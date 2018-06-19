@@ -51,7 +51,7 @@
     <div class="container">
         <div class="text-center">
             <h1>formJS</h1>
-            <p>Documentation v1.1</p>
+            <p>Documentation v1.1.1</p>
         </div>
 
         <br />
@@ -63,13 +63,24 @@
                         <p>Basic UI</p>
                     </div>
                     <div class="panel-body">
-                        <form action="" name="my-form-1" data-ajax-settings='{
-                                                                             "dataType": "json",
+                        <form action="" name="my-form-1" enctype="multipart/form-data" data-ajax-settings='{
+                                                                             "dataTypeOption": "json",
                                                                              "myoption": [1,2,3],
                                                                              "option3": {
                                                                                 "intOpt": "hello"
                                                                              }
                                                                              }' data-ajax-submit novalidate>
+                            <div data-formjs-question="" class="form-group">
+                                <div class="answers-box">
+                                    <input name="documents" type="file" multiple class="form-control" required="" />
+                                    <label>Document(s)</label>
+                                </div>
+                                <div class="field-error-message small">
+                                    <div>
+                                    Select one or more files! Max file size is <span data-max-file-size></span>MB
+                                    </div>
+                                </div>
+                            </div>
                             <div data-formjs-question="" class="form-group">
                                 <div class="answers-box">
                                     <input name="name" type="text" class="form-control" required="" />
@@ -86,35 +97,35 @@
                             </div>
                             <div data-formjs-question="" class="form-group">
                                 <div class="answers-box">
-                                    <input name="fiscalCode" type="text" data-subtype="fiscal-code" class="form-control text-uppercase" required="" />
+                                    <input name="fiscalCode" type="text" data-subtype="fiscal-code" class="form-control text-uppercase" data-validate-if-filled="" />
                                     <label>Fiscal Code</label>
                                 </div>
                                 <div class="field-error-message small">Check your fiscal code, it is not valid!</div>
                             </div>
                             <div data-formjs-question="" class="form-group">
                                 <div class="answers-box">
-                                    <input name="vatNumber" type="text" data-subtype="vat-number" class="form-control" required="" />
+                                    <input name="vatNumber" type="text" data-subtype="vat-number" class="form-control" data-validate-if-filled="" />
                                     <label>VAT Number</label>
                                 </div>
                                 <div class="field-error-message small">Check your VAT number, it is not valid!</div>
                             </div>
                             <div data-formjs-question="" class="form-group">
                                 <div class="answers-box">
-                                    <input name="username" type="text" data-subtype="username" class="form-control" required="" />
+                                    <input name="username" type="text" data-subtype="username" class="form-control" data-validate-if-filled="" />
                                     <label>Username</label>
                                 </div>
                                 <div class="field-error-message small">Username must have at least 3 characters (no special chars allowed)!</div>
                             </div>
                             <div data-formjs-question="" class="form-group">
                                 <div class="answers-box">
-                                    <input name="email" type="email" class="form-control" required="" />
+                                    <input name="email" type="email" class="form-control" data-validate-if-filled="" />
                                     <label>Email</label>
                                 </div>
                                 <div class="field-error-message small">Check your email address, it is not valid!</div>
                             </div>
                             <div data-formjs-question="" class="form-group">
                                 <div class="answers-box">
-                                    <input name="mobileNumber" type="text" data-subtype="mobile-number" class="form-control" required="" />
+                                    <input name="mobileNumber" type="text" data-subtype="mobile-number" class="form-control" data-validate-if-filled="" />
                                     <label>Mobile number</label>
                                 </div>
                                 <div class="field-error-message small">Check your mobile number, it is not valid!</div>
@@ -156,7 +167,7 @@
                             </div>
                             <div data-formjs-question="" class="form-group">
                                 <div class="answers-box">
-                                    <input name="hexColorConfirm" type="text" data-subtype="hex-color" data-equal-to="hexColor" class="form-control" required />
+                                    <input name="hexColorConfirm" type="text" data-subtype="hex-color" data-equal-to="hexColor" class="form-control" data-validate-if-filled="" />
                                     <label>HEX color confirm</label>
                                 </div>
                                 <div class="field-error-message small">Check your HEX color, must be equal to the one above!</div>
@@ -170,7 +181,7 @@
                             </div>
                             <div data-formjs-question="" class="form-group">
                                 <div class="answers-box">
-                                    <input name="test" type="number" min="10" max="50" data-exact-length="2" class="form-control" required="" />
+                                    <input name="test" type="number" min="10" max="50" data-exact-length="2" class="form-control" data-validate-if-filled="" />
                                     <label>Number ( min 10 - max 50)</label>
                                 </div>
                                 <div class="field-error-message small">Check your number, it is not valid (min 10, max 50, exact-length 2)!</div>
@@ -184,19 +195,19 @@
                             <div data-formjs-question="" class="form-group">
                                 <div class="input-container radio">
                                     <label for="radio-5-20-6-1">
-                                        <input required="" id="radio-5-20-6-1" name="radio-list-1" value="1" type="radio" />
+                                        <input requireds="" id="radio-5-20-6-1" name="radio-list-1" value="1" type="radio" />
                                         Answer One
                                     </label>
                                 </div>
                                 <div class="input-container radio">
                                     <label for="radio-5-20-6-2">
-                                        <input required="" id="radio-5-20-6-2" name="radio-list-1" value="2" type="radio" />
+                                        <input requireds="" id="radio-5-20-6-2" name="radio-list-1" value="2" type="radio" />
                                         Answer Two
                                     </label>
                                 </div>
                                 <div class="input-group">
                                     <span class="input-group-addon">
-                                        <input id="radio-5-200-6-3" name="radio-list-1" value="3" required="" data-require-more="" type="radio" />
+                                        <input id="radio-5-200-6-3" name="radio-list-1" value="3" requireds="" data-require-more="" type="radio" />
                                         <label for="radio-5-200-6-3">&nbsp;Other:</label>
                                     </span>
                                     <input class="form-control" name="radio-list-1-more" data-required-from="#radio-5-200-6-3" type="text" />
@@ -208,7 +219,7 @@
                                         I agree with the <a href="">Privacy Policy</a>.
                                     </div>
                                     <label class="radio-inline">
-                                        <input name="privacyCheck" type="radio" value="1" required="" />
+                                        <input name="privacyCheck" type="radio" value="accept" required="" />
                                         Yes
                                     </label>
                                     <label class="radio-inline">
@@ -222,7 +233,7 @@
                                 <div class="answers-box">
                                     <div class="checkbox">
                                         <label>
-                                            <input name="commercialCheck" type="checkbox" value="1" required="" />
+                                            <input name="regulationCheck" type="checkbox" value="read" required="" />
                                             I have read the <a href="#">Regulation</a>
                                         </label>
                                     </div>
@@ -593,7 +604,10 @@
             </ul>
             <pre>
 &lt;!-- JQUERY --&gt;
-&lt;script src="js/vendors/jquery-1.12.4.min.js"&gt;&lt;/script&gt;</pre>
+&lt;script src="js/vendors/jquery-1.12.4.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- FORM JS --&gt;
+&lt;script src="js/modules/formJS.js"&gt;&lt;/script&gt;</pre>
             <p class="small">
                 The demo is developed with Bootstrap CSS 3.3.7
             </p>
@@ -832,6 +846,23 @@
                         <div class="">
                             <div class="clearfix padding-tb-md row-list-separator small">
                                 <div class="col-xs-4">
+                                    <p class="text-green">maxFileSize</p>
+                                </div>
+                                <div class="col-xs-3">
+                                    number
+                                </div>
+                                <div class="col-xs-5">
+                                    <p>
+                                        size limit ( in MB ) for each file to upload.<br />
+                                        Set to 0 ( zero ) if you want to disable the size check.<br />
+                                        Inside the field error message container you can put a span (or else) with data-max-file-size attribute to print the size limit ( see the demo )
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="clearfix padding-tb-md row-list-separator small">
+                                <div class="col-xs-4">
                                     <p class="text-green">onValidation</p>
                                 </div>
                                 <div class="col-xs-3">
@@ -919,6 +950,7 @@
             valid: 'is-valid'
         },
         focusOnRelated: true,
+        maxFileSize: 10,
         onValidation: null,
         preventPasteFields: '[type="password"], [data-equal-to]',
         skipUIfeedback: false,
@@ -933,7 +965,8 @@
             <div>
                 <h3 class="sticky-title mt-0 ml-4"><span class="small">Form Options</span></h3>
                 <p>
-                    Each can be a function but will be used ONLY inside submitAjaxForm() method ( that can be used as standalone method but it is also used inside init() method ). 
+                    They will be used ONLY inside submitAjaxForm() method ( that can be used as standalone method but it is also used inside init() method ).<br />
+                    To make use of these functionalities you must set the data-ajax-submit attribute for the form.
                 </p>
                 <div class="panel panel-default panel-transparent" style="background-color: transparent;">
                 <div class="panel-heading clearfix">
@@ -982,6 +1015,24 @@
                             <div class="col-xs-4">
                                 <p>
                                     Fires before the AJAX call starts. If used to modify the JSON, it must have a return statement. 
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="clearfix padding-tb-md row-list-separator small">
+                            <div class="col-xs-3">
+                                <p class="text-green">manageFileUpload</p>
+                                ( boolean )
+                            </div>
+                            <div class="col-xs-5">
+                                
+                            </div>
+                            <div class="col-xs-4">
+                                <p>
+                                    Wether or not the plugin must manage the file upload. It is a simple file upload via ajax.<br />
+                                    You must also set the enctype="multipart/form-data" attribute to the form.
+                                    
                                 </p>
                             </div>
                         </div>
@@ -1659,9 +1710,7 @@
     </div>
     
     <script src="js/vendors/jquery-1.12.4.min.js"></script>
-    
-    <script src="js/modules/form_validation.js"></script>
-    
+    <script src="js/modules/formJS.js"></script>
     <script type="text/javascript">
         $(function(){
             
@@ -1690,7 +1739,7 @@
                             console.log('onValidation fieldsArray ', fieldsArray);
                             for(var f=0; f<fieldsArray.length; f++){
                                 var field = fieldsArray[f];
-                                console.log( 'field "' + field.$field.attr('name') + '" is valid? ', field.result );
+                                //console.log( 'field "' + field.$field.attr('name') + '" is valid? ', field.result );
                             }
                         },
                         strictHtmlValidation: true,
@@ -1701,6 +1750,7 @@
                             console.log( 'beforeSend data ', data );
                             console.log( 'beforeSend $form ', $form );
                             data.formData.addedInfo = 'This info was added on beforeSend callback';
+                            console.log( 'beforeSend data edited ', data );
                             return data;
                         },
                         onSubmitSuccess: function( ajaxData, $form ){
