@@ -1,12 +1,11 @@
 /**
- * @version     1.1.1
- * @file        formJS - for forms validation
- * @author      Valerio Di Punzio <sayhi@valeriodipunzio.com>
- * @doc         http://valeriodipunzio.com/plugins/formJS/
- * 
- * Dependencies:
- * jQuery
- *
+ * formJS
+ * -------------
+ * Version      : 1.1.2
+ * Website      : https://valeriodipunzio.com/plugins/formJS/
+ * Repo         : https://github.com/valedp88/formJS
+ * Author       : Valerio Di Punzio (@valedp88)
+ * Dependencies : jQuery
  */
 
 var FORM = (function( $ ){
@@ -496,9 +495,8 @@ var FORM = (function( $ ){
                     
                         if( isRequiredFrom ){
                             
-                            var $reqMore = $( $field.data('required-from') );
-                            
-                            isValid = $( '[name="'+ $reqMore.attr('name') +'"]:checked' ).length > 0;
+                            var $reqMore = $( $field.data('required-from') ),
+                                isOneChecked = $( '[name="'+ $reqMore.attr('name') +'"]:checked' ).length > 0;
                             
                             if( isValidValue ){
                                 $reqMore.prop('checked', true);
@@ -508,6 +506,11 @@ var FORM = (function( $ ){
                             if( !$reqMore.is(':checked') ){
                                 doExtraValidations = false;
                             }
+                            
+                            isValid = (
+                                $reqMore.is('[required]') && $reqMore.is(':checked') ? 
+                                isValidValue : ($reqMore.is('[required]') ? isOneChecked : true)
+                            );
                             
                         }
 
