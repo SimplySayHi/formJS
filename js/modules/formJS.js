@@ -426,11 +426,11 @@ var FORM = (function( $ ){
                     if( $form.is('[data-ajax-submit]') ){
                         
                         event.preventDefault();
-                        submitAjaxForm( $(this), optionsFormSubmit );
+                        submitAjaxForm( $form, optionsFormSubmit );
                         
                     } else {
                         
-                        if( !FORM.isValidForm($form, optionsFormSubmit).result ){
+                        if( !isValidForm($form, optionsFormSubmit).result ){
                             event.preventDefault();
                         }
                         
