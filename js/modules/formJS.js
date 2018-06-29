@@ -416,15 +416,25 @@ var FORM = (function( $ ){
                     });
                 }
                 
-                $thisForm.filter('[data-ajax-submit]').on('submit', function(event){
-                    event.preventDefault();
-                    
-                    var optionsAjaxSubmit = {
+                $thisForm.on('submit', function(event){
+                    var $form = $(this),
+                        optionsFormSubmit = {
                             formOptions: formOptions,
                             fieldOptions: fieldOptions
                         };
                     
-                    submitAjaxForm( $(this), optionsAjaxSubmit );
+                    if( $form.is('[data-ajax-submit]') ){
+                        
+                        event.preventDefault();
+                        submitAjaxForm( $(this), optionsFormSubmit );
+                        
+                    } else {
+                        
+                        if( !FORM.isValidForm($form, optionsFormSubmit).result ){
+                            event.preventDefault();
+                        }
+                        
+                    }
                 });
                 
             });
@@ -622,7 +632,7 @@ var FORM = (function( $ ){
             
             options.fieldOptions = _mergeObjects( (options.fieldOptions || {}), defaultFieldOptions );
             options.formOptions = _mergeObjects( (options.formOptions || {}), defaultFormOptions );
-                        
+            
             var formValidation = isValidForm($form, options),
                 $btn = $form.find('[type="submit"]');
             
