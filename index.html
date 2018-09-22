@@ -11,59 +11,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great|Raleway:200" rel="stylesheet">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/demo.css">
-    <style>
-        html, body { font-family: 'Raleway', sans-serif; }
-        h1 { font-size: 4em; line-height: 1; display: inline-block; border-bottom: 2px solid rgba(0,0,0,0.15); padding: 0.25em 0.0625em; }
-        h2 { font-size: 3em; border-bottom: 2px solid rgba(0,0,0,0.15); padding: 0.25em 0.0625em; }
-        h3 { font-size: 2em; }
-        h1, h2, h3 { font-family: 'Fredericka the Great', cursive; }
-        h2, h3 { color: #ffd166; margin-top: 2em; }
-        h1 .small { font-family: 'Raleway', sans-serif; font-size: 0.5em; color: inherit; }
-        h3 .small { color: inherit; }
-        .sticky-title {
-            position: -webkit-sticky; position: sticky;
-            top: 0; z-index: 1; background: #073B4C; border-bottom: 2px solid rgba(0,0,0,0.15); padding: 0.25em 0.0625em;
-        }
-        .mt-0 { margin-top: 0; }
-        .ml-4 { margin-left: 4em; }
-        .title-min { line-height: 0.75; }
-        .text-yellow { color: #ffd166; }
-        .text-red { color: #ef476f; }
-        .text-green { color: #06d6a0; }
-        .text-opacity { opacity: 0.5; }
-        ul { padding-left: 1em; }
-        a { color: #ef476f; }
-        pre { max-height: 355px; }
-        .panel { background-color: transparent; border-width: 2px; border-radius: 8px; /*color: #ccc;*/ }
-        .panel-heading { border: 0 none; border-top-right-radius: 6px; border-top-left-radius: 6px; }
-        .panel-transparent { color: #ccc; }
-        .no-bg { background: none; }
-        .padding-tb-md { padding-top: 1em; padding-bottom: 1em; }
-        .row-list-separator { border-top: 2px solid rgba(204, 204, 204, 0.2); }
-        .row-list-separator:first-child { border-top: 0 none; }
-    </style>
 </head>
 
 <body>
     
     <div class="container">
         <div class="text-center">
+            <div>
+                <p class="d-inline-block mt-5 mb-4">
+                    <a href="https://github.com/valedp88/formJS" target="_blank" class="media">
+                        <span class="media-body interline-sm">view on <br />Github</span>
+                        <svg class="align-self-center ml-2" style="vertical-align: middle;" version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+         width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+                    <path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M16,0.112c-8.836,0-16,7.294-16,16.291
+        C0,23.6,4.584,29.706,10.942,31.86c0.801,0.148,1.093-0.354,1.093-0.785c0-0.387-0.015-1.412-0.021-2.771
+        c-4.451,0.984-5.39-2.184-5.39-2.184c-0.729-1.881-1.777-2.383-1.777-2.383c-1.452-1.01,0.11-0.99,0.11-0.99
+        c1.605,0.115,2.45,1.68,2.45,1.68c1.428,2.488,3.745,1.77,4.657,1.354c0.145-1.053,0.559-1.771,1.016-2.178
+        c-3.553-0.412-7.288-1.809-7.288-8.051c0-1.778,0.623-3.232,1.646-4.371c-0.164-0.412-0.713-2.068,0.157-4.311
+        c0,0,1.344-0.438,4.399,1.67c1.276-0.361,2.646-0.543,4.006-0.549c1.359,0.006,2.728,0.188,4.006,0.549
+        c3.056-2.108,4.396-1.67,4.396-1.67c0.873,2.242,0.323,3.898,0.159,4.311c1.024,1.139,1.644,2.593,1.644,4.371
+        c0,6.258-3.74,7.635-7.305,8.038c0.574,0.504,1.086,1.498,1.086,3.018c0,2.178-0.02,3.934-0.02,4.469
+        c0,0.436,0.288,0.941,1.101,0.783C27.421,29.7,32,23.598,32,16.403C32,7.406,24.837,0.112,16,0.112z"/>
+    </svg></a>
+                </p>
+            </div>
             <h1>formJS</h1>
-            <p>Documentation v1.1.2</p>
+            <p>Version 1.2.0<br />Documentation</p>
         </div>
 
         <br />
+        <!-- Demos -->
         <div class="panel-collapsible row">
             
-            <div class="col-xs-6 col-sm-6 col-md-3">
+            <!-- Demo 1 -->
+            <div class="col-6 col-sm-6 col-md-3 py-3">
                 <div class="panel no-bg">
-                    <div class="panel-heading bg-white">
-                        <p>Basic UI</p>
+                    <div class="card-header bg-white text-dark bg-white">
+                        <div><p>Basic UI</p></div>
                     </div>
-                    <div class="panel-body">
-                        <form action="" name="my-form-1" enctype="multipart/form-data" data-ajax-settings='{
+                    <div class="card-body">
+                        <form action="json/survey.json" name="my-form-1" enctype="multipart/form-data" data-ajax-settings='{
                                                                              "dataTypeOption": "json",
                                                                              "myoption": [1,2,3],
                                                                              "option3": {
@@ -182,7 +171,7 @@
                             <div data-formjs-question="" class="form-group">
                                 <div class="answers-box">
                                     <input name="test" type="number" min="10" max="50" data-exact-length="2" class="form-control" data-validate-if-filled="" />
-                                    <label>Number ( min 10 - max 50 )</label>
+                                    <label>Number ( min 10 - max 50)</label>
                                 </div>
                                 <div class="field-error-message small">Check your number, it is not valid (min 10, max 50, exact-length 2)!</div>
                             </div>
@@ -193,22 +182,24 @@
                                 </div>
                             </div>
                             <div data-formjs-question="" class="form-group">
-                                <div class="input-container radio">
-                                    <label for="radio-5-20-6-1">
-                                        <input required="" id="radio-5-20-6-1" name="radio-list-1" value="1" type="radio" />
+                                <div class="input-container form-check">
+                                    <input required="" id="radio-5-20-6-1" name="radio-list-1" value="1" type="radio" class="form-check-input" />
+                                    <label for="radio-5-20-6-1" class="form-check-label">
                                         Answer One
                                     </label>
                                 </div>
-                                <div class="input-container radio">
-                                    <label for="radio-5-20-6-2">
-                                        <input required="" id="radio-5-20-6-2" name="radio-list-1" value="2" type="radio" />
+                                <div class="input-container form-check">
+                                    <input required="" id="radio-5-20-6-2" name="radio-list-1" value="2" type="radio" class="form-check-input" />
+                                    <label for="radio-5-20-6-2" class="form-check-label">
                                         Answer Two
                                     </label>
                                 </div>
                                 <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input id="radio-5-200-6-3" name="radio-list-1" value="3" required="" data-require-more="" type="radio" />
-                                        <label for="radio-5-200-6-3">&nbsp;Other:</label>
+                                    <span class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input id="radio-5-200-6-3" name="radio-list-1" value="3" required="" data-require-more="" type="radio" />
+                                            <label for="radio-5-200-6-3">&nbsp;Other:</label>
+                                        </div>
                                     </span>
                                     <input class="form-control" name="radio-list-1-more" data-required-from="#radio-5-200-6-3" type="text" />
                                 </div>
@@ -218,24 +209,22 @@
                                     <div class="small">
                                         I agree with the <a href="">Privacy Policy</a>.
                                     </div>
-                                    <label class="radio-inline">
-                                        <input name="privacyCheck" type="radio" value="accept" required="" />
-                                        Yes
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input name="privacyCheck" type="radio" value="" required="" />
-                                        No
-                                    </label>
+                                    <div class="form-check form-check-inline">
+                                        <input id="privacyCheck-01" class="form-check-input" name="privacyCheck" type="radio" value="accept" required="" />
+                                        <label for="privacyCheck-01" class="form-check-label">Yes</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input id="privacyCheck-02" class="form-check-input" name="privacyCheck" type="radio" value="" required="" />
+                                        <label for="privacyCheck-02" class="form-check-label">No</label>
+                                    </div>
                                 </div>
                                 <div class="field-error-message small">You must agree!</div>
                             </div>
                             <div data-formjs-question="" class="form-group">
                                 <div class="answers-box">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input name="regulationCheck" type="checkbox" value="read" required="" />
-                                            I have read the <a href="#">Regulation</a>
-                                        </label>
+                                    <div class="form-check">
+                                        <input id="regulationCheck" class="form-check-input" name="regulationCheck" type="checkbox" value="read" required="" />
+                                        <label for="regulationCheck" class="form-check-label">I have read the <a href="#">Regulation</a></label>
                                     </div>
                                 </div>
                                 <div class="field-error-message small">Check the field!</div>
@@ -248,12 +237,13 @@
                 </div>
             </div>
             
-            <div class="col-xs-6 col-sm-6 col-md-3">
+            <!-- Demo 2 -->
+            <div class="col-6 col-sm-6 col-md-3 py-3">
                 <div class="panel no-bg">
-                    <div class="panel-heading bg-white">
-                        <p>Label Inline Flex UI</p>
+                    <div class="card-header bg-white text-dark bg-white">
+                        <div><p>Label Inline Flex UI</p></div>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         <form action="" name="my-form-2b" novalidate>
                             <div data-formjs-question="" class="form-group">
                                 <div class="answers-box label-inline-flex">
@@ -347,12 +337,13 @@
                 </div>
             </div>
             
-            <div class="col-xs-6 col-sm-6 col-md-3">
+            <!-- Demo 3 -->
+            <div class="col-6 col-sm-6 col-md-3 py-3">
                 <div class="panel no-bg">
-                    <div class="panel-heading bg-white">
-                        <p>Label Fade Down UI</p>
+                    <div class="card-header bg-white text-dark bg-white">
+                        <div><p>Label Fade Down UI</p></div>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         <form action="" name="my-form-3" novalidate>
                             <div data-formjs-question="" class="form-group">
                                 <div class="answers-box label-fade-down">
@@ -446,12 +437,13 @@
                 </div>
             </div>
             
-            <div class="col-xs-6 col-sm-6 col-md-3">
+            <!-- Demo 4 -->
+            <div class="col-6 col-sm-6 col-md-3 py-3">
                 <div class="panel no-bg">
-                    <div class="panel-heading bg-white">
-                        <p>Label Move Up UI</p>
+                    <div class="card-header bg-white text-dark bg-white">
+                        <div><p>Label Move Up UI</p></div>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         <form action="" name="my-form-4" data-ajax-submit="" novalidate>
                             <div data-formjs-question="" class="form-group">
                                 <div class="answers-box label-move-up">
@@ -554,6 +546,15 @@
 
         </div>
         
+        <!-- Demo Links -->
+        <div class="text-center mt-5">
+            <p>
+                <a href="demo-plain-js.html">Demos with Plain JS</a> &nbsp; | &nbsp; 
+                <a href="demo-jquery.html">Demos with jQuery</a>
+            </p>
+        </div>
+        
+        <!-- Download -->
         <div class="text-center">
             <h3>Download</h3>
             <p>
@@ -561,12 +562,14 @@
             </p>
         </div>
         
-        <h2>Usage</h2>
-        <p>
-            This module lets you validate forms.<br />
-            You can specify form/field options to:
-        </p>
-        <ul>
+        <!-- Usage -->
+        <div>
+            <h2>Usage</h2>
+            <p>
+                This module lets you validate forms.<br />
+                You can specify form/field options to:
+            </p>
+            <ul>
             <li>
                 skip feedback on UI
             </li>
@@ -574,43 +577,90 @@
                 specify CSS class(es) for dirty/error/valid fields
             </li>
             <li>
-                check if a field is "dirty"
-            </li>
-            <li>
                 specify which events will fire the validation
             </li>
             <li>
-                handle JSON data generated from a form
+                manage AJAX calls: handle JSON data, change settings and set callbacks
             </li>
             <li>
-                change AJAX call settings
-            </li>
-            <li>
-                callbacks for AJAX call
+                and more...
             </li>
         </ul>
+        </div>
         
-        <!-- Dependencies -->
+        <!-- Browsers Support -->
         <div>
-        
-            <h3 class="sticky-title">Dependencies</h3>
-            <p>
-                formJS is developed with these dependencies:
+            <h3 class="sticky-title">Browsers Support</h3>
+            <p class="small">
+                formJS is compatible with ( desktop &amp; mobile versions ):
             </p>
             <ul>
                 <li>
-                    jQuery 1.12.4
+                    Chrome
+                </li>
+                <li>
+                    Firefox
+                </li>
+                <li>
+                    Internet Explorer 10+ / Edge
+                </li>
+                <li>
+                    Safari
                 </li>
             </ul>
-            <pre>
-&lt;!-- JQUERY --&gt;
-&lt;script src="js/vendors/jquery-1.12.4.min.js"&gt;&lt;/script&gt;
-
-&lt;!-- FORM JS --&gt;
-&lt;script src="js/modules/formJS.js"&gt;&lt;/script&gt;</pre>
+        </div>
+        
+        <!-- Dependencies -->
+        <div>
+            <h3 class="sticky-title">Dependencies</h3>
             <p class="small">
-                The demo is developed with Bootstrap CSS 3.3.7
+                This demo is developed with Bootstrap CSS but it is not a dependency.
+                <br />
+                You can use formJS with vanilla JS or with jQuery as dependency.
             </p>
+            <div class="row my-3">
+                <div class="col-6">
+                    <h4 class="text-center">Plain JS</h4>
+                    <div class="panel">
+                        <div class="card-body">
+                            <ul class="small">
+                                <li>
+                                    No Dependencies!
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <h4 class="text-center">jQuery</h4>
+                    <div class="panel">
+                        <div class="card-body">
+                            <ul class="small">
+                                <li>
+                                    jQuery 1.12.4+
+                                </li>
+                            </ul>
+                            <pre>&lt;!-- JQUERY --&gt;
+&lt;script src="js/vendors/jquery-1.12.4.min.js"&gt;&lt;/script&gt;</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p>
+                Include the formJS script in your page:
+            </p>
+            <div class="row">
+                <div class="col-6">
+                    <pre>
+&lt;!-- FORM JS for Plain JS --&gt;
+&lt;script src="js/modules/formJS.js"&gt;&lt;/script&gt;</pre>
+                </div>
+                <div class="col-6">
+                    <pre>
+&lt;!-- FORM JS for jQuery --&gt;
+&lt;script src="js/modules/jquery.formJS.js"&gt;&lt;/script&gt;</pre>
+                </div>
+            </div>
         </div>
         
         <!-- HTML -->
@@ -625,7 +675,7 @@
                     novalidate: ( mandatory ) for the form ( fields will be validated via JS )
                 </li>
                 <li>
-                    data-ajax-submit: ( optional ) for the form. To let the plugin manage the form with an AJAX call.
+                    data-ajax-submit: ( optional empty attribute ) for the form. To let the plugin manage the form with an AJAX call.
                 </li>
                 <li>
                     data-ajax-settings: ( optional ) for the form, to specify new options for the AJAX call as JSON object inside the HTML attribute. Used together with data-ajax-submit attribute.<br />
@@ -641,14 +691,18 @@
                     data-subtype: ( optional ) for special field types ( eg: VAT number, fiscal code, etc - see the <a href="#subtypes-list">full list</a> )
                 </li>
                 <li>
-                    data-exclude-json: ( optional ) for fields, used to avoid the plugin to take in consideration the field when building the JSON ( used inside getFormJSON method, so inside submitAjaxForm method )
+                    data-exclude-json: ( optional empty attribute ) for fields, used to avoid the plugin to take in consideration the field when building the JSON ( used inside getFormJSON method, so inside submitAjaxForm method )
                 </li>
                 <li>
-                    data-formjs-question: ( optional ) used for visual feedback on valid/invalid fields and/or character count functionality
+                    data-formjs-question: ( optional empty attribute ) used for visual feedback on valid/invalid fields and/or character count functionality
                 </li>
             </ul>
             <p>
                 For other validations see the <a href="#other-validations-list">full list</a>
+            </p>
+            
+            <p>
+                Below, the HTML example:
             </p>
             <pre>
 &lt;form action="/mypath/mypage.php" method="POST" name="my-form-example" novalidate&gt;
@@ -711,17 +765,74 @@
                 <p>
                     Below the default AJAX Options used inside submitAjaxForm method ( can be changed via data-ajax-settings attribute ):
                 </p>
-                <pre>
+                <div class="row mt-3">
+                    <div class="col-6">
+                        <h4 class="text-center">Plain JS</h4>
+                        <div class="">
+                            <pre>
 {
-    cache: false,
-    data: formData,
-    url: $form.attr('action'),
-    method : $form.attr('method') || 'POST'
+    async:          true,
+    cache:          false,
+    contentType:    'application/x-www-form-urlencoded; charset=UTF-8',
+    data:           formDataJSON,
+    headers:        {},
+    method:         'POST',
+    timeout:        0,
+    url:            location.href
 }</pre>
+                            <p>
+                                These above are all the ajax options that can be changed.
+                            </p>
+                            <ul>
+                                <li>
+                                    async: if true will make an async ajax call, if false will make a sync ajax call.
+                                </li>
+                                <li>
+                                    cache: ( only for GET ajax calls ) if true will add a timestamp parameter to the url query string.
+                                </li>
+                                <li>
+                                    contentType: content type of the ajax request ( anything put inside the enctype html form attribute ).
+                                </li>
+                                <li>
+                                    headers: object of key/value pairs to set the request headers.
+                                </li>
+                                <li>
+                                    timeout: ( in milliseconds ) in greater than 0, after the specified time, the ajax call will be aborted if still pending.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-center">jQuery</h4>
+                        <div class="">
+                            <pre>
+{
+    cache:      false,
+    data:       formDataJSON,
+    method:     'POST',
+    url:        location.href
+}</pre>
+                            <p>
+                                Ajax settings as described in the <a href="http://api.jquery.com/jquery.ajax/" target="_blank">jQuery $.ajax() documentation page</a>.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-8 col-offset-2 col-sm-6 col-sm-offset-3"><hr /></div>
+                </div>
+                <ul>
+                    <li>
+                        data ( formDataJSON ) is automatically generated by the plugin and can be changed via beforeSend callback function
+                    </li>
+                    <li>
+                        method is by default 'POST' but it takes the method html form attribute if set
+                    </li>
+                    <li>
+                        url is by default the page url but it takes the action html form attribute if set
+                    </li>
+                </ul>
+                <br />
                 <p>
-                    formData is automatically generated by the plugin and can be changed via beforeSend callback function
-                    <br /><br />
-                    Below, an example of AJAX settings passed via HTML data attribute:
+                    Below, an example of AJAX settings passed via "data-ajax-settings" ( they will override the same options specified via HTML attributes ):
                 </p>
                 <pre>
 &lt;form action="/mypath/mypage.php"
@@ -743,7 +854,7 @@
         <div>
             <h3 class="sticky-title">Initialization</h3>
             <p>
-                You can initialize every form inside the page to be managed by formJS with very basic JS code:
+                You can initialize every form ( with "novalidate" attribute ) inside the page to be managed by formJS with:
             </p>
             <pre>FORM.init();</pre>
         </div>
@@ -752,374 +863,356 @@
         <div id="options-list">
             <h3 class="sticky-title">Options<span class="small">:</span></h3>
             <p>
-                formJS has "options" as second argument, as follow:
+                formJS takes an object as second argument ( options ), as follow:
             </p>
             <pre class="small">
 {
-    fieldOptions: {...},
-    formOptions: {...}
+    fieldOptions:   {...},
+    formOptions:    {...}
 }</pre>
             <br />
+            <!-- Form Options -->
             <div>
-                <h3 class="sticky-title mt-0 ml-4"><span class="small">Field Options</span></h3>
+                <h3 class="sticky-title mt-0 ml-4em"><span class="small">Field Options</span></h3>
                 <div class="panel panel-default panel-transparent" style="background-color: transparent;">
-                    <div class="panel-heading clearfix">
-                        <div class="">
-                            <div class="col-xs-4">
+                    <div class="card-header bg-white text-dark clearfix">
+                        <div class="d-flex">
+                            <div class="col-4">
                                 name
                             </div>
-                            <div class="col-xs-3">
+                            <div class="col-3">
                                 type
                             </div>
-                            <div class="col-xs-5">
+                            <div class="col-5">
                                 description
                             </div>
                         </div>
                     </div>
-                    <div class="panel-body">
-                        <div class="">
-                            <div class="clearfix padding-tb-md row-list-separator small">
-                                <div class="col-xs-4">
-                                    <p class="text-green">checkDirtyField</p>
-                                </div>
-                                <div class="col-xs-3">
-                                    boolean
-                                </div>
-                                <div class="col-xs-5">
-                                    <p>
-                                        wether or not to use the checkDirtyField() method when validating a field 
-                                    </p>
-                                </div>
+                    <div class="card-body">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4">
+                                <p class="text-green">checkDirtyField</p>
+                            </div>
+                            <div class="col-3">
+                                boolean
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    wether or not to check if the field is dirty ( has some value ) or not.
+                                </p>
                             </div>
                         </div>
-                        <div class="">
-                            <div class="clearfix padding-tb-md row-list-separator small">
-                                <div class="col-xs-4">
-                                    <p class="text-green">cssClasses</p>
-                                </div>
-                                <div class="col-xs-3">
-                                    object
-                                </div>
-                                <div class="col-xs-5">
-                                    <p>
-                                        JS object as follow:
-                                    </p>
-                                    <ul>
-                                        <li>
-                                            <span class="text-green">dirty</span>: ( string ) CSS class(es) to be applied if the field "dirty" ( has some value )
-                                        </li>
-                                        <li>
-                                            <span class="text-green">error</span>: ( string ) CSS class(es) to be applied if the field is not valid
-                                        </li>
-                                        <li>
-                                            <span class="text-green">errorMultiChoice</span>: ( string ) CSS class(es) to be applied if the field with multiple selectable answers ( eg: some checboxes ) is not valid
-                                        </li>
-                                        <li>
-                                            <span class="text-green">valid</span>: ( string ) CSS class(es) to be applied if the field is valid
-                                        </li>
-                                    </ul>
-                                    <pre class="small">
-    {
-        dirty: 'dirty-field',
-        error: 'has-error',
-        errorMultiChoice: 'has-error-switch',
-        valid: 'is-valid'
-    }</pre>
-                                </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4">
+                                <p class="text-green">cssClasses</p>
+                            </div>
+                            <div class="col-3">
+                                object
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    JS object with keys:
+                                </p>
+                                <ul>
+                                    <li>
+                                        <span class="text-green">dirty</span>: ( string ) CSS class(es) to be applied if the field "dirty" ( has some value )
+                                    </li>
+                                    <li>
+                                        <span class="text-green">error</span>: ( string ) CSS class(es) to be applied if the field is not valid
+                                    </li>
+                                    <li>
+                                        <span class="text-green">errorMultiChoice</span>: ( string ) CSS class(es) to be applied if the field with multiple selectable answers ( eg: some checboxes ) is not valid
+                                    </li>
+                                    <li>
+                                        <span class="text-green">valid</span>: ( string ) CSS class(es) to be applied if the field is valid
+                                    </li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="">
-                            <div class="clearfix padding-tb-md row-list-separator small">
-                                <div class="col-xs-4">
-                                    <p class="text-green">focusOnRelated</p>
-                                </div>
-                                <div class="col-xs-3">
-                                    boolean
-                                </div>
-                                <div class="col-xs-5">
-                                    <p>
-                                        wether or not to focus on the related (input/select) field when selecting its radio answer 
-                                    </p>
-                                </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4">
+                                <p class="text-green">focusOnRelated</p>
+                            </div>
+                            <div class="col-3">
+                                boolean
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    wether or not to focus on the related (input/select) field when selecting its radio answer 
+                                </p>
                             </div>
                         </div>
-                        <div class="">
-                            <div class="clearfix padding-tb-md row-list-separator small">
-                                <div class="col-xs-4">
-                                    <p class="text-green">maxFileSize</p>
-                                </div>
-                                <div class="col-xs-3">
-                                    number
-                                </div>
-                                <div class="col-xs-5">
-                                    <p>
-                                        size limit ( in MB ) for each file to upload.<br />
-                                        Set to 0 ( zero ) if you want to disable the size check.<br />
-                                        Inside the field error message container you can put a span (or else) with data-max-file-size attribute to print the size limit ( see the demo )
-                                    </p>
-                                </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4">
+                                <p class="text-green">maxFileSize</p>
+                            </div>
+                            <div class="col-3">
+                                number
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    size limit ( in MB ) for each file to upload.<br />
+                                    Set to 0 ( zero ) if you want to disable the size check.<br />
+                                    Inside the field error message container you can put a span (or else) with data-max-file-size attribute to print the size limit ( see the demo )
+                                </p>
                             </div>
                         </div>
-                        <div class="">
-                            <div class="clearfix padding-tb-md row-list-separator small">
-                                <div class="col-xs-4">
-                                    <p class="text-green">onValidation</p>
-                                </div>
-                                <div class="col-xs-3">
-                                    function
-                                </div>
-                                <div class="col-xs-5">
-                                    <p>
-                                        used ONLY inside init() and submitAjaxForm() methods. Fires just after a field has been validated. 
-                                    </p>
-                                </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4">
+                                <p class="text-green">onPastePrevented</p>
+                            </div>
+                            <div class="col-3">
+                                function
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    used ONLY inside init() method. Fires when the paste event has been prevented on the field(s) ( see "preventPasteFields" option ).
+                                </p>
                             </div>
                         </div>
-                        <div class="">
-                            <div class="clearfix padding-tb-md row-list-separator small">
-                                <div class="col-xs-4">
-                                    <p class="text-green">preventPasteFields</p>
-                                </div>
-                                <div class="col-xs-3">
-                                    string
-                                </div>
-                                <div class="col-xs-5">
-                                    <p>
-                                        CSS string selector for which the paste command will be disabled 
-                                    </p>
-                                </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4">
+                                <p class="text-green">onValidation</p>
+                            </div>
+                            <div class="col-3">
+                                function
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    used ONLY inside init() and submitAjaxForm() methods. Fires just after a field has been validated. 
+                                </p>
                             </div>
                         </div>
-                        <div class="">
-                            <div class="clearfix padding-tb-md row-list-separator small">
-                                <div class="col-xs-4">
-                                    <p class="text-green">skipUIfeedback</p>
-                                </div>
-                                <div class="col-xs-3">
-                                    boolean
-                                </div>
-                                <div class="col-xs-5">
-                                    <p>
-                                        if true, the "has-error/has-error-switch" class will not be added ( for UI feedback as said by the name ) 
-                                    </p>
-                                </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4">
+                                <p class="text-green">preventPasteFields</p>
+                            </div>
+                            <div class="col-3">
+                                string
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    CSS string selector for which the paste command will be disabled 
+                                </p>
                             </div>
                         </div>
-                        <div class="">
-                            <div class="clearfix padding-tb-md row-list-separator small">
-                                <div class="col-xs-4">
-                                    <p class="text-green">strictHtmlValidation</p>
-                                </div>
-                                <div class="col-xs-3">
-                                    boolean
-                                </div>
-                                <div class="col-xs-5">
-                                    <p>
-                                        activate JS controls for strict validation ( as for HTML5 attributes, eg: mexlength that does not allow to type chars that exceed its value ) 
-                                    </p>
-                                </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4">
+                                <p class="text-green">skipUIfeedback</p>
+                            </div>
+                            <div class="col-3">
+                                boolean
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    if true, the "has-error/has-error-switch" class will not be added ( for UI feedback as said by the name ) 
+                                </p>
                             </div>
                         </div>
-                        <div class="">
-                            <div class="clearfix padding-tb-md row-list-separator small">
-                                <div class="col-xs-4">
-                                    <p class="text-green">validateOnEvents</p>
-                                </div>
-                                <div class="col-xs-3">
-                                    string
-                                </div>
-                                <div class="col-xs-5">
-                                    <p>
-                                        events on which the validation will fire ( only for required fields ) - used ONLY inside init() method 
-                                    </p>
-                                </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4">
+                                <p class="text-green">strictHtmlValidation</p>
+                            </div>
+                            <div class="col-3">
+                                boolean
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    activate JS controls for strict validation ( as for HTML5 attributes, eg: mexlength that does not allow to type chars that exceed its value ) 
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4">
+                                <p class="text-green">validateOnEvents</p>
+                            </div>
+                            <div class="col-3">
+                                string
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    events on which the validation will fire ( only for required fields ) - used ONLY inside init() method 
+                                </p>
                             </div>
                         </div>
                     </div>
-                    <div class="panel-footer no-bg">
+                    <div class="card-footer no-bg">
                         <p>
-                            Default field options are:
+                            Default field options:
                         </p>
                         <pre class="small">
-    {
-        checkDirtyField: false,
-        cssClasses: {
-            dirty: 'dirty-field',
-            error: 'has-error',
-            errorMultiChoice: 'has-error-switch',
-            valid: 'is-valid'
-        },
-        focusOnRelated: true,
-        maxFileSize: 10,
-        onValidation: null,
-        preventPasteFields: '[type="password"], [data-equal-to]',
-        skipUIfeedback: false,
-        strictHtmlValidation: false,
-        validateOnEvents: 'input change'
-    }</pre>
+{
+    checkDirtyField:        false,
+    cssClasses: {
+        dirty:              'dirty-field',
+        error:              'has-error',
+        errorMultiChoice:   'has-error-switch',
+        valid:              'is-valid'
+    },
+    focusOnRelated:         true,
+    maxFileSize:            10,
+    onPastePrevented:       null,
+    onValidation:           null,
+    preventPasteFields:     '[type="password"], [data-equal-to]',
+    skipUIfeedback:         false,
+    strictHtmlValidation:   false,
+    validateOnEvents:       'input change'
+}</pre>
                     </div>
                 </div>
             </div>
         
             <br />
+            <!-- Field Options -->
             <div>
-                <h3 class="sticky-title mt-0 ml-4"><span class="small">Form Options</span></h3>
+                <h3 class="sticky-title mt-0 ml-4em"><span class="small">Form Options</span></h3>
                 <p>
                     They will be used ONLY inside submitAjaxForm() method ( that can be used as standalone method but it is also used inside init() method ).<br />
                     To make use of these functionalities you must set the data-ajax-submit attribute for the form.
                 </p>
                 <div class="panel panel-default panel-transparent" style="background-color: transparent;">
-                <div class="panel-heading clearfix">
-                    <div class="">
-                        <div class="col-xs-3">
-                            name ( type )
-                        </div>
-                        <div class="col-xs-5">
-                            arguments
-                        </div>
-                        <div class="col-xs-4">
-                            description
+                    <div class="card-header bg-white text-dark clearfix">
+                        <div class="d-flex">
+                            <div class="col-3">
+                                name ( type )
+                            </div>
+                            <div class="col-5">
+                                arguments
+                            </div>
+                            <div class="col-4">
+                                description
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="panel-body">
-                    <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-3">
+                    <div class="card-body">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-3">
                                 <p class="text-green">beforeSend</p>
                                 ( function )
                             </div>
-                            <div class="col-xs-5">
+                            <div class="col-5">
                                 <ul>
                                     <li>
                                         data: ( JS object )
                                         <pre class="small">
 {
-    formData: {},
-    stopExecution: false
+    formData:       {},
+    stopExecution:  false
 }</pre>
                                         <ul>
                                             <li>
                                                 formData: ( JS object ) with the form data
                                             </li>
                                             <li>
-                                                stopExecution: ( Boolean - default is false ) wether or not to stop the execution of the script. If true, the AJAX call will not be done.
+                                                stopExecution: ( Boolean - default is false ) wether or not to stop the execution of the script. If true, the AJAX call will not be executed.
                                             </li>
                                         </ul>
                                     </li>
                                     <li>
-                                        $form: ( jQuery object ) jQuery object form the form tag
+                                        formEl: JS/jQuery node element for the form
                                     </li>
                                 </ul>
                             </div>
-                            <div class="col-xs-4">
+                            <div class="col-4">
                                 <p>
                                     Fires before the AJAX call starts. If used to modify the JSON, it must have a return statement. 
                                 </p>
                             </div>
                         </div>
-                    </div>
-                    <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-3">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-3">
                                 <p class="text-green">manageFileUpload</p>
                                 ( boolean )
                             </div>
-                            <div class="col-xs-5">
-                                
+                            <div class="col-5">
+
                             </div>
-                            <div class="col-xs-4">
+                            <div class="col-4">
                                 <p>
                                     Wether or not the plugin must manage the file upload. It is a simple file upload via ajax.<br />
                                     You must also set the enctype="multipart/form-data" attribute to the form.
-                                    
+
                                 </p>
                             </div>
                         </div>
-                    </div>
-                    <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-3">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-3">
                                 <p class="text-green">onSubmitComplete</p>
                                 ( function )
                             </div>
-                            <div class="col-xs-5">
+                            <div class="col-5">
                                 <ul>
                                     <li>
-                                        ajaxData: ( JS object ) containing the ajax call data as jquery passes it ( dataOrXHR, status, XHRorResponse ).
+                                        ajaxData: ( JS object ) containing the ajax call data ( dataOrXHR, status, XHRorResponse ).
                                     </li>
                                     <li>
-                                        $form: ( jQuery object ) jQuery object form the form tag
+                                        formEl: JS/jQuery node element for the form
                                     </li>
                                 </ul>
                             </div>
-                            <div class="col-xs-4">
+                            <div class="col-4">
                                 <p>
                                     Fires at AJAX call equivalent. 
                                 </p>
                             </div>
                         </div>
-                    </div>
-                    <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-3">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-3">
                                 <p class="text-green">onSubmitError</p>
                                 ( function )
                             </div>
-                            <div class="col-xs-5">
+                            <div class="col-5">
                                 <ul>
                                     <li>
-                                        ajaxData: ( JS object ) containing the ajax call data as jquery passes it ( errorThrown, status, response ).
+                                        ajaxData: ( JS object ) containing the ajax call data ( errorThrown, status, response ).
                                     </li>
                                     <li>
-                                        $form: ( jQuery object ) jQuery object form the form tag
+                                        formEl: JS/jQuery node element for the form
                                     </li>
                                 </ul>
                             </div>
-                            <div class="col-xs-4">
+                            <div class="col-4">
                                 <p>
                                     Fires at AJAX call equivalent. 
                                 </p>
                             </div>
                         </div>
-                    </div>
-                    <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-3">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-3">
                                 <p class="text-green">onSubmitSuccess</p>
                                 ( function )
                             </div>
-                            <div class="col-xs-5">
+                            <div class="col-5">
                                 <ul>
                                     <li>
-                                        ajaxData: ( JS object ) containing the ajax call data as jquery passes it ( data, status, response ).
+                                        ajaxData: ( JS object ) containing the ajax call data ( data, status, response ).
                                     </li>
                                     <li>
-                                        $form: ( jQuery object ) jQuery object form the form tag
+                                        formEl: JS/jQuery node element for the form
                                     </li>
                                 </ul>
                             </div>
-                            <div class="col-xs-4">
+                            <div class="col-4">
                                 <p>
                                     Fires at AJAX call equivalent. 
                                 </p>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="panel-footer no-bg">
-                    <p>
-                        Default form options are:
-                    </p>
-                    <pre class="small">
+                    <div class="card-footer no-bg">
+                        <p>
+                            Default form options:
+                        </p>
+                        <pre class="small">
 {
-    beforeSend: null,
-    onSubmitComplete: null,
-    onSubmitError: null,
-    onSubmitSuccess: null
+    beforeSend:         null,
+    manageFileUpload:   true,
+    onSubmitComplete:   null,
+    onSubmitError:      null,
+    onSubmitSuccess:    null
 }</pre>
+                    </div>
                 </div>
-            </div>
             </div>
         </div>
         
@@ -1130,26 +1223,26 @@
                 formJS has these useful methods:
             </p>
             <div class="panel panel-default panel-transparent" style="background-color: transparent;">
-                <div class="panel-heading clearfix">
-                    <div class="">
-                        <div class="col-xs-4">
+                <div class="card-header bg-white text-dark clearfix">
+                    <div class="d-flex">
+                        <div class="col-4">
                             name
                         </div>
-                        <div class="col-xs-5">
+                        <div class="col-5">
                             parameters
                         </div>
-                        <div class="col-xs-3">
+                        <div class="col-3">
                             return value
                         </div>
                     </div>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4">
                                 <pre class="small text-green">addValidationRules( newRules )</pre>
                             </div>
-                            <div class="col-xs-5">
+                            <div class="col-5">
                                 <ul>
                                     <li>
                                         newRules: JS object containing the new validation rule(s) to add:<br />
@@ -1172,112 +1265,41 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="col-xs-3">
+                            <div class="col-3">
                                 
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4">
-                                <pre class="small text-green">checkDirtyField( $fields )</pre>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4">
+                                <pre class="small text-green">getFormJSON( formEl )</pre>
                             </div>
-                            <div class="col-xs-5">
+                            <div class="col-5">
                                 <ul>
                                     <li>
-                                        $fields: jQuery collection of fields ( or a single field ). To know if a field has a value or is empty ( useful in case, for example, where you want to move the label of a field - see all examples above but Basic UI ).
+                                        formEl: JS/jQuery node element for the form you want to get the JSON from.
                                     </li>
                                 </ul>
                             </div>
-                            <div class="col-xs-3">
-                                
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4">
-                                <pre class="small text-green">getFormJSON( $form )</pre>
-                            </div>
-                            <div class="col-xs-5">
-                                <ul>
-                                    <li>
-                                        $form: jQuery object for the form you want to get the JSON from.
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-xs-3">
+                            <div class="col-3">
                                 <p>
                                     a JSON object with pairs of field-name / field-value like:
                                 </p>
                                 <pre class="small">
 {
-    name: 'Valerio',
-    city: 'Milan',
-    website: 'http://www.valeriodipunzio.com'
+    name:   'Valerio',
+    city:   'Milan',
+    website:'http://www.valeriodipunzio.com'
 }</pre>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4">
-                                <pre class="small text-green">isValidField( $field[, fieldOptions] )</pre>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4">
+                                <pre class="small text-green">init( [formEl[, options]] )</pre>
                             </div>
-                            <div class="col-xs-5">
+                            <div class="col-5">
                                 <ul>
                                     <li>
-                                        $field: jQuery object for the form field ( input, select, textarea )
-                                    </li>
-                                    <li>
-                                        fieldOptions: ( Optional ) JS object. For default values see Options section
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-xs-3">
-                                <p>
-                                    Boolean
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4">
-                                <pre class="small text-green">isValidForm( $form[, options] )</pre>
-                            </div>
-                            <div class="col-xs-5">
-                                <ul>
-                                    <li>
-                                        $form: jQuery object for the form
-                                    </li>
-                                    <li>
-                                        options: ( Optional ) JS object. Can contain fieldOptions and formOptions. For default values see Options section
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-xs-3">
-                                <p>
-                                    Object like:
-                                </p>
-                                <pre class="small">
-{
-    $fields: [{
-        $field: $('.my-field')
-        result: true
-    }],
-    result: true
-}</pre>
-                                <ul>
-                                    <li>
-                                        $fields: ( array of JS objects ) a list of the form fields with $field ( jQuery object ) and result ( boolean )
-                                    </li>
-                                    <li>
-                                        result: ( boolean ) check for the form, if it is valid or not
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4">
-                                <pre class="small text-green">init( [$form[, options]] )</pre>
-                            </div>
-                            <div class="col-xs-5">
-                                <ul>
-                                    <li>
-                                        $form: ( Optional ) jQuery object for the form(s)
+                                        formEl: ( Optional ) JS/jQuery node element for the form(s)
                                     </li>
                                     <li>
                                         options: ( Optional ) JS object. Can contain fieldOptions and formOptions. For default values see Options section
@@ -1286,32 +1308,85 @@
                                 <p>
                                     The validation is executed on every field with required attribute on events as defined in fieldOptions. For default values see Options section
                                     <br /><br />
-                                    This method will validate specific forms ( if passed ) or every form ( if a falsy value is passed ) that:
+                                    This method will validate specific forms ( if passed ) or every form ( if none or falsy value is passed ) that:
                                 </p>
                                 <ul>
                                     <li>
-                                        has novalidate attribute
-                                    </li>
-                                    <li>
-                                        is not a survey form ( with class "survey-form" )
+                                        has "novalidate" attribute
                                     </li>
                                 </ul>
                                 <p>
                                     If the form has "data-ajax-submit" attribute, submitAjaxForm method will be used on form submit.
                                 </p>
                             </div>
-                            <div class="col-xs-3">
+                            <div class="col-3">
 
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4">
-                                <pre class="small text-green">submitAjaxForm( $form[, options] )</pre>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4">
+                                <pre class="small text-green">isValidField( fieldEl[, fieldOptions] )</pre>
                             </div>
-                            <div class="col-xs-5">
+                            <div class="col-5">
                                 <ul>
                                     <li>
-                                        $form: jQuery object for the form
+                                        fieldEl: JS/jQuery node element for the form field ( input, select, textarea )
+                                    </li>
+                                    <li>
+                                        fieldOptions: ( Optional ) JS object. For default values see Options section
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-3">
+                                <p>
+                                    Boolean
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4">
+                                <pre class="small text-green">isValidForm( formEl[, options] )</pre>
+                            </div>
+                            <div class="col-5">
+                                <ul>
+                                    <li>
+                                        formEl: JS/jQuery node element for the form
+                                    </li>
+                                    <li>
+                                        options: ( Optional ) JS object. Can contain fieldOptions and formOptions. For default values see Options section
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-3">
+                                <p>
+                                    Object like:
+                                </p>
+                                <pre class="small">
+{
+    fields: [{
+        field:  element,
+        result: true
+    }],
+    result:     true
+}</pre>
+                                <ul>
+                                    <li>
+                                        fields: ( array of JS objects ) a list of the form fields with field ( JS/jQuery node element ) and result ( boolean )
+                                    </li>
+                                    <li>
+                                        result: ( boolean ) check for the form, if it is valid or not
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4">
+                                <pre class="small text-green">submitAjaxForm( formEl[, options] )</pre>
+                            </div>
+                            <div class="col-5">
+                                <ul>
+                                    <li>
+                                        formEl: JS/jQuery node element for the form
                                     </li>
                                     <li>
                                         options: ( Optional ) JS object. Can contain fieldOptions and formOptions. For default values see Options section
@@ -1335,7 +1410,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="col-xs-3">
+                            <div class="col-3">
                                 
                             </div>
                         </div>
@@ -1351,25 +1426,25 @@
                 Special fields, with data-subtype attribute, will be validated with rules as follow ( you can add and/or override these rules with addValidationRules method ):
             </p>
             <div class="panel panel-default panel-transparent" style="background-color: transparent;">
-                <div class="panel-heading clearfix">
-                    <div class="">
-                        <div class="col-xs-4 col-sm-3">
+                <div class="card-header bg-white text-dark clearfix">
+                    <div class="d-flex">
+                        <div class="col-4 col-sm-3">
                             data-subtype value
                         </div>
-                        <div class="col-xs-8 col-sm-9">
+                        <div class="col-8 col-sm-9">
                             validation rule
                         </div>
                     </div>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 col-sm-3 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 col-sm-3 text-green">
                                 cap
                             </div>
-                            <div class="col-xs-8 col-sm-9">
+                            <div class="col-8 col-sm-9">
                                 <p>
-                                    /[0-9]{5}$/
+                                    /^[0-9]{5}$/
                                 </p>
                                 <br />
                                 <p class="small text-lowercase text-opacity">
@@ -1377,11 +1452,11 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 col-sm-3 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 col-sm-3 text-green">
                                 date
                             </div>
-                            <div class="col-xs-8 col-sm-9">
+                            <div class="col-8 col-sm-9">
                                 <p>
                                     /^(0?[1-9]|[12][0-9]|3[01])([ \/\-.])(0?[1-9]|1[012])\2([0-9][0-9][0-9][0-9])(([ -])([0-1]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9])?$/
                                 </p>
@@ -1392,24 +1467,24 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 col-sm-3 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 col-sm-3 text-green">
                                 email
                             </div>
-                            <div class="col-xs-8 col-sm-9">
+                            <div class="col-8 col-sm-9">
                                 <p>
-                                    /(\w+)\@(\w+)\.[a-zA-Z]/
+                                    /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/
                                 </p>
                                 <p class="small text-lowercase text-opacity">
-                                    EMAIL MUST BE AT LEAST ( FOR EXAMPLE ): a@a.a
+                                    EMAIL MUST BE AT LEAST ( FOR EXAMPLE ): a@a.aa
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 col-sm-3 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 col-sm-3 text-green">
                                 fiscal-code
                             </div>
-                            <div class="col-xs-8 col-sm-9">
+                            <div class="col-8 col-sm-9">
                                 <p>
                                     /^(?:[B-DF-HJ-NP-TV-Z](?:[AEIOU]{2}|[AEIOU]X)|[AEIOU]{2}X|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[1256LMRS][\dLMNP-V])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[\dLMNP-V][1-9MNP-V]|[1-9MNP-V][0L]))[A-Z]$/i
                                 </p>
@@ -1419,11 +1494,11 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 col-sm-3 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 col-sm-3 text-green">
                                 hex-color
                             </div>
-                            <div class="col-xs-8 col-sm-9">
+                            <div class="col-8 col-sm-9">
                                 <p>
                                     /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/
                                 </p>
@@ -1435,11 +1510,11 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 col-sm-3 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 col-sm-3 text-green">
                                 landline-number
                             </div>
-                            <div class="col-xs-8 col-sm-9">
+                            <div class="col-8 col-sm-9">
                                 <p>
                                     /^((00|\+)\d{2}[\-\. ]??)??(((0[\d]{1,4}))([\/\-\. ]){0,1}([\d, ]{5,10}))$/
                                 </p>
@@ -1453,11 +1528,11 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 col-sm-3 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 col-sm-3 text-green">
                                 mobile-number
                             </div>
-                            <div class="col-xs-8 col-sm-9">
+                            <div class="col-8 col-sm-9">
                                 <p>
                                     /^((00|\+)\d{2}[\-\. ]??)??3\d{2}[\-\. ]??\d{6,7}$/
                                 </p>
@@ -1469,11 +1544,11 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 col-sm-3 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 col-sm-3 text-green">
                                 number
                             </div>
-                            <div class="col-xs-8 col-sm-9">
+                            <div class="col-8 col-sm-9">
                                 <p>
                                     /[+-]?([0-9]*[.])?[0-9]+/
                                 </p>
@@ -1483,11 +1558,11 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 col-sm-3 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 col-sm-3 text-green">
                                 numberFloat
                             </div>
-                            <div class="col-xs-8 col-sm-9">
+                            <div class="col-8 col-sm-9">
                                 <p>
                                     /[+-]?([0-9]*[.])[0-9]+/
                                 </p>
@@ -1498,11 +1573,11 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 col-sm-3 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 col-sm-3 text-green">
                                 numberInteger
                             </div>
-                            <div class="col-xs-8 col-sm-9">
+                            <div class="col-8 col-sm-9">
                                 <p>
                                     /^\d+$/
                                 </p>
@@ -1512,11 +1587,11 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 col-sm-3 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 col-sm-3 text-green">
                                 password
                             </div>
-                            <div class="col-xs-8 col-sm-9">
+                            <div class="col-8 col-sm-9">
                                 <p>
                                     /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
                                 </p>
@@ -1527,11 +1602,11 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 col-sm-3 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 col-sm-3 text-green">
                                 url
                             </div>
-                            <div class="col-xs-8 col-sm-9">
+                            <div class="col-8 col-sm-9">
                                 <p>
                                     /^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
                                 </p>
@@ -1543,25 +1618,25 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 col-sm-3 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 col-sm-3 text-green">
                                 username
                             </div>
-                            <div class="col-xs-8 col-sm-9">
+                            <div class="col-8 col-sm-9">
                                 <p>
-                                    /^[a-zA-Z0-9_-]{3,24}$/
+                                    /^(?=\w)(?=[\-\.\@]?)[\w\-\.\@]{3,24}$/
                                 </p>
                                 <br />
                                 <p class="small text-lowercase text-opacity">
-                                    USERNAME WITH LETTERS/NUMBERS AND - OR _ WITH MIN LENGTH 3 AND MAX LENGTH 24
+                                    USERNAME MUST START WITH A LETTER/NUMBER/UNDERSCORE AND CAN ALSO CONTAIN . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 col-sm-3 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 col-sm-3 text-green">
                                 vat-number
                             </div>
-                            <div class="col-xs-8 col-sm-9">
+                            <div class="col-8 col-sm-9">
                                 <p>
                                     /^(IT){0,1}[0-9]{11}$/i
                                 </p>
@@ -1583,23 +1658,23 @@
                 Other types of validations can be enabled with HTML data-* attributes:
             </p>
             <div class="panel panel-default panel-transparent" style="background-color: transparent;">
-                <div class="panel-heading clearfix">
-                    <div class="">
-                        <div class="col-xs-4">
+                <div class="card-header bg-white text-dark clearfix">
+                    <div class="d-flex">
+                        <div class="col-4">
                             HTML attribute
                         </div>
-                        <div class="col-xs-8">
+                        <div class="col-8">
                             value
                         </div>
                     </div>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 text-green">
                                 data-validate-if-filled
                             </div>
-                            <div class="col-xs-8">
+                            <div class="col-8">
                                 <p>
                                     No value needed.<br />
                                     The field will be validated only if filled.<br />
@@ -1607,14 +1682,14 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 text-green">
                                 data-required-from
                                 <div class="small">
                                     ( use together with data-require-more )
                                 </div>
                             </div>
-                            <div class="col-xs-8">
+                            <div class="col-8">
                                 <p>
                                     The "id" attribute of the field with "data-require-more" attribute
                                 </p>
@@ -1624,11 +1699,11 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 text-green">
                                 data-equal-to
                             </div>
-                            <div class="col-xs-8">
+                            <div class="col-8">
                                 <p>
                                     The "name" attribute of the field this answer value must be equal to
                                 </p>
@@ -1638,11 +1713,11 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 text-green">
                                 data-exact-length
                             </div>
-                            <div class="col-xs-8">
+                            <div class="col-8">
                                 <p>
                                     The exact number of characters the answer must have ( no more nor less )
                                 </p>
@@ -1664,27 +1739,27 @@
                 Other utilities for fields validation activated by setting a data-* attribute on the field:
             </p>
             <div class="panel panel-default panel-transparent" style="background-color: transparent;">
-                <div class="panel-heading clearfix">
-                    <div class="">
-                        <div class="col-xs-4">
+                <div class="card-header bg-white text-dark clearfix">
+                    <div class="d-flex">
+                        <div class="col-4">
                             HTML attribute
                         </div>
-                        <div class="col-xs-8">
+                        <div class="col-8">
                             description
                         </div>
                     </div>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator small">
-                            <div class="col-xs-4 text-green">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                            <div class="col-4 text-green">
                                 data-char-count
                                 <div class="small">
                                     ( use together with data-char-length ) <br />
                                     ( optionally with maxlength and data-char-maxlength )
                                 </div>
                             </div>
-                            <div class="col-xs-8">
+                            <div class="col-8">
                                 <p>
                                     setup a counter for the field ( for example for a message in a textarea ).<br />
                                     Related HTML attributes:
@@ -1709,81 +1784,76 @@
         
     </div>
     
-    <script src="js/vendors/jquery-1.12.4.min.js"></script>
     <script src="js/modules/formJS.js"></script>
     <script type="text/javascript">
-        $(function(){
-            
-            /* ---------------------------------------- */
-            // ADD A NEW VALIDATION RULE
-            /*
-            FORM.addValidationRules({
-                zip: function( zipCode ){ return /[5-9]{3}$/.test( zipCode ); }
-            });
-            */
-            /* ---------------------------------------- */
-            
-            $(document).on('click', '.panel-collapsible .panel-heading', function(e){
-                e.preventDefault();
-                $(this).toggleClass('active');
-                $(this).closest('.panel').find('.panel-body').slideToggle();
-            });
-                        
-            var options = {
-                    fieldOptions: {
-                        checkDirtyField: true,
-                        cssClasses: {
-                            dirty: 'dirty-field custom-dirty-field'
-                        },
-                        onValidation: function( fieldsArray ){
-                            console.log('onValidation fieldsArray ', fieldsArray);
-                            for(var f=0; f<fieldsArray.length; f++){
-                                var field = fieldsArray[f];
-                                //console.log( 'field "' + field.$field.attr('name') + '" is valid? ', field.result );
-                            }
-                        },
-                        strictHtmlValidation: true,
-                        validateOnEvents: 'input change'
-                    },
-                    formOptions: {
-                        beforeSend: function( data, $form ){
-                            console.log( 'beforeSend data ', data );
-                            console.log( 'beforeSend $form ', $form );
-                            data.formData.addedInfo = 'This info was added on beforeSend callback';
-                            console.log( 'beforeSend data edited ', data );
-                            return data;
-                        },
-                        onSubmitSuccess: function( ajaxData, $form ){
-                            console.log( 'onSubmitSuccess ajaxData ', ajaxData );
-                            console.log( 'onSubmitSuccess $form ', $form );
-                        },
-                        onSubmitError: function( ajaxData, $form ){
-                            console.log( 'onSubmitError ajaxData ', ajaxData );
-                            console.log( 'onSubmitError $form ', $form );
-                        }
-                    }
-                };
-            
-            FORM.init( null, options );
-            
-            /* ---------------------------------------- */
-            // MANUAL CALL FOR FORM VALIDATION
-            /*
-            $(document).on('submit', 'form', function(e){
-                e.preventDefault();
-                
-                var formValidation = FORM.isValidForm( $(this) );
-                
-                if( formValidation.result ){
-                    console.log( 'THIS FORM IS VALID ;)' );
-                } else {
-                    console.log( 'SORRY, THIS FORM IS NOT VALID :( CHECK HERE: ', formValidation.$fields );
-                }
-            });
-            */
-            /* ---------------------------------------- */
-            
+        /* ---------------------------------------- */
+        // ADD A NEW VALIDATION RULE
+        /*
+        FORM.addValidationRules({
+            zip: function( zipCode ){ return /[5-9]{3}$/.test( zipCode ); }
         });
+        */
+        /* ---------------------------------------- */
+        
+        document.addEventListener('click', function(e){
+            var elem = e.target,
+                elemSelector = '.panel-collapsible .card-header',
+                panelHeadingEL = (
+                    elem.matches(elemSelector) ? 
+                    elem : elem.closest(elemSelector)
+                );
+            
+            if( panelHeadingEL ){
+                e.preventDefault();
+                
+                var panelEl = elem.closest('.panel').querySelector('.card-body'),
+                    panelDisplay = panelEl.style.display;
+                
+                panelHeadingEL.classList.toggle('active');
+                panelEl.style.display = (panelDisplay === '' || panelDisplay === 'none' ? 'block' : 'none');
+            }
+        }, false);
+        
+        var options = {
+                fieldOptions: {
+                    checkDirtyField: true,
+                    cssClasses: {
+                        dirty: 'dirty-field custom-dirty-field'
+                    },
+                    onValidation: function( fieldsArray ){
+                        console.log('onValidation fieldsArray ', fieldsArray);
+                        for(var f=0; f<fieldsArray.length; f++){
+                            var field = fieldsArray[f];
+                            console.log( 'field "' + field.field.name + '" is valid? ', field.result );
+                        }
+                    },
+                    strictHtmlValidation: true,
+                    validateOnEvents: 'input change'
+                },
+                formOptions: {
+                    beforeSend: function( data, formEl ){
+                        console.log( 'beforeSend data ', data );
+                        console.log( 'beforeSend formEl ', formEl );
+                        data.formData.addedInfo = 'This info was added on beforeSend callback';
+                        console.log( 'beforeSend data edited ', data );
+                        return data;
+                    },
+                    onSubmitSuccess: function( ajaxData, formEl ){
+                        console.log( 'onSubmitSuccess ajaxData ', ajaxData );
+                        console.log( 'onSubmitSuccess formEl ', formEl );
+                    },
+                    onSubmitError: function( ajaxData, formEl ){
+                        console.log( 'onSubmitError ajaxData ', ajaxData );
+                        console.log( 'onSubmitError formEl ', formEl );
+                    },
+                    onSubmitComplete: function( ajaxData, formEl ){
+                        console.log( 'onSubmitComplete ajaxData ', ajaxData );
+                        console.log( 'onSubmitComplete formEl ', formEl );
+                    }
+                }
+            };
+        
+        FORM.init( options );
     </script>
 </body>
 </html>

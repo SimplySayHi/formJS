@@ -2,6 +2,8 @@ html, body, .input-group-addon, .form-control {
     font-size: 16px;
 }
 
+html, body { font-family: 'Raleway', sans-serif; }
+
 body {
     background-color: #073b4c;
     color: #06d6a0;
@@ -11,7 +13,7 @@ ul, ol {
     padding-left: 1em;
 }
 
-.panel-heading p {
+.card-header p {
     margin: 0;
 }
 
@@ -28,6 +30,7 @@ pre code{padding: 0;font-size: inherit;color: inherit;white-space: pre-wrap;back
 label {
     font-size: 0.85em;
     font-weight: 300;
+    margin: 0;
 }
 
 .input-group-addon,
@@ -35,9 +38,6 @@ label {
 .form-control:focus {
     -webkit-box-shadow: none;
     box-shadow: none;
-    /*border-width: 1px;
-    border-color: #fff;
-    color: #fff;*/
 }
 
 .input-group-addon {
@@ -101,27 +101,25 @@ textarea {
     -webkit-appearance: textfield;
     -moz-appearance: textfield;
     appearance: textfield;
-    display: block;
-    width: 100%;
-    height: 34px;
-    padding: 6px 0;
+    padding-left: 0;
+    padding-right: 0;
     font-size: 0.85em;
     line-height: inherit;
-    color: #fff;
-    background-color: transparent;
+    color: #fff !important;
+    background-color: transparent !important;
     background-image: none;
     border: 0 none;
     border-bottom: 1px solid rgba(255,255,255,0.25);
     border-radius: 0;
-    -webkit-box-shadow: none;
-    box-shadow: none;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
     -webkit-transition: border-color ease-in-out 0.15s;
     -o-transition: border-color ease-in-out 0.15s;
     transition: border-color ease-in-out 0.15s;
     position: relative;
     z-index: 1;
 }
-.input-group-addon {
+/*.input-group-addon {
     display: table-cell;
     border: 0 none;
     border-radius: 0;
@@ -131,13 +129,33 @@ textarea {
     padding-top: 0;
     padding-bottom: 0;
 }
+.has-error .input-group-addon {
+    background: none;
+    border-width: 2px;
+}*/
 .radio + .input-group {
     margin-top: -5px;
 }
 
-.has-error .input-group-addon {
-    background: none;
+.input-group-prepend {
+    margin-right: 0;
+}
+.input-group-prepend .input-group-text {
+	background-color: transparent;
+    color: #06d6a0;
+    border-radius: 0;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+    padding-left: 0;
+}
+.input-group-prepend .input-group-text label {
+    margin-left: 0.15rem;
+}
+.has-error .input-group-prepend .input-group-text {
     border-width: 2px;
+    border-color: #a94442;
 }
 
 /* ANIMATED LABELS */
@@ -338,6 +356,7 @@ label, .radio label, .checkbox label {
 .has-error .form-control:focus,
 .has-error .label-inline,
 .has-error .label-inline-flex .form-control + label:after {
+    border-color: #a94442;
     border-width: 2px;
     -webkit-box-shadow: none;
     box-shadow: none;
@@ -362,12 +381,12 @@ label, .radio label, .checkbox label {
 }
 
 /* PANELS */
+.panel-collapsible .card-header,
 .panel-collapsible .panel-heading {
 	cursor: pointer;
     position: relative;
 }
 .panel-collapsible .panel-heading:after {
-    /*content: '\e094';*/
     content: '\e114';
     font-family:'Glyphicons Halflings';
     position: absolute;
@@ -382,10 +401,62 @@ label, .radio label, .checkbox label {
 .panel-collapsible .panel-heading.active:after {
     content: '\e113';
 }
+.panel-collapsible .card-body,
 .panel-collapsible .panel-body {
     display: none;
 }
 
+.panel-collapsible .card-header > div {
+    position: relative;
+}
 
+.panel-collapsible .card-header > div:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 7px 7px 0 7px;
+    border-color: black transparent transparent transparent;
+}
 
+.panel-collapsible .card-header.active > div:after {
+    border-width: 0 7px 7px 7px;
+    border-color: transparent transparent black transparent;
+}
 
+/* ----- */
+h1 { font-size: 4em; line-height: 1; display: inline-block; border-bottom: 2px solid rgba(0,0,0,0.15); padding: 0.25em 0.0625em; }
+h2 { font-size: 3em; border-bottom: 2px solid rgba(0,0,0,0.15); padding: 0.25em 0.0625em; }
+h3 { font-size: 2em; }
+h1, h2, h3 { font-family: 'Fredericka the Great', cursive; }
+h2, h3 { color: #ffd166; margin-top: 2em; }
+h1 .small { font-family: 'Raleway', sans-serif; font-size: 0.5em; color: inherit; }
+h3 .small { color: inherit; }
+.interline-sm { line-height: 1; }
+.sticky-title {
+    position: -webkit-sticky; position: sticky;
+    top: 0; z-index: 1; background: #073B4C; border-bottom: 2px solid rgba(0,0,0,0.15); padding: 0.25em 0.0625em;
+}
+hr { opacity: 0.2; }
+.mt-0 { margin-top: 0; }
+.ml-4em { margin-left: 4em; }
+.title-min { line-height: 0.75; }
+.text-yellow { color: #ffd166; }
+.text-red { color: #ef476f; }
+.text-green { color: #06d6a0; }
+.text-opacity { opacity: 0.5; }
+ul { padding-left: 1em; }
+a { color: #ef476f; }
+a:hover, a:active { color: inherit; }
+pre { max-height: 355px; }
+.panel { background-color: transparent; border-width: 2px; border-radius: 8px; /*color: #ccc;*/ }
+.card-header { border: 0 none; border-top-right-radius: 6px; border-top-left-radius: 6px; }
+.panel-transparent { color: #ccc; }
+.no-bg { background: none; }
+.padding-tb-md { padding-top: 1em; padding-bottom: 1em; }
+.row-list-separator { border-top: 2px solid rgba(204, 204, 204, 0.2); }
+.row-list-separator:first-child { border-top: 0 none; }
