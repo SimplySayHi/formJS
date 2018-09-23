@@ -10,9 +10,9 @@ Visit the [Plugin Documentation Page](http://valeriodipunzio.com/plugins/formJS/
 
 ## Changelog
 
-1.2.0 - Now written with plain Javascript ( ES5 ) and jQuery, Minor bugfix.
+- 1.2.0 - Now written with plain Javascript ( ES5 ) and jQuery, Minor bugfix.
 
-1.1.2 - Works with jQuery.
+- [1.1.2](http://valeriodipunzio.com/plugins/formJS/1.1.2/) - Works with jQuery.
 
 
 ## License
