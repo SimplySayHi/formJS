@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>formJS - Demos jQuery</title>
+    <title>formJS - Demos</title>
     <meta name="description" content="">
     <meta name="author" content="">
     
@@ -17,19 +17,22 @@
 
 <body>
     
-    <div class="container">
-        <div class="text-center">
+    <div class="container mb-5">
+        <div id="top" class="text-center mb-5">
+            <div>
+                <p class="mt-5 mb-4">
+                    <a href="./index.html">< back to documentation</a>
+                </p>
+            </div>
             <h1>formJS</h1>
-            <p>Version 1.2.0<br />Demos with jQuery</p>
+            <p>Version 2.0.0<br />Demos</p>
         </div>
-
-        <br />
+        
         <!-- Demos -->
-        <div class="panel-collapsible row">
+        <div id="demos" class="panel-collapsible row">
             
-          
             <!-- Demo Ajax Form ( POST ) -->
-            <div class="col-sm-6 col-md-3 py-3">
+            <div id="demo-01" class="col-sm-6 col-md-3 py-3">
                 <div class="panel no-bg">
                     <div class="card-header bg-white text-dark">
                         <div>
@@ -37,7 +40,34 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="json/survey.json" name="ajax-form-post-01" data-ajax-submit novalidate>
+                        <form method="POST" enctype="multipart/form-data" action="" name="ajax-form-post-01" data-ajax-submit novalidate>
+                            <!-- <div data-formjs-question="" class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="test1" min="10" max="50" data-exact-length="2" class="form-control" required="" type="number">
+                                    <label>Number ( min 10 - max 50 )</label>
+                                </div>
+                                <div class="field-error-message small">Check your number, it is not valid (min 10, max 50, exact-length 2)!</div>
+                            </div>
+                            <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="test2" min="10" max="50" class="form-control" required="" type="range">
+                                        <label>Number ( min 10 - max 50 )</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your number, it is not valid (min 10, max 50, exact-length 2)!</div>
+                                </div>
+                            <div data-formjs-question="" class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="message" class="form-control" type="text" data-exact-length="10" data-char-count required />
+                                    <label>Message ( <span data-char-length="">0</span>/<span data-char-maxlength="">100</span> )</label>
+                                </div>
+                            </div> -->
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="document" type="file" class="form-control" accept="image/png" required />
+                                    <label>File</label>
+                                </div>
+                                <div class="field-error-message small">You must select a PNG file and size limit is 10MB!</div>
+                            </div>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
                                     <input name="name" type="text" class="form-control" required />
@@ -80,6 +110,13 @@
                                 </div>
                                 <div class="field-error-message small">Password must have minimum 8 characters with one digit, one lowercase, one uppercase</div>
                             </div>
+                            <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="passwordConfirm" type="password" data-equal-to="password" class="form-control" required />
+                                        <label>Confirm Password</label>
+                                    </div>
+                                    <div class="field-error-message small">Password and Confirm Password are not equal!</div>
+                                </div>
                             <div data-formjs-question  data-max-check="2" class="form-group">
                                 <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
                                 <div class="answers-box">
@@ -120,13 +157,14 @@
                             <div class="text-center">
                                 <button type="submit" class="btn btn-light">SEND</button>
                             </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
                         </form>
                     </div>
                 </div>
             </div>
             
             <!-- Demo Ajax Form ( GET ) -->
-            <div class="col-sm-6 col-md-3 py-3">
+            <div id="demo-02" class="col-sm-6 col-md-3 py-3">
                 <div class="panel no-bg">
                     <div class="card-header bg-white text-dark">
                         <div>
@@ -134,7 +172,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="json/survey.json" method="GET" name="ajax-form-get-01" data-ajax-submit novalidate>
+                        <form action="" method="GET" name="ajax-form-get-01" data-ajax-submit novalidate>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
                                     <input name="name" type="text" class="form-control" required />
@@ -217,13 +255,14 @@
                             <div class="text-center">
                                 <button type="submit" class="btn btn-light">SEND</button>
                             </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
                         </form>
                     </div>
                 </div>
             </div>
             
             <!-- Demo Basic Form ( POST ) -->
-            <div class="col-sm-6 col-md-3 py-3">
+            <div id="demo-03" class="col-sm-6 col-md-3 py-3">
                 <div class="panel no-bg">
                     <div class="card-header bg-white text-dark">
                         <div>
@@ -231,7 +270,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="json/survey.json" method="POST" name="basic-form-post-01" novalidate>
+                        <form action="" method="POST" name="basic-form-post-01" novalidate>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
                                     <input name="name" type="text" class="form-control" required />
@@ -320,7 +359,7 @@
             </div>
             
             <!-- Demo Basic Form ( GET ) -->
-            <div class="col-sm-6 col-md-3 py-3">
+            <div id="demo-04" class="col-sm-6 col-md-3 py-3">
                 <div class="panel no-bg">
                     <div class="card-header bg-white text-dark">
                         <div>
@@ -328,7 +367,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="json/survey.json" method="GET" name="basic-form-get-01" novalidate>
+                        <form action="" method="GET" name="basic-form-get-01" novalidate>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
                                     <input name="name" type="text" class="form-control" required />
@@ -415,75 +454,122 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Demo Non-Initialized Form -->
+            <div id="demo-05" class="col-sm-6 col-md-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Non-Initialized Form</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/survey.json" name="basic-form-post-02" novalidate data-formjs-init="false">
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="name" type="text" class="form-control" required />
+                                    <label>Name</label>
+                                </div>
+                                <div class="field-error-message small">Write your name!</div>
+                            </div>
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="surname" type="text" class="form-control" />
+                                    <label>Surname</label>
+                                </div>
+                                <div class="field-error-message small">Write your surname!</div>
+                            </div>
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="email" type="email" class="form-control" required />
+                                    <label>Email</label>
+                                </div>
+                                <div class="field-error-message small">Check your email address, it is not valid!</div>
+                            </div>
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="username" type="text" pattern="^(IT){0,1}[0-9]{11}$" class="form-control" required />
+                                    <label>VAT Number ( with pattern attribute )</label>
+                                </div>
+                                <div class="field-error-message small">VAT Number is not valid!</div>
+                            </div>
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="mobileNumber" type="text" data-subtype="mobile-number" class="form-control" data-validate-if-filled />
+                                    <label>Mobile number</label>
+                                </div>
+                                <div class="field-error-message small">Check your mobile number, it is not valid!</div>
+                            </div>
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="username" type="text" data-subtype="username" class="form-control" required />
+                                    <label>Username</label>
+                                </div>
+                                <div class="field-error-message small">Username must have at least 3 characters (no special chars allowed)!</div>
+                            </div>
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="password" type="password" class="form-control" required />
+                                    <label>Password</label>
+                                </div>
+                                <div class="field-error-message small">Password must have minimum 8 characters with one digit, one lowercase, one uppercase</div>
+                            </div>
+                            <div data-formjs-question  data-max-check="2" class="form-group">
+                                <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
+                                <div class="answers-box">
+                                    <div class="form-check">
+                                        <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-e" required="" />
+                                        <label class="form-check-label" for="checkbox-1-e">SMS</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="contactPrefCheck" type="checkbox" value="email" class="form-check-input" id="checkbox-2-e" required="" />
+                                        <label class="form-check-label" for="checkbox-2-e">Email</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="contactPrefCheck" type="checkbox" value="app-notiifcation" class="form-check-input" id="checkbox-3-e" required="" />
+                                        <label class="form-check-label" for="checkbox-3-e">App Notification</label>
+                                    </div>
+                                </div>
+                                <div class="field-error-message small">
+                                    <span>Select al least one of the options!</span>
+                                    <span>You can select 2 answers max!</span>
+                                </div>
+                            </div>
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box">
+                                    <div class="small">
+                                        I agree with the <a href="#" target="_blank">Privacy Policy</a>.
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="privacyCheck" id="privacyCheck-1-e" value="accepted" required />
+                                        <label class="form-check-label" for="privacyCheck-1-e">Yes</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="privacyCheck" id="privacyCheck-2-e" value="" required />
+                                        <label class="form-check-label" for="privacyCheck-2-e">No</label>
+                                    </div>
+                                </div>
+                                <div class="field-error-message small">You must agree!</div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             
         </div>
         
     </div>
-    
-    <script src="js/vendors/jquery-1.12.4.min.js"></script>
-    <script src="js/modules/jquery.formJS.js"></script>
-    <script type="text/javascript">
-        $(function(){
-            
-            /* ---------------------------------------- */
-            // ADD A NEW VALIDATION RULE
-            /*
-            FORM.addValidationRules({
-                zip: function( zipCode ){ return /[5-9]{3}$/.test( zipCode ); }
-            });
-            */
-            /* ---------------------------------------- */
-            
-            $(document).on('click', '.panel-collapsible .card-header', function(e){
-                e.preventDefault();
-                $(this).toggleClass('active');
-                $(this).closest('.panel').find('.card-body').slideToggle();
-            });
-            
-            var options = {
-                    fieldOptions: {
-                        checkDirtyField: true,
-                        cssClasses: {
-                            dirty: 'dirty-field custom-dirty-field'
-                        },
-                        onPastePrevented: function( fieldEl ){
-                            console.log( 'Paste event prevented on field ', fieldEl );
-                        },
-                        onValidation: function( fieldsArray ){
-                            console.log('onValidation fieldsArray ', fieldsArray);
-                            for(var f=0; f<fieldsArray.length; f++){
-                                var field = fieldsArray[f];
-                                console.log( 'field "' + field.field.name + '" is valid? ', field.result );
-                            }
-                        },
-                        strictHtmlValidation: true,
-                        validateOnEvents: 'input change'
-                    },
-                    formOptions: {
-                        beforeSend: function( data, formEl ){
-                            console.log( 'beforeSend data ', data );
-                            console.log( 'beforeSend formEl ', formEl );
-                            return data;
-                        },
-                        onSubmitSuccess: function( ajaxData, formEl ){
-                            console.log( 'onSubmitSuccess ajaxData ', ajaxData );
-                            console.log( 'onSubmitSuccess formEl ', formEl );
-                        },
-                        onSubmitError: function( ajaxData, formEl ){
-                            console.log( 'onSubmitError ajaxData ', ajaxData );
-                            console.log( 'onSubmitError formEl ', formEl );
-                        },
-                        onSubmitComplete: function( ajaxData, formEl ){
-                            console.log( 'onSubmitComplete ajaxData ', ajaxData );
-                            console.log( 'onSubmitComplete formEl ', formEl );
-                        }
-                    }
-                };
 
-            FORM.init( options );
-            
-        });
-    </script>
+    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 -->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event"></script>
     
+    <!-- <script type="module" src="src/index.js"></script>
+    <script type="module" src="js/demo.js"></script> -->
+
+    <script src="dist/formJS.min.js"></script>
+    <script src="js/demo.js"></script>
 </body>
 </html>

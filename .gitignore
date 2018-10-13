@@ -1,0 +1,8 @@
+node_modules/
+package-lock.json
+yarn.lock
+*.zip
+.DS_Store
+**/.DS_Store
+Thumbs.db
+**/Thumbs.db

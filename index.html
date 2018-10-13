@@ -17,12 +17,33 @@
 
 <body>
     
-    <div class="container">
-        <div class="text-center">
+    <div id="top" class="container mb-5">
+        <div id="menu" class="position-sticky text-right">
+            <div class="dropdown d-inline-block mt-3">
+                <button class="btn dropdown-toggle py-0 px-2 border border-red" data-toggle="dropdown" type="button">
+                    <span class="text-red">menu</span>
+                </button>
+                <span class="dropdown-menu">
+                    <a class="dropdown-item" href="formJS.zip">Download</a>
+                    <a class="dropdown-item" href="demos.html">Demos</a>
+                    <a class="dropdown-item" href="#browsers-support">Browsers Support</a>
+                    <a class="dropdown-item" href="#dependencies">Dependencies</a>
+                    <a class="dropdown-item" href="#html">HTML</a>
+                    <a class="dropdown-item" href="#initialization">Initialization</a>
+                    <a class="dropdown-item" href="#options-list">Options</a>
+                    <a class="dropdown-item" href="#methods">Methods</a>
+                    <a class="dropdown-item" href="#builtin-validations">Validation Rules &amp; Utilities</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS" target="_blank">View on Github</a>
+                    <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS/issues" target="_blank">Report a Bug</a>
+                </span>
+            </div>
+        </div>
+        <div class="text-center mb-5">
             <div>
-                <p class="d-inline-block mt-5 mb-4">
-                    <a href="https://github.com/valedp88/formJS" target="_blank" class="media">
-                        <span class="media-body interline-sm">view on <br />Github</span>
+                <p class="d-inline-block my-4">
+                    <a href="https://github.com/SimplySayHi/formJS" target="_blank" class="media">
+                        <span class="media-body interline-normal">view on <br />Github</span>
                         <svg class="align-self-center ml-2" style="vertical-align: middle;" version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
          width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
                     <path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M16,0.112c-8.836,0-16,7.294-16,16.291
@@ -37,534 +58,207 @@
     </svg></a>
                 </p>
             </div>
-            <h1>formJS</h1>
-            <p>Version 1.2.0<br />Documentation</p>
+            <h1>formJS</h1>            
+            <p>
+                Version 
+                <span class="dropdown d-inline-block ml-1">
+                    <button class="btn dropdown-toggle py-0 px-2 bg-transparent border border-red" data-toggle="dropdown" type="button">
+                        <span class="text-red">2.0.0</span>
+                    </button>
+                    <span class="dropdown-menu w-100 py-1">
+                        <a class="dropdown-item px-2" href="/plugins/formJS/1.2.0/">1.2.0</a>
+                        <a class="dropdown-item px-2" href="/plugins/formJS/1.1.2/">1.1.2</a>
+                    </span>
+                </span>
+                <br />
+                Documentation
+            </p>
         </div>
 
-        <br />
-        <!-- Demos -->
-        <div class="panel-collapsible row">
-            
-            <!-- Demo 1 -->
-            <div class="col-6 col-sm-6 col-md-3 py-3">
+        <!-- Demo -->
+        <div id="demo" class="panel-collapsible row">
+            <div class="col-12 col-sm-6 col-md-4 mx-auto py-3">
                 <div class="panel no-bg">
                     <div class="card-header bg-white text-dark bg-white">
-                        <div><p>Basic UI</p></div>
+                        <div><p>Demo</p></div>
                     </div>
                     <div class="card-body">
-                        <form action="json/survey.json" name="my-form-1" enctype="multipart/form-data" data-ajax-settings='{
-                                                                             "dataTypeOption": "json",
-                                                                             "myoption": [1,2,3],
-                                                                             "option3": {
-                                                                                "intOpt": "hello"
-                                                                             }
-                                                                             }' data-ajax-submit novalidate>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <input name="documents" type="file" multiple class="form-control" required="" />
-                                    <label>Document(s)</label>
+                        <form action="json/survey.json" name="my-form-4" data-ajax-submit="" novalidate>
+                            <div>
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="name" type="text" class="form-control" required="" />
+                                        <label>Name</label>
+                                    </div>
+                                    <div class="field-error-message small">Write your name!</div>
                                 </div>
-                                <div class="field-error-message small">
-                                    <div>
-                                    Select one or more files! Max file size is <span data-max-file-size></span>MB
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="surname" type="text" class="form-control" required="" />
+                                        <label>Surname</label>
+                                    </div>
+                                    <div class="field-error-message small">Write your surname!</div>
+                                </div>
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="fiscalCode" type="text" data-subtype="fiscal-code" class="form-control text-uppercase" required="" />
+                                        <label>Fiscal Code</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your fiscal code, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="vatNumber" type="text" data-subtype="vat-number" class="form-control" required="" />
+                                        <label>VAT Number</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your VAT number, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="username" type="text" data-subtype="username" class="form-control" required="" />
+                                        <label>Username</label>
+                                    </div>
+                                    <div class="field-error-message small">Username must have at least 3 characters (no special chars allowed)!</div>
+                                </div>
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="email" type="email" class="form-control" required="" />
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your email address, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="mobileNumber" type="text" data-subtype="mobile-number" class="form-control" required="" />
+                                        <label>Mobile number</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your mobile number, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="landlineNumber" type="text" data-subtype="landline-number" class="form-control" data-validate-if-filled="" />
+                                        <label>Landline number</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your landline number, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="zipCode" type="text" data-subtype="cap" class="form-control" data-validate-if-filled="" />
+                                        <label>ZIP</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your ZIP code, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="websiteUrl" type="text" data-subtype="url" class="form-control" data-validate-if-filled="" />
+                                        <label>Website</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your website url, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="date" type="text" data-subtype="date" class="form-control" data-validate-if-filled="" />
+                                        <label>Date</label>
+                                    </div>
+                                    <div class="field-error-message small">Check the date, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="hexColor" type="text" data-subtype="hex-color" class="form-control" data-validate-if-filled="" />
+                                        <label>HEX color</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your HEX color, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="test" type="number" min="10" max="50" data-exact-length="2" class="form-control" required="" />
+                                        <label>Number ( min 10 - max 50 )</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your number, it is not valid (min 10, max 50, exact-length 2)!</div>
+                                </div>
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <textarea name="message" class="form-control" rows="3" maxlength="100" data-char-count></textarea>
+                                        <label>Message ( <span data-char-length></span>/<span data-char-maxlength></span> )</label>
                                     </div>
                                 </div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <input name="name" type="text" class="form-control" required="" />
-                                    <label>Name</label>
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="input-container form-check">
+                                        <input required="" id="radio-5-20-6-1" name="radio-list-1" value="1" type="radio" class="form-check-input" />
+                                        <label for="radio-5-20-6-1" class="form-check-label">
+                                            Answer One
+                                        </label>
+                                    </div>
+                                    <div class="input-container form-check">
+                                        <input required="" id="radio-5-20-6-2" name="radio-list-1" value="2" type="radio" class="form-check-input" />
+                                        <label for="radio-5-20-6-2" class="form-check-label">
+                                            Answer Two
+                                        </label>
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <input id="radio-5-200-6-3" name="radio-list-1" value="3" required="" data-require-more="" type="radio" />
+                                                <label for="radio-5-200-6-3">&nbsp;Other:</label>
+                                            </div>
+                                        </span>
+                                        <input class="form-control" name="radio-list-1-more" data-required-from="#radio-5-200-6-3" type="text" />
+                                    </div>
                                 </div>
-                                <div class="field-error-message small">Write your name!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <input name="surname" type="text" class="form-control" required="" />
-                                    <label>Surname</label>
-                                </div>
-                                <div class="field-error-message small">Write your surname!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <input name="fiscalCode" type="text" data-subtype="fiscal-code" class="form-control text-uppercase" data-validate-if-filled="" />
-                                    <label>Fiscal Code</label>
-                                </div>
-                                <div class="field-error-message small">Check your fiscal code, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <input name="vatNumber" type="text" data-subtype="vat-number" class="form-control" data-validate-if-filled="" />
-                                    <label>VAT Number</label>
-                                </div>
-                                <div class="field-error-message small">Check your VAT number, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <input name="username" type="text" data-subtype="username" class="form-control" data-validate-if-filled="" />
-                                    <label>Username</label>
-                                </div>
-                                <div class="field-error-message small">Username must have at least 3 characters (no special chars allowed)!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <input name="email" type="email" class="form-control" data-validate-if-filled="" />
-                                    <label>Email</label>
-                                </div>
-                                <div class="field-error-message small">Check your email address, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <input name="mobileNumber" type="text" data-subtype="mobile-number" class="form-control" data-validate-if-filled="" />
-                                    <label>Mobile number</label>
-                                </div>
-                                <div class="field-error-message small">Check your mobile number, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <input name="landlineNumber" type="text" data-subtype="landline-number" class="form-control" data-validate-if-filled=""  />
-                                    <label>Landline number</label>
-                                </div>
-                                <div class="field-error-message small">Check your landline number, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <input name="zipCode" type="text" data-subtype="cap" class="form-control" data-validate-if-filled=""  />
-                                    <label>CAP</label>
-                                </div>
-                                <div class="field-error-message small">Check your ZIP code, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <input name="websiteUrl" type="text" data-subtype="url" class="form-control" data-validate-if-filled=""  />
-                                    <label>Website</label>
-                                </div>
-                                <div class="field-error-message small">Check your website url, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <input name="date" type="text" data-subtype="date" class="form-control" data-validate-if-filled="" />
-                                    <label>Date</label>
-                                </div>
-                                <div class="field-error-message small">Check the date, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <input name="hexColor" type="text" data-subtype="hex-color" class="form-control" data-validate-if-filled="" />
-                                    <label>HEX color</label>
-                                </div>
-                                <div class="field-error-message small">Check your HEX color, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <input name="hexColorConfirm" type="text" data-subtype="hex-color" data-equal-to="hexColor" class="form-control" data-validate-if-filled="" />
-                                    <label>HEX color confirm</label>
-                                </div>
-                                <div class="field-error-message small">Check your HEX color, must be equal to the one above!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <input name="password" type="password" class="form-control"  />
-                                    <label>Password</label>
-                                </div>
-                                <div class="field-error-message small">Check your password, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <input name="test" type="number" min="10" max="50" data-exact-length="2" class="form-control" data-validate-if-filled="" />
-                                    <label>Number ( min 10 - max 50)</label>
-                                </div>
-                                <div class="field-error-message small">Check your number, it is not valid (min 10, max 50, exact-length 2)!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <textarea name="message" class="form-control" rows="3" maxlength="100" data-char-count></textarea>
-                                    <label>Message ( <span data-char-length></span>/<span data-char-maxlength></span> )</label>
-                                </div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="input-container form-check">
-                                    <input required="" id="radio-5-20-6-1" name="radio-list-1" value="1" type="radio" class="form-check-input" />
-                                    <label for="radio-5-20-6-1" class="form-check-label">
-                                        Answer One
-                                    </label>
-                                </div>
-                                <div class="input-container form-check">
-                                    <input required="" id="radio-5-20-6-2" name="radio-list-1" value="2" type="radio" class="form-check-input" />
-                                    <label for="radio-5-20-6-2" class="form-check-label">
-                                        Answer Two
-                                    </label>
-                                </div>
-                                <div class="input-group">
-                                    <span class="input-group-prepend">
-                                        <div class="input-group-text">
-                                            <input id="radio-5-200-6-3" name="radio-list-1" value="3" required="" data-require-more="" type="radio" />
-                                            <label for="radio-5-200-6-3">&nbsp;Other:</label>
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box">
+                                        <div class="small">
+                                            I agree with the <a href="">Privacy Policy</a>.
                                         </div>
-                                    </span>
-                                    <input class="form-control" name="radio-list-1-more" data-required-from="#radio-5-200-6-3" type="text" />
+                                        <div class="form-check form-check-inline">
+                                            <input id="privacyCheck-01" class="form-check-input" name="privacyCheck" type="radio" value="accept" required="" />
+                                            <label for="privacyCheck-01" class="form-check-label">Yes</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input id="privacyCheck-02" class="form-check-input" name="privacyCheck" type="radio" value="" required="" />
+                                            <label for="privacyCheck-02" class="form-check-label">No</label>
+                                        </div>
+                                    </div>
+                                    <div class="field-error-message small">You must agree!</div>
                                 </div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <div class="small">
-                                        I agree with the <a href="">Privacy Policy</a>.
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box">
+                                        <div class="form-check">
+                                            <input id="regulationCheck" class="form-check-input" name="regulationCheck" type="checkbox" value="read" required="" />
+                                            <label for="regulationCheck" class="form-check-label">I have read the <a href="#">Regulation</a></label>
+                                        </div>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input id="privacyCheck-01" class="form-check-input" name="privacyCheck" type="radio" value="accept" required="" />
-                                        <label for="privacyCheck-01" class="form-check-label">Yes</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input id="privacyCheck-02" class="form-check-input" name="privacyCheck" type="radio" value="" required="" />
-                                        <label for="privacyCheck-02" class="form-check-label">No</label>
-                                    </div>
+                                    <div class="field-error-message small">Check the field!</div>
                                 </div>
-                                <div class="field-error-message small">You must agree!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box">
-                                    <div class="form-check">
-                                        <input id="regulationCheck" class="form-check-input" name="regulationCheck" type="checkbox" value="read" required="" />
-                                        <label for="regulationCheck" class="form-check-label">I have read the <a href="#">Regulation</a></label>
-                                    </div>
-                                </div>
-                                <div class="field-error-message small">Check the field!</div>
                             </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-default">SEND</button>
                             </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
                         </form>
                     </div>
                 </div>
             </div>
-            
-            <!-- Demo 2 -->
-            <div class="col-6 col-sm-6 col-md-3 py-3">
-                <div class="panel no-bg">
-                    <div class="card-header bg-white text-dark bg-white">
-                        <div><p>Label Inline Flex UI</p></div>
-                    </div>
-                    <div class="card-body">
-                        <form action="" name="my-form-2b" novalidate>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-inline-flex">
-                                    <input name="name" type="text" class="form-control" required="" />
-                                    <label>Name</label>
-                                </div>
-                                <div class="field-error-message small">Write your name!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-inline-flex">
-                                    <input name="surname" type="text" class="form-control" required="" />
-                                    <label>Surname</label>
-                                </div>
-                                <div class="field-error-message small">Write your surname!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-inline-flex">
-                                    <input name="fiscalCode" type="text" data-subtype="fiscal-code" class="form-control text-uppercase" required="" />
-                                    <label>Fiscal Code</label>
-                                </div>
-                                <div class="field-error-message small">Check your fiscal code, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-inline-flex">
-                                    <input name="vatNumber" type="text" data-subtype="vat-number" class="form-control" required="" />
-                                    <label>VAT Number</label>
-                                </div>
-                                <div class="field-error-message small">Check your VAT number, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-inline-flex">
-                                    <input name="username" type="text" data-subtype="username" class="form-control" required="" />
-                                    <label>Username</label>
-                                </div>
-                                <div class="field-error-message small">Username must have at least 3 characters (no special chars allowed)!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-inline-flex">
-                                    <input name="email" type="email" class="form-control" required="" />
-                                    <label>Email</label>
-                                </div>
-                                <div class="field-error-message small">Check your email address, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-inline-flex">
-                                    <input name="mobileNumber" type="text" data-subtype="mobile-number" class="form-control" required="" />
-                                    <label>Mobile number</label>
-                                </div>
-                                <div class="field-error-message small">Check your mobile number, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-inline-flex">
-                                    <input name="landlineNumber" type="text" data-subtype="landline-number" class="form-control" data-validate-if-filled="" />
-                                    <label>Landline number</label>
-                                </div>
-                                <div class="field-error-message small">Check your landline number, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-inline-flex">
-                                    <input name="zipCode" type="text" data-subtype="cap" class="form-control" data-validate-if-filled="" />
-                                    <label>ZIP</label>
-                                </div>
-                                <div class="field-error-message small">Check your ZIP code, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-inline-flex">
-                                    <input name="websiteUrl" type="text" data-subtype="url" class="form-control" data-validate-if-filled="" />
-                                    <label>Website</label>
-                                </div>
-                                <div class="field-error-message small">Check your website url, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-inline-flex">
-                                    <input name="date" type="text" data-subtype="date" class="form-control" data-validate-if-filled="" />
-                                    <label>Date</label>
-                                </div>
-                                <div class="field-error-message small">Check the date, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-inline-flex">
-                                    <input name="hexColor" type="text" data-subtype="hex-color" class="form-control" data-validate-if-filled="" />
-                                    <label>HEX color</label>
-                                </div>
-                                <div class="field-error-message small">Check your HEX color, it is not valid!</div>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-default">SEND</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Demo 3 -->
-            <div class="col-6 col-sm-6 col-md-3 py-3">
-                <div class="panel no-bg">
-                    <div class="card-header bg-white text-dark bg-white">
-                        <div><p>Label Fade Down UI</p></div>
-                    </div>
-                    <div class="card-body">
-                        <form action="" name="my-form-3" novalidate>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-fade-down">
-                                    <input name="name" type="text" class="form-control" required="" />
-                                    <label>Name</label>
-                                </div>
-                                <div class="field-error-message small">Write your name!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-fade-down">
-                                    <input name="surname" type="text" class="form-control" required="" />
-                                    <label>Surname</label>
-                                </div>
-                                <div class="field-error-message small">Write your surname!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-fade-down">
-                                    <input name="fiscalCode" type="text" data-subtype="fiscal-code" class="form-control text-uppercase" required="" />
-                                    <label>Fiscal Code</label>
-                                </div>
-                                <div class="field-error-message small">Check your fiscal code, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-fade-down">
-                                    <input name="vatNumber" type="text" data-subtype="vat-number" class="form-control" required="" />
-                                    <label>VAT Number</label>
-                                </div>
-                                <div class="field-error-message small">Check your VAT number, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-fade-down">
-                                    <input name="username" type="text" data-subtype="username" class="form-control" required="" />
-                                    <label>Username</label>
-                                </div>
-                                <div class="field-error-message small">Username must have at least 3 characters (no special chars allowed)!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-fade-down">
-                                    <input name="email" type="email" class="form-control" required="" />
-                                    <label>Email</label>
-                                </div>
-                                <div class="field-error-message small">Check your email address, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-fade-down">
-                                    <input name="mobileNumber" type="text" data-subtype="mobile-number" class="form-control" required="" />
-                                    <label>Mobile number</label>
-                                </div>
-                                <div class="field-error-message small">Check your mobile number, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-fade-down">
-                                    <input name="landlineNumber" type="text" data-subtype="landline-number" class="form-control" data-validate-if-filled="" />
-                                    <label>Landline number</label>
-                                </div>
-                                <div class="field-error-message small">Check your landline number, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-fade-down">
-                                    <input name="zipCode" type="text" data-subtype="cap" class="form-control" data-validate-if-filled="" />
-                                    <label>ZIP</label>
-                                </div>
-                                <div class="field-error-message small">Check your ZIP code, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-fade-down">
-                                    <input name="websiteUrl" type="text" data-subtype="url" class="form-control" data-validate-if-filled="" />
-                                    <label>Website</label>
-                                </div>
-                                <div class="field-error-message small">Check your website url, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-fade-down">
-                                    <input name="date" type="text" data-subtype="date" class="form-control" data-validate-if-filled="" />
-                                    <label>Date</label>
-                                </div>
-                                <div class="field-error-message small">Check the date, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-fade-down">
-                                    <input name="hexColor" type="text" data-subtype="hex-color" class="form-control" data-validate-if-filled="" />
-                                    <label>HEX color</label>
-                                </div>
-                                <div class="field-error-message small">Check your HEX color, it is not valid!</div>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-default">SEND</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Demo 4 -->
-            <div class="col-6 col-sm-6 col-md-3 py-3">
-                <div class="panel no-bg">
-                    <div class="card-header bg-white text-dark bg-white">
-                        <div><p>Label Move Up UI</p></div>
-                    </div>
-                    <div class="card-body">
-                        <form action="" name="my-form-4" data-ajax-submit="" novalidate>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="name" type="text" class="form-control" required="" />
-                                    <label>Name</label>
-                                </div>
-                                <div class="field-error-message small">Write your name!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="surname" type="text" class="form-control" required="" />
-                                    <label>Surname</label>
-                                </div>
-                                <div class="field-error-message small">Write your surname!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="fiscalCode" type="text" data-subtype="fiscal-code" class="form-control text-uppercase" required="" />
-                                    <label>Fiscal Code</label>
-                                </div>
-                                <div class="field-error-message small">Check your fiscal code, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="vatNumber" type="text" data-subtype="vat-number" class="form-control" required="" />
-                                    <label>VAT Number</label>
-                                </div>
-                                <div class="field-error-message small">Check your VAT number, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="username" type="text" data-subtype="username" class="form-control" required="" />
-                                    <label>Username</label>
-                                </div>
-                                <div class="field-error-message small">Username must have at least 3 characters (no special chars allowed)!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="email" type="email" class="form-control" required="" />
-                                    <label>Email</label>
-                                </div>
-                                <div class="field-error-message small">Check your email address, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="mobileNumber" type="text" data-subtype="mobile-number" class="form-control" required="" />
-                                    <label>Mobile number</label>
-                                </div>
-                                <div class="field-error-message small">Check your mobile number, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="landlineNumber" type="text" data-subtype="landline-number" class="form-control" data-validate-if-filled="" />
-                                    <label>Landline number</label>
-                                </div>
-                                <div class="field-error-message small">Check your landline number, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="zipCode" type="text" data-subtype="cap" class="form-control" data-validate-if-filled="" />
-                                    <label>ZIP</label>
-                                </div>
-                                <div class="field-error-message small">Check your ZIP code, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="websiteUrl" type="text" data-subtype="url" class="form-control" data-validate-if-filled="" />
-                                    <label>Website</label>
-                                </div>
-                                <div class="field-error-message small">Check your website url, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="date" type="text" data-subtype="date" class="form-control" data-validate-if-filled="" />
-                                    <label>Date</label>
-                                </div>
-                                <div class="field-error-message small">Check the date, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="hexColor" type="text" data-subtype="hex-color" class="form-control" data-validate-if-filled="" />
-                                    <label>HEX color</label>
-                                </div>
-                                <div class="field-error-message small">Check your HEX color, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="test" type="number" min="10" max="50" data-exact-length="2" class="form-control" required="" />
-                                    <label>Number ( min 10 - max 50 )</label>
-                                </div>
-                                <div class="field-error-message small">Check your number, it is not valid (min 10, max 50, exact-length 2)!</div>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-default">SEND</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
         </div>
         
         <!-- Demo Links -->
-        <div class="text-center mt-5">
+        <div id="demo-links" class="text-center mt-5">
             <p>
-                <a href="demo-plain-js.html">Demos with Plain JS</a> &nbsp; | &nbsp; 
-                <a href="demo-jquery.html">Demos with jQuery</a>
+                <a href="demos.html">More Demos</a>
             </p>
         </div>
         
         <!-- Download -->
-        <div class="text-center">
+        <div id="download" class="text-center">
             <h3>Download</h3>
             <p>
                 <a href="formJS.zip"><i class="fa fa-download"></i> Download the zip package</a>
             </p>
         </div>
         
-        <!-- Usage -->
-        <div>
-            <h2>Usage</h2>
+        <!-- Intro -->
+        <div id="intro">
+            <h2>Intro</h2>
             <p>
                 This module lets you validate forms.<br />
                 You can specify form/field options to:
@@ -589,9 +283,9 @@
         </div>
         
         <!-- Browsers Support -->
-        <div>
+        <div id="browsers-support">
             <h3 class="sticky-title">Browsers Support</h3>
-            <p class="small">
+            <p>
                 formJS is compatible with ( desktop &amp; mobile versions ):
             </p>
             <ul>
@@ -602,69 +296,40 @@
                     Firefox
                 </li>
                 <li>
-                    Internet Explorer 10+ / Edge
+                    Internet Explorer 10+ / Edge <span class="text-yellow">*</span>
                 </li>
                 <li>
                     Safari
                 </li>
             </ul>
+            <hr />
+            <p>
+                <span class="text-yellow">*</span> for compatibility with IE 10/11 and old versions of Edge you have to load some JS polyfills ( from <a href="https://polyfill.io" target="_blank">polyfill.io</a> or else ):<br />
+                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code>
+            </p>
+            <pre>
+&lt;script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event"&gt;&lt;/script&gt;</pre>
         </div>
         
         <!-- Dependencies -->
-        <div>
+        <div id="dependencies">
             <h3 class="sticky-title">Dependencies</h3>
-            <p class="small">
-                This demo is developed with Bootstrap CSS but it is not a dependency.
-                <br />
-                You can use formJS with vanilla JS or with jQuery as dependency.
+            <p>
+                No dependencies.<br />
+                <span class="small">This demo is developed with Bootstrap CSS but it is not a dependency.</span>
             </p>
-            <div class="row my-3">
-                <div class="col-6">
-                    <h4 class="text-center">Plain JS</h4>
-                    <div class="panel">
-                        <div class="card-body">
-                            <ul class="small">
-                                <li>
-                                    No Dependencies!
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <h4 class="text-center">jQuery</h4>
-                    <div class="panel">
-                        <div class="card-body">
-                            <ul class="small">
-                                <li>
-                                    jQuery 1.12.4+
-                                </li>
-                            </ul>
-                            <pre>&lt;!-- JQUERY --&gt;
-&lt;script src="js/vendors/jquery-1.12.4.min.js"&gt;&lt;/script&gt;</pre>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <p>
                 Include the formJS script in your page:
             </p>
-            <div class="row">
-                <div class="col-6">
+            <div>
                     <pre>
-&lt;!-- FORM JS for Plain JS --&gt;
-&lt;script src="js/modules/formJS.js"&gt;&lt;/script&gt;</pre>
-                </div>
-                <div class="col-6">
-                    <pre>
-&lt;!-- FORM JS for jQuery --&gt;
-&lt;script src="js/modules/jquery.formJS.js"&gt;&lt;/script&gt;</pre>
-                </div>
+&lt;!-- FORM JS --&gt;
+&lt;script src="dist/formJS.min.js"&gt;&lt;/script&gt;</pre>
             </div>
         </div>
         
         <!-- HTML -->
-        <div>
+        <div id="html">
             <h3 class="sticky-title">HTML</h3>
             <p>
                 This is the basic HTML structure to make the validation works ( some Bootstrap classes are optional ).<br />
@@ -672,34 +337,33 @@
             </p>
             <ul>
                 <li>
-                    novalidate: ( mandatory ) for the form ( fields will be validated via JS )
+                    novalidate: ( required  ) for the form ( fields will be validated via JS )
                 </li>
                 <li>
                     data-ajax-submit: ( optional empty attribute ) for the form. To let the plugin manage the form with an AJAX call.
                 </li>
                 <li>
-                    data-ajax-settings: ( optional ) for the form, to specify new options for the AJAX call as JSON object inside the HTML attribute. Used together with data-ajax-submit attribute.<br />
-                    See <a href="#ajax-settings">below</a> for details.
+                    data-ajax-settings: ( optional ) for the form, to specify new options for the AJAX call as JSON object inside the HTML attribute. Used together with data-ajax-submit attribute. See <a href="#ajax-settings">AJAX Options</a> for details.
                 </li>
                 <li>
-                    required: ( mandatory ) for fields that require an answer
+                    required: ( required  ) for fields that require an answer
                 </li>
                 <li>
-                    type: ( mandatory )
+                    type: ( required  )
                 </li>
                 <li>
-                    data-subtype: ( optional ) for special field types ( eg: VAT number, fiscal code, etc - see the <a href="#subtypes-list">full list</a> )
+                    data-subtype: ( optional ) for special field types ( eg: VAT number, fiscal code, etc - see the <a href="#builtin-validations">full list</a> )
                 </li>
                 <li>
-                    data-exclude-json: ( optional empty attribute ) for fields, used to avoid the plugin to take in consideration the field when building the JSON ( used inside getFormJSON method, so inside submitAjaxForm method )
+                    data-exclude-json: ( optional empty attribute ) for fields, used to avoid the plugin to take in consideration the field when building the JSON ( used inside getFormJSON method )
                 </li>
                 <li>
                     data-formjs-question: ( optional empty attribute ) used for visual feedback on valid/invalid fields and/or character count functionality
                 </li>
+                <li>
+                    data-formjs-init: ( optional ) if set to "false", the plugin will not initialize the events listeners but you can use its methods and so on ( for example if you just want to use getFormJSON method ). See <a href="#initialization">non-fully-initialized forms</a>
+                </li>
             </ul>
-            <p>
-                For other validations see the <a href="#other-validations-list">full list</a>
-            </p>
             
             <p>
                 Below, the HTML example:
@@ -759,120 +423,50 @@
     &lt;button type="submit" class="btn btn-default"&gt;SEND&lt;/button&gt;
     
 &lt;/form&gt;</pre>
-            
-            <div id="ajax-settings">
-                <h3 class="sticky-title">AJAX Options</h3>
-                <p>
-                    Below the default AJAX Options used inside submitAjaxForm method ( can be changed via data-ajax-settings attribute ):
-                </p>
-                <div class="row mt-3">
-                    <div class="col-6">
-                        <h4 class="text-center">Plain JS</h4>
-                        <div class="">
-                            <pre>
-{
-    async:          true,
-    cache:          false,
-    contentType:    'application/x-www-form-urlencoded; charset=UTF-8',
-    data:           formDataJSON,
-    headers:        {},
-    method:         'POST',
-    timeout:        0,
-    url:            location.href
-}</pre>
-                            <p>
-                                These above are all the ajax options that can be changed.
-                            </p>
-                            <ul>
-                                <li>
-                                    async: if true will make an async ajax call, if false will make a sync ajax call.
-                                </li>
-                                <li>
-                                    cache: ( only for GET ajax calls ) if true will add a timestamp parameter to the url query string.
-                                </li>
-                                <li>
-                                    contentType: content type of the ajax request ( anything put inside the enctype html form attribute ).
-                                </li>
-                                <li>
-                                    headers: object of key/value pairs to set the request headers.
-                                </li>
-                                <li>
-                                    timeout: ( in milliseconds ) in greater than 0, after the specified time, the ajax call will be aborted if still pending.
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <h4 class="text-center">jQuery</h4>
-                        <div class="">
-                            <pre>
-{
-    cache:      false,
-    data:       formDataJSON,
-    method:     'POST',
-    url:        location.href
-}</pre>
-                            <p>
-                                Ajax settings as described in the <a href="http://api.jquery.com/jquery.ajax/" target="_blank">jQuery $.ajax() documentation page</a>.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-8 col-offset-2 col-sm-6 col-sm-offset-3"><hr /></div>
-                </div>
-                <ul>
-                    <li>
-                        data ( formDataJSON ) is automatically generated by the plugin and can be changed via beforeSend callback function
-                    </li>
-                    <li>
-                        method is by default 'POST' but it takes the method html form attribute if set
-                    </li>
-                    <li>
-                        url is by default the page url but it takes the action html form attribute if set
-                    </li>
-                </ul>
-                <br />
-                <p>
-                    Below, an example of AJAX settings passed via "data-ajax-settings" ( they will override the same options specified via HTML attributes ):
-                </p>
-                <pre>
-&lt;form action="/mypath/mypage.php"
-         method="POST"
-         name="my-form-example"
-         novalidate
-         data-ajax-settings='{
-                                 "dataType": "json",
-                                 "myoption": [1,2,3],
-                                 "option3": {
-                                    "intOpt": "hello"
-                                 }
-                             }'
-&gt; ... &lt;/form&gt;</pre>
-            </div>
         </div>
         
         <!-- Initialization -->
-        <div>
+        <div id="initialization">
             <h3 class="sticky-title">Initialization</h3>
             <p>
-                You can initialize every form ( with "novalidate" attribute ) inside the page to be managed by formJS with:
+                Here an example of initialization:
             </p>
-            <pre>FORM.init();</pre>
+            <pre>var formEl = document.querySelector('form');
+var options = {};
+
+var formInstance = new Form( formEl, options );</pre>
+            <ul>
+                <li>
+                    formEl: ( required ) must be a single form node ( not a nodelist! )
+                </li>
+                <li>
+                    options: ( optional ) a JS object with fieldOptions and formOptions ( see <a href="#options-list">Options section</a> )
+                </li>
+            </ul>
+            <p>
+                You will read about "non-fully-initialized forms". It means that form has <code>data-formjs-init="false"</code> attribute, so the plugin will not add the event listeners to validate the fields and to submit that form.
+            </p>
+            <p>
+                <b>IMPORTANT</b>: If <code>Form</code> namespace is not available, you can use <code>FormJS</code> namespace.
+            </p>
         </div>
         
         <!-- Options -->
         <div id="options-list">
             <h3 class="sticky-title">Options<span class="small">:</span></h3>
-            <p>
-                formJS takes an object as second argument ( options ), as follow:
-            </p>
-            <pre class="small">
+            <div>
+                <p>
+                    formJS takes an object as second argument ( options ), as follow:
+                </p>
+                <pre>
 {
     fieldOptions:   {...},
     formOptions:    {...}
 }</pre>
-            <br />
-            <!-- Form Options -->
-            <div>
+                <br />
+            </div>
+            <!-- Field Options -->
+            <div id="field-options">
                 <h3 class="sticky-title mt-0 ml-4em"><span class="small">Field Options</span></h3>
                 <div class="panel panel-default panel-transparent" style="background-color: transparent;">
                     <div class="card-header bg-white text-dark clearfix">
@@ -889,7 +483,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
                                 <p class="text-green">checkDirtyField</p>
                             </div>
@@ -902,7 +496,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
                                 <p class="text-green">cssClasses</p>
                             </div>
@@ -929,7 +523,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
                                 <p class="text-green">focusOnRelated</p>
                             </div>
@@ -942,7 +536,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
                                 <p class="text-green">maxFileSize</p>
                             </div>
@@ -953,11 +547,11 @@
                                 <p>
                                     size limit ( in MB ) for each file to upload.<br />
                                     Set to 0 ( zero ) if you want to disable the size check.<br />
-                                    Inside the field error message container you can put a span (or else) with data-max-file-size attribute to print the size limit ( see the demo )
+                                    Inside the field error message container you can put a span (or else) with data-max-file-size attribute to print the size limit
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
                                 <p class="text-green">onPastePrevented</p>
                             </div>
@@ -966,11 +560,13 @@
                             </div>
                             <div class="col-5">
                                 <p>
-                                    used ONLY inside init() method. Fires when the paste event has been prevented on the field(s) ( see "preventPasteFields" option ).
+                                    Fires when the paste event has been prevented on the field(s) ( see "preventPasteFields" option ).
+                                    <br />
+                                    <span class="small">( not fired for <a href="#initialization">non-fully-initialized forms</a> )</span>
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
                                 <p class="text-green">onValidation</p>
                             </div>
@@ -979,11 +575,11 @@
                             </div>
                             <div class="col-5">
                                 <p>
-                                    used ONLY inside init() and submitAjaxForm() methods. Fires just after a field has been validated. 
+                                    Fires just after a field has been validated.
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
                                 <p class="text-green">preventPasteFields</p>
                             </div>
@@ -996,7 +592,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
                                 <p class="text-green">skipUIfeedback</p>
                             </div>
@@ -1009,7 +605,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
                                 <p class="text-green">strictHtmlValidation</p>
                             </div>
@@ -1018,11 +614,11 @@
                             </div>
                             <div class="col-5">
                                 <p>
-                                    activate JS controls for strict validation ( as for HTML5 attributes, eg: mexlength that does not allow to type chars that exceed its value ) 
+                                    activate JS controls for strict JS validation ( as for HTML5 attributes, eg: mexlength that does not work on Android Chrome/stock borwsers ) 
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
                                 <p class="text-green">validateOnEvents</p>
                             </div>
@@ -1031,7 +627,9 @@
                             </div>
                             <div class="col-5">
                                 <p>
-                                    events on which the validation will fire ( only for required fields ) - used ONLY inside init() method 
+                                    events on which the validation will fire ( only for required fields )
+                                    <br />
+                                    <span class="small">( not used for <a href="#initialization">non-fully-initialized forms</a> )</span>
                                 </p>
                             </div>
                         </div>
@@ -1040,7 +638,7 @@
                         <p>
                             Default field options:
                         </p>
-                        <pre class="small">
+                        <pre>
 {
     checkDirtyField:        false,
     cssClasses: {
@@ -1055,7 +653,7 @@
     onValidation:           null,
     preventPasteFields:     '[type="password"], [data-equal-to]',
     skipUIfeedback:         false,
-    strictHtmlValidation:   false,
+    strictHtmlValidation:   true,
     validateOnEvents:       'input change'
 }</pre>
                     </div>
@@ -1063,13 +661,9 @@
             </div>
         
             <br />
-            <!-- Field Options -->
-            <div>
+            <!-- Form Options -->
+            <div id="form-options">
                 <h3 class="sticky-title mt-0 ml-4em"><span class="small">Form Options</span></h3>
-                <p>
-                    They will be used ONLY inside submitAjaxForm() method ( that can be used as standalone method but it is also used inside init() method ).<br />
-                    To make use of these functionalities you must set the data-ajax-submit attribute for the form.
-                </p>
                 <div class="panel panel-default panel-transparent" style="background-color: transparent;">
                     <div class="card-header bg-white text-dark clearfix">
                         <div class="d-flex">
@@ -1085,7 +679,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-3">
                                 <p class="text-green">beforeSend</p>
                                 ( function )
@@ -1094,32 +688,36 @@
                                 <ul>
                                     <li>
                                         data: ( JS object )
-                                        <pre class="small">
+                                        <pre>
 {
     formData:       {},
     stopExecution:  false
 }</pre>
                                         <ul>
                                             <li>
-                                                formData: ( JS object ) with the form data
+                                                formData: ( JS object - ONLY for AJAX forms ) with the form data
                                             </li>
                                             <li>
-                                                stopExecution: ( Boolean - default is false ) wether or not to stop the execution of the script. If true, the AJAX call will not be executed.
+                                                stopExecution: ( Boolean - default is false ) wether or not to prevent the form submit ( AJAX or default ).
                                             </li>
                                         </ul>
                                     </li>
-                                    <li>
-                                        formEl: JS/jQuery node element for the form
-                                    </li>
                                 </ul>
+                                <p>
+                                    Additionally, the "this" keyword is bound to the Form instance.
+                                </p>
                             </div>
                             <div class="col-4">
                                 <p>
-                                    Fires before the AJAX call starts. If used to modify the JSON, it must have a return statement. 
+                                    For AJAX forms:<br />
+                                    Fires before the AJAX call starts. If used to modify the JSON or prevent the AJAX call to start, it must have a return statement. 
+                                    <br /><br />
+                                    For HTML forms:<br />
+                                    Fire before form submit. Can be used to execute some custom code ( example: populate a hidden field ) or to prevent the form submit ( in this case, it must have a return statement ).
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-3">
                                 <p class="text-green">manageFileUpload</p>
                                 ( boolean )
@@ -1131,11 +729,12 @@
                                 <p>
                                     Wether or not the plugin must manage the file upload. It is a simple file upload via ajax.<br />
                                     You must also set the enctype="multipart/form-data" attribute to the form.
-
+                                    <br />
+                                    <span class="small">( ONLY for AJAX forms )</span>
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-3">
                                 <p class="text-green">onSubmitComplete</p>
                                 ( function )
@@ -1145,10 +744,10 @@
                                     <li>
                                         ajaxData: ( JS object ) containing the ajax call data ( dataOrXHR, status, XHRorResponse ).
                                     </li>
-                                    <li>
-                                        formEl: JS/jQuery node element for the form
-                                    </li>
                                 </ul>
+                                <p>
+                                    Additionally, the "this" keyword is bound to the Form instance.
+                                </p>
                             </div>
                             <div class="col-4">
                                 <p>
@@ -1156,7 +755,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-3">
                                 <p class="text-green">onSubmitError</p>
                                 ( function )
@@ -1166,10 +765,10 @@
                                     <li>
                                         ajaxData: ( JS object ) containing the ajax call data ( errorThrown, status, response ).
                                     </li>
-                                    <li>
-                                        formEl: JS/jQuery node element for the form
-                                    </li>
                                 </ul>
+                                <p>
+                                    Additionally, the "this" keyword is bound to the Form instance.
+                                </p>
                             </div>
                             <div class="col-4">
                                 <p>
@@ -1177,7 +776,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-3">
                                 <p class="text-green">onSubmitSuccess</p>
                                 ( function )
@@ -1187,10 +786,10 @@
                                     <li>
                                         ajaxData: ( JS object ) containing the ajax call data ( data, status, response ).
                                     </li>
-                                    <li>
-                                        formEl: JS/jQuery node element for the form
-                                    </li>
                                 </ul>
+                                <p>
+                                    Additionally, the "this" keyword is bound to the Form instance.
+                                </p>
                             </div>
                             <div class="col-4">
                                 <p>
@@ -1203,7 +802,7 @@
                         <p>
                             Default form options:
                         </p>
-                        <pre class="small">
+                        <pre>
 {
     beforeSend:         null,
     manageFileUpload:   true,
@@ -1215,13 +814,90 @@
                 </div>
             </div>
         </div>
+
+        <!-- AJAX Options -->
+        <div id="ajax-settings">
+            <h3 class="sticky-title">AJAX Options</h3>
+            <p>
+                Below the default AJAX Options used for AJAX form submit ( can be changed via data-ajax-settings attribute ):
+            </p>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div class="">
+                        <pre>
+{
+    async:          true,
+    cache:          false,
+    contentType:    'application/x-www-form-urlencoded; charset=UTF-8',
+    data:           formDataJSON,
+    headers:        {},
+    method:         'POST',
+    timeout:        0,
+    url:            location.href
+}</pre>
+                        <p>
+                            Below all the AJAX options that can be changed:
+                        </p>
+                        <ul>
+                            <li>
+                                async: if true will make an async ajax call, if false will make a sync ajax call.
+                            </li>
+                            <li>
+                                cache: ( only for GET ajax calls ) if true will add a timestamp parameter to the url query string.
+                            </li>
+                            <li>
+                                contentType: content type of the ajax request ( anything put inside the enctype html form attribute ).
+                            </li>
+                            <li>
+                                headers: object of key/value pairs to set the request headers.
+                            </li>
+                            <li>
+                                mimeType: a mime type to override the XHR mime type.
+                            </li>
+                            <li>
+                                timeout: ( in milliseconds ) in greater than 0, after the specified time, the ajax call will be aborted if still pending.
+                            </li>
+                            <li>
+                                xhrFields: object of fieldName-fieldValue pairs to set on the native XHR object.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-8 col-offset-2 col-sm-6 col-sm-offset-3 mb-3"><hr /></div>
+            </div>
+            <ul>
+                <li>
+                    data ( formDataJSON ) is automatically generated by the plugin and can be changed via beforeSend callback function
+                </li>
+                <li>
+                    method is by default 'POST' but it takes the "method" html form attribute if set
+                </li>
+                <li>
+                    url is by default the page url but it takes the "action" html form attribute if set
+                </li>
+            </ul>
+            <br />
+            <p>
+                Below, an example of AJAX settings passed via "data-ajax-settings" ( they will override the same options specified via HTML attributes ):
+            </p>
+            <pre>
+&lt;form action="/mypath/mypage.php"
+        method="POST"
+        name="my-form-example"
+        novalidate
+        data-ajax-settings='{
+                                "dataType": "json",
+                                "myoption": [1,2,3],
+                                "option3": {
+                                "intOpt": "hello"
+                                }
+                            }'
+&gt; ... &lt;/form&gt;</pre>
+        </div>
         
         <!-- Methods -->
-        <div>
+        <div id="methods">
             <h3 class="sticky-title">Methods</h3>
-            <p>
-                formJS has these useful methods:
-            </p>
             <div class="panel panel-default panel-transparent" style="background-color: transparent;">
                 <div class="card-header bg-white text-dark clearfix">
                     <div class="d-flex">
@@ -1238,15 +914,158 @@
                 </div>
                 <div class="card-body">
                     <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <pre class="small text-green">addValidationRules( newRules )</pre>
+                                <pre class="text-green">getFormJSON()</pre>
+                            </div>
+                            <div class="col-5">
+                                
+                            </div>
+                            <div class="col-3">
+                                <p>
+                                    a JSON object with pairs of field-name / field-value like:
+                                </p>
+                                <pre>
+{
+    name:   'Valerio',
+    city:   'Milan',
+    website:'http://www.valeriodipunzio.com'
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4">
+                                <pre class="text-green">isValidField( field[, fieldOptions] )</pre>
+                            </div>
+                            <div class="col-5">
+                                <ul>
+                                    <li>
+                                        field: CSS string selector ( or node element <span class="text-yellow">*</span> ) for the form field ( input, select, textarea )
+                                    </li>
+                                    <li>
+                                        fieldOptions: ( Optional ) JS object. For default values see <a href="#field-options">Field Options section</a>
+                                    </li>
+                                </ul>
+                                <p class="d-flex">
+                                    <span class="text-yellow mr-2">*</span> 
+                                    <span class="small">
+                                            best to use a CSS string selector so that it looks for the field inside the instance form element.
+                                            <br />
+                                            Example:<br />
+                                    </span>
+                                    <pre>formInstance.isValidField('[name="myEmail"]');</pre>
+                                </p>
+                            </div>
+                            <div class="col-3">
+                                <p>
+                                    Boolean
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4">
+                                <pre class="text-green">isValidForm( [options] )</pre>
+                            </div>
+                            <div class="col-5">
+                                <ul>
+                                    <li>
+                                        options: ( Optional ) JS object with fieldOptions and/or formOptions. For default values see <a href="#options-list">Options section</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-3">
+                                <p>
+                                    Object like:
+                                </p>
+                                <pre>
+{
+    fields: [{
+        field:  element,
+        result: true
+    }],
+    result:     true
+}</pre>
+                                <ul>
+                                    <li>
+                                        fields: ( array of JS objects ) a list of the form fields with field ( JS node element ) and result ( boolean )
+                                    </li>
+                                    <li>
+                                        result: ( boolean ) check for the form, if it is valid or not
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4">
+                                <pre class="text-green">submit( [options, [event]] )</pre>
+                            </div>
+                            <div class="col-5">
+                                <ul>
+                                    <li>
+                                        options: ( Optional ) JS object. Can contain fieldOptions and formOptions. For default values see <a href="#options-list">Options section</a>
+                                    </li>
+                                    <li>
+                                        event: ( Optional - Required for submit of <a href="#initialization">non-fully-initialized forms</a> ) JS event object for submit event.
+                                    </li>
+                                </ul>
+                                <p>
+                                    It will:
+                                </p>
+                                <ul>
+                                    <li>
+                                        validate the form according to the fieldOptions and formOptions ( passed inside options param )
+                                    </li>
+                                    <li>
+                                        ( for AJAX forms ) create the JSON data to send via AJAX call as for getFormJSON method
+                                    </li>
+                                    <li>
+                                        ( for AJAX forms ) make the AJAX call to the url specified as action of the HTML form
+                                    </li>
+                                    <li>
+                                        ( for AJAX forms ) trigger callback functions as defined in options param
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-3">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prototype Methods -->
+        <div id="prototype-methods">
+            <h3 class="sticky-title">Prototype Methods</h3>
+            <p>
+                You can use these methods <b>ONLY</b> from the original Form object ( not from a new instance - examples below ):
+            </p>
+            <div class="panel panel-default panel-transparent" style="background-color: transparent;">
+                <div class="card-header bg-white text-dark clearfix">
+                    <div class="d-flex">
+                        <div class="col-4">
+                            name
+                        </div>
+                        <div class="col-5">
+                            parameters
+                        </div>
+                        <div class="col-3">
+                            notes
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4">
+                                <pre class="text-green">addValidationRules( newRules )</pre>
                             </div>
                             <div class="col-5">
                                 <ul>
                                     <li>
                                         newRules: JS object containing the new validation rule(s) to add:<br />
-                                        <pre class="small">
+                                        <pre class="">
 {
     zip: function( zipCode ){ return /[5-9]{3}$/.test( zipCode ); }
 }</pre>
@@ -1266,183 +1085,73 @@
                                 </ul>
                             </div>
                             <div class="col-3">
-                                
+                                This will affect both old and new instances.<br />
+                                Can also be used to override existing validation rules.
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <pre class="small text-green">getFormJSON( formEl )</pre>
+                                <pre class="text-green">setOptions( options )</pre>
                             </div>
                             <div class="col-5">
                                 <ul>
                                     <li>
-                                        formEl: JS/jQuery node element for the form you want to get the JSON from.
+                                        options: JS object with the fieldOptions/formOptions to override ( see <a href="#options-list">Options section</a> )
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-3">
-                                <p>
-                                    a JSON object with pairs of field-name / field-value like:
-                                </p>
-                                <pre class="small">
-{
-    name:   'Valerio',
-    city:   'Milan',
-    website:'http://www.valeriodipunzio.com'
-}</pre>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
-                            <div class="col-4">
-                                <pre class="small text-green">init( [formEl[, options]] )</pre>
-                            </div>
-                            <div class="col-5">
-                                <ul>
-                                    <li>
-                                        formEl: ( Optional ) JS/jQuery node element for the form(s)
-                                    </li>
-                                    <li>
-                                        options: ( Optional ) JS object. Can contain fieldOptions and formOptions. For default values see Options section
-                                    </li>
-                                </ul>
-                                <p>
-                                    The validation is executed on every field with required attribute on events as defined in fieldOptions. For default values see Options section
-                                    <br /><br />
-                                    This method will validate specific forms ( if passed ) or every form ( if none or falsy value is passed ) that:
-                                </p>
-                                <ul>
-                                    <li>
-                                        has "novalidate" attribute
-                                    </li>
-                                </ul>
-                                <p>
-                                    If the form has "data-ajax-submit" attribute, submitAjaxForm method will be used on form submit.
-                                </p>
-                            </div>
-                            <div class="col-3">
-
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
-                            <div class="col-4">
-                                <pre class="small text-green">isValidField( fieldEl[, fieldOptions] )</pre>
-                            </div>
-                            <div class="col-5">
-                                <ul>
-                                    <li>
-                                        fieldEl: JS/jQuery node element for the form field ( input, select, textarea )
-                                    </li>
-                                    <li>
-                                        fieldOptions: ( Optional ) JS object. For default values see Options section
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-3">
-                                <p>
-                                    Boolean
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
-                            <div class="col-4">
-                                <pre class="small text-green">isValidForm( formEl[, options] )</pre>
-                            </div>
-                            <div class="col-5">
-                                <ul>
-                                    <li>
-                                        formEl: JS/jQuery node element for the form
-                                    </li>
-                                    <li>
-                                        options: ( Optional ) JS object. Can contain fieldOptions and formOptions. For default values see Options section
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-3">
-                                <p>
-                                    Object like:
-                                </p>
-                                <pre class="small">
-{
-    fields: [{
-        field:  element,
-        result: true
-    }],
-    result:     true
-}</pre>
-                                <ul>
-                                    <li>
-                                        fields: ( array of JS objects ) a list of the form fields with field ( JS/jQuery node element ) and result ( boolean )
-                                    </li>
-                                    <li>
-                                        result: ( boolean ) check for the form, if it is valid or not
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
-                            <div class="col-4">
-                                <pre class="small text-green">submitAjaxForm( formEl[, options] )</pre>
-                            </div>
-                            <div class="col-5">
-                                <ul>
-                                    <li>
-                                        formEl: JS/jQuery node element for the form
-                                    </li>
-                                    <li>
-                                        options: ( Optional ) JS object. Can contain fieldOptions and formOptions. For default values see Options section
-                                    </li>
-                                </ul>
-                                <p>
-                                    It will:
-                                </p>
-                                <ul>
-                                    <li>
-                                        validate the form according to the fieldOptions and formOptions ( passed inside options param )
-                                    </li>
-                                    <li>
-                                        create the JSON data to send via AJAX call as for getFormJSON method
-                                    </li>
-                                    <li>
-                                        make the AJAX call to the url specified as action of the HTML form
-                                    </li>
-                                    <li>
-                                        trigger callback functions as defined in options param
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-3">
-                                
+                                This will affect <b>ONLY</b> new instances
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="card-footer no-bg">
+                        <p>
+                            Examples of usage:
+                        </p>
+                        <pre>
+Form.addValidationRules({
+    zip: function( string ){ return /^[5-9]{3}$/.test( string ); }
+});
+
+Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
+</pre>
+                    </div>
             </div>
         </div>
-        
-        <!-- Validation subtypes -->
-        <div id="subtypes-list">
-            <h3 class="sticky-title">Validation subtypes</h3>
+
+        <!-- Built-in Validations -->
+        <div id="builtin-validations">
+            <h3 class="sticky-title">Built-in Validations</h3>
             <p>
-                Special fields, with data-subtype attribute, will be validated with rules as follow ( you can add and/or override these rules with addValidationRules method ):
+                There are the rules used to validate the field depending on html attributes/data-* attributes ( you can add new ones - or override the ones having JS key specified - with addValidationRules method ).
             </p>
             <div class="panel panel-default panel-transparent" style="background-color: transparent;">
                 <div class="card-header bg-white text-dark clearfix">
                     <div class="d-flex">
                         <div class="col-4 col-sm-3">
-                            data-subtype value
+                            name ( JS key )
                         </div>
-                        <div class="col-8 col-sm-9">
-                            validation rule
+                        <div class="col-4 col-sm-3">
+                            API
+                        </div>
+                        <div class="col-4 col-sm-6">
+                            validation rule / notes
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
-                                cap
+                                CAP
+                                <div>( cap )</div>
                             </div>
-                            <div class="col-8 col-sm-9">
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-subtype="cap"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
                                     /^[0-9]{5}$/
                                 </p>
@@ -1452,11 +1161,16 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
-                                date
+                                Date
+                                <div>( date )</div>
                             </div>
-                            <div class="col-8 col-sm-9">
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="date"</code></div>
+                                <div><code>data-subtype="date"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
                                     /^(0?[1-9]|[12][0-9]|3[01])([ \/\-.])(0?[1-9]|1[012])\2([0-9][0-9][0-9][0-9])(([ -])([0-1]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9])?$/
                                 </p>
@@ -1467,24 +1181,70 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
-                                email
+                                Email
+                                <div>( email )</div>
                             </div>
-                            <div class="col-8 col-sm-9">
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="email"</code></div>
+                                <div><code>data-subtype="email"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
-                                    /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/
+                                    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                                 </p>
-                                <p class="small text-lowercase text-opacity">
+                                <p class="small text-lowercase text-opacity m-0">
                                     EMAIL MUST BE AT LEAST ( FOR EXAMPLE ): a@a.aa
+                                </p>
+                                <p class="small text-lowercase">
+                                    <a href="https://emailregex.com" target="_blank">read this post</a>
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
-                                fiscal-code
+                                Equal To
                             </div>
-                            <div class="col-8 col-sm-9">
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-equal-to="password"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    The "name" attribute of the field this answer value must be equal to 
+                                </p>
+                                <br />
+                                <p class="small text-lowercase text-opacity m-0">
+                                    Eg: for a confirm email/password field 
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Exact Length
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-exact-length="24"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    Check that the input length is equal to the data-exact-length value.
+                                </p>
+                                <br />
+                                <p class="small text-lowercase text-opacity">
+                                    Eg: a field that must have a specific number of characters, such as for cents ( 2 digits )
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Fiscal Code
+                                <div>( fiscalCode )</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-subtype="fiscal-code"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
                                     /^(?:[B-DF-HJ-NP-TV-Z](?:[AEIOU]{2}|[AEIOU]X)|[AEIOU]{2}X|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[1256LMRS][\dLMNP-V])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[\dLMNP-V][1-9MNP-V]|[1-9MNP-V][0L]))[A-Z]$/i
                                 </p>
@@ -1494,11 +1254,15 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
-                                hex-color
+                                HEX Color
+                                <div>( hexColor )</div>
                             </div>
-                            <div class="col-8 col-sm-9">
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-subtype="hex-color"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
                                     /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/
                                 </p>
@@ -1510,11 +1274,15 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
-                                landline-number
+                                Landline Number
+                                <div>( landlineNumber )</div>
                             </div>
-                            <div class="col-8 col-sm-9">
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-subtype="landline-number"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
                                     /^((00|\+)\d{2}[\-\. ]??)??(((0[\d]{1,4}))([\/\-\. ]){0,1}([\d, ]{5,10}))$/
                                 </p>
@@ -1528,11 +1296,85 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
-                                mobile-number
+                                Max
                             </div>
-                            <div class="col-8 col-sm-9">
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>max="13"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    HTML5<br />
+                                    Check that the input number is less or equal to the max value.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Maxlength
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>maxlength="150"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    HTML5<br />
+                                    Check that the input length is less or equal to the maxlength value.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Max Check
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-max-check="2"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    Check that the number of checked checkboxes is less or equal the the given number.<br />
+                                    The attribute must be applied to a container element that is parent of all the checkboxes of the group.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Min
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>min="7"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    HTML5<br />
+                                    Check that the input number is more or equal to the min value.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Minlength
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>minlength="10"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    HTML5<br />
+                                    Check that the input length is more or equal to the minlength value.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Mobile Number
+                                <div>( mobileNumber )</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-subtype="mobile-number"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
                                     /^((00|\+)\d{2}[\-\. ]??)??3\d{2}[\-\. ]??\d{6,7}$/
                                 </p>
@@ -1544,11 +1386,19 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
-                                number
+                                Number
+                                <div>( number )</div>
                             </div>
-                            <div class="col-8 col-sm-9">
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="number"</code></div>
+                                <div><code>data-subtype="number"</code></div>
+                                <p class="small mt-3">
+                                    Also used together.
+                                </p>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
                                     /[+-]?([0-9]*[.])?[0-9]+/
                                 </p>
@@ -1558,11 +1408,19 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
-                                numberFloat
+                                Number Float
+                                <div>( numberFloat )</div>
                             </div>
-                            <div class="col-8 col-sm-9">
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="number"</code></div>
+                                <div><code>data-subtype="number-float"</code></div>
+                                <p class="small mt-3">
+                                    Used together or only data-subtype.
+                                </p>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
                                     /[+-]?([0-9]*[.])[0-9]+/
                                 </p>
@@ -1573,11 +1431,19 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
-                                numberInteger
+                                Number Integer
+                                <div>( numberInteger )</div>
                             </div>
-                            <div class="col-8 col-sm-9">
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="number"</code></div>
+                                <div><code>data-subtype="number-integer"</code></div>
+                                <p class="small mt-3">
+                                    Used together or only data-subtype.
+                                </p>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
                                     /^\d+$/
                                 </p>
@@ -1587,11 +1453,16 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
-                                password
+                                Password
+                                <div>( password )</div>
                             </div>
-                            <div class="col-8 col-sm-9">
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="password"</code></div>
+                                <div><code>data-subtype="password"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
                                     /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
                                 </p>
@@ -1602,11 +1473,47 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
-                                url
+                                Pattern
                             </div>
-                            <div class="col-8 col-sm-9">
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>pattern="[RegExp]"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    HTML5<br />
+                                    Check the field value against the RegExp in pattern attribute.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Require More &amp; Required From
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div>
+                                    <code>data-require-more="" id="element-that-requires-more"</code>
+                                    <code>data-required-from="#element-that-requires-more"</code>
+                                </div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    Attributes "data-require-more" and "id" must be set on the input field ( ideally a radio input ) that, if selected, requires an extra answer to be valid.
+                                    <br /><br />
+                                    Attribute "data-required-from" must be set to a field ( ideally a text input ) and the attribute value must be a CSS selector ( the id in the API example ) of the related input ( the one specified before ).
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Url
+                                <div>( url )</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-subtype="url"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
                                     /^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
                                 </p>
@@ -1618,11 +1525,15 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
-                                username
+                                Username
+                                <div>( username )</div>
                             </div>
-                            <div class="col-8 col-sm-9">
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-subtype="username"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
                                     /^(?=\w)(?=[\-\.\@]?)[\w\-\.\@]{3,24}$/
                                 </p>
@@ -1632,11 +1543,29 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                                <div class="col-4 col-sm-3 text-green">
+                                    Validate if Filled
+                                </div>
+                                <div class="col-4 col-sm-3 text-green">
+                                    <div><code>data-validate-if-filled=""</code></div>
+                                </div>
+                                <div class="col-4 col-sm-6">
+                                    <p>
+                                        The field will be validated only if filled.<br />
+                                        If empty, the field will be evaluated as valid. 
+                                    </p>
+                                </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
-                                vat-number
+                                VAT Number
+                                <div>( vatNumber )</div>
                             </div>
-                            <div class="col-8 col-sm-9">
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-subtype="vat-number"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
                                     /^(IT){0,1}[0-9]{11}$/i
                                 </p>
@@ -1651,92 +1580,11 @@
             </div>
         </div>
         
-        <!-- Other validations -->
-        <div id="other-validations-list">
-            <h3 class="sticky-title">Other validations</h3>
+        <!-- Utilities -->
+        <div id="utilities-list">
+            <h3 class="sticky-title">Utilities</h3>
             <p>
-                Other types of validations can be enabled with HTML data-* attributes:
-            </p>
-            <div class="panel panel-default panel-transparent" style="background-color: transparent;">
-                <div class="card-header bg-white text-dark clearfix">
-                    <div class="d-flex">
-                        <div class="col-4">
-                            HTML attribute
-                        </div>
-                        <div class="col-8">
-                            value
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
-                            <div class="col-4 text-green">
-                                data-validate-if-filled
-                            </div>
-                            <div class="col-8">
-                                <p>
-                                    No value needed.<br />
-                                    The field will be validated only if filled.<br />
-                                    If empty, the field will be evaluated as valid.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
-                            <div class="col-4 text-green">
-                                data-required-from
-                                <div class="small">
-                                    ( use together with data-require-more )
-                                </div>
-                            </div>
-                            <div class="col-8">
-                                <p>
-                                    The "id" attribute of the field with "data-require-more" attribute
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    Used to bind the answer with "data-required-from" attribute ( eg: a text answer ) to be mandatory when the answer with "data-require-more" attribute is selected ( es: a radio answer )
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
-                            <div class="col-4 text-green">
-                                data-equal-to
-                            </div>
-                            <div class="col-8">
-                                <p>
-                                    The "name" attribute of the field this answer value must be equal to
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    Eg: for a confirm email/password field
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
-                            <div class="col-4 text-green">
-                                data-exact-length
-                            </div>
-                            <div class="col-8">
-                                <p>
-                                    The exact number of characters the answer must have ( no more nor less )
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    Eg: a field that must have a specific number of characters, such as for cents ( 2 digits )
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Other utilities -->
-        <div id="other-utilities-list">
-            <h3 class="sticky-title">Other utilities</h3>
-            <p>
-                Other utilities for fields validation activated by setting a data-* attribute on the field:
+                Fields utilities activated by setting a data-* attribute on the field:
             </p>
             <div class="panel panel-default panel-transparent" style="background-color: transparent;">
                 <div class="card-header bg-white text-dark clearfix">
@@ -1751,7 +1599,7 @@
                 </div>
                 <div class="card-body">
                     <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator d-flex small">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 text-green">
                                 data-char-count
                                 <div class="small">
@@ -1761,7 +1609,7 @@
                             </div>
                             <div class="col-8">
                                 <p>
-                                    setup a counter for the field ( for example for a message in a textarea ).<br />
+                                    Set a counter for the field ( for example for a message in a textarea ).<br />
                                     Related HTML attributes:
                                 </p>
                                 <ul>
@@ -1781,44 +1629,124 @@
                 </div>
             </div>
         </div>
+
+        <!-- Changelog -->
+        <div id="changelog">
+            <h3 class="sticky-title">Changelog</h3>
+            <ul class="p-0">
+                <li class="media my-3">
+                    <div class="version-num text-red">2.0.0</div>
+                    <div class="media-body pl-2">
+                        Rewritten with ES6:
+                        <ul>
+                            <li>
+                                Completely different usage of the plugin with introduction of plugin instance instead of one-instance-management.
+                            </li>
+                            <li>
+                                Changed "submitAjaxForm" method with "submit" method ( manages both AJAX and HTML forms ).
+                            </li>
+                            <li>
+                                Moved "addValidationRules" from instance methods to Class-prototype methods.
+                            </li>
+                            <li>
+                                Changed regex for email validation.
+                            </li>
+                            <li>
+                                Added "setOptions" method ( as Class-prototype method ).
+                            </li>
+                            <li>
+                                Some changes in methods arguments and callbacks arguments.
+                            </li>
+                            <li>
+                                Now HTML forms are better managed and beforeSend function is available.
+                            </li>
+                            <li>
+                                Added support for JS validation of "minlength" attribute.
+                            </li>
+                            <li>
+                                Addes support for JS validation of "accept" attribute for file inputs.
+                            </li>
+                            <li>
+                                Added support for JS validation via "pattern" attribute.
+                            </li>
+                            <li>
+                                "strictHtmlValidation" option in "fieldOptions" is now set to true by default.
+                            </li>
+                            <li>
+                                General bugfix.
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="media my-3">
+                    <div class="version-num text-red">1.2.0</div>
+                    <div class="media-body pl-2">
+                        Now written with plain Javascript ( ES5 ) and jQuery, Minor bugfix.
+                    </div>
+                </li>
+                <li class="media my-3">
+                    <div class="version-num text-red">1.1.2</div>
+                    <div class="media-body pl-2">
+                        First stable version.
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Bugs -->
+        <div id="bugs">
+            <h3 class="sticky-title">Bugs</h3>
+            <p>
+                If you find a bug, please report it <a href="https://github.com/SimplySayHi/formJS/issues" target="_blank">here</a>
+            </p>
+        </div>
         
     </div>
     
-    <script src="js/modules/formJS.js"></script>
+    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 -->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event"></script>
+
+    <script src="dist/formJS.min.js"></script>
     <script type="text/javascript">
-        /* ---------------------------------------- */
-        // ADD A NEW VALIDATION RULE
-        /*
-        FORM.addValidationRules({
-            zip: function( zipCode ){ return /[5-9]{3}$/.test( zipCode ); }
-        });
-        */
-        /* ---------------------------------------- */
-        
         document.addEventListener('click', function(e){
-            var elem = e.target,
-                elemSelector = '.panel-collapsible .card-header',
-                panelHeadingEL = (
-                    elem.matches(elemSelector) ? 
-                    elem : elem.closest(elemSelector)
-                );
-            
-            if( panelHeadingEL ){
-                e.preventDefault();
+            var key = e.which || e.keyCode;
+
+            if( key === 1 ){
+                var elem = e.target,
+                    cardHeaderSelector = '.panel-collapsible .card-header',
+                    dropDownSelector = '[data-toggle="dropdown"]',
+                    checkElement = function( cssSelector ){
+                        return (elem.matches(cssSelector) ? elem : (elem.closest(cssSelector) || null));
+                    };
                 
-                var panelEl = elem.closest('.panel').querySelector('.card-body'),
-                    panelDisplay = panelEl.style.display;
-                
-                panelHeadingEL.classList.toggle('active');
-                panelEl.style.display = (panelDisplay === '' || panelDisplay === 'none' ? 'block' : 'none');
+                if( checkElement(cardHeaderSelector) ){
+                    e.preventDefault();
+                    
+                    var cardHeader = checkElement(cardHeaderSelector),
+                        panelEl = elem.closest('.panel').querySelector('.card-body'),
+                        panelDisplay = panelEl.style.display;
+                    
+                    cardHeader.classList.toggle('active');
+                    panelEl.style.display = (panelDisplay === '' || panelDisplay === 'none' ? 'block' : 'none');
+                } else if( checkElement(dropDownSelector) ){
+                    e.preventDefault();
+
+                    var dropDown = checkElement(dropDownSelector),
+                        dropDownList = dropDown.nextElementSibling;
+
+                    dropDownList.classList.toggle('show');
+                }
             }
         }, false);
         
-        var options = {
+        var optionsPlugin = {
                 fieldOptions: {
                     checkDirtyField: true,
                     cssClasses: {
                         dirty: 'dirty-field custom-dirty-field'
+                    },
+                    onPastePrevented: function( fieldEl ){
+                        console.log( 'Paste event prevented on field ', fieldEl );
                     },
                     onValidation: function( fieldsArray ){
                         console.log('onValidation fieldsArray ', fieldsArray);
@@ -1827,33 +1755,54 @@
                             console.log( 'field "' + field.field.name + '" is valid? ', field.result );
                         }
                     },
-                    strictHtmlValidation: true,
-                    validateOnEvents: 'input change'
+                    strictHtmlValidation: true
                 },
                 formOptions: {
-                    beforeSend: function( data, formEl ){
+                    beforeSend: function( data ){
+                        console.log('this', this);
                         console.log( 'beforeSend data ', data );
-                        console.log( 'beforeSend formEl ', formEl );
-                        data.formData.addedInfo = 'This info was added on beforeSend callback';
-                        console.log( 'beforeSend data edited ', data );
+
+                        var feedbackEl = this.formEl.querySelector('[data-formjs-global-feedback]');
+                        feedbackEl.classList.add( 'd-none' );
+
                         return data;
                     },
-                    onSubmitSuccess: function( ajaxData, formEl ){
+                    onSubmitSuccess: function( ajaxData ){
+                        console.log('this', this);
                         console.log( 'onSubmitSuccess ajaxData ', ajaxData );
-                        console.log( 'onSubmitSuccess formEl ', formEl );
+
+                        let formEl = this.formEl;
+
+                        if( formEl.matches('[data-ajax-submit]') ){
+                            var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
+                            feedbackEl.classList.remove( 'alert-danger' );
+                            feedbackEl.classList.add( 'alert-success' );
+                            feedbackEl.classList.remove( 'd-none' );
+                            feedbackEl.innerHTML = 'Great! Your infos have been sent :D';
+                        }
                     },
-                    onSubmitError: function( ajaxData, formEl ){
+                    onSubmitError: function( ajaxData ){
+                        console.log('this', this);
                         console.log( 'onSubmitError ajaxData ', ajaxData );
-                        console.log( 'onSubmitError formEl ', formEl );
+
+                        let formEl = this.formEl;
+
+                        if( formEl.matches('[data-ajax-submit]') ){
+                            var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
+                            feedbackEl.classList.remove( 'alert-success' );
+                            feedbackEl.classList.add( 'alert-danger' );
+                            feedbackEl.classList.remove( 'd-none' );
+                            feedbackEl.innerHTML = 'Oh no, something went wrong! :( Retry';
+                        }
                     },
-                    onSubmitComplete: function( ajaxData, formEl ){
+                    onSubmitComplete: function( ajaxData ){
+                        console.log('this', this);
                         console.log( 'onSubmitComplete ajaxData ', ajaxData );
-                        console.log( 'onSubmitComplete formEl ', formEl );
                     }
                 }
             };
-        
-        FORM.init( options );
+
+        var formInstance = new Form( document.querySelector('form'), optionsPlugin );
     </script>
 </body>
 </html>
