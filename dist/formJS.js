@@ -181,16 +181,23 @@
                 return elem.matches(excludeSelectors);
             });
             filteredFields.forEach(function(fieldEl) {
-                var isCheckbox = fieldEl.type === "checkbox", isRadio = fieldEl.type === "radio", name = fieldEl.name, value = isCheckbox ? [] : fieldEl.value;
+                var isCheckbox = fieldEl.type === "checkbox", isRadio = fieldEl.type === "radio", isSelect = fieldEl.matches("select"), name = fieldEl.name, value = isCheckbox || isSelect ? [] : fieldEl.value;
                 if (isCheckbox || isRadio) {
-                    var checkedFieldsEl = formEl.querySelectorAll('[name="' + name + '"]:checked');
+                    var checkedFieldsEl = Array.from(formEl.querySelectorAll('[name="' + name + '"]:checked'));
                     if (isRadio) {
                         value = checkedFieldsEl.length === 0 ? null : checkedFieldsEl[0].value;
                     } else {
-                        Array.from(checkedFieldsEl).forEach(function(fieldEl) {
+                        checkedFieldsEl.forEach(function(fieldEl) {
                             value.push(fieldEl.value);
                         });
                     }
+                } else if (isSelect) {
+                    var optionsList = Array.from(fieldEl.options).filter(function(option) {
+                        return option.selected;
+                    });
+                    optionsList.forEach(function(fieldEl) {
+                        value.push(fieldEl.value);
+                    });
                 }
                 formData[name] = value;
             });
