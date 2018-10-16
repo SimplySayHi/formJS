@@ -332,36 +332,36 @@
         <div id="html">
             <h3 class="sticky-title">HTML</h3>
             <p>
-                This is the basic HTML structure to make the validation works ( some Bootstrap classes are optional ).<br />
+                This is the basic HTML structure to make the validation works ( Bootstrap CSS classes are optional ).<br />
                 Some notations about form/fields attributes:
             </p>
             <ul>
-                <li>
-                    novalidate: ( required  ) for the form ( fields will be validated via JS )
+                <li class="my-2">
+                    <code>novalidate</code> ( required  ) for the form ( fields will be validated via JS )
                 </li>
-                <li>
-                    data-ajax-submit: ( optional empty attribute ) for the form. To let the plugin manage the form with an AJAX call.
+                <li class="my-2">
+                    <code>data-ajax-submit</code> ( optional empty attribute ) for the form. To let the plugin manage the form with an AJAX call.
                 </li>
-                <li>
-                    data-ajax-settings: ( optional ) for the form, to specify new options for the AJAX call as JSON object inside the HTML attribute. Used together with data-ajax-submit attribute. See <a href="#ajax-settings">AJAX Options</a> for details.
+                <li class="my-2">
+                    <code>data-ajax-settings</code> ( optional ) for the form, to specify new options for the AJAX call as JSON object inside the HTML attribute. Used together with data-ajax-submit attribute. See <a href="#ajax-settings">AJAX Options</a> for details.
                 </li>
-                <li>
-                    required: ( required  ) for fields that require an answer
+                <li class="my-2">
+                    <code>required</code> ( required  ) for fields that require an answer
                 </li>
-                <li>
-                    type: ( required  )
+                <li class="my-2">
+                    <code>type</code> ( required  )
                 </li>
-                <li>
-                    data-subtype: ( optional ) for special field types ( eg: VAT number, fiscal code, etc - see the <a href="#builtin-validations">full list</a> )
+                <li class="my-2">
+                    <code>data-subtype</code> ( optional ) for special field types ( eg: VAT number, fiscal code, etc - see the <a href="#builtin-validations">full list</a> )
                 </li>
-                <li>
-                    data-exclude-json: ( optional empty attribute ) for fields, used to avoid the plugin to take in consideration the field when building the JSON ( used inside getFormJSON method )
+                <li class="my-2">
+                    <code>data-exclude-json</code> ( optional empty attribute ) for fields, used to avoid the plugin to take in consideration the field when building the JSON ( used inside getFormJSON method )
                 </li>
-                <li>
-                    data-formjs-question: ( optional empty attribute ) used for visual feedback on valid/invalid fields and/or character count functionality
+                <li class="my-2">
+                    <code>data-formjs-question</code> ( optional empty attribute ) used for visual feedback on valid/invalid fields and/or character count functionality
                 </li>
-                <li>
-                    data-formjs-init: ( optional ) if set to "false", the plugin will not initialize the events listeners but you can use its methods and so on ( for example if you just want to use getFormJSON method ). See <a href="#initialization">non-fully-initialized forms</a>
+                <li class="my-2">
+                    <code>data-formjs-init</code> ( optional ) if set to "false", the plugin will not initialize the events listeners but you can use its methods and so on ( for example if you just want to use getFormJSON method ). See <a href="#initialization">non-fully-initialized forms</a>
                 </li>
             </ul>
             
@@ -437,7 +437,7 @@ var options = {};
 var formInstance = new Form( formEl, options );</pre>
             <ul>
                 <li>
-                    formEl: ( required ) must be a single form node ( not a nodelist! )
+                    formEl: ( required ) must be a <u>single form node</u> ( not a nodelist! )
                 </li>
                 <li>
                     options: ( optional ) a JS object with fieldOptions and formOptions ( see <a href="#options-list">Options section</a> )
@@ -1601,7 +1601,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                     <div class="">
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 text-green">
-                                data-char-count
+                                <code>data-char-count</code>
                                 <div class="small">
                                     ( use together with data-char-length ) <br />
                                     ( optionally with maxlength and data-char-maxlength )
@@ -1613,14 +1613,14 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     Related HTML attributes:
                                 </p>
                                 <ul>
-                                    <li>
-                                        <span class="text-green">data-char-length</span>: used on a tag where you want to print the number of characters typed inside the field.
+                                    <li class="my-2">
+                                        <code class="text-green">data-char-length</code> used on a tag where you want to print the number of characters typed inside the field.
                                     </li>
-                                    <li>
-                                        <span class="text-green">maxlength</span>: used on the field to set the maxlength ( can be validated via JS by setting strictHtmlValidation to true ). the value will be printed as text inside the tag with data-char-maxlength attribute.
+                                    <li class="my-2">
+                                        <code class="text-green">maxlength</code> used on the field to set the maxlength ( can be validated via JS by setting strictHtmlValidation to true ). the value will be printed as text inside the tag with data-char-maxlength attribute.
                                     </li>
-                                    <li>
-                                        <span class="text-green">data-char-maxlength</span>: used on a tag where you want to print the value of maxlength of the field.
+                                    <li class="my-2">
+                                        <code class="text-green">data-char-maxlength</code> used on a tag where you want to print the value of maxlength of the field.
                                     </li>
                                 </ul>
                             </div>
