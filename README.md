@@ -5,7 +5,9 @@ Visit the [Plugin Documentation Page](http://valeriodipunzio.com/plugins/formJS/
 
 ## Changelog
 
-- 2.0.0 - Completely rewritten with ES6, comes with new addings, many important changes and bugfixes.
+- 2.1.0 - Some new features, some removals, internal improvements and so on. See [Changelog](http://valeriodipunzio.com/plugins/formJS/2.0.0/#changelog) for details.
+
+- [2.0.0](http://valeriodipunzio.com/plugins/formJS/2.0.0/) - Completely rewritten with ES6, comes with new addings, many important changes and bugfixes.
 
 - [1.2.0](http://valeriodipunzio.com/plugins/formJS/1.2.0/) - Now written with plain Javascript ( ES5 ) and jQuery, Minor bugfix.
 
