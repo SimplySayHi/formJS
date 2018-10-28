@@ -25,12 +25,12 @@
                 </p>
             </div>
             <h1>formJS</h1>
-            <p>Version 2.0.0<br />Demos</p>
+            <p>Version 2.1.0<br />Demos</p>
         </div>
         
         <!-- Demos -->
         <div id="demos" class="panel-collapsible row">
-            
+
             <!-- Demo Ajax Form ( POST ) -->
             <div id="demo-01" class="col-sm-6 col-md-3 py-3">
                 <div class="panel no-bg">
@@ -40,27 +40,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form method="POST" enctype="multipart/form-data" action="" name="ajax-form-post-01" data-ajax-submit novalidate>
-                            <!-- <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="test1" min="10" max="50" data-exact-length="2" class="form-control" required="" type="number">
-                                    <label>Number ( min 10 - max 50 )</label>
-                                </div>
-                                <div class="field-error-message small">Check your number, it is not valid (min 10, max 50, exact-length 2)!</div>
-                            </div>
-                            <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="test2" min="10" max="50" class="form-control" required="" type="range">
-                                        <label>Number ( min 10 - max 50 )</label>
-                                    </div>
-                                    <div class="field-error-message small">Check your number, it is not valid (min 10, max 50, exact-length 2)!</div>
-                                </div>
-                            <div data-formjs-question="" class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="message" class="form-control" type="text" data-exact-length="10" data-char-count required />
-                                    <label>Message ( <span data-char-length="">0</span>/<span data-char-maxlength="">100</span> )</label>
-                                </div>
-                            </div> -->
+                        <form method="POST" enctype="multipart/form-data" action="" name="ajax-form-post-01" novalidate>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
                                     <input name="document" type="file" class="form-control" accept="image/png" required />
@@ -70,7 +50,7 @@
                             </div>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
-                                    <input name="name" type="text" class="form-control" required />
+                                    <input name="name" type="text" data-length="[3,20]" class="form-control" required />
                                     <label>Name</label>
                                 </div>
                                 <div class="field-error-message small">Write your name!</div>
@@ -111,17 +91,17 @@
                                 <div class="field-error-message small">Password must have minimum 8 characters with one digit, one lowercase, one uppercase</div>
                             </div>
                             <div data-formjs-question class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="passwordConfirm" type="password" data-equal-to="password" class="form-control" required />
-                                        <label>Confirm Password</label>
-                                    </div>
-                                    <div class="field-error-message small">Password and Confirm Password are not equal!</div>
+                                <div class="answers-box label-move-up">
+                                    <input name="passwordConfirm" type="password" data-equal-to="password" class="form-control" required />
+                                    <label>Confirm Password</label>
                                 </div>
+                                <div class="field-error-message small">Password and Confirm Password are not equal!</div>
+                            </div>
                             <div data-formjs-question  data-max-check="2" class="form-group">
                                 <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
                                 <div class="answers-box">
                                     <div class="form-check">
-                                        <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-a" required="" />
+                                        <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-a" required="" data-checks="[1,2]" />
                                         <label class="form-check-label" for="checkbox-1-a">SMS</label>
                                     </div>
                                     <div class="form-check">
@@ -134,8 +114,7 @@
                                     </div>
                                 </div>
                                 <div class="field-error-message small">
-                                    <span>Select al least one of the options!</span>
-                                    <span>You can select 2 answers max!</span>
+                                    You must select at least 1 and at most 2 answers!
                                 </div>
                             </div>
                             <div data-formjs-question class="form-group">
@@ -172,7 +151,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="" method="GET" name="ajax-form-get-01" data-ajax-submit novalidate>
+                        <form action="" method="GET" name="ajax-form-get-01" novalidate>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
                                     <input name="name" type="text" class="form-control" required />
@@ -464,7 +443,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="json/survey.json" name="basic-form-post-02" novalidate data-formjs-init="false">
+                        <form method="POST" action="" name="basic-form-post-02" novalidate data-formjs-init="false">
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
                                     <input name="name" type="text" class="form-control" required />
@@ -485,13 +464,6 @@
                                     <label>Email</label>
                                 </div>
                                 <div class="field-error-message small">Check your email address, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="username" type="text" pattern="^(IT){0,1}[0-9]{11}$" class="form-control" required />
-                                    <label>VAT Number ( with pattern attribute )</label>
-                                </div>
-                                <div class="field-error-message small">VAT Number is not valid!</div>
                             </div>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
@@ -564,7 +536,7 @@
     </div>
 
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 -->
-    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"></script>
     
     <!-- <script type="module" src="src/index.js"></script>
     <script type="module" src="js/demo.js"></script> -->

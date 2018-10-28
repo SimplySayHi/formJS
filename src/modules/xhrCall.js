@@ -17,7 +17,7 @@ export function _xhrCall( formDataJSON, options ){
             url:            formEl.getAttribute('action') || location.href
         };
     
-    if( xhrOptions.contentType === 'multipart/form-data' && options.formOptions.manageFileUpload ){
+    if( xhrOptions.contentType === 'multipart/form-data' && options.formOptions.handleFileUpload ){
         var formDataMultipart = new FormData();
         
         for(var key in xhrOptions.data){

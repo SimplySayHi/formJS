@@ -120,20 +120,6 @@ textarea {
     position: relative;
     z-index: 1;
 }
-/*.input-group-addon {
-    display: table-cell;
-    border: 0 none;
-    border-radius: 0;
-    border-bottom: 1px solid rgba(255,255,255,0.25);
-    color: #06d6a0;
-    padding-left: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-}
-.has-error .input-group-addon {
-    background: none;
-    border-width: 2px;
-}*/
 .radio + .input-group {
     margin-top: -5px;
 }
@@ -239,7 +225,7 @@ textarea {
     -o-transition: border-color ease-in-out 0.15s;
     transition: border-color ease-in-out 0.15s;
 }
-.has-error .label-inline-flex .form-control + label,
+.has-error .label-inline-flex .form-control.dirty-field + label,
 .label-inline-flex .form-control:focus + label,
 .label-inline-flex .form-control.dirty-field + label {
     font-size: 0.75em;
@@ -255,7 +241,7 @@ textarea {
     line-height: 34px;
     top: 0;
 }
-.has-error .label-fade-down .form-control + label,
+.has-error .label-fade-down .form-control.dirty-field + label,
 .label-fade-down .form-control:focus + label,
 .label-fade-down .form-control.dirty-field + label {
     -webkit-transform: translateY(100%);
@@ -284,8 +270,9 @@ textarea {
     -o-transform: translateY(-50%);
     transform: translateY(-50%);
 }
+.label-move-up .form-control[type="date"] + label,
 .label-move-up .form-control[type="file"] + label,
-.has-error .label-move-up .form-control + label,
+.has-error .label-move-up .form-control.dirty-field + label,
 .label-move-up .form-control:focus + label,
 .label-move-up .form-control.dirty-field + label {
     -webkit-transform: translateY(-200%);
@@ -314,12 +301,6 @@ label, .radio label, .checkbox label {
 .checkbox, .radio {
     text-align: left;
 }
-/*.checkbox label, .radio label {
-    position: static;
-    font-weight: 300;
-    padding-left: 10px;
-    padding-top: 5px;
-}*/
 .checkbox label:before, .radio label:before {
     border-radius: 4px;
     width: 20px;
@@ -379,9 +360,7 @@ label, .radio label, .checkbox label {
 .field-error-message > span {
     display: none;
 }
-.has-error .field-error-message,
-.has-error:not(.has-error-switch) .field-error-message > span:first-child,
-.has-error-switch .field-error-message > span:last-child {
+.has-error .field-error-message {
     display: block;
 }
 
@@ -435,9 +414,11 @@ label, .radio label, .checkbox label {
 
 /* ----- */
 body > .container > div { position: relative; z-index: 0; }
-#menu { top: 0; right: 0; z-index: 1; }
+#menu { top: 0; right: 0; z-index: 10; }
 #menu .dropdown-toggle { background-color: #073b4c; }
 #menu .dropdown-menu { left: auto; right: 0; }
+
+#hero { z-index: 5; }
 
 h1 { font-size: 4em; line-height: 1; display: inline-block; border-bottom: 2px solid rgba(0,0,0,0.15); padding: 0.25em 0.0625em; }
 h2 { font-size: 3em; border-bottom: 2px solid rgba(0,0,0,0.15); padding: 0.25em 0.0625em; }
@@ -474,5 +455,8 @@ pre { max-height: 355px; }
 .row-list-separator { border-top: 2px solid rgba(204, 204, 204, 0.2); }
 .row-list-separator:first-child { border-top: 0 none; }
 .dropdown-menu { min-width: auto; }
-.dropdown-toggle:after { border-top-color: #ef476f; }
+.dropdown-toggle.dropdown-red-outline { border: 1px solid #ef476f; color: #ef476f; }
+.dropdown-toggle.dropdown-red-outline:after { border-top-color: #ef476f; }
+.dropdown-toggle.dropdown-red-outline[aria-expanded="true"] { background-color: #ef476f !important; color: #fff; }
+.dropdown-toggle.dropdown-red-outline[aria-expanded="true"]:after { border-top-color: #fff; }
 .version-num { min-width: 32px; }

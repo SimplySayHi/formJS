@@ -4,7 +4,6 @@ export const options = {
         cssClasses: {
             dirty:              'dirty-field',
             error:              'has-error',
-            errorMultiChoice:   'has-error-switch',
             valid:              'is-valid'
         },
         focusOnRelated:         true,
@@ -17,8 +16,10 @@ export const options = {
         validateOnEvents:       'input change'
     },
     formOptions: {
+        ajaxSubmit:             true,
         beforeSend:             null,
-        manageFileUpload:       true,
+        handleFileUpload:       true,
+        handleSubmit:           true,
         onSubmitComplete:       null,
         onSubmitError:          null,
         onSubmitSuccess:        null

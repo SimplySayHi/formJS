@@ -20,8 +20,8 @@
     <div id="top" class="container mb-5">
         <div id="menu" class="position-sticky text-right">
             <div class="dropdown d-inline-block mt-3">
-                <button class="btn dropdown-toggle py-0 px-2 border border-red" data-toggle="dropdown" type="button">
-                    <span class="text-red">menu</span>
+                <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2" data-toggle="dropdown" type="button">
+                    menu
                 </button>
                 <span class="dropdown-menu">
                     <a class="dropdown-item" href="formJS.zip">Download</a>
@@ -39,7 +39,7 @@
                 </span>
             </div>
         </div>
-        <div class="text-center mb-5">
+        <div id="hero" class="text-center mb-5">
             <div>
                 <p class="d-inline-block my-4">
                     <a href="https://github.com/SimplySayHi/formJS" target="_blank" class="media">
@@ -62,10 +62,11 @@
             <p>
                 Version 
                 <span class="dropdown d-inline-block ml-1">
-                    <button class="btn dropdown-toggle py-0 px-2 bg-transparent border border-red" data-toggle="dropdown" type="button">
-                        <span class="text-red">2.0.0</span>
+                    <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button">
+                        2.1.0
                     </button>
                     <span class="dropdown-menu w-100 py-1">
+                        <a class="dropdown-item px-2" href="/plugins/formJS/2.0.0/">2.0.0</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/1.2.0/">1.2.0</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/1.1.2/">1.1.2</a>
                     </span>
@@ -83,7 +84,7 @@
                         <div><p>Demo</p></div>
                     </div>
                     <div class="card-body">
-                        <form action="json/survey.json" name="my-form-4" data-ajax-submit="" novalidate>
+                        <form action="json/data.json" name="my-form-4" novalidate>
                             <div>
                                 <div data-formjs-question="" class="form-group">
                                     <div class="answers-box label-move-up">
@@ -204,6 +205,7 @@
                                         </span>
                                         <input class="form-control" name="radio-list-1-more" data-required-from="#radio-5-200-6-3" type="text" />
                                     </div>
+                                    <div class="field-error-message small">You must choose an answer ( and fill the text field if you selected "Other" )!</div>
                                 </div>
                                 <div data-formjs-question="" class="form-group">
                                     <div class="answers-box">
@@ -308,7 +310,7 @@
                 <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code>
             </p>
             <pre>
-&lt;script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event"&gt;&lt;/script&gt;</pre>
+&lt;script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"&gt;&lt;/script&gt;</pre>
         </div>
         
         <!-- Dependencies -->
@@ -333,17 +335,25 @@
             <h3 class="sticky-title">HTML</h3>
             <p>
                 This is the basic HTML structure to make the validation works ( Bootstrap CSS classes are optional ).<br />
-                Some notations about form/fields attributes:
+                Some notations about form attributes:
             </p>
             <ul>
                 <li class="my-2">
-                    <code>novalidate</code> ( required  ) for the form ( fields will be validated via JS )
+                    <code>novalidate</code> ( required  ) enables JS field validation
                 </li>
                 <li class="my-2">
-                    <code>data-ajax-submit</code> ( optional empty attribute ) for the form. To let the plugin manage the form with an AJAX call.
+                    <code>data-ajax-settings</code> ( optional ) to specify new options for the AJAX call as JSON object inside the HTML attribute. See <a href="#ajax-settings">AJAX Options</a> for details.
                 </li>
                 <li class="my-2">
-                    <code>data-ajax-settings</code> ( optional ) for the form, to specify new options for the AJAX call as JSON object inside the HTML attribute. Used together with data-ajax-submit attribute. See <a href="#ajax-settings">AJAX Options</a> for details.
+                    <code>data-formjs-init</code> ( optional ) if set to "false", the plugin will not initialize the events listeners but you can use its methods and so on ( for example if you just want to use getFormJSON method ). See <a href="#initialization">non-fully-initialized forms</a>
+                </li>
+            </ul>
+            <p>
+                And some notations about field attributes:
+            </p>
+            <ul>
+                <li class="my-2">
+                    <code>data-formjs-question</code> ( optional empty attribute ) used for visual feedback on valid/invalid fields and/or character count functionality ( to be used on a container element for the field )
                 </li>
                 <li class="my-2">
                     <code>required</code> ( required  ) for fields that require an answer
@@ -355,16 +365,9 @@
                     <code>data-subtype</code> ( optional ) for special field types ( eg: VAT number, fiscal code, etc - see the <a href="#builtin-validations">full list</a> )
                 </li>
                 <li class="my-2">
-                    <code>data-exclude-json</code> ( optional empty attribute ) for fields, used to avoid the plugin to take in consideration the field when building the JSON ( used inside getFormJSON method )
-                </li>
-                <li class="my-2">
-                    <code>data-formjs-question</code> ( optional empty attribute ) used for visual feedback on valid/invalid fields and/or character count functionality
-                </li>
-                <li class="my-2">
-                    <code>data-formjs-init</code> ( optional ) if set to "false", the plugin will not initialize the events listeners but you can use its methods and so on ( for example if you just want to use getFormJSON method ). See <a href="#initialization">non-fully-initialized forms</a>
+                    <code>data-exclude-json</code> ( optional empty attribute ) used to avoid the plugin to take in consideration the field when building the JSON ( used inside getFormJSON method )
                 </li>
             </ul>
-            
             <p>
                 Below, the HTML example:
             </p>
@@ -432,19 +435,22 @@
                 Here an example of initialization:
             </p>
             <pre>var formEl = document.querySelector('form');
+// or with CSS string selector:
+// var formEl = '.my-container .my-form';
+
 var options = {};
 
 var formInstance = new Form( formEl, options );</pre>
             <ul>
                 <li>
-                    formEl: ( required ) must be a <u>single form node</u> ( not a nodelist! )
+                    formEl: ( required ) must be a <u>single form node</u> ( not a nodelist! ) or a <u>CSS string selector</u>
                 </li>
                 <li>
                     options: ( optional ) a JS object with fieldOptions and formOptions ( see <a href="#options-list">Options section</a> )
                 </li>
             </ul>
             <p>
-                You will read about "non-fully-initialized forms". It means that form has <code>data-formjs-init="false"</code> attribute, so the plugin will not add the event listeners to validate the fields and to submit that form.
+                You will read about "non-fully-initialized forms". It means that the form has <code>data-formjs-init="false"</code> attribute, so the plugin will not add the event listeners to validate the fields and to submit the form.
             </p>
             <p>
                 <b>IMPORTANT</b>: If <code>Form</code> namespace is not available, you can use <code>FormJS</code> namespace.
@@ -513,9 +519,6 @@ var formInstance = new Form( formEl, options );</pre>
                                     </li>
                                     <li>
                                         <span class="text-green">error</span>: ( string ) CSS class(es) to be applied if the field is not valid
-                                    </li>
-                                    <li>
-                                        <span class="text-green">errorMultiChoice</span>: ( string ) CSS class(es) to be applied if the field with multiple selectable answers ( eg: some checboxes ) is not valid
                                     </li>
                                     <li>
                                         <span class="text-green">valid</span>: ( string ) CSS class(es) to be applied if the field is valid
@@ -644,7 +647,6 @@ var formInstance = new Form( formEl, options );</pre>
     cssClasses: {
         dirty:              'dirty-field',
         error:              'has-error',
-        errorMultiChoice:   'has-error-switch',
         valid:              'is-valid'
     },
     focusOnRelated:         true,
@@ -679,6 +681,19 @@ var formInstance = new Form( formEl, options );</pre>
                         </div>
                     </div>
                     <div class="card-body">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-3">
+                                <p class="text-green">ajaxSubmit</p>
+                                ( boolean )
+                            </div>
+                            <div class="col-5">
+                            </div>
+                            <div class="col-4">
+                                <p>
+                                    To let the plugin submit the form via AJAX.
+                                </p>
+                            </div>
+                        </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-3">
                                 <p class="text-green">beforeSend</p>
@@ -719,7 +734,7 @@ var formInstance = new Form( formEl, options );</pre>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-3">
-                                <p class="text-green">manageFileUpload</p>
+                                <p class="text-green">handleFileUpload</p>
                                 ( boolean )
                             </div>
                             <div class="col-5">
@@ -727,10 +742,25 @@ var formInstance = new Form( formEl, options );</pre>
                             </div>
                             <div class="col-4">
                                 <p>
-                                    Wether or not the plugin must manage the file upload. It is a simple file upload via ajax.<br />
+                                    Wether or not the plugin must handle the file upload. It is a simple file upload via ajax.<br />
                                     You must also set the enctype="multipart/form-data" attribute to the form.
                                     <br />
                                     <span class="small">( ONLY for AJAX forms )</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-3">
+                                <p class="text-green">handleSubmit</p>
+                                ( boolean )
+                            </div>
+                            <div class="col-5">
+
+                            </div>
+                            <div class="col-4">
+                                <p>
+                                    Wether or not the plugin must handle form submit ( AJAX or default )<br />
+                                    If set to false, you will have to handle form submit by yourself.
                                 </p>
                             </div>
                         </div>
@@ -804,8 +834,10 @@ var formInstance = new Form( formEl, options );</pre>
                         </p>
                         <pre>
 {
+    ajaxSubmit:         true,
     beforeSend:         null,
-    manageFileUpload:   true,
+    handleFileUpload:   true,
+    handleSubmit:       true,
     onSubmitComplete:   null,
     onSubmitError:      null,
     onSubmitSuccess:    null
@@ -905,7 +937,7 @@ var formInstance = new Form( formEl, options );</pre>
                             name
                         </div>
                         <div class="col-5">
-                            parameters
+                            description &amp; parameters
                         </div>
                         <div class="col-3">
                             return value
@@ -916,10 +948,24 @@ var formInstance = new Form( formEl, options );</pre>
                     <div class="">
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
+                                <pre class="text-green">destroy()</pre>
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    Remove all events listeners from the form instance.
+                                </p>
+                            </div>
+                            <div class="col-3">
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4">
                                 <pre class="text-green">getFormJSON()</pre>
                             </div>
                             <div class="col-5">
-                                
+                                <p>
+                                    Get a JSON object of the form.
+                                </p>
                             </div>
                             <div class="col-3">
                                 <p>
@@ -938,6 +984,9 @@ var formInstance = new Form( formEl, options );</pre>
                                 <pre class="text-green">isValidField( field[, fieldOptions] )</pre>
                             </div>
                             <div class="col-5">
+                                <p>
+                                    Vaidate the field based on the field options of the instance or the ones passed as second argument.
+                                </p>
                                 <ul>
                                     <li>
                                         field: CSS string selector ( or node element <span class="text-yellow">*</span> ) for the form field ( input, select, textarea )
@@ -967,6 +1016,9 @@ var formInstance = new Form( formEl, options );</pre>
                                 <pre class="text-green">isValidForm( [options] )</pre>
                             </div>
                             <div class="col-5">
+                                <p>
+                                    Vaidate the form based on the form options of the instance or the ones passed as argument.
+                                </p>
                                 <ul>
                                     <li>
                                         options: ( Optional ) JS object with fieldOptions and/or formOptions. For default values see <a href="#options-list">Options section</a>
@@ -1000,6 +1052,9 @@ var formInstance = new Form( formEl, options );</pre>
                                 <pre class="text-green">submit( [options, [event]] )</pre>
                             </div>
                             <div class="col-5">
+                                <p>
+                                    To manually trigger the form submit.
+                                </p>
                                 <ul>
                                     <li>
                                         options: ( Optional ) JS object. Can contain fieldOptions and formOptions. For default values see <a href="#options-list">Options section</a>
@@ -1125,7 +1180,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
         <div id="builtin-validations">
             <h3 class="sticky-title">Built-in Validations</h3>
             <p>
-                There are the rules used to validate the field depending on html attributes/data-* attributes ( you can add new ones - or override the ones having JS key specified - with addValidationRules method ).
+                Below the rules used to validate the fields depending on html basic/data-* attributes ( you can add new ones - or override the ones having JS key specified - with addValidationRules method ).
             </p>
             <div class="panel panel-default panel-transparent" style="background-color: transparent;">
                 <div class="card-header bg-white text-dark clearfix">
@@ -1163,6 +1218,33 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
+                                Checkbox
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="checkbox"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    Check if the field is checked or not.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Checks
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-checks="[1,3]"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    Check that the number of checked checkboxes is between the the given numbers ( must be a valid - 2 values - array ).<br />
+                                    The attribute can be applied to only one of the checkboxes, not mandatory for all.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
                                 Date
                                 <div>( date )</div>
                             </div>
@@ -1172,12 +1254,40 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                             </div>
                             <div class="col-4 col-sm-6">
                                 <p>
-                                    /^(0?[1-9]|[12][0-9]|3[01])([ \/\-.])(0?[1-9]|1[012])\2([0-9][0-9][0-9][0-9])(([ -])([0-1]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9])?$/
+                                    /^(((0[1-9]|[12]\d|3[01])[ \/\-.](0[13578]|1[02])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)[ \/\-.](0[13456789]|1[012])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])[ \/\-.]02[ \/\-.]((19|[2-9]\d)\d{2}))|(29[ \/\-.]02[ \/\-.]((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/
+                                    <br />or<br />
+                                    /^(((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29)$/
                                 </p>
                                 <br />
                                 <p class="small text-lowercase text-opacity">
-                                    DATE AS ITALIAN SYNTAX WITH / WITHOUT TIME<br />
-                                    dd mm yyyy | dd/mm/yyyy | dd.mm.yyyy | dd-mm-yyyy | dd/mm/yyyy-hh:mm:ss ( WITH SPACE / . - AS SEPARATOR FOR THE DATE )
+                                    DATE AS ITALIAN SYNTAX<br />
+                                    DD MM YYYY | DD/MM/YYYY | DD.MM.YYYY | DD-MM-YYYY
+                                    <br /><br />
+                                    OR AS ISO 8601 DATE FORMAT<br />
+                                    YYYY MM DD | YYYY/MM/DD | YYYY.MM.DD | YYYY-MM-DD
+                                    <br /><br />
+                                    WITH SPACE / . - AS SEPARATOR
+                                </p>
+                                <br />
+                                <p>
+                                    <b>Important Note</b>:<br />
+                                    <code>type="date"</code> is not supported by:
+                                </p>
+                                <ul>
+                                    <li>
+                                        IE ( all versions )
+                                    </li>
+                                    <li>
+                                        Safari for OS X ( tested on version 12 )
+                                    </li>
+                                    <li>
+                                        Firefox &lt; 57
+                                    </li>
+                                </ul>
+                                <p>
+                                    If you want to support these browsers you must also set <code>data-subtype="date"</code>
+                                    <br />
+                                    See <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date#Browser_compatibility" target="_blank">here</a> for details on browsers support.
                                 </p>
                             </div>
                         </div>
@@ -1233,6 +1343,20 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <br />
                                 <p class="small text-lowercase text-opacity">
                                     Eg: a field that must have a specific number of characters, such as for cents ( 2 digits )
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                File
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="file"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    Check if a file is selected or not.<br />
+                                    "accept" attribute is supported for JS validation.
                                 </p>
                             </div>
                         </div>
@@ -1298,6 +1422,19 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
+                                Length
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-length="[5,30]"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    Check that the field value length is between the the given numbers ( must be a valid - 2 values - array ).
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
                                 Max
                             </div>
                             <div class="col-4 col-sm-3 text-green">
@@ -1321,20 +1458,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p>
                                     HTML5<br />
                                     Check that the input length is less or equal to the maxlength value.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4 col-sm-3 text-green">
-                                Max Check
-                            </div>
-                            <div class="col-4 col-sm-3 text-green">
-                                <div><code>data-max-check="2"</code></div>
-                            </div>
-                            <div class="col-4 col-sm-6">
-                                <p>
-                                    Check that the number of checked checkboxes is less or equal the the given number.<br />
-                                    The attribute must be applied to a container element that is parent of all the checkboxes of the group.
                                 </p>
                             </div>
                         </div>
@@ -1489,6 +1612,19 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
+                                Radio
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="radio"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    Check if the field is checked or not.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
                                 Require More &amp; Required From
                             </div>
                             <div class="col-4 col-sm-3 text-green">
@@ -1635,6 +1771,46 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
             <h3 class="sticky-title">Changelog</h3>
             <ul class="p-0">
                 <li class="media my-3">
+                    <div class="version-num text-red">2.1.0</div>
+                    <div class="media-body pl-2">
+                        <ul>
+                            <li>
+                                Added "destroy" method.
+                            </li>
+                            <li>
+                                Added "handleSubmit" option in "formOptions".
+                            </li>
+                            <li>
+                                Added "Checks" and "Length" in "Built-in Validations".
+                            </li>
+                            <li>
+                                Removed "errorMultiChoice" in "fieldOptions.cssClasses".
+                            </li>
+                            <li>
+                                Removed support for "data-ajax-submit" attribute and added "ajaxSubmit" option in "formOptions" instead.
+                            </li>
+                            <li>
+                                Removed "Max check" from "Built-in Validations". Use the new "Checks" validation.
+                            </li>
+                            <li>
+                                Now "formEl" in constructor function can also be a CSS string selector.
+                            </li>
+                            <li>
+                                Better check for "formEl" argument inside the constructor function.
+                            </li>
+                            <li>
+                                Renamed "manageFileUpload" option in "handleFileUpload" inside "formOptions".
+                            </li>
+                            <li>
+                                Changed RegExp for "Date" in "Built-in Validations".
+                            </li>
+                            <li>
+                                Some internal improvements.
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="media my-3">
                     <div class="version-num text-red">2.0.0</div>
                     <div class="media-body pl-2">
                         Rewritten with ES6:
@@ -1704,7 +1880,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
     </div>
     
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 -->
-    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"></script>
 
     <script src="dist/formJS.min.js"></script>
     <script type="text/javascript">
@@ -1732,8 +1908,11 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                     e.preventDefault();
 
                     var dropDown = checkElement(dropDownSelector),
-                        dropDownList = dropDown.nextElementSibling;
+                        dropDownList = dropDown.nextElementSibling,
+                        dropDownAriaExpanded = dropDown.getAttribute('aria-expanded'),
+                        ariaExpValue = ( !dropDownAriaExpanded || dropDownAriaExpanded === 'false' ? 'true' : 'false' );
 
+                    dropDown.setAttribute('aria-expanded', ariaExpValue);
                     dropDownList.classList.toggle('show');
                 }
             }
@@ -1742,9 +1921,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
         var optionsPlugin = {
                 fieldOptions: {
                     checkDirtyField: true,
-                    cssClasses: {
-                        dirty: 'dirty-field custom-dirty-field'
-                    },
                     onPastePrevented: function( fieldEl ){
                         console.log( 'Paste event prevented on field ', fieldEl );
                     },
@@ -1754,8 +1930,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                             var field = fieldsArray[f];
                             console.log( 'field "' + field.field.name + '" is valid? ', field.result );
                         }
-                    },
-                    strictHtmlValidation: true
+                    }
                 },
                 formOptions: {
                     beforeSend: function( data ){
@@ -1773,7 +1948,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
 
                         let formEl = this.formEl;
 
-                        if( formEl.matches('[data-ajax-submit]') ){
+                        if( this.options.formOptions.ajaxSubmit ){
                             var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
                             feedbackEl.classList.remove( 'alert-danger' );
                             feedbackEl.classList.add( 'alert-success' );
@@ -1787,7 +1962,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
 
                         let formEl = this.formEl;
 
-                        if( formEl.matches('[data-ajax-submit]') ){
+                        if( this.options.formOptions.ajaxSubmit ){
                             var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
                             feedbackEl.classList.remove( 'alert-success' );
                             feedbackEl.classList.add( 'alert-danger' );

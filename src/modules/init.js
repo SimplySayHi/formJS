@@ -1,8 +1,4 @@
-import { _isNodeList, _isPlainObject, _mergeObjects } from './helper.js';
-
-import { _initFieldsFirstLoad }         from './init/fieldsFirstLoad.js';
-import { _initValidationEvents }        from './init/validationEvents.js';
-import { _initStrictHtmlValidation }    from './init/strictHtmlValidation.js';
+import { _initFieldsFirstLoad } from './initFieldsFirstLoad.js';
 
 export function _init(){
     const self = this,
@@ -16,29 +12,24 @@ export function _init(){
     _initFieldsFirstLoad.call(self, formEl, fieldOptions);
     
     // INIT EVENTS LISTENER
-    _initValidationEvents.call(self, formEl, fieldOptions);
+    fieldOptions.validateOnEvents.split(' ').forEach(function( eventName ){
+        let useCapturing = (eventName === 'blur' ? true : false);
+        formEl.addEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
+    });
     
     if( fieldOptions.strictHtmlValidation ){
         // VALIDATION WITH ATTRIBUTES LIKE HTML ONES ( ALSO FOR BUG FIXING, EG: maxlength IN ANDROID )
-        _initStrictHtmlValidation.call(self, formEl);
+        formEl.addEventListener('keypress', self.listenerCallbacks.keypressMaxlength, false);
     }
     
     if( fieldOptions.preventPasteFields && formEl.querySelectorAll( fieldOptions.preventPasteFields ).length ){
         // INIT EVENT LISTENER FOR "PASTE" EVENT TO PREVENT IT ON SPECIFIED FIELDS
-        formEl.addEventListener('paste', function(event){
-            const fieldEl = event.target;
-            if( fieldEl.matches( fieldOptions.preventPasteFields ) ){
-                event.preventDefault();
-                if( typeof fieldOptions.onPastePrevented === 'function' ){
-                    fieldOptions.onPastePrevented( fieldEl );
-                }
-            }
-        }, false);
+        formEl.addEventListener('paste', self.listenerCallbacks.pastePrevent, false);
     }
     
-    // INIT FORM SUBMIT ( DEFAULT AND AJAX )
-    formEl.addEventListener('submit', function(event){
-        self.submit( self.options, event );
-    });
+    if( self.options.formOptions.handleSubmit ){
+        // INIT FORM SUBMIT ( DEFAULT AND AJAX )
+        formEl.addEventListener('submit', self.listenerCallbacks.submit);
+    }
 
 }

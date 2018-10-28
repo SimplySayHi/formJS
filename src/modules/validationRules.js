@@ -6,9 +6,14 @@ export const validationRules = {
     },
     
     date: function( string ){
-        // DATE AS ITALIAN SYNTAX WITH/WITHOUT TIME
-        // dd mm yyyy | dd/mm/yyyy | dd.mm.yyyy | dd-mm-yyyy | dd/mm/yyyy-hh:mm:ss ( WITH SPACE / . - AS SEPARATOR FOR THE DATE )
-        return /^(0?[1-9]|[12][0-9]|3[01])([ \/\-.])(0?[1-9]|1[012])\2([0-9][0-9][0-9][0-9])(([ -])([0-1]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9])?$/.test( string );
+        // DATE AS ITALIAN SYNTAX       DD MM YYYY | DD/MM/YYYY | DD.MM.YYYY | DD-MM-YYYY
+        // OR AS ISO 8601 DATE FORMAT   YYYY MM DD | YYYY/MM/DD | YYYY.MM.DD | YYYY-MM-DD
+
+        let dateIT = /^(((0[1-9]|[12]\d|3[01])[ \/\-.](0[13578]|1[02])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)[ \/\-.](0[13456789]|1[012])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])[ \/\-.]02[ \/\-.]((19|[2-9]\d)\d{2}))|(29[ \/\-.]02[ \/\-.]((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/g.test( string ),
+
+            dateISO8601ext = /^(((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29)$/g.test( string );
+
+        return dateIT || dateISO8601ext;
     },
     
     email: function( string ){
@@ -90,32 +95,168 @@ export const validationRules = {
     
 };
 
-export const _validationRulesStrictHtml = {
+export const _validationRulesAttributes = {
+
+    checkbox: function( data ){
+        let isValid = data.fieldEl.checked,
+            formEl = data.fieldEl.closest('form'),
+            dataChecksEl = formEl.querySelector('[name="' + data.fieldEl.name + '"][data-checks]');
+
+        if( dataChecksEl !== null ){
+            isValid = this.checks({ attrValue: dataChecksEl.getAttribute('data-checks'), fieldEl: dataChecksEl});
+        }
+
+        return isValid;
+    },
+
+    checks: function( data ){
+        try{
+            let attrValue = JSON.parse(data.attrValue),
+                fieldEl = data.fieldEl,
+                formEl = fieldEl.closest('form'),
+                checkedElLength = formEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length;
+
+            return checkedElLength >= attrValue[0] && checkedElLength <= attrValue[1];
+        } catch(e){
+            throw new Error('"data-checks" attribute is not a valid array!');
+        }
+    },
+
+    equalTo: function( data ){
+        let fieldEl = data.fieldEl,
+            formEl = fieldEl.closest('form'),
+            checkFromEl = formEl.querySelector( '[name="' + fieldEl.getAttribute('data-equal-to') + '"]' );
+
+        return fieldEl.value === checkFromEl.value;
+    },
             
-    exactLength: function( value, validationValue ){
-        return value.length === (validationValue * 1);
+    exactLength: function( data ){
+        return data.fieldEl.value.length === (data.attrValue * 1);
+    },
+
+    file: function( data ){
+        let isValid = true,
+            fieldEl = data.fieldEl,
+            MIMEtype = (fieldEl.accept ? new RegExp(fieldEl.accept.replace( '*', '[^\\/,]+' )) : null),
+            filesList = Array.from(fieldEl.files);
+
+        filesList.forEach(function( file ){
+            let exceedMaxFileSize = data.fieldOptions.maxFileSize > 0 && (file.size/1024/1024) > data.fieldOptions.maxFileSize,
+                isAcceptedFileType = (MIMEtype !== null ? MIMEtype.test(file.type) : true);
+
+            if( exceedMaxFileSize || !isAcceptedFileType ){
+                isValid = false;
+            }
+        });
+
+        return isValid;
+    },
+
+    length: function( data ){
+        try{
+            var valueL = data.fieldEl.value.length,
+                attrValue = JSON.parse(data.attrValue);
+
+            return valueL >= attrValue[0] && valueL <= attrValue[1];
+        } catch(e){
+            throw new Error('"data-length" attribute is not a valid array!');
+        }
     },
     
-    max: function( value, validationValue ){
-        var value = value * 1,
-            maxVal = validationValue * 1;
+    max: function( data ){
+        var value = data.fieldEl.value * 1,
+            maxVal = data.attrValue * 1;
         
         return value <= maxVal;
     },
     
-    maxlength: function( value, validationValue ){
-        return value.length <= (validationValue * 1);
+    maxlength: function( data ){
+        return data.fieldEl.value.length <= (data.attrValue * 1);
     },
     
-    min: function( value, validationValue ){
-        var value = value * 1,
-            minVal = validationValue * 1;
+    min: function( data ){
+        var value = data.fieldEl.value * 1,
+            minVal = data.attrValue * 1;
         
         return value >= minVal;
     },
 
-    minlength: function( value, validationValue ){
-        return value.length >= (validationValue * 1);
+    minlength: function( data ){
+        return data.fieldEl.value.length >= (data.attrValue * 1);
+    },
+
+    pattern: function( data ){
+        let fieldEl = data.fieldEl,
+            fieldPattern = fieldEl.pattern,
+            fieldRegex = new RegExp( fieldPattern );
+
+        return fieldRegex.test( fieldEl.value );
+    },
+
+    radio: function( data ){
+        let fieldEl = data.fieldEl,
+            formEl = fieldEl.closest('form'),
+            fieldChecked = formEl.querySelector( '[name="'+ fieldEl.name +'"]:checked' ),
+            requireMoreEl = formEl.querySelector('[name="' + fieldEl.name + '"][data-require-more]'),
+            isValid = fieldChecked !== null && fieldChecked.value.trim().length > 0;
+
+        if( requireMoreEl !== null ){
+            isValid = this.requireMore({fieldEl: requireMoreEl, fieldOptions: data.fieldOptions});
+        }
+
+        return isValid;
+    },
+
+    requiredFrom: function( data ){
+        let fieldEl = data.fieldEl,
+            formEl = fieldEl.closest('form'),
+            isValidValue = fieldEl.value.trim().length > 0,
+            reqMoreEl = formEl.querySelector( fieldEl.getAttribute('data-required-from') ),
+            checkedEl = formEl.querySelector( '[name="'+ reqMoreEl.name +'"]:checked' );
+        
+        if( isValidValue ){
+
+            reqMoreEl.checked = true;
+            
+            if( reqMoreEl.required ){
+                fieldEl.required = true;
+            }
+
+        }
+
+        if( !reqMoreEl.checked ){
+            return true;
+        }
+        
+        return (reqMoreEl.required && reqMoreEl.checked ? isValidValue : (reqMoreEl.required ? checkedEl !== null : true));
+    },
+
+    requireMore: function( data ){
+        let requireMoreEl = data.fieldEl,
+            formEl = requireMoreEl.closest('form'),
+            requiredFromEl = formEl.querySelector('[data-required-from="#'+ requireMoreEl.id +'"]'),
+            fieldChecked = formEl.querySelector( '[name="'+ requireMoreEl.name +'"]:checked' ),
+            validReqFrom = true;
+        
+        if( requiredFromEl !== null ){
+            requiredFromEl.required = false;
+
+            if( requireMoreEl.checked ){
+                requiredFromEl.required = true;
+
+                if( data.fieldOptions.focusOnRelated ){
+                    requiredFromEl.focus();
+                } else {
+                    if( requireMoreEl.required && requiredFromEl.value.trim().length === 0 ){
+                        validReqFrom = false;
+                    }
+                }
+            } else {
+                requiredFromEl.value = '';
+            }
+        }
+
+        return fieldChecked && fieldChecked.value.trim().length > 0 && validReqFrom;
     }
     
 };

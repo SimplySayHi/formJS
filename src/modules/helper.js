@@ -20,6 +20,18 @@ _isPlainObject = function( object ){
     return Object.prototype.toString.call( object ) === '[object Object]';
 },
 
+_checkFormEl = function( formEl ){
+    let isString = typeof formEl,
+        isValidNodeSelector = isString === 'string' && _isDOMNode(document.querySelector(formEl)),
+        isFormSelector = isValidNodeSelector && document.querySelector(formEl).tagName.toLowerCase() === 'form',
+        obj = {
+            result: _isDOMNode(formEl) || isFormSelector,
+            element: (isString === 'string' ? document.querySelector(formEl) : formEl)
+        };
+
+    return obj;
+},
+
 _mergeObjects = function( out = {} ){
     for(let i=1; i<arguments.length; i++){
         let obj = arguments[i];

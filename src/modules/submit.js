@@ -5,7 +5,6 @@ import { _xhrCall } from './xhrCall.js';
 export function submit( options = {}, event = null ){
     const self = this,
           formEl = self.formEl,
-          isAjaxForm = formEl.matches('[data-ajax-submit]'),
           eventPreventDefault = ( enableBtn = true ) => {
               if( btnEl && enableBtn ){ btnEl.disabled = false; }
               if( event ){ event.preventDefault(); }
@@ -15,7 +14,8 @@ export function submit( options = {}, event = null ){
     options.formOptions = _mergeObjects( {}, (options.formOptions || {}), this.options.formOptions );
     
     const formValidation = self.isValidForm( options ),
-          btnEl = formEl.querySelector('[type="submit"]');
+          btnEl = formEl.querySelector('[type="submit"]'),
+          isAjaxForm = options.formOptions.ajaxSubmit;
     
     if( typeof options.fieldOptions.onValidation === 'function' ){
         options.fieldOptions.onValidation( formValidation.fields );

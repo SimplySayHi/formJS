@@ -24,9 +24,7 @@ document.addEventListener('click', function(e){
 var optionsPlugin = {
         fieldOptions: {
             checkDirtyField: true,
-            cssClasses: {
-                dirty: 'dirty-field custom-dirty-field'
-            },
+            cssClasses: { dirty: 'dirty-field custom-dirty-field' },
             onPastePrevented: function( fieldEl ){
                 console.log( 'Paste event prevented on field ', fieldEl );
             },
@@ -36,8 +34,7 @@ var optionsPlugin = {
                     var field = fieldsArray[f];
                     console.log( 'field "' + field.field.name + '" is valid? ', field.result );
                 }
-            },
-            strictHtmlValidation: true
+            }
         },
         formOptions: {
             beforeSend: function( data ){
@@ -57,7 +54,7 @@ var optionsPlugin = {
 
                 let formEl = this.formEl;
 
-                if( formEl.matches('[data-ajax-submit]') ){
+                if( this.options.formOptions.ajaxSubmit ){
                     var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
                     feedbackEl.classList.remove( 'alert-danger' );
                     feedbackEl.classList.add( 'alert-success' );
@@ -71,7 +68,7 @@ var optionsPlugin = {
 
                 let formEl = this.formEl;
 
-                if( formEl.matches('[data-ajax-submit]') ){
+                if( this.options.formOptions.ajaxSubmit ){
                     var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
                     feedbackEl.classList.remove( 'alert-success' );
                     feedbackEl.classList.add( 'alert-danger' );
@@ -86,7 +83,7 @@ var optionsPlugin = {
         }
     };
 
-const formsList = document.querySelectorAll('form');
+var formsList = document.querySelectorAll('form');
 
 var f1 = new Form( formsList[0], optionsPlugin );
 window.f1 = f1;
@@ -101,13 +98,13 @@ Form.addValidationRules({
 var addToDefOpts = {
         fieldOptions: {
             maxFileSize: 99,
-            validateOnEvents: 'blur',
+            validateOnEvents: 'change blur',
             cssClasses: { error: 'has-error custom-error-class' }
         }
     };
 Form.setOptions( addToDefOpts );
 
-const pswField = document.querySelectorAll('form [name="password"]');
+var pswField = document.querySelectorAll('form [name="password"]');
 Array.from(pswField).forEach(function(field){
     field.value = 'asdAsd123';
     // MANUAL EVENT TRIGGERING
@@ -118,28 +115,39 @@ Array.from(pswField).forEach(function(field){
 
 // --------------------
 
-//console.log( 'f.getFormJSON()', f.getFormJSON() );
-
-//console.log( 'f.isValidField()', f.isValidField(document.querySelector('form [name="email"]')) );
-
-//console.log( 'f.isValidForm() ', f.isValidForm() );
-
-// --------------------
-
-//var f2 = new Form( formsList[1], {fieldOptions: {maxFileSize: 200, validateOnEvents: 'input change blur' }} );
-var f2 = new Form( formsList[1], optionsPlugin );
+var f2 = new Form( formsList[1] );
 window.f2 = f2;
 console.log( 'Form Instance f2', f2.options.fieldOptions );
 
-var f3 = new Form( formsList[2] );
+var f3 = new Form( formsList[2], {formOptions: {ajaxSubmit: false}} );
 window.f3 = f3;
 console.log( 'Form Instance f3', f3.options.fieldOptions );
 
-var f4 = new Form( formsList[3], optionsPlugin );
+var optionsPlugin2 = {
+        fieldOptions: {
+            checkDirtyField: true,
+            cssClasses: { dirty: 'dirty-field custom-dirty-field' },
+            onPastePrevented: function( fieldEl ){
+                console.log( 'Paste event prevented on field ', fieldEl );
+            },
+            onValidation: function( fieldsArray ){
+                console.log('onValidation fieldsArray ', fieldsArray);
+                for(var f=0; f<fieldsArray.length; f++){
+                    var field = fieldsArray[f];
+                    console.log( 'field "' + field.field.name + '" is valid? ', field.result );
+                }
+            }
+        },
+        formOptions: {
+            ajaxSubmit: false
+        }
+};
+
+var f4 = new Form( formsList[3], optionsPlugin2 );
 window.f4 = f4;
 console.log( 'Form Instance f4', f4.options.fieldOptions );
 
-var f5 = new Form( formsList[4], {fieldOptions: {checkDirtyField: true}, formOptions: optionsPlugin.formOptions} );
+var f5 = new Form( formsList[4], {fieldOptions: {checkDirtyField: true}, formOptions: optionsPlugin2.formOptions} );
 window.f5 = f5;
 console.log( 'Form Instance f5', f5.options.fieldOptions );
 
