@@ -28,10 +28,20 @@ _pastePreventCallback = function( event ){
     let fieldOptions = this.options.fieldOptions;
 
     if( fieldEl.matches( fieldOptions.preventPasteFields ) ){
+        let callbacks = [],
+            functionOpt = fieldOptions.onPastePrevented;
+
         event.preventDefault();
-        if( typeof fieldOptions.onPastePrevented === 'function' ){
-            fieldOptions.onPastePrevented( fieldEl );
+
+        if( typeof functionOpt === 'function' ){
+            callbacks.push( functionOpt );
+        } else if( Array.isArray(functionOpt) ) {
+            callbacks = functionOpt;
         }
+
+        callbacks.forEach(function(cbFn){
+            cbFn( fieldEl );
+        });
     }
 },
 
@@ -56,15 +66,21 @@ _validationCallback = function( event ){
             (eventName !== 'change' && eventName !== 'input')
         ){
             
+            let callbacks = [],
+                onValidationOpt = fieldOptions.onValidation;
+
             const validationResult = self.isValidField( fieldEl, fieldOptions );
-            if( typeof fieldOptions.onValidation === 'function' ){
-                
-                const callbackData = [ { field: fieldEl, result: validationResult} ];
-                
-                fieldOptions.onValidation( callbackData );
-                
+            const callbackData = [ { field: fieldEl, result: validationResult} ];
+
+            if( typeof onValidationOpt === 'function' ){
+                callbacks.push( onValidationOpt );
+            } else if( Array.isArray(onValidationOpt) ) {
+                callbacks = onValidationOpt;
             }
-            
+
+            callbacks.forEach(function(cbFn){
+                cbFn( callbackData );
+            });
         }
     }
 };

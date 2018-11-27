@@ -13,17 +13,32 @@ export function submit( options = {}, event = null ){
     options.fieldOptions = _mergeObjects( {}, (options.fieldOptions || {}), this.options.fieldOptions );
     options.formOptions = _mergeObjects( {}, (options.formOptions || {}), this.options.formOptions );
     
-    const formValidation = self.isValidForm( options ),
-          btnEl = formEl.querySelector('[type="submit"]'),
+    const handleValidation = options.fieldOptions.handleValidation,
+          formValidation = (handleValidation ? self.isValidForm( options ) : { result: true });
+
+    const btnEl = formEl.querySelector('[type="submit"]'),
           isAjaxForm = options.formOptions.ajaxSubmit;
     
-    if( typeof options.fieldOptions.onValidation === 'function' ){
-        options.fieldOptions.onValidation( formValidation.fields );
+    if( handleValidation ){
+        let callbacksValidation = [],
+            onValidationOpt = options.fieldOptions.onValidation;
+
+        if( typeof onValidationOpt === 'function' ){
+            callbacksValidation.push( onValidationOpt );
+        } else if( Array.isArray(onValidationOpt) ) {
+            callbacksValidation = onValidationOpt;
+        }
+
+        callbacksValidation.forEach(function(cbFn){
+            cbFn( formValidation.fields );
+        });
     }
     
-    let formDataJSON = (isAjaxForm ? self.getFormJSON() : null);
-    
-    if( typeof options.formOptions.beforeSend === 'function' ){
+    let formDataJSON = (isAjaxForm ? self.getFormJSON() : null),
+        callbacksBeforeSend = [],
+        beforeSendOpt = options.formOptions.beforeSend;
+
+    if( typeof beforeSendOpt === 'function' || Array.isArray(beforeSendOpt) ){
         let beforeSendData = {
                 stopExecution: false
             };
@@ -32,15 +47,23 @@ export function submit( options = {}, event = null ){
             beforeSendData.formData = formDataJSON;
         }
 
-        let beforeSendFn = options.formOptions.beforeSend.call( self, beforeSendData );
-        
-        if( _isPlainObject(beforeSendFn) ){
-            formDataJSON = beforeSendFn.formData || formDataJSON;
-            if( beforeSendFn.stopExecution ){
-                eventPreventDefault();
-                return false;
-            }
+        if( typeof beforeSendOpt === 'function' ){
+            callbacksBeforeSend.push( beforeSendOpt );
+        } else if( Array.isArray(beforeSendOpt) ) {
+            callbacksBeforeSend = beforeSendOpt;
         }
+
+        callbacksBeforeSend.forEach(function(cbFn){
+            let beforeSendFn = cbFn.call( self, beforeSendData );
+            
+            if( _isPlainObject(beforeSendFn) ){
+                formDataJSON = beforeSendFn.formData || formDataJSON;
+                if( beforeSendFn.stopExecution ){
+                    eventPreventDefault();
+                    return false;
+                }
+            }
+        });
     }
 
     if( !formValidation.result || (btnEl && btnEl.disabled) ){
@@ -56,7 +79,7 @@ export function submit( options = {}, event = null ){
 
         // AJAX FORM SUBMIT
         eventPreventDefault(false);
-        _xhrCall.call( self, formDataJSON, options );
+        _xhrCall.call( self, formDataJSON );
 
     } else if( !event ){
 

@@ -357,9 +357,6 @@ label, .radio label, .checkbox label {
     display: none;
     color: #a94442;
 }
-.field-error-message > span {
-    display: none;
-}
 .has-error .field-error-message {
     display: block;
 }
@@ -428,9 +425,11 @@ h2, h3 { color: #ffd166; margin-top: 2em; }
 h1 .small { font-family: 'Raleway', sans-serif; font-size: 0.5em; color: inherit; }
 h3 .small { color: inherit; }
 .sticky-title {
-    position: -webkit-sticky; position: sticky;
+    position: -webkit-sticky; position: sticky; margin-bottom: 0;
     top: 0; z-index: 1; background: #073B4C; border-bottom: 2px solid rgba(0,0,0,0.15); padding: 0.25em 0.0625em;
 }
+.sticky-title + * { margin-top: 1rem !important; }
+.sticky-title + p, .sticky-title + ul { margin-top: 0.5rem !important; }
 .interline-normal { line-height: 1.2; }
 .interline-sm { line-height: 1; }
 hr { border-top: 1px solid rgba(0, 0, 0, 0.2); }

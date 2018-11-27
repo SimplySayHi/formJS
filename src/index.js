@@ -1,4 +1,4 @@
-/**! formJS v2.1.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/**! formJS v2.2.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 
 import { _checkFormEl, _isNodeList, _mergeObjects } from './modules/helper.js';
 
@@ -48,8 +48,8 @@ class Form {
         destroy.call(this);
     }
     
-    getFormJSON(){
-        return getFormJSON.call(this);
+    getFormJSON( customFn ){
+        return getFormJSON.call(this, customFn);
     }
     
     isValidField( fieldEl, fieldOptions ){

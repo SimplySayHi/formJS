@@ -81,7 +81,7 @@
                 return Constructor;
             };
         }();
- /**! formJS v2.1.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
+ /**! formJS v2.2.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
         var _options = __webpack_require__("./src/modules/options.js");
         var _validationRules = __webpack_require__("./src/modules/validationRules.js");
         var _listenerCallbacks2 = __webpack_require__("./src/modules/listenerCallbacks.js");
@@ -129,8 +129,8 @@
                 }
             }, {
                 key: "getFormJSON",
-                value: function getFormJSON() {
-                    return _getFormJSON2.getFormJSON.call(this);
+                value: function getFormJSON(customFn) {
+                    return _getFormJSON2.getFormJSON.call(this, customFn);
                 }
             }, {
                 key: "isValidField",
@@ -229,30 +229,35 @@
         });
         exports.getFormJSON = getFormJSON;
         function getFormJSON() {
-            var formData = {}, formEl = this.formEl, formFieldsEl = formEl.querySelectorAll("input, select, textarea"), excludeSelectors = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-json])', filteredFields = Array.from(formFieldsEl).filter(function(elem) {
+            var customFn = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.options.formOptions.getFormJSON;
+            var formData = {}, self = this, formEl = self.formEl, formFieldsEl = formEl.querySelectorAll("input, select, textarea"), excludeSelectors = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-json])', filteredFields = Array.from(formFieldsEl).filter(function(elem) {
                 return elem.matches(excludeSelectors);
             });
-            filteredFields.forEach(function(fieldEl) {
-                var isCheckbox = fieldEl.type === "checkbox", isRadio = fieldEl.type === "radio", isSelect = fieldEl.matches("select"), name = fieldEl.name, value = isCheckbox || isSelect ? [] : fieldEl.value;
-                if (isCheckbox || isRadio) {
-                    var checkedFieldsEl = Array.from(formEl.querySelectorAll('[name="' + name + '"]:checked'));
-                    if (isRadio) {
-                        value = checkedFieldsEl.length === 0 ? null : checkedFieldsEl[0].value;
-                    } else {
-                        checkedFieldsEl.forEach(function(fieldEl) {
+            if (typeof customFn === "function") {
+                formData = customFn.call(self, filteredFields);
+            } else {
+                filteredFields.forEach(function(fieldEl) {
+                    var isCheckbox = fieldEl.type === "checkbox", isRadio = fieldEl.type === "radio", isSelect = fieldEl.matches("select"), name = fieldEl.name, value = isCheckbox || isSelect ? [] : fieldEl.value;
+                    if (isCheckbox || isRadio) {
+                        var checkedFieldsEl = Array.from(formEl.querySelectorAll('[name="' + name + '"]:checked'));
+                        if (isRadio) {
+                            value = checkedFieldsEl.length === 0 ? null : checkedFieldsEl[0].value;
+                        } else {
+                            checkedFieldsEl.forEach(function(fieldEl) {
+                                value.push(fieldEl.value);
+                            });
+                        }
+                    } else if (isSelect) {
+                        var optionsList = Array.from(fieldEl.options).filter(function(option) {
+                            return option.selected;
+                        });
+                        optionsList.forEach(function(fieldEl) {
                             value.push(fieldEl.value);
                         });
                     }
-                } else if (isSelect) {
-                    var optionsList = Array.from(fieldEl.options).filter(function(option) {
-                        return option.selected;
-                    });
-                    optionsList.forEach(function(fieldEl) {
-                        value.push(fieldEl.value);
-                    });
-                }
-                formData[name] = value;
-            });
+                    formData[name] = value;
+                });
+            }
             return formData;
         }
     },
@@ -327,23 +332,36 @@
         var _initFieldsFirstLoad2 = __webpack_require__("./src/modules/initFieldsFirstLoad.js");
         function _init() {
             var self = this, formEl = self.formEl;
-            if (!formEl || !formEl.matches('[novalidate]:not([data-formjs-init="false"])')) {
+            if (!formEl || !formEl.matches("[novalidate]")) {
                 return false;
             }
-            var fieldOptions = self.options.fieldOptions;
-            _initFieldsFirstLoad2._initFieldsFirstLoad.call(self, formEl, fieldOptions);
-            fieldOptions.validateOnEvents.split(" ").forEach(function(eventName) {
-                var useCapturing = eventName === "blur" ? true : false;
-                formEl.addEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
-            });
-            if (fieldOptions.strictHtmlValidation) {
-                formEl.addEventListener("keypress", self.listenerCallbacks.keypressMaxlength, false);
+            var fieldOptions = self.options.fieldOptions, formOptions = self.options.formOptions;
+            if (fieldOptions.handleValidation) {
+                _initFieldsFirstLoad2._initFieldsFirstLoad.call(self, formEl, fieldOptions);
+                fieldOptions.validateOnEvents.split(" ").forEach(function(eventName) {
+                    var useCapturing = eventName === "blur" ? true : false;
+                    formEl.addEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
+                });
+                if (fieldOptions.strictHtmlValidation) {
+                    formEl.addEventListener("keypress", self.listenerCallbacks.keypressMaxlength, false);
+                }
+                if (fieldOptions.preventPasteFields && formEl.querySelectorAll(fieldOptions.preventPasteFields).length) {
+                    formEl.addEventListener("paste", self.listenerCallbacks.pastePrevent, false);
+                }
             }
-            if (fieldOptions.preventPasteFields && formEl.querySelectorAll(fieldOptions.preventPasteFields).length) {
-                formEl.addEventListener("paste", self.listenerCallbacks.pastePrevent, false);
-            }
-            if (self.options.formOptions.handleSubmit) {
+            if (formOptions.handleSubmit) {
                 formEl.addEventListener("submit", self.listenerCallbacks.submit);
+                if (formOptions.ajaxSubmit) {
+                    if (formEl.getAttribute("enctype")) {
+                        formOptions.ajaxOptions.contentType = formEl.getAttribute("enctype");
+                    }
+                    if (formEl.getAttribute("method")) {
+                        formOptions.ajaxOptions.method = formEl.getAttribute("method").toUpperCase();
+                    }
+                    if (formEl.getAttribute("action")) {
+                        formOptions.ajaxOptions.url = formEl.getAttribute("action");
+                    }
+                }
             }
         }
     },
@@ -533,10 +551,16 @@
             var fieldEl = event.target;
             var fieldOptions = this.options.fieldOptions;
             if (fieldEl.matches(fieldOptions.preventPasteFields)) {
+                var callbacks = [], functionOpt = fieldOptions.onPastePrevented;
                 event.preventDefault();
-                if (typeof fieldOptions.onPastePrevented === "function") {
-                    fieldOptions.onPastePrevented(fieldEl);
+                if (typeof functionOpt === "function") {
+                    callbacks.push(functionOpt);
+                } else if (Array.isArray(functionOpt)) {
+                    callbacks = functionOpt;
                 }
+                callbacks.forEach(function(cbFn) {
+                    cbFn(fieldEl);
+                });
             }
         }, _submitCallback = exports._submitCallback = function _submitCallback(event) {
             var self = this;
@@ -547,14 +571,20 @@
             if (fieldEl.matches(_helper._fieldsStringSelector)) {
                 var isFieldForChangeEvent = fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
                 if (isFieldForChangeEvent && eventName === "change" || !isFieldForChangeEvent && eventName === "input" || eventName !== "change" && eventName !== "input") {
+                    var callbacks = [], onValidationOpt = fieldOptions.onValidation;
                     var validationResult = self.isValidField(fieldEl, fieldOptions);
-                    if (typeof fieldOptions.onValidation === "function") {
-                        var callbackData = [ {
-                            field: fieldEl,
-                            result: validationResult
-                        } ];
-                        fieldOptions.onValidation(callbackData);
+                    var callbackData = [ {
+                        field: fieldEl,
+                        result: validationResult
+                    } ];
+                    if (typeof onValidationOpt === "function") {
+                        callbacks.push(onValidationOpt);
+                    } else if (Array.isArray(onValidationOpt)) {
+                        callbacks = onValidationOpt;
                     }
+                    callbacks.forEach(function(cbFn) {
+                        cbFn(callbackData);
+                    });
                 }
             }
         };
@@ -573,6 +603,8 @@
                     valid: "is-valid"
                 },
                 focusOnRelated: true,
+                handleFileUpload: true,
+                handleValidation: true,
                 maxFileSize: 10,
                 onPastePrevented: null,
                 onValidation: null,
@@ -582,9 +614,20 @@
                 validateOnEvents: "input change"
             },
             formOptions: {
+                ajaxOptions: {
+                    async: true,
+                    cache: false,
+                    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+                    method: "POST",
+                    timeout: 0,
+                    url: location.href
+                },
                 ajaxSubmit: true,
                 beforeSend: null,
-                handleFileUpload: true,
+                getFormJSON: null,
                 handleSubmit: true,
                 onSubmitComplete: null,
                 onSubmitError: null,
@@ -614,26 +657,44 @@
             };
             options.fieldOptions = (0, _helper._mergeObjects)({}, options.fieldOptions || {}, this.options.fieldOptions);
             options.formOptions = (0, _helper._mergeObjects)({}, options.formOptions || {}, this.options.formOptions);
-            var formValidation = self.isValidForm(options), btnEl = formEl.querySelector('[type="submit"]'), isAjaxForm = options.formOptions.ajaxSubmit;
-            if (typeof options.fieldOptions.onValidation === "function") {
-                options.fieldOptions.onValidation(formValidation.fields);
+            var handleValidation = options.fieldOptions.handleValidation, formValidation = handleValidation ? self.isValidForm(options) : {
+                result: true
+            };
+            var btnEl = formEl.querySelector('[type="submit"]'), isAjaxForm = options.formOptions.ajaxSubmit;
+            if (handleValidation) {
+                var callbacksValidation = [], onValidationOpt = options.fieldOptions.onValidation;
+                if (typeof onValidationOpt === "function") {
+                    callbacksValidation.push(onValidationOpt);
+                } else if (Array.isArray(onValidationOpt)) {
+                    callbacksValidation = onValidationOpt;
+                }
+                callbacksValidation.forEach(function(cbFn) {
+                    cbFn(formValidation.fields);
+                });
             }
-            var formDataJSON = isAjaxForm ? self.getFormJSON() : null;
-            if (typeof options.formOptions.beforeSend === "function") {
+            var formDataJSON = isAjaxForm ? self.getFormJSON() : null, callbacksBeforeSend = [], beforeSendOpt = options.formOptions.beforeSend;
+            if (typeof beforeSendOpt === "function" || Array.isArray(beforeSendOpt)) {
                 var beforeSendData = {
                     stopExecution: false
                 };
                 if (formDataJSON) {
                     beforeSendData.formData = formDataJSON;
                 }
-                var beforeSendFn = options.formOptions.beforeSend.call(self, beforeSendData);
-                if ((0, _helper._isPlainObject)(beforeSendFn)) {
-                    formDataJSON = beforeSendFn.formData || formDataJSON;
-                    if (beforeSendFn.stopExecution) {
-                        eventPreventDefault();
-                        return false;
-                    }
+                if (typeof beforeSendOpt === "function") {
+                    callbacksBeforeSend.push(beforeSendOpt);
+                } else if (Array.isArray(beforeSendOpt)) {
+                    callbacksBeforeSend = beforeSendOpt;
                 }
+                callbacksBeforeSend.forEach(function(cbFn) {
+                    var beforeSendFn = cbFn.call(self, beforeSendData);
+                    if ((0, _helper._isPlainObject)(beforeSendFn)) {
+                        formDataJSON = beforeSendFn.formData || formDataJSON;
+                        if (beforeSendFn.stopExecution) {
+                            eventPreventDefault();
+                            return false;
+                        }
+                    }
+                });
             }
             if (!formValidation.result || btnEl && btnEl.disabled) {
                 eventPreventDefault();
@@ -644,7 +705,7 @@
             }
             if (isAjaxForm) {
                 eventPreventDefault(false);
-                _xhrCall2._xhrCall.call(self, formDataJSON, options);
+                _xhrCall2._xhrCall.call(self, formDataJSON);
             } else if (!event) {
                 var submitEvent = new Event("submit", {
                     bubbles: true,
@@ -817,19 +878,11 @@
         });
         exports._xhrCall = _xhrCall;
         var _helper = __webpack_require__("./src/modules/helper.js");
-        function _xhrCall(formDataJSON, options) {
-            var self = this, formEl = self.formEl, btnEl = formEl.querySelector('[type="submit"]'), timeoutTimer, xhrOptions = {
-                async: true,
-                cache: false,
-                contentType: formEl.getAttribute("enctype") || "application/x-www-form-urlencoded; charset=UTF-8",
-                crossDomain: false,
-                data: formDataJSON,
-                headers: {},
-                method: formEl.getAttribute("method") ? formEl.getAttribute("method").toUpperCase() : "POST",
-                timeout: 0,
-                url: formEl.getAttribute("action") || location.href
-            };
-            if (xhrOptions.contentType === "multipart/form-data" && options.formOptions.handleFileUpload) {
+        function _xhrCall(formDataJSON) {
+            var self = this, formEl = self.formEl, fieldOptions = self.options.fieldOptions, formOptions = self.options.formOptions, btnEl = formEl.querySelector('[type="submit"]'), timeoutTimer = void 0, xhrOptions = (0, 
+            _helper._mergeObjects)({}, formOptions.ajaxOptions);
+            xhrOptions.data = formDataJSON;
+            if (xhrOptions.contentType === "multipart/form-data" && fieldOptions.handleFileUpload) {
                 var formDataMultipart = new FormData();
                 for (var key in xhrOptions.data) {
                     formDataMultipart.append(key, xhrOptions.data[key]);
@@ -842,15 +895,6 @@
                 });
                 xhrOptions.data = formDataMultipart;
             }
-            if (formEl.matches("[data-ajax-settings]")) {
-                try {
-                    var ajaxSettings = JSON.parse(formEl.getAttribute("data-ajax-settings"));
-                    xhrOptions = (0, _helper._mergeObjects)({}, ajaxSettings, xhrOptions);
-                } catch (error) {
-                    var formName = formEl.getAttribute("name") && 'form "' + formEl.getAttribute("name") + '"' || "the form";
-                    throw new Error("data-ajax-settings specified for " + formName + " is not a valid JSON object!");
-                }
-            }
             var XHR = new XMLHttpRequest(), parseResponse = function parseResponse(xhr) {
                 var data = xhr.responseText, getJSON = function getJSON() {
                     try {
@@ -861,8 +905,7 @@
                     }
                 }, getXML_HTML = function getXML_HTML() {
                     try {
-                        var isXML = xhr.responseXML !== null;
-                        var obj = isXML ? new DOMParser().parseFromString(data, "text/xml") : data;
+                        var isXML = xhr.responseXML !== null, obj = isXML ? new DOMParser().parseFromString(data, "text/xml") : data;
                         return obj;
                     } catch (e) {
                         return false;
@@ -870,44 +913,57 @@
                 };
                 return getJSON() || getXML_HTML() || data;
             }, loadendFn = function loadendFn(e) {
-                var xhr = e.target, responseData = parseResponse(xhr);
+                var xhr = e.target, responseData = parseResponse(xhr), callbacks = [], functionOpt = formOptions.onSubmitComplete;
+                var readyStateOK = xhr.readyState === 4, statusOK = xhr.status === 200, ajaxData = {
+                    dataOrXHR: readyStateOK && statusOK ? responseData : xhr,
+                    status: readyStateOK && statusOK ? "success" : "error",
+                    XHRorResponse: readyStateOK && statusOK ? xhr : responseData
+                };
                 if (timeoutTimer) {
                     window.clearTimeout(timeoutTimer);
                 }
                 btnEl.disabled = false;
-                if (typeof options.formOptions.onSubmitComplete === "function") {
-                    var readyStateOK = xhr.readyState === 4, statusOK = xhr.status === 200, ajaxData = {
-                        dataOrXHR: readyStateOK && statusOK ? responseData : xhr,
-                        status: readyStateOK && statusOK ? "success" : "error",
-                        XHRorResponse: readyStateOK && statusOK ? xhr : responseData
-                    };
-                    options.formOptions.onSubmitComplete.call(self, ajaxData);
+                if (typeof functionOpt === "function") {
+                    callbacks.push(functionOpt);
+                } else if (Array.isArray(functionOpt)) {
+                    callbacks = functionOpt;
                 }
+                callbacks.forEach(function(cbFn) {
+                    cbFn.call(self, ajaxData);
+                });
             }, loadFn = function loadFn(e) {
                 var xhr = e.target;
                 if (xhr.status === 200) {
-                    var responseData = parseResponse(xhr);
-                    if (typeof options.formOptions.onSubmitSuccess === "function") {
-                        var ajaxData = {
-                            data: responseData,
-                            status: "success",
-                            response: xhr
-                        };
-                        options.formOptions.onSubmitSuccess.call(self, ajaxData);
+                    var callbacks = [], functionOpt = formOptions.onSubmitSuccess, responseData = parseResponse(xhr), ajaxData = {
+                        data: responseData,
+                        status: "success",
+                        response: xhr
+                    };
+                    if (typeof functionOpt === "function") {
+                        callbacks.push(functionOpt);
+                    } else if (Array.isArray(functionOpt)) {
+                        callbacks = functionOpt;
                     }
+                    callbacks.forEach(function(cbFn) {
+                        cbFn.call(self, ajaxData);
+                    });
                 } else {
                     errorFn(e);
                 }
             }, errorFn = function errorFn(e) {
-                var xhr = e.target;
-                if (typeof options.formOptions.onSubmitError === "function") {
-                    var ajaxData = {
-                        errorThrown: xhr.statusText,
-                        status: "error",
-                        response: xhr
-                    };
-                    options.formOptions.onSubmitError.call(self, ajaxData);
+                var xhr = e.target, callbacks = [], functionOpt = formOptions.onSubmitError, ajaxData = {
+                    errorThrown: xhr.statusText,
+                    status: "error",
+                    response: xhr
+                };
+                if (typeof functionOpt === "function") {
+                    callbacks.push(functionOpt);
+                } else if (Array.isArray(functionOpt)) {
+                    callbacks = functionOpt;
                 }
+                callbacks.forEach(function(cbFn) {
+                    cbFn.call(self, ajaxData);
+                });
             };
             XHR.addEventListener("loadend", loadendFn, false);
             XHR.addEventListener("load", loadFn, false);
@@ -929,9 +985,6 @@
             }
             if (xhrOptions.data && xhrOptions.contentType !== "multipart/form-data") {
                 XHR.setRequestHeader("Content-Type", xhrOptions.contentType);
-            }
-            if (!xhrOptions.crossDomain && !xhrOptions.headers["X-Requested-With"]) {
-                xhrOptions.headers["X-Requested-With"] = "XMLHttpRequest";
             }
             for (var h in xhrOptions.headers) {
                 XHR.setRequestHeader(h, xhrOptions.headers[h]);

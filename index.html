@@ -63,9 +63,10 @@
                 Version 
                 <span class="dropdown d-inline-block ml-1">
                     <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button">
-                        2.1.0
+                        2.2.0
                     </button>
                     <span class="dropdown-menu w-100 py-1">
+                        <a class="dropdown-item px-2" href="/plugins/formJS/2.1.0/">2.1.0</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/2.0.0/">2.0.0</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/1.2.0/">1.2.0</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/1.1.2/">1.1.2</a>
@@ -341,12 +342,6 @@
                 <li class="my-2">
                     <code>novalidate</code> ( required  ) enables JS field validation
                 </li>
-                <li class="my-2">
-                    <code>data-ajax-settings</code> ( optional ) to specify new options for the AJAX call as JSON object inside the HTML attribute. See <a href="#ajax-settings">AJAX Options</a> for details.
-                </li>
-                <li class="my-2">
-                    <code>data-formjs-init</code> ( optional ) if set to "false", the plugin will not initialize the events listeners but you can use its methods and so on ( for example if you just want to use getFormJSON method ). See <a href="#initialization">non-fully-initialized forms</a>
-                </li>
             </ul>
             <p>
                 And some notations about field attributes:
@@ -450,9 +445,6 @@ var formInstance = new Form( formEl, options );</pre>
                 </li>
             </ul>
             <p>
-                You will read about "non-fully-initialized forms". It means that the form has <code>data-formjs-init="false"</code> attribute, so the plugin will not add the event listeners to validate the fields and to submit the form.
-            </p>
-            <p>
                 <b>IMPORTANT</b>: If <code>Form</code> namespace is not available, you can use <code>FormJS</code> namespace.
             </p>
         </div>
@@ -498,7 +490,7 @@ var formInstance = new Form( formEl, options );</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    wether or not to check if the field is dirty ( has some value ) or not.
+                                    Wether or not to check if the field is dirty ( has some value ) or not.
                                 </p>
                             </div>
                         </div>
@@ -535,7 +527,36 @@ var formInstance = new Form( formEl, options );</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    wether or not to focus on the related (input/select) field when selecting its radio answer 
+                                    Wether or not to focus on the related (input/select) field when selecting its radio answer 
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4">
+                                <p class="text-green">handleFileUpload</p>
+                            </div>
+                            <div class="col-3">
+                                boolean
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    Wether or not the plugin must handle the file upload. It is a simple file upload via ajax.<br />
+                                    You must also set the enctype="multipart/form-data" attribute to the form.
+                                    <br />
+                                    <span class="small">( NOT used if <code>ajaxSubmit: false</code> )</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4">
+                                <p class="text-green">handleValidation</p>
+                            </div>
+                            <div class="col-3">
+                                boolean
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    Wether or not the plugin must handle the fields validation ( as single check and on form submit ).
                                 </p>
                             </div>
                         </div>
@@ -548,7 +569,7 @@ var formInstance = new Form( formEl, options );</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    size limit ( in MB ) for each file to upload.<br />
+                                    Size limit ( in MB ) for each file to upload.<br />
                                     Set to 0 ( zero ) if you want to disable the size check.<br />
                                     Inside the field error message container you can put a span (or else) with data-max-file-size attribute to print the size limit
                                 </p>
@@ -559,13 +580,13 @@ var formInstance = new Form( formEl, options );</pre>
                                 <p class="text-green">onPastePrevented</p>
                             </div>
                             <div class="col-3">
-                                function
+                                function / array of functions
                             </div>
                             <div class="col-5">
                                 <p>
                                     Fires when the paste event has been prevented on the field(s) ( see "preventPasteFields" option ).
                                     <br />
-                                    <span class="small">( not fired for <a href="#initialization">non-fully-initialized forms</a> )</span>
+                                    <span class="small">( NOT fired if <code>handleValidation: false</code> )</span>
                                 </p>
                             </div>
                         </div>
@@ -574,7 +595,7 @@ var formInstance = new Form( formEl, options );</pre>
                                 <p class="text-green">onValidation</p>
                             </div>
                             <div class="col-3">
-                                function
+                                function / array of functions
                             </div>
                             <div class="col-5">
                                 <p>
@@ -604,7 +625,7 @@ var formInstance = new Form( formEl, options );</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    if true, the "has-error/has-error-switch" class will not be added ( for UI feedback as said by the name ) 
+                                    If true, the "has-error/has-error-switch" class will not be added ( for UI feedback as said by the name ) 
                                 </p>
                             </div>
                         </div>
@@ -617,7 +638,7 @@ var formInstance = new Form( formEl, options );</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    activate JS controls for strict JS validation ( as for HTML5 attributes, eg: mexlength that does not work on Android Chrome/stock borwsers ) 
+                                    Activate JS controls for strict JS validation ( as for HTML5 attributes, eg: mexlength that does not work on Android Chrome/stock borwsers ) 
                                 </p>
                             </div>
                         </div>
@@ -630,9 +651,9 @@ var formInstance = new Form( formEl, options );</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    events on which the validation will fire ( only for required fields )
+                                    Events on which the validation will fire ( only for required fields )
                                     <br />
-                                    <span class="small">( not used for <a href="#initialization">non-fully-initialized forms</a> )</span>
+                                    <span class="small">( NOT used if <code>handleValidation: false</code> )</span>
                                 </p>
                             </div>
                         </div>
@@ -650,6 +671,8 @@ var formInstance = new Form( formEl, options );</pre>
         valid:              'is-valid'
     },
     focusOnRelated:         true,
+    handleFileUpload:       true,
+    handleValidation:       true,
     maxFileSize:            10,
     onPastePrevented:       null,
     onValidation:           null,
@@ -683,6 +706,21 @@ var formInstance = new Form( formEl, options );</pre>
                     <div class="card-body">
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-3">
+                                <p class="text-green">ajaxOptions</p>
+                                ( object )
+                            </div>
+                            <div class="col-5">
+                            </div>
+                            <div class="col-4">
+                                <p>
+                                    See below for default values.
+                                    <br /><br />
+                                    See <a href="#ajax-settings">AJAX Options</a> section for details.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-3">
                                 <p class="text-green">ajaxSubmit</p>
                                 ( boolean )
                             </div>
@@ -697,12 +735,12 @@ var formInstance = new Form( formEl, options );</pre>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-3">
                                 <p class="text-green">beforeSend</p>
-                                ( function )
+                                ( function / array of functions )
                             </div>
                             <div class="col-5">
                                 <ul>
                                     <li>
-                                        data: ( JS object )
+                                        <span class="text-green">data</span>: ( JS object )
                                         <pre>
 {
     formData:       {},
@@ -710,10 +748,10 @@ var formInstance = new Form( formEl, options );</pre>
 }</pre>
                                         <ul>
                                             <li>
-                                                formData: ( JS object - ONLY for AJAX forms ) with the form data
+                                                <span class="text-green">formData</span>: ( JS object - ONLY for AJAX forms ) with the form data
                                             </li>
                                             <li>
-                                                stopExecution: ( Boolean - default is false ) wether or not to prevent the form submit ( AJAX or default ).
+                                                <span class="text-green">stopExecution</span>: ( Boolean - default is false ) wether or not to prevent the form submit ( AJAX or default ).
                                             </li>
                                         </ul>
                                     </li>
@@ -734,18 +772,34 @@ var formInstance = new Form( formEl, options );</pre>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-3">
-                                <p class="text-green">handleFileUpload</p>
-                                ( boolean )
+                                <p class="text-green">getFormJSON</p>
+                                ( function )
                             </div>
                             <div class="col-5">
-
+                                <ul>
+                                    <li>
+                                        <span class="text-green">fields</span>: a filtered collection of form fields.
+                                    </li>
+                                </ul>
+                                <p>
+                                    These fields are excluded:
+                                    <br />
+                                    <code>type="reset"</code>
+                                    <code>type="submit"</code>
+                                    <code>type="button"</code>
+                                    <code>type="file"</code>
+                                    <code>data-exclude-json</code>
+                                    <br />
+                                    If you want to select fields by yourself, you can access the form element through "this.formEl".
+                                </p>
+                                <p>
+                                    Additionally, the "this" keyword is bound to the Form instance.
+                                </p>
                             </div>
                             <div class="col-4">
                                 <p>
-                                    Wether or not the plugin must handle the file upload. It is a simple file upload via ajax.<br />
-                                    You must also set the enctype="multipart/form-data" attribute to the form.
-                                    <br />
-                                    <span class="small">( ONLY for AJAX forms )</span>
+                                    If set, it will be passed as function parameter for "getFormJSON" method.<br />
+                                    See <a href="#methods">Methods</a> section for details
                                 </p>
                             </div>
                         </div>
@@ -767,12 +821,12 @@ var formInstance = new Form( formEl, options );</pre>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-3">
                                 <p class="text-green">onSubmitComplete</p>
-                                ( function )
+                                ( function / array of functions )
                             </div>
                             <div class="col-5">
                                 <ul>
                                     <li>
-                                        ajaxData: ( JS object ) containing the ajax call data ( dataOrXHR, status, XHRorResponse ).
+                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( dataOrXHR, status, XHRorResponse ).
                                     </li>
                                 </ul>
                                 <p>
@@ -788,12 +842,12 @@ var formInstance = new Form( formEl, options );</pre>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-3">
                                 <p class="text-green">onSubmitError</p>
-                                ( function )
+                                ( function / array of functions )
                             </div>
                             <div class="col-5">
                                 <ul>
                                     <li>
-                                        ajaxData: ( JS object ) containing the ajax call data ( errorThrown, status, response ).
+                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( errorThrown, status, response ).
                                     </li>
                                 </ul>
                                 <p>
@@ -809,12 +863,12 @@ var formInstance = new Form( formEl, options );</pre>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-3">
                                 <p class="text-green">onSubmitSuccess</p>
-                                ( function )
+                                ( function / array of functions )
                             </div>
                             <div class="col-5">
                                 <ul>
                                     <li>
-                                        ajaxData: ( JS object ) containing the ajax call data ( data, status, response ).
+                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( data, status, response ).
                                     </li>
                                 </ul>
                                 <p>
@@ -834,9 +888,20 @@ var formInstance = new Form( formEl, options );</pre>
                         </p>
                         <pre>
 {
+    ajaxOptions: {
+        async:          true,
+        cache:          false,
+        contentType:    'application/x-www-form-urlencoded; charset=UTF-8',
+        headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+        },
+        method:         'POST',
+        timeout:        0,
+        url:            location.href
+    },
     ajaxSubmit:         true,
     beforeSend:         null,
-    handleFileUpload:   true,
+    getFormJSON:        null,
     handleSubmit:       true,
     onSubmitComplete:   null,
     onSubmitError:      null,
@@ -851,26 +916,12 @@ var formInstance = new Form( formEl, options );</pre>
         <div id="ajax-settings">
             <h3 class="sticky-title">AJAX Options</h3>
             <p>
-                Below the default AJAX Options used for AJAX form submit ( can be changed via data-ajax-settings attribute ):
+                Below an explanation of AJAX options ( set these via HTML attributes, where possible, will override the ones from JS options ):
             </p>
             <div class="row mt-3">
                 <div class="col-12">
                     <div class="">
-                        <pre>
-{
-    async:          true,
-    cache:          false,
-    contentType:    'application/x-www-form-urlencoded; charset=UTF-8',
-    data:           formDataJSON,
-    headers:        {},
-    method:         'POST',
-    timeout:        0,
-    url:            location.href
-}</pre>
-                        <p>
-                            Below all the AJAX options that can be changed:
-                        </p>
-                        <ul>
+                        <ul class="m-0">
                             <li>
                                 async: if true will make an async ajax call, if false will make a sync ajax call.
                             </li>
@@ -878,10 +929,13 @@ var formInstance = new Form( formEl, options );</pre>
                                 cache: ( only for GET ajax calls ) if true will add a timestamp parameter to the url query string.
                             </li>
                             <li>
-                                contentType: content type of the ajax request ( anything put inside the enctype html form attribute ).
+                                contentType: content type of the ajax request ( or as "enctype" html form attribute if set ).
                             </li>
                             <li>
                                 headers: object of key/value pairs to set the request headers.
+                            </li>
+                            <li>
+                                method: it can also take the "method" html form attribute if set
                             </li>
                             <li>
                                 mimeType: a mime type to override the XHR mime type.
@@ -890,41 +944,15 @@ var formInstance = new Form( formEl, options );</pre>
                                 timeout: ( in milliseconds ) in greater than 0, after the specified time, the ajax call will be aborted if still pending.
                             </li>
                             <li>
+                                url: by default is the current page url but it can also take the "action" html form attribute if set
+                            </li>
+                            <li>
                                 xhrFields: object of fieldName-fieldValue pairs to set on the native XHR object.
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-8 col-offset-2 col-sm-6 col-sm-offset-3 mb-3"><hr /></div>
             </div>
-            <ul>
-                <li>
-                    data ( formDataJSON ) is automatically generated by the plugin and can be changed via beforeSend callback function
-                </li>
-                <li>
-                    method is by default 'POST' but it takes the "method" html form attribute if set
-                </li>
-                <li>
-                    url is by default the page url but it takes the "action" html form attribute if set
-                </li>
-            </ul>
-            <br />
-            <p>
-                Below, an example of AJAX settings passed via "data-ajax-settings" ( they will override the same options specified via HTML attributes ):
-            </p>
-            <pre>
-&lt;form action="/mypath/mypage.php"
-        method="POST"
-        name="my-form-example"
-        novalidate
-        data-ajax-settings='{
-                                "dataType": "json",
-                                "myoption": [1,2,3],
-                                "option3": {
-                                "intOpt": "hello"
-                                }
-                            }'
-&gt; ... &lt;/form&gt;</pre>
         </div>
         
         <!-- Methods -->
@@ -960,16 +988,23 @@ var formInstance = new Form( formEl, options );</pre>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <pre class="text-green">getFormJSON()</pre>
+                                <pre class="text-green">getFormJSON( customFn )</pre>
                             </div>
                             <div class="col-5">
                                 <p>
                                     Get a JSON object of the form.
                                 </p>
+                                <ul>
+                                    <li>
+                                        <span class="text-green">customFn</span>: custom function to create the JSON object of the form answers ( MUST have a return statement ).<br />
+                                            Can also be set as "getFormJSON" in "formOptions".<br />
+                                            See <a href="#form-options">Form Options</a> section for details.
+                                    </li>
+                                </ul>
                             </div>
                             <div class="col-3">
                                 <p>
-                                    a JSON object with pairs of field-name / field-value like:
+                                    A JSON object with pairs of field-name / field-value like:
                                 </p>
                                 <pre>
 {
@@ -985,14 +1020,14 @@ var formInstance = new Form( formEl, options );</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    Vaidate the field based on the field options of the instance or the ones passed as second argument.
+                                    Validate the field based on the field options of the instance or the ones passed as second argument.
                                 </p>
                                 <ul>
                                     <li>
-                                        field: CSS string selector ( or node element <span class="text-yellow">*</span> ) for the form field ( input, select, textarea )
+                                        <span class="text-green">field</span>: CSS string selector ( or node element <span class="text-yellow">*</span> ) for the form field ( input, select, textarea )
                                     </li>
                                     <li>
-                                        fieldOptions: ( Optional ) JS object. For default values see <a href="#field-options">Field Options section</a>
+                                        <span class="text-green">fieldOptions</span>: ( Optional ) JS object. For default values see <a href="#field-options">Field Options section</a>
                                     </li>
                                 </ul>
                                 <p class="d-flex">
@@ -1017,11 +1052,11 @@ var formInstance = new Form( formEl, options );</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    Vaidate the form based on the form options of the instance or the ones passed as argument.
+                                    Validate the form based on the form options of the instance or the ones passed as argument.
                                 </p>
                                 <ul>
                                     <li>
-                                        options: ( Optional ) JS object with fieldOptions and/or formOptions. For default values see <a href="#options-list">Options section</a>
+                                        <span class="text-green">options</span>: ( Optional ) JS object with fieldOptions and/or formOptions. For default values see <a href="#options-list">Options section</a>
                                     </li>
                                 </ul>
                             </div>
@@ -1039,10 +1074,10 @@ var formInstance = new Form( formEl, options );</pre>
 }</pre>
                                 <ul>
                                     <li>
-                                        fields: ( array of JS objects ) a list of the form fields with field ( JS node element ) and result ( boolean )
+                                        <span class="text-green">fields</span>: ( array of JS objects ) a list of the form fields with field ( JS node element ) and result ( boolean )
                                     </li>
                                     <li>
-                                        result: ( boolean ) check for the form, if it is valid or not
+                                        <span class="text-green">result</span>: ( boolean ) check for the form, if it is valid or not
                                     </li>
                                 </ul>
                             </div>
@@ -1057,10 +1092,10 @@ var formInstance = new Form( formEl, options );</pre>
                                 </p>
                                 <ul>
                                     <li>
-                                        options: ( Optional ) JS object. Can contain fieldOptions and formOptions. For default values see <a href="#options-list">Options section</a>
+                                        <span class="text-green">options</span>: ( Optional ) JS object. Can contain fieldOptions and formOptions. For default values see <a href="#options-list">Options section</a>
                                     </li>
                                     <li>
-                                        event: ( Optional - Required for submit of <a href="#initialization">non-fully-initialized forms</a> ) JS event object for submit event.
+                                        <span class="text-green">event</span>: ( Optional | Required if <code>handleSubmit: false</code> ) JS event object for submit event.
                                     </li>
                                 </ul>
                                 <p>
@@ -1119,7 +1154,7 @@ var formInstance = new Form( formEl, options );</pre>
                             <div class="col-5">
                                 <ul>
                                     <li>
-                                        newRules: JS object containing the new validation rule(s) to add:<br />
+                                        <span class="text-green">newRules</span>: JS object containing the new validation rule(s) to add:<br />
                                         <pre class="">
 {
     zip: function( zipCode ){ return /[5-9]{3}$/.test( zipCode ); }
@@ -1151,7 +1186,7 @@ var formInstance = new Form( formEl, options );</pre>
                             <div class="col-5">
                                 <ul>
                                     <li>
-                                        options: JS object with the fieldOptions/formOptions to override ( see <a href="#options-list">Options section</a> )
+                                        <span class="text-green">options</span>: JS object with the fieldOptions/formOptions to override ( see <a href="#options-list">Options section</a> )
                                     </li>
                                 </ul>
                             </div>
@@ -1770,6 +1805,34 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
         <div id="changelog">
             <h3 class="sticky-title">Changelog</h3>
             <ul class="p-0">
+                <li class="media my-3">
+                    <div class="version-num text-red">2.2.0</div>
+                    <div class="media-body pl-2">
+                        <ul>
+                            <li>
+                                Added "handleValidation" in "fieldOptions"
+                            </li>
+                            <li>
+                                Added "ajaxOptions" in "formOptions"
+                            </li>
+                            <li>
+                                Added "getFormJSON" in "formOptions"
+                            </li>
+                            <li>
+                                Added "customFn" parameter to "getFormJSON" method
+                            </li>
+                            <li>
+                                Moved "handleFileUpload" from "formOptions" to "fieldOptions" for options consistency
+                            </li>
+                            <li>
+                                Removed support for attributes "data-ajax-settings" and "data-formjs-init". Use instead, respectively, "ajaxOptions" in "formOptions" and "handleValidation" in "fieldOptions" &amp; "handleSubmit" in "formOptions"
+                            </li>
+                            <li>
+                                "onPastePrevented" and "onValidation" in "fieldOptions" but also "beforeSend", "onSubmitComplete", "onSubmitError" and "onSubmitSuccess" in "formOptions" can now be a function or array of functions
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="media my-3">
                     <div class="version-num text-red">2.1.0</div>
                     <div class="media-body pl-2">

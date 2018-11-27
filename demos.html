@@ -25,7 +25,7 @@
                 </p>
             </div>
             <h1>formJS</h1>
-            <p>Version 2.1.0<br />Demos</p>
+            <p>Demos</p>
         </div>
         
         <!-- Demos -->
@@ -97,7 +97,7 @@
                                 </div>
                                 <div class="field-error-message small">Password and Confirm Password are not equal!</div>
                             </div>
-                            <div data-formjs-question  data-max-check="2" class="form-group">
+                            <div data-formjs-question class="form-group">
                                 <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
                                 <div class="answers-box">
                                     <div class="form-check">
@@ -194,11 +194,11 @@
                                 </div>
                                 <div class="field-error-message small">Password must have minimum 8 characters with one digit, one lowercase, one uppercase</div>
                             </div>
-                            <div data-formjs-question  data-max-check="2" class="form-group">
+                            <div data-formjs-question class="form-group">
                                 <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
                                 <div class="answers-box">
                                     <div class="form-check">
-                                        <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-b" required="" />
+                                        <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-b" required="" data-checks="[1,2]" />
                                         <label class="form-check-label" for="checkbox-1-b">SMS</label>
                                     </div>
                                     <div class="form-check">
@@ -292,11 +292,11 @@
                                 </div>
                                 <div class="field-error-message small">Password must have minimum 8 characters with one digit, one lowercase, one uppercase</div>
                             </div>
-                            <div data-formjs-question  data-max-check="2" class="form-group">
+                            <div data-formjs-question class="form-group">
                                 <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
                                 <div class="answers-box">
                                     <div class="form-check">
-                                        <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-c" required="" />
+                                        <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-c" data-checks="[1,2]" required="" />
                                         <label class="form-check-label" for="checkbox-1-c">SMS</label>
                                     </div>
                                     <div class="form-check">
@@ -389,11 +389,11 @@
                                 </div>
                                 <div class="field-error-message small">Password must have minimum 8 characters with one digit, one lowercase, one uppercase</div>
                             </div>
-                            <div data-formjs-question  data-max-check="2" class="form-group">
+                            <div data-formjs-question class="form-group">
                                 <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
                                 <div class="answers-box">
                                     <div class="form-check">
-                                        <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-d" required="" />
+                                        <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-d" data-checks="[1,2]" required="" />
                                         <label class="form-check-label" for="checkbox-1-d">SMS</label>
                                     </div>
                                     <div class="form-check">
@@ -434,16 +434,16 @@
                 </div>
             </div>
 
-            <!-- Demo Non-Initialized Form -->
+            <!-- Demo Form No-submit -->
             <div id="demo-05" class="col-sm-6 col-md-3 py-3">
                 <div class="panel no-bg">
                     <div class="card-header bg-white text-dark">
                         <div>
-                            <p class="m-0">Non-Initialized Form</p>
+                            <p class="m-0">Form No-submit</p>
                         </div>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="" name="basic-form-post-02" novalidate data-formjs-init="false">
+                        <form method="POST" action="" name="basic-form-post-02" novalidate>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
                                     <input name="name" type="text" class="form-control" required />
@@ -486,11 +486,11 @@
                                 </div>
                                 <div class="field-error-message small">Password must have minimum 8 characters with one digit, one lowercase, one uppercase</div>
                             </div>
-                            <div data-formjs-question  data-max-check="2" class="form-group">
+                            <div data-formjs-question class="form-group">
                                 <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
                                 <div class="answers-box">
                                     <div class="form-check">
-                                        <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-e" required="" />
+                                        <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-e" data-checks="[1,2]" required="" />
                                         <label class="form-check-label" for="checkbox-1-e">SMS</label>
                                     </div>
                                     <div class="form-check">

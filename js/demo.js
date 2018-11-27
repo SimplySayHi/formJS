@@ -147,10 +147,23 @@ var f4 = new Form( formsList[3], optionsPlugin2 );
 window.f4 = f4;
 console.log( 'Form Instance f4', f4.options.fieldOptions );
 
-var f5 = new Form( formsList[4], {fieldOptions: {checkDirtyField: true}, formOptions: optionsPlugin2.formOptions} );
+var f5_options = {
+        fieldOptions: {checkDirtyField: true},
+        formOptions: optionsPlugin2.formOptions
+};
+f5_options.formOptions.handleSubmit = false;
+var f5 = new Form( formsList[4], f5_options );
 window.f5 = f5;
 console.log( 'Form Instance f5', f5.options.fieldOptions );
 
 f5.formEl.addEventListener('submit', function(event){
+    // MANUALLY VALIDATE THE FORM
+    /* var checkForm = f5.isValidForm();
+    if( !checkForm.result ){
+        event.preventDefault();
+        return false;
+    } */
+    
+    // OR JUST MANUALLY TRIGGER THE SUBMIT
     f5.submit({}, event);
 });
