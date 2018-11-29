@@ -5,7 +5,7 @@ Visit the [Plugin Documentation Page](http://valeriodipunzio.com/plugins/formJS/
 
 ## Changelog
 
-See [Changelog Page](http://valeriodipunzio.com/plugins/formJS/#changelog) for details.
+See the [Changelog Page](http://valeriodipunzio.com/plugins/formJS/#changelog) for details.
 
 - 2.2.0 - Some new features, some removals, internal improvements and so on.
 
