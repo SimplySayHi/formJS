@@ -1,4 +1,4 @@
-/**! formJS v2.2.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/**! formJS v2.2.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 
 import { _checkFormEl, _isNodeList, _mergeObjects } from './modules/helper.js';
 
