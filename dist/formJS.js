@@ -676,7 +676,7 @@
             if (typeof beforeSendOpt === "function" || Array.isArray(beforeSendOpt)) {
                 var beforeSendData = {
                     stopExecution: false
-                };
+                }, stopCallbackLoop = false;
                 if (formDataJSON) {
                     beforeSendData.formData = formDataJSON;
                 }
@@ -686,15 +686,20 @@
                     callbacksBeforeSend = beforeSendOpt;
                 }
                 callbacksBeforeSend.forEach(function(cbFn) {
-                    var beforeSendFn = cbFn.call(self, beforeSendData);
-                    if ((0, _helper._isPlainObject)(beforeSendFn)) {
-                        formDataJSON = beforeSendFn.formData || formDataJSON;
-                        if (beforeSendFn.stopExecution) {
-                            eventPreventDefault();
-                            return false;
+                    if (!stopCallbackLoop) {
+                        var beforeSendFn = cbFn.call(self, beforeSendData);
+                        if ((0, _helper._isPlainObject)(beforeSendFn)) {
+                            formDataJSON = beforeSendFn.formData || formDataJSON;
+                            if (beforeSendFn.stopExecution) {
+                                stopCallbackLoop = true;
+                            }
                         }
                     }
                 });
+                if (stopCallbackLoop) {
+                    eventPreventDefault();
+                    return false;
+                }
             }
             if (!formValidation.result || btnEl && btnEl.disabled) {
                 eventPreventDefault();

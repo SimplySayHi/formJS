@@ -41,7 +41,8 @@ export function submit( options = {}, event = null ){
     if( typeof beforeSendOpt === 'function' || Array.isArray(beforeSendOpt) ){
         let beforeSendData = {
                 stopExecution: false
-            };
+            },
+            stopCallbackLoop = false;
 
         if( formDataJSON ){
             beforeSendData.formData = formDataJSON;
@@ -54,16 +55,22 @@ export function submit( options = {}, event = null ){
         }
 
         callbacksBeforeSend.forEach(function(cbFn){
-            let beforeSendFn = cbFn.call( self, beforeSendData );
-            
-            if( _isPlainObject(beforeSendFn) ){
-                formDataJSON = beforeSendFn.formData || formDataJSON;
-                if( beforeSendFn.stopExecution ){
-                    eventPreventDefault();
-                    return false;
+            if( !stopCallbackLoop ){
+                let beforeSendFn = cbFn.call( self, beforeSendData );
+                
+                if( _isPlainObject(beforeSendFn) ){
+                    formDataJSON = beforeSendFn.formData || formDataJSON;
+                    if( beforeSendFn.stopExecution ){
+                        stopCallbackLoop = true;
+                    }
                 }
             }
         });
+
+        if( stopCallbackLoop ){
+            eventPreventDefault();
+            return false;
+        }
     }
 
     if( !formValidation.result || (btnEl && btnEl.disabled) ){
