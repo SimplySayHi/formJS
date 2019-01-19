@@ -8,6 +8,21 @@ _addClass = function( element, cssClasses ){
     });
 },
 
+_executeCallback = function( callbackOption, callbackData ){
+    let self = this,
+        callbackFnList = [];
+
+    if( typeof callbackOption === 'function' ){
+        callbackFnList.push( callbackOption );
+    } else if( Array.isArray(callbackOption) ) {
+        callbackFnList = callbackOption;
+    }
+
+    callbackFnList.forEach(function(cbFn){
+        cbFn.call(self, callbackData );
+    });
+},
+
 _isDOMNode = function( node ){
     return Element.prototype.isPrototypeOf( node );
 },

@@ -1,54 +1,54 @@
-import { _initFieldsFirstLoad } from './initFieldsFirstLoad.js';
+import { _executeCallback, _fieldsStringSelector } from './helper.js';
 
-export function _init(){
+export const init = function(){
     const self = this,
-          formEl = self.formEl;
+          fieldOptions = self.options.fieldOptions,
+          formEl = self.formEl,
+          formFields = formEl.querySelectorAll( _fieldsStringSelector );
 
-    if( !formEl || !formEl.matches('[novalidate]') ){ return false; }
-    
-    let fieldOptions = self.options.fieldOptions,
-        formOptions = self.options.formOptions;
+    Array.from( formFields ).forEach(function( fieldEl ){
+        const containerEl = fieldEl.closest('[data-formjs-question]'),
+              isCheckboxOrRadio = (fieldEl.type === 'checkbox' || fieldEl.type === 'radio'),
+              fieldChecked = formEl.querySelector('[name="' + fieldEl.name + '"]:checked'),
+              isReqFrom = fieldEl.matches('[data-required-from]'),
+              reqMoreEl = (isReqFrom ? formEl.querySelector(fieldEl.getAttribute('data-required-from')) : null);
+        
+        if( !isCheckboxOrRadio ){
+            if( fieldEl.matches('[data-char-count]') ){
+                // PRINT RELATED MAX LENGTH IN HTML
+                if( fieldEl.matches('[maxlength]') && containerEl.querySelector('[data-char-maxlength]') ){
+                    let maxlength = fieldEl.getAttribute('maxlength');
+                    containerEl.querySelector('[data-char-maxlength]').textContent = maxlength;
+                }
 
-    // HANDLE FIELD VALIDATION
-    if( fieldOptions.handleValidation ){
-        // INIT FIELDS FOR FIRST LOAD
-        _initFieldsFirstLoad.call(self, formEl, fieldOptions);
-        
-        // INIT EVENTS LISTENER
-        fieldOptions.validateOnEvents.split(' ').forEach(function( eventName ){
-            let useCapturing = (eventName === 'blur' ? true : false);
-            formEl.addEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
-        });
-        
-        if( fieldOptions.strictHtmlValidation ){
-            // VALIDATION WITH ATTRIBUTES LIKE HTML ONES ( ALSO FOR BUG FIXING, EG: maxlength IN ANDROID )
-            formEl.addEventListener('keypress', self.listenerCallbacks.keypressMaxlength, false);
-        }
-        
-        if( fieldOptions.preventPasteFields && formEl.querySelectorAll( fieldOptions.preventPasteFields ).length ){
-            // INIT EVENT LISTENER FOR "PASTE" EVENT TO PREVENT IT ON SPECIFIED FIELDS
-            formEl.addEventListener('paste', self.listenerCallbacks.pastePrevent, false);
-        }
-    }
-    
-    // HANDLE FORM SUBMIT
-    if( formOptions.handleSubmit ){
-        // INIT FORM SUBMIT ( DEFAULT AND AJAX )
-        formEl.addEventListener('submit', self.listenerCallbacks.submit);
-
-        if( formOptions.ajaxSubmit ){
-            if( formEl.getAttribute('enctype') ){
-                formOptions.ajaxOptions.contentType = formEl.getAttribute('enctype');
+                // PRINT CHAR COUNT IN HTML
+                self.listenerCallbacks.charCount.call( null, fieldEl );
             }
 
-            if( formEl.getAttribute('method') ){
-                formOptions.ajaxOptions.method = formEl.getAttribute('method').toUpperCase();
-            }
-
-            if( formEl.getAttribute('action') ){
-                formOptions.ajaxOptions.url = formEl.getAttribute('action');
+            // PRINT MAX FILE SIZE FOR INPUTS WITH type="file"
+            if( fieldEl.type === 'file' && fieldOptions.maxFileSize > 0 ){
+                if( containerEl && containerEl.querySelector('[data-max-file-size]') ){
+                    containerEl.querySelector('[data-max-file-size]').textContent = fieldOptions.maxFileSize;
+                }
             }
         }
-    }
+        
+        // VALIDATE FIELDS WITH SELECTED/INSERTED VALUE
+        if(
+            (!isCheckboxOrRadio && fieldEl.value) || 
+            (isCheckboxOrRadio && fieldChecked !== null) ||
+            (isReqFrom && reqMoreEl.checked)
+        ){
 
+            if( isCheckboxOrRadio ){
+                fieldEl = fieldChecked;
+            }
+
+            const validationResult = self.isValidField( fieldEl ),
+                  callbackData = [ { field: fieldEl, result: validationResult} ];
+
+            _executeCallback.call( self, fieldOptions.onValidation, callbackData );
+
+        }
+    });
 }

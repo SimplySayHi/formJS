@@ -129,7 +129,7 @@ export const _validationRulesAttributes = {
 
         return fieldEl.value === checkFromEl.value;
     },
-            
+    
     exactLength: function( data ){
         return data.fieldEl.value.length === (data.attrValue * 1);
     },
@@ -195,14 +195,8 @@ export const _validationRulesAttributes = {
 
     radio: function( data ){
         let fieldEl = data.fieldEl,
-            formEl = fieldEl.closest('form'),
-            fieldChecked = formEl.querySelector( '[name="'+ fieldEl.name +'"]:checked' ),
-            requireMoreEl = formEl.querySelector('[name="' + fieldEl.name + '"][data-require-more]'),
+            fieldChecked = fieldEl.closest('form').querySelector( '[name="'+ fieldEl.name +'"]:checked' ),
             isValid = fieldChecked !== null && fieldChecked.value.trim().length > 0;
-
-        if( requireMoreEl !== null ){
-            isValid = this.requireMore({fieldEl: requireMoreEl, fieldOptions: data.fieldOptions});
-        }
 
         return isValid;
     },
@@ -213,50 +207,12 @@ export const _validationRulesAttributes = {
             isValidValue = fieldEl.value.trim().length > 0,
             reqMoreEl = formEl.querySelector( fieldEl.getAttribute('data-required-from') ),
             checkedEl = formEl.querySelector( '[name="'+ reqMoreEl.name +'"]:checked' );
-        
-        if( isValidValue ){
-
-            reqMoreEl.checked = true;
-            
-            if( reqMoreEl.required ){
-                fieldEl.required = true;
-            }
-
-        }
 
         if( !reqMoreEl.checked ){
             return true;
         }
         
-        return (reqMoreEl.required && reqMoreEl.checked ? isValidValue : (reqMoreEl.required ? checkedEl !== null : true));
-    },
-
-    requireMore: function( data ){
-        let requireMoreEl = data.fieldEl,
-            formEl = requireMoreEl.closest('form'),
-            requiredFromEl = formEl.querySelector('[data-required-from="#'+ requireMoreEl.id +'"]'),
-            fieldChecked = formEl.querySelector( '[name="'+ requireMoreEl.name +'"]:checked' ),
-            validReqFrom = true;
-        
-        if( requiredFromEl !== null ){
-            requiredFromEl.required = false;
-
-            if( requireMoreEl.checked ){
-                requiredFromEl.required = true;
-
-                if( data.fieldOptions.focusOnRelated ){
-                    requiredFromEl.focus();
-                } else {
-                    if( requireMoreEl.required && requiredFromEl.value.trim().length === 0 ){
-                        validReqFrom = false;
-                    }
-                }
-            } else {
-                requiredFromEl.value = '';
-            }
-        }
-
-        return fieldChecked && fieldChecked.value.trim().length > 0 && validReqFrom;
+        return ((reqMoreEl.required && reqMoreEl.checked) ? isValidValue : (reqMoreEl.required ? checkedEl !== null : true));
     }
     
 };

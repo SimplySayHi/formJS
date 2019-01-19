@@ -1,4 +1,4 @@
-import { _mergeObjects, _serialize } from './helper.js';
+import { _executeCallback, _mergeObjects, _serialize } from './helper.js';
 
 export function _xhrCall( formDataJSON ){
     let self = this,
@@ -53,9 +53,7 @@ export function _xhrCall( formDataJSON ){
         },
         loadendFn = function(e) {
             let xhr = e.target,
-                responseData = parseResponse(xhr),
-                callbacks = [],
-                functionOpt = formOptions.onSubmitComplete;
+                responseData = parseResponse(xhr);
 
             let readyStateOK = xhr.readyState === 4,
                 statusOK = xhr.status === 200,
@@ -70,66 +68,26 @@ export function _xhrCall( formDataJSON ){
             }
 
             btnEl.disabled = false;
-            
-            if( typeof functionOpt === 'function' ){
 
-                callbacks.push( functionOpt );
-
-            } else if( Array.isArray(functionOpt) ) {
-
-                callbacks = functionOpt;
-
-            }
-
-            callbacks.forEach(function(cbFn){
-                cbFn.call( self, ajaxData );
-            });
+            _executeCallback.call( self, formOptions.onSubmitComplete, ajaxData );
         },
         loadFn = function(e) {
             let xhr = e.target;
 
             if( xhr.status === 200 ){
-                let callbacks = [],
-                    functionOpt = formOptions.onSubmitSuccess,
-                    responseData = parseResponse(xhr),
+                let responseData = parseResponse(xhr),
                     ajaxData = { data: responseData, status: 'success', response: xhr };
-                
-                if( typeof functionOpt === 'function' ){
 
-                    callbacks.push( functionOpt );
-
-                } else if( Array.isArray(functionOpt) ) {
-                    
-                    callbacks = functionOpt;
-                    
-                }
-
-                callbacks.forEach(function(cbFn){
-                    cbFn.call( self, ajaxData );
-                });
+                _executeCallback.call( self, formOptions.onSubmitSuccess, ajaxData );
             } else {
                 errorFn(e);
             }
         },
         errorFn = function(e) {
             let xhr = e.target,
-                callbacks = [],
-                functionOpt = formOptions.onSubmitError,
                 ajaxData = { errorThrown: xhr.statusText, status: 'error', response: xhr };
-            
-            if( typeof functionOpt === 'function' ){
 
-                callbacks.push( functionOpt );
-
-            } else if( Array.isArray(functionOpt) ) {
-                
-                callbacks = functionOpt;
-                
-            }
-
-            callbacks.forEach(function(cbFn){
-                cbFn.call( self, ajaxData );
-            });
+            _executeCallback.call( self, formOptions.onSubmitError, ajaxData );
         };
     
     XHR.addEventListener('loadend', loadendFn,  false);

@@ -1,86 +1,129 @@
-import { _fieldsStringSelector } from './helper.js';
+import { _executeCallback, _fieldsStringSelector } from './helper.js';
 
-export const 
+export const _callbackFns = {
 
-_charCountCallback = function(){
-    let field = this,
-        usedChars = field.value.length;
+    charCount: function( eventOrField ){
+        const fieldEl = eventOrField.target || eventOrField;
 
-    field.closest('[data-formjs-question]').querySelector('[data-char-length]').textContent = usedChars;
-},
+        if( fieldEl.matches( '[data-char-count]' ) ){
+            let containerEL = fieldEl.closest('[data-formjs-question]');
 
-_keypressMaxlengthCallback = function( event ){
-    const fieldEl = event.target;
-    
-    if( fieldEl.matches( '[maxlength]' ) ){
-        const maxLength = fieldEl.maxLength * 1,
-              keyPressed = event.which || event.keyCode,
-              allowedKeys = [8, 37, 38, 39, 46];
-
-        if( fieldEl.value.length >= maxLength && allowedKeys.indexOf(keyPressed) === -1 ){
-            return false;
+            if( containerEL && containerEL.querySelector('[data-char-length]') ){
+                let usedChars = fieldEl.value.length;
+                containerEL.querySelector('[data-char-length]').textContent = usedChars;
+            }
         }
-    }
-},
+    },
 
-_pastePreventCallback = function( event ){
-    const fieldEl = event.target;
-    let fieldOptions = this.options.fieldOptions;
-
-    if( fieldEl.matches( fieldOptions.preventPasteFields ) ){
-        let callbacks = [],
-            functionOpt = fieldOptions.onPastePrevented;
-
-        event.preventDefault();
-
-        if( typeof functionOpt === 'function' ){
-            callbacks.push( functionOpt );
-        } else if( Array.isArray(functionOpt) ) {
-            callbacks = functionOpt;
-        }
-
-        callbacks.forEach(function(cbFn){
-            cbFn( fieldEl );
-        });
-    }
-},
-
-_submitCallback = function( event ){
-    const self = this;
-    self.submit( self.options, event );
-},
-
-_validationCallback = function( event ){
-    const self = this,
-          eventName = event.type,
-          fieldEl = event.target;
-
-    let fieldOptions = self.options.fieldOptions;
-
-    if( fieldEl.matches( _fieldsStringSelector ) ){
-        const isFieldForChangeEvent = fieldEl.matches( 'select, [type="radio"], [type="checkbox"], [type="file"]' );
+    dataTypeNumber: function( event ){
+        const fieldEl = event.target;
         
-        if(
-            (isFieldForChangeEvent && eventName === 'change') ||
-            (!isFieldForChangeEvent && eventName === 'input') ||
-            (eventName !== 'change' && eventName !== 'input')
-        ){
+        if( fieldEl.matches('[data-type="number"]') ){
+            let fieldValue = fieldEl.value,
+                hasInvalidChars = /[^\d.,+\-]/.test(fieldValue);
             
-            let callbacks = [],
-                onValidationOpt = fieldOptions.onValidation;
+            if( hasInvalidChars ){
+                event.stopImmediatePropagation();
+                let valueReplaced = fieldValue.replace(/[^\d.,+\-]/g, '');
+                fieldEl.value = valueReplaced;
+            }
+        }
+    },
 
-            const validationResult = self.isValidField( fieldEl, fieldOptions );
-            const callbackData = [ { field: fieldEl, result: validationResult} ];
+    keypressMaxlength: function( event ){
+        const fieldEl = event.target;
+        
+        if( fieldEl.matches( '[maxlength]' ) ){
+            const maxLength = fieldEl.maxLength * 1,
+                keyPressed = event.which || event.keyCode,
+                allowedKeys = [8, 37, 38, 39, 46];
 
-            if( typeof onValidationOpt === 'function' ){
-                callbacks.push( onValidationOpt );
-            } else if( Array.isArray(onValidationOpt) ) {
-                callbacks = onValidationOpt;
+            if( fieldEl.value.length >= maxLength && allowedKeys.indexOf(keyPressed) === -1 ){
+                return false;
+            }
+        }
+    },
+
+    pastePrevent: function( event ){
+        const self = this,
+              fieldEl = event.target;
+        let fieldOptions = self.options.fieldOptions;
+
+        if( fieldEl.matches( fieldOptions.preventPasteFields ) ){
+            
+            event.preventDefault();
+            _executeCallback.call( self, fieldOptions.onPastePrevented, fieldEl );
+
+        }
+    },
+
+    submit: function( event ){
+        this.submit( {}, event );
+    },
+
+    validation: function( event ){
+        const self = this,
+            eventName = event.type,
+            fieldEl = event.target;
+
+        if( fieldEl.matches( _fieldsStringSelector ) ){
+            const isFieldForChangeEvent = fieldEl.matches( 'select, [type="radio"], [type="checkbox"], [type="file"]' ),
+                isRadio = fieldEl.type === 'radio',
+                isReqFrom = fieldEl.matches('[data-required-from]'),
+                isReqMore = fieldEl.matches('[data-require-more]'),
+                isValidValue = fieldEl.value.trim().length > 0;
+
+            // HANDLE data-require-more FIELDS
+            if( isRadio && eventName === 'change' ){
+                let findReqMoreEl = (isReqMore ? fieldEl : self.formEl.querySelector('[name="'+ fieldEl.name +'"][data-require-more]')),
+                    findReqFromEl = (findReqMoreEl !== null ? self.formEl.querySelector('[data-required-from="#'+ findReqMoreEl.id +'"]') : null);
+
+                if( isReqMore ){
+
+                    if( findReqFromEl !== null ){
+                        findReqFromEl.required = true;
+
+                        if( self.options.fieldOptions.focusOnRelated ){
+                            findReqFromEl.focus();
+                        }
+                    }
+
+                } else if( findReqMoreEl !== null ){
+
+                    if( findReqFromEl !== null ){
+                        findReqFromEl.required = false;
+                        findReqFromEl.value = '';
+                    }
+
+                }
             }
 
-            callbacks.forEach(function(cbFn){
-                cbFn( callbackData );
-            });
+            // HANDLE data-required-from FIELDS
+            if( isReqFrom ){
+                if( isValidValue ){
+                    let reqMoreEl = self.formEl.querySelector( fieldEl.getAttribute('data-required-from') );
+
+                    reqMoreEl.checked = true;
+
+                    if( reqMoreEl.required ){
+                        fieldEl.required = true;
+                    }
+                }
+            }
+            
+            if(
+                (isFieldForChangeEvent && eventName === 'change') ||
+                (!isFieldForChangeEvent && eventName === 'input') ||
+                (eventName !== 'change' && eventName !== 'input')
+            ){
+
+                const validationResult = self.isValidField( fieldEl ),
+                    callbackData = [ { field: fieldEl, result: validationResult} ];
+
+                _executeCallback.call( self, self.options.fieldOptions.onValidation, callbackData );
+
+            }
         }
     }
+
 };

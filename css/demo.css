@@ -225,9 +225,9 @@ textarea {
     -o-transition: border-color ease-in-out 0.15s;
     transition: border-color ease-in-out 0.15s;
 }
-.has-error .label-inline-flex .form-control.dirty-field + label,
+.has-error.is-dirty .label-inline-flex .form-control + label,
 .label-inline-flex .form-control:focus + label,
-.label-inline-flex .form-control.dirty-field + label {
+.is-dirty .label-inline-flex .form-control + label {
     font-size: 0.75em;
     padding-right: 7px;
 }
@@ -241,9 +241,9 @@ textarea {
     line-height: 34px;
     top: 0;
 }
-.has-error .label-fade-down .form-control.dirty-field + label,
+.has-error.is-dirty .label-fade-down .form-control + label,
 .label-fade-down .form-control:focus + label,
-.label-fade-down .form-control.dirty-field + label {
+.is-dirty .label-fade-down .form-control + label {
     -webkit-transform: translateY(100%);
     -moz-transform: translateY(100%);
     -ms-transform: translateY(100%);
@@ -272,9 +272,9 @@ textarea {
 }
 .label-move-up .form-control[type="date"] + label,
 .label-move-up .form-control[type="file"] + label,
-.has-error .label-move-up .form-control.dirty-field + label,
+.has-error.is-dirty .label-move-up .form-control + label,
 .label-move-up .form-control:focus + label,
-.label-move-up .form-control.dirty-field + label {
+.is-dirty .label-move-up .form-control + label {
     -webkit-transform: translateY(-200%);
     -moz-transform: translateY(-200%);
     -ms-transform: translateY(-200%);

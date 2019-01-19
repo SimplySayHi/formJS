@@ -24,7 +24,7 @@ document.addEventListener('click', function(e){
 var optionsPlugin = {
         fieldOptions: {
             checkDirtyField: true,
-            cssClasses: { dirty: 'dirty-field custom-dirty-field' },
+            cssClasses: { dirty: 'is-dirty custom-dirty-field' },
             onPastePrevented: function( fieldEl ){
                 console.log( 'Paste event prevented on field ', fieldEl );
             },
@@ -85,7 +85,7 @@ var optionsPlugin = {
 
 var formsList = document.querySelectorAll('form');
 
-var f1 = new Form( formsList[0], optionsPlugin );
+var f1 = new Form( formsList[0], optionsPlugin ).init();
 window.f1 = f1;
 console.log( 'Form Instance f1', f1.options.fieldOptions );
 
@@ -115,18 +115,18 @@ Array.from(pswField).forEach(function(field){
 
 // --------------------
 
-var f2 = new Form( formsList[1] );
+var f2 = new Form( formsList[1] ).init();
 window.f2 = f2;
 console.log( 'Form Instance f2', f2.options.fieldOptions );
 
-var f3 = new Form( formsList[2], {formOptions: {ajaxSubmit: false}} );
+var f3 = new Form( formsList[2], {formOptions: {ajaxSubmit: false}} ).init();
 window.f3 = f3;
 console.log( 'Form Instance f3', f3.options.fieldOptions );
 
 var optionsPlugin2 = {
         fieldOptions: {
             checkDirtyField: true,
-            cssClasses: { dirty: 'dirty-field custom-dirty-field' },
+            cssClasses: { dirty: 'is-dirty custom-dirty-field' },
             onPastePrevented: function( fieldEl ){
                 console.log( 'Paste event prevented on field ', fieldEl );
             },
@@ -143,7 +143,7 @@ var optionsPlugin2 = {
         }
 };
 
-var f4 = new Form( formsList[3], optionsPlugin2 );
+var f4 = new Form( formsList[3], optionsPlugin2 ).init();
 window.f4 = f4;
 console.log( 'Form Instance f4', f4.options.fieldOptions );
 
@@ -152,7 +152,7 @@ var f5_options = {
         formOptions: optionsPlugin2.formOptions
 };
 f5_options.formOptions.handleSubmit = false;
-var f5 = new Form( formsList[4], f5_options );
+var f5 = new Form( formsList[4], f5_options ).init();
 window.f5 = f5;
 console.log( 'Form Instance f5', f5.options.fieldOptions );
 

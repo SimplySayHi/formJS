@@ -11,14 +11,14 @@ export function isValidForm( options = {} ){
             fields: [],
             result: true
         },
-        fieldName = '',
-        fieldType = '';
+        currentFieldName = '',
+        currentFieldType = '';
     
     if( typeof fieldOptions.focusOnRelated === 'undefined' ){
         fieldOptions.focusOnRelated = false;
     }
     
-    Array.from( formEl.querySelectorAll( _fieldsStringSelector ) ).forEach(function( fieldEl ){
+    Array.from( formEl.querySelectorAll(_fieldsStringSelector) ).forEach(function( fieldEl ){
         let name = fieldEl.name,
             type = fieldEl.type,
             fieldData = {
@@ -26,11 +26,11 @@ export function isValidForm( options = {} ){
                 result: true
             };
         
-        if( (name === fieldName && type === fieldType) ){ return true; }
-            
+        if( (name === currentFieldName && type === currentFieldType) ){ return true; }
+        
         if( !fieldEl.matches('[data-required-from]') ){
-            fieldName = name;
-            fieldType = type;
+            currentFieldName = name;
+            currentFieldType = type;
         }
         
         const fieldResult = self.isValidField( fieldEl, fieldOptions );

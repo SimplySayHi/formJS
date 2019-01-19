@@ -1,7 +1,7 @@
 {
   "dependencies": {},
   "name": "formjs",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "main": "webpack.config.js",
   "devDependencies": {
     "babel-core": "^6.26.3",

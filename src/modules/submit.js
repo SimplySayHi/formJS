@@ -1,4 +1,4 @@
-import { _isPlainObject, _mergeObjects } from './helper.js';
+import { _executeCallback, _isPlainObject, _mergeObjects } from './helper.js';
 
 import { _xhrCall } from './xhrCall.js';
 
@@ -10,8 +10,8 @@ export function submit( options = {}, event = null ){
               if( event ){ event.preventDefault(); }
           };
     
-    options.fieldOptions = _mergeObjects( {}, (options.fieldOptions || {}), this.options.fieldOptions );
-    options.formOptions = _mergeObjects( {}, (options.formOptions || {}), this.options.formOptions );
+    options.fieldOptions = _mergeObjects( {}, (options.fieldOptions || {}), self.options.fieldOptions );
+    options.formOptions = _mergeObjects( {}, (options.formOptions || {}), self.options.formOptions );
     
     const handleValidation = options.fieldOptions.handleValidation,
           formValidation = (handleValidation ? self.isValidForm( options ) : { result: true });
@@ -20,18 +20,7 @@ export function submit( options = {}, event = null ){
           isAjaxForm = options.formOptions.ajaxSubmit;
     
     if( handleValidation ){
-        let callbacksValidation = [],
-            onValidationOpt = options.fieldOptions.onValidation;
-
-        if( typeof onValidationOpt === 'function' ){
-            callbacksValidation.push( onValidationOpt );
-        } else if( Array.isArray(onValidationOpt) ) {
-            callbacksValidation = onValidationOpt;
-        }
-
-        callbacksValidation.forEach(function(cbFn){
-            cbFn( formValidation.fields );
-        });
+        _executeCallback.call( self, options.fieldOptions.onValidation, formValidation.fields );
     }
     
     let formDataJSON = (isAjaxForm ? self.getFormJSON() : null),

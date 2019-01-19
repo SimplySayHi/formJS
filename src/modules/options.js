@@ -2,7 +2,7 @@ export const options = {
     fieldOptions: {
         checkDirtyField:        false,
         cssClasses: {
-            dirty:              'dirty-field',
+            dirty:              'is-dirty',
             error:              'has-error',
             valid:              'is-valid'
         },

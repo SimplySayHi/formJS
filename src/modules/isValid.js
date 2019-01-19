@@ -6,6 +6,7 @@ export function _isValid( fieldEl, fieldOptions = {} ){
     const self = this,
           fieldType = ( fieldEl.matches('[data-subtype]') ? _toCamelCase( fieldEl.getAttribute('data-subtype') ) : fieldEl.type ),
           fieldValue = fieldEl.value,
+          isValidValue = fieldValue.trim().length > 0,
           // ALPHABETICAL REVERSE ORDER
           fieldAttributes = Array.from(fieldEl.attributes).sort(function(a,b){ return a.name < b.name });
          
@@ -40,15 +41,15 @@ export function _isValid( fieldEl, fieldOptions = {} ){
     });
 
     attrValidations.forEach(function(item){
-        let extraVal = _validationRulesAttributes[item.attrName]( item );
+        let extraVal = _validationRulesAttributes[item.attrName]( item, fieldEl );
         if( !extraVal ){ attrValidationsResult = false; }
     });
 
-    attrValidationsResult = attrValidations.length > 0 ? attrValidationsResult : fieldValue.trim().length > 0; 
+    attrValidationsResult = attrValidations.length > 0 ? (attrValidationsResult && isValidValue) : isValidValue; 
     
     return (
         typeof self.validationRules[fieldType] === 'function' ? 
-        self.validationRules[fieldType]( fieldValue ) && attrValidationsResult : 
+        self.validationRules[fieldType]( fieldValue, fieldEl ) && attrValidationsResult : 
         attrValidationsResult
     );
 }

@@ -11,22 +11,22 @@ export function isValidField( fieldElem, fieldOptionsObj = {} ){
 
     let options =           _mergeObjects( {}, fieldOptionsObj, self.options.fieldOptions ),
         
-        //fieldType =         fieldEl.type,
         isValidValue =      fieldEl.value.trim().length > 0,
         
         isRequired =        fieldEl.required,
-        isRequiredFrom =    fieldEl.matches( '[data-required-from]' ),
+        isReqFrom =         fieldEl.matches('[data-required-from]'),
         reqMoreEl =         self.formEl.querySelector( fieldEl.getAttribute('data-required-from') ),
-        isValidateIfFilled =fieldEl.matches( '[data-validate-if-filled]' ),
+        isValidateIfFilled =fieldEl.matches('[data-validate-if-filled]'),
         isValid =           isValidValue,
         
         containerEl =       fieldEl.closest('[data-formjs-question]');
     
     if(
-        (!isRequired && !isValidateIfFilled && !isRequiredFrom ) || 
-        (isValidateIfFilled && !isValidValue)
+        (!isRequired && !isValidateIfFilled && !isReqFrom) || 
+        (isValidateIfFilled && !isValidValue) ||
+        (isReqFrom && !isRequired && !reqMoreEl.checked)
     ){
-      
+
         isValid = true;
        
     } else {
@@ -40,26 +40,19 @@ export function isValidField( fieldElem, fieldOptionsObj = {} ){
     }
     
     // VALIDATION VISUAL FEEDBACK
-    if( containerEl !== null ){
-        if( options.skipUIfeedback ){
-            
-            let cssClasses = options.cssClasses.valid + ' ' + options.cssClasses.error;
-            _removeClass( containerEl, cssClasses );
-            
-        } else {
-            if( isValid ){
+    if( containerEl !== null && !options.skipUIfeedback ){
+        if( isValid ){
 
-                if( !isRequiredFrom || (isRequiredFrom && reqMoreEl.checked) ){
-                    _removeClass( containerEl, options.cssClasses.error );
-                    _addClass( containerEl, options.cssClasses.valid );
-                }
-
-            } else {
-
-                _addClass( containerEl, options.cssClasses.error );
-                _removeClass( containerEl, options.cssClasses.valid );
-
+            if( !isReqFrom || (isReqFrom && reqMoreEl.checked) ){
+                _removeClass( containerEl, options.cssClasses.error );
+                _addClass( containerEl, options.cssClasses.valid );
             }
+
+        } else {
+
+            _removeClass( containerEl, options.cssClasses.valid );
+            _addClass( containerEl, options.cssClasses.error );
+
         }
     }
     

@@ -17,28 +17,38 @@ export function getFormJSON( customFn = this.options.formOptions.getFormJSON ){
                 isRadio = fieldEl.type === 'radio',
                 isSelect = fieldEl.matches('select'),
                 name = fieldEl.name,
-                value = ( isCheckbox || isSelect ? [] : fieldEl.value );
-            
-            if( isCheckbox || isRadio ){
-                let checkedFieldsEl = Array.from( formEl.querySelectorAll('[name="'+ name +'"]:checked') );
+                value = fieldEl.value;
+                         
+            if( isCheckbox ) {
                 
-                if( isRadio ){
-                    
-                    value = (checkedFieldsEl.length === 0 ? null : checkedFieldsEl[0].value);
-                    
-                } else {
-                    
-                    checkedFieldsEl.forEach(fieldEl => {
+                value = fieldEl.checked;
+                let checkboxes = Array.from( formEl.querySelectorAll('[name="'+ name +'"]') );
+                if( checkboxes.length > 1 ){
+
+                    value = [];
+                    let checkedElems = checkboxes.filter(field => field.checked);
+                    checkedElems.forEach(fieldEl => {
                         value.push( fieldEl.value );
                     });
-                    
+
                 }
+                    
+            } else if( isRadio ){
+                
+                let checkedRadio = formEl.querySelector('[name="'+ name +'"]:checked');
+                value = (checkedRadio === null ? null : checkedRadio.value);
+                
             } else if( isSelect ){
 
-                let optionsList = Array.from( fieldEl.options ).filter(option => option.selected);
-                optionsList.forEach(fieldEl => {
-                    value.push( fieldEl.value );
-                });
+                let selectedOpts = Array.from( fieldEl.options ).filter(option => option.selected);
+                if( selectedOpts.length > 1 ){
+
+                    value = [];
+                    selectedOpts.forEach(fieldEl => {
+                        value.push( fieldEl.value );
+                    });
+
+                }
             }
 
             formData[ name ] = value;

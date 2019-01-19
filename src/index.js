@@ -1,43 +1,47 @@
-/**! formJS v2.2.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/**! formJS v2.3.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 
 import { _checkFormEl, _isNodeList, _mergeObjects } from './modules/helper.js';
+import { _callbackFns }         from './modules/listenerCallbacks.js';
 
 import { options }              from './modules/options.js';
 import { validationRules }      from './modules/validationRules.js';
 
-import { _charCountCallback, _keypressMaxlengthCallback, _pastePreventCallback, _submitCallback, _validationCallback } from './modules/listenerCallbacks.js';
+import { _formStartup }         from './modules/formStartup.js';
 
 import { destroy }              from './modules/destroy.js';
 import { getFormJSON }          from './modules/getFormJSON.js';
+import { init }                 from './modules/init.js';
 import { isValidField }         from './modules/isValidField.js';
 import { isValidForm }          from './modules/isValidForm.js';
 import { submit }               from './modules/submit.js';
 
-import { _init }                from './modules/init.js';
-
+const version = '2.3.0';
 const _listenerCallbacks = new WeakMap();
 
 class Form {
     constructor( formEl, optionsObj = {} ){
-        let argsL = arguments.length,
+        let self = this,
+            argsL = arguments.length,
             checkFormEl = _checkFormEl(formEl);
 
         if( argsL === 0 || (argsL > 0 && !formEl) ){ throw new Error('First argument "formEl" is missing or falsy!'); }
         if( _isNodeList(formEl) ){ throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!'); }
         if( !checkFormEl.result ){ throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!'); }
 
-        this.formEl = checkFormEl.element;
-        this.options = _mergeObjects({}, optionsObj, Form.prototype.options);
+        self.isInitialized = false;
+        self.formEl = checkFormEl.element;
+        self.options = _mergeObjects({}, optionsObj, Form.prototype.options);
 
-        _listenerCallbacks.set(this, {
-            charCount:          _charCountCallback,
-            validation:         _validationCallback.bind(this),
-            keypressMaxlength:  _keypressMaxlengthCallback.bind(this),
-            pastePrevent:       _pastePreventCallback.bind(this),
-            submit:             _submitCallback.bind(this)
+        _listenerCallbacks.set(self, {
+            charCount:          _callbackFns.charCount,
+            dataTypeNumber:     _callbackFns.dataTypeNumber,
+            keypressMaxlength:  _callbackFns.keypressMaxlength,
+            pastePrevent:       _callbackFns.pastePrevent.bind(self),
+            submit:             _callbackFns.submit.bind(self),
+            validation:         _callbackFns.validation.bind(self)
         });
 
-        _init.call( this );
+        _formStartup.call( self );
     }
 
     get listenerCallbacks(){
@@ -50,6 +54,15 @@ class Form {
     
     getFormJSON( customFn ){
         return getFormJSON.call(this, customFn);
+    }
+
+    init(){
+        const self = this;
+
+        init.call(self);
+        self.isInitialized = true;
+
+        return self;
     }
     
     isValidField( fieldEl, fieldOptions ){
@@ -73,8 +86,8 @@ class Form {
     }
 }
 
+Form.prototype.version = version;
 Form.prototype.validationRules = validationRules;
-
 Form.prototype.options = options;
 
 if( !window.Form ){ window.Form = Form; }
