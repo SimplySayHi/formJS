@@ -222,6 +222,7 @@
             }
             if (self.options.fieldOptions.strictHtmlValidation) {
                 formEl.removeEventListener("keypress", self.listenerCallbacks.keypressMaxlength, false);
+                formEl.removeEventListener("input", self.listenerCallbacks.dataTypeNumber, false);
             }
             if (self.options.fieldOptions.preventPasteFields) {
                 formEl.removeEventListener("paste", self.listenerCallbacks.pastePrevent, false);
