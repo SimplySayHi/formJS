@@ -1,8 +1,10 @@
+
 export function _formStartup(){
+
     const self = this,
           formEl = self.formEl;
 
-    if( !formEl || !formEl.matches('[novalidate]') ){ return false; }
+    if( !formEl.matches('[novalidate]') ){ return false; }
     
     let fieldOptions = self.options.fieldOptions,
         formOptions = self.options.formOptions;

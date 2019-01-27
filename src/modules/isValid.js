@@ -1,8 +1,9 @@
-import { _toCamelCase } from './helper.js';
 
+import { _toCamelCase } from './helper.js';
 import { _validationRulesAttributes } from './validationRules.js';
 
 export function _isValid( fieldEl, fieldOptions = {} ){
+
     const self = this,
           fieldType = ( fieldEl.matches('[data-subtype]') ? _toCamelCase( fieldEl.getAttribute('data-subtype') ) : fieldEl.type ),
           fieldValue = fieldEl.value,
@@ -52,4 +53,5 @@ export function _isValid( fieldEl, fieldOptions = {} ){
         self.validationRules[fieldType]( fieldValue, fieldEl ) && attrValidationsResult : 
         attrValidationsResult
     );
+
 }

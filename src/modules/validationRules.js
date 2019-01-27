@@ -1,3 +1,4 @@
+
 export const validationRules = {
             
     cap: function( string ){
@@ -93,7 +94,7 @@ export const validationRules = {
         return /^(IT){0,1}[0-9]{11}$/i.test( string );
     }
     
-};
+}
 
 export const _validationRulesAttributes = {
 
@@ -215,4 +216,4 @@ export const _validationRulesAttributes = {
         return ((reqMoreEl.required && reqMoreEl.checked) ? isValidValue : (reqMoreEl.required ? checkedEl !== null : true));
     }
     
-};
+}

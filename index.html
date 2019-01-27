@@ -56,9 +56,10 @@
                 Version 
                 <span class="dropdown d-inline-block ml-1">
                     <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button">
-                        2.3.0
+                        3.0.0
                     </button>
                     <span class="dropdown-menu w-100 py-1">
+                        <a class="dropdown-item px-2" href="/plugins/formJS/2.3.0/">2.3.0</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/2.2.1/">2.2.1</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/2.2.0/">2.2.0</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/2.1.0/">2.1.0</a>
@@ -358,7 +359,7 @@
                     <code>data-subtype</code> ( optional ) for special field types ( eg: VAT number, fiscal code, etc - see the <a href="#builtin-validations">full list</a> )
                 </li>
                 <li class="my-2">
-                    <code>data-exclude-json</code> ( optional empty attribute ) used to avoid the plugin to take in consideration the field when building the JSON ( used inside getFormJSON method )
+                    <code>data-exclude-json</code> ( optional empty attribute ) used to avoid the plugin to take in consideration the field when building the JSON ( used inside getFormData method )
                 </li>
             </ul>
             <p>
@@ -428,12 +429,17 @@
                 Here an example of initialization:
             </p>
             <pre>var formEl = document.querySelector('form');
-// or with CSS string selector:
+
+// OR WITH CSS STRING SELECTOR:
 // var formEl = '.my-container .my-form';
 
 var options = {};
 
-var formInstance = new Form( formEl, options ).init();</pre>
+var formInstance = new Form( formEl, options ).init();
+
+// IN SOME CASES YOU COULD NEED TO INITIALIZE THE FORM IN THIS WAY:
+// var formInstance = new Form( formEl, options );
+// formInstance.init();</pre>
             <ul>
                 <li>
                     formEl: ( required ) must be a <u>single form node</u> ( not a nodelist! ) or a <u>CSS string selector</u>
@@ -509,7 +515,13 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                         <span class="text-green">dirty</span>: ( string ) CSS class(es) to be applied if the field "dirty" ( has some value )
                                     </li>
                                     <li>
-                                        <span class="text-green">error</span>: ( string ) CSS class(es) to be applied if the field is not valid
+                                        <span class="text-green">error</span>: ( string ) CSS class(es) to be applied if the field is not valid ( in any error case )
+                                    </li>
+                                    <li>
+                                        <span class="text-green">errorEmpty</span>: ( string ) additional CSS class(es) to be applied if the field value is empty
+                                    </li>
+                                    <li>
+                                        <span class="text-green">errorRule</span>: ( string ) additional CSS class(es) to be applied if the field value does not respect the validation rule
                                     </li>
                                     <li>
                                         <span class="text-green">valid</span>: ( string ) CSS class(es) to be applied if the field is valid
@@ -590,6 +602,16 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                 <p>
                                     Additionally, the "this" keyword is bound to the Form instance.
                                 </p>
+                                <div class="card-footer bg-transparent pb-0 px-0">
+                                    <p class="text-green">
+                                        Arguments
+                                    </p>
+                                    <ul>
+                                        <li>
+                                            fieldEl: JS node element
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -606,6 +628,30 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                 <p>
                                     Additionally, the "this" keyword is bound to the Form instance.
                                 </p>
+                                <div class="card-footer bg-transparent pb-0 px-0">
+                                    <p class="text-green">
+                                        Arguments
+                                    </p>
+                                    <ul>
+                                        <li>
+                                            fieldsList: ( Array ) list of JS objects:
+<pre>
+[{
+    field: fieldEl,
+    result: true
+}]
+</pre>
+                                            <ul>
+                                                <li>
+                                                    field: JS node element
+                                                </li>
+                                                <li>
+                                                    result: boolean
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -697,6 +743,8 @@ var formInstance = new Form( formEl, options ).init();</pre>
     cssClasses: {
         dirty:              'is-dirty',
         error:              'has-error',
+        errorEmpty:         'has-error-empty',
+        errorRule:          'has-error-rule',
         valid:              'is-valid'
     },
     focusOnRelated:         true,
@@ -801,7 +849,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-3">
-                                <p class="text-green">getFormJSON</p>
+                                <p class="text-green">getFormData</p>
                                 ( function )
                             </div>
                             <div class="col-5">
@@ -827,7 +875,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             </div>
                             <div class="col-4">
                                 <p>
-                                    If set, it will be passed as function parameter for "getFormJSON" method.<br />
+                                    If set, it will be passed as function parameter for "getFormData" method.<br />
                                     See <a href="#methods">Methods</a> section for details
                                 </p>
                             </div>
@@ -930,7 +978,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
     },
     ajaxSubmit:         true,
     beforeSend:         null,
-    getFormJSON:        null,
+    getFormData:        null,
     handleSubmit:       true,
     onSubmitComplete:   null,
     onSubmitError:      null,
@@ -1017,7 +1065,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <pre class="text-green">getFormJSON( customFn )</pre>
+                                <pre class="text-green">getFormData( customFn )</pre>
                             </div>
                             <div class="col-5">
                                 <p>
@@ -1042,7 +1090,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                 <ul class="card-footer no-bg pt-3 pl-3 pr-0 pb-0">
                                     <li>
                                         <span class="text-green">customFn</span>: custom function to collect data from the form answers ( MUST have a return statement ).<br />
-                                            Can also be set as "getFormJSON" in "formOptions".<br />
+                                            Can also be set as "getFormData" in "formOptions".<br />
                                             See <a href="#form-options">Form Options</a> section for details.
                                     </li>
                                 </ul>
@@ -1165,7 +1213,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                         validate the form according to the fieldOptions and formOptions ( passed inside options param )
                                     </li>
                                     <li>
-                                        ( for AJAX forms ) create the JSON data to send via AJAX call as for getFormJSON method
+                                        ( for AJAX forms ) create the JSON data to send via AJAX call as for getFormData method
                                     </li>
                                     <li>
                                         ( for AJAX forms ) make the AJAX call to the url specified as action of the HTML form
@@ -1176,7 +1224,55 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                 </ul>
                             </div>
                             <div class="col-3">
-                                
+                                <p>
+
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4">
+                                <pre class="text-green">validateField( field )</pre>
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    Fires validation for the specified field ( with "isValidField" method ).<br />
+                                    Then, this also fires feedback on UI ( basic feedback with css classes ) and callback function(s) ( "onValidation" in "fieldOptions" ) according to the initialization options for the form instance.
+                                </p>
+                                <ul>
+                                    <li>
+                                        <span class="text-green">field</span>: CSS string selector ( or node element <span class="text-yellow">*</span> ) for the form field ( input, select, textarea )
+                                    </li>
+                                </ul>
+                                <p class="d-flex">
+                                    <span class="text-yellow mr-2">*</span> 
+                                    <span class="small">
+                                            best to use a CSS string selector so that it looks for the field inside the instance form element.
+                                            <br>
+                                            Example:<br>
+                                    </span>
+                                </p>
+                                <pre>formInstance.validateField('[name="myEmail"]');</pre>
+                            </div>
+                            <div class="col-3">
+                                <p>
+                                    Returns the Form instance 
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4">
+                                <pre class="text-green">validateForm()</pre>
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    Fires validation for the form ( with "isValidForm" method ).<br />
+                                    Then, this also fires feedback on UI for each field ( basic feedback with css classes ) and callback function(s) passing the full array of fields ( "onValidation" in "fieldOptions" ) according to the initialization options for the form instance.
+                                </p>
+                            </div>
+                            <div class="col-3">
+                                <p>
+                                    Returns the Form instance 
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -1893,6 +1989,33 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
         <div id="changelog">
             <h3 class="sticky-title">Changelog</h3>
             <ul class="p-0">
+                <li class="media my-3">
+                    <div class="version-num text-red">3.0.0</div>
+                    <div class="media-body pl-2">
+                        <b>NEW MAJOR VERSION</b><br />
+                        Many relevant changes from previous version
+                        <ul>
+                            <li>
+                                Added "errorEmpty" and "errorRule" to "cssClasses" in "fieldOptions" to show different error messages ( see implementation in CSS file ).
+                            </li>
+                            <li>
+                                Added method "validateField".
+                            </li>
+                            <li>
+                                Added method "validateForm".
+                            </li>
+                            <li>
+                                Renamed method "getFormJSON" with "getFormData" ( and related option in "formOptions" ).
+                            </li>
+                            <li>
+                                Change in "isValidField" method: now it just checks the field validity without feedback on the user interface ( same change for "isValidForm" method since it makes use of "isValidField" method ).
+                            </li>
+                            <li>
+                                Minor improvements.
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="media my-3">
                     <div class="version-num text-red">2.3.0</div>
                     <div class="media-body pl-2">

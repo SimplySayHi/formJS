@@ -1,6 +1,8 @@
+
 import { _addClass, _isNodeList, _removeClass } from './helper.js';
 
-export function _checkDirtyField( fields, cssClasses = '' ){ 
+export function _checkDirtyField( fields, cssClasses = this.options.fieldOptions.cssClasses.dirty ){
+
     var fields = (_isNodeList(fields) ? Array.from( fields ) : [fields]);
     
     fields.forEach(function(fieldEl){
@@ -18,4 +20,5 @@ export function _checkDirtyField( fields, cssClasses = '' ){
             }
         }
     });
+    
 }

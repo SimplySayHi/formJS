@@ -1,6 +1,8 @@
+
 import { _executeCallback, _mergeObjects, _serialize } from './helper.js';
 
 export function _xhrCall( formDataJSON ){
+
     let self = this,
         formEl = self.formEl,
         fieldOptions = self.options.fieldOptions,

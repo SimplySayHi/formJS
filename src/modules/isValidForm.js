@@ -1,16 +1,22 @@
-import { _fieldsStringSelector, _mergeObjects } from './helper.js';
+
+import { _fieldsStringSelector, _isDOMNode, _mergeObjects } from './helper.js';
 
 export function isValidForm( options = {} ){
+
     const self = this,
           formEl = self.formEl;
 
-    if( formEl === null || !formEl.matches('[novalidate]') ){ return false; }
-    
-    var fieldOptions = _mergeObjects( {}, options.fieldOptions || {}, self.options.fieldOptions ),
-        obj = {
+    let obj = {
             fields: [],
             result: true
-        },
+        };
+
+    if( !_isDOMNode(formEl) || !formEl.matches('[novalidate]') ){
+        obj.result = false;
+        return obj;
+    }
+    
+    var fieldOptions = _mergeObjects( {}, options.fieldOptions || {}, self.options.fieldOptions ),
         currentFieldName = '',
         currentFieldType = '';
     
@@ -44,4 +50,5 @@ export function isValidForm( options = {} ){
     });
     
     return obj;
+
 }

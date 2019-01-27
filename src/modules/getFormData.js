@@ -1,4 +1,6 @@
-export function getFormJSON( customFn = this.options.formOptions.getFormJSON ){
+
+export function getFormData( customFn = this.options.formOptions.getFormJSON ){
+
     let formData = {},
         self = this,
         formEl = self.formEl,
@@ -57,4 +59,5 @@ export function getFormJSON( customFn = this.options.formOptions.getFormJSON ){
     }
     
     return formData;
+    
 }

@@ -1,3 +1,4 @@
+
 export const
 
 _fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type=button]):not([type=hidden]), select, textarea',
@@ -87,4 +88,4 @@ _serialize = function( obj ){
 
 _toCamelCase = function( string ){
     return string.replace(/-([a-z])/ig, function(all, letter){ return letter.toUpperCase(); });
-};
+}

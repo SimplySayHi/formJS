@@ -1,4 +1,6 @@
+
 export function destroy(){
+
     const self = this,
           formEl = self.formEl,
           validationListenerNames = self.options.fieldOptions.validateOnEvents;
@@ -9,6 +11,7 @@ export function destroy(){
 
     if( self.options.fieldOptions.strictHtmlValidation ){
         formEl.removeEventListener('keypress', self.listenerCallbacks.keypressMaxlength, false);
+        formEl.removeEventListener('input', self.listenerCallbacks.dataTypeNumber, false);
     }
 
     if( self.options.fieldOptions.preventPasteFields ){
@@ -23,4 +26,5 @@ export function destroy(){
         let useCapturing = (eventName === 'blur' ? true : false);
         formEl.removeEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
     });
+    
 }

@@ -1,8 +1,10 @@
+
 import { _executeCallback, _fieldsStringSelector } from './helper.js';
 
 export const _callbackFns = {
 
     charCount: function( eventOrField ){
+
         const fieldEl = eventOrField.target || eventOrField;
 
         if( fieldEl.matches( '[data-char-count]' ) ){
@@ -13,9 +15,11 @@ export const _callbackFns = {
                 containerEL.querySelector('[data-char-length]').textContent = usedChars;
             }
         }
+
     },
 
     dataTypeNumber: function( event ){
+
         const fieldEl = event.target;
         
         if( fieldEl.matches('[data-type="number"]') ){
@@ -28,9 +32,11 @@ export const _callbackFns = {
                 fieldEl.value = valueReplaced;
             }
         }
+
     },
 
     keypressMaxlength: function( event ){
+
         const fieldEl = event.target;
         
         if( fieldEl.matches( '[maxlength]' ) ){
@@ -42,19 +48,20 @@ export const _callbackFns = {
                 return false;
             }
         }
+
     },
 
     pastePrevent: function( event ){
+
         const self = this,
               fieldEl = event.target;
         let fieldOptions = self.options.fieldOptions;
 
-        if( fieldEl.matches( fieldOptions.preventPasteFields ) ){
-            
+        if( fieldEl.matches( fieldOptions.preventPasteFields ) ){     
             event.preventDefault();
             _executeCallback.call( self, fieldOptions.onPastePrevented, fieldEl );
-
         }
+
     },
 
     submit: function( event ){
@@ -62,6 +69,7 @@ export const _callbackFns = {
     },
 
     validation: function( event ){
+
         const self = this,
             eventName = event.type,
             fieldEl = event.target;
@@ -82,7 +90,6 @@ export const _callbackFns = {
 
                     if( findReqFromEl !== null ){
                         findReqFromEl.required = true;
-
                         if( self.options.fieldOptions.focusOnRelated ){
                             findReqFromEl.focus();
                         }
@@ -101,8 +108,8 @@ export const _callbackFns = {
             // HANDLE data-required-from FIELDS
             if( isReqFrom ){
                 if( isValidValue ){
-                    let reqMoreEl = self.formEl.querySelector( fieldEl.getAttribute('data-required-from') );
 
+                    let reqMoreEl = self.formEl.querySelector( fieldEl.getAttribute('data-required-from') );
                     reqMoreEl.checked = true;
 
                     if( reqMoreEl.required ){
@@ -124,6 +131,7 @@ export const _callbackFns = {
 
             }
         }
+        
     }
 
 };

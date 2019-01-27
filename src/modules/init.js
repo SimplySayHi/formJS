@@ -1,6 +1,8 @@
-import { _executeCallback, _fieldsStringSelector } from './helper.js';
+
+import { _fieldsStringSelector } from './helper.js';
 
 export const init = function(){
+
     const self = this,
           fieldOptions = self.options.fieldOptions,
           formEl = self.formEl,
@@ -44,11 +46,9 @@ export const init = function(){
                 fieldEl = fieldChecked;
             }
 
-            const validationResult = self.isValidField( fieldEl ),
-                  callbackData = [ { field: fieldEl, result: validationResult} ];
-
-            _executeCallback.call( self, fieldOptions.onValidation, callbackData );
+            self.validateField( fieldEl );
 
         }
     });
+
 }

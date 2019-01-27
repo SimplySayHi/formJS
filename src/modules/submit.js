@@ -1,8 +1,9 @@
-import { _executeCallback, _isPlainObject, _mergeObjects } from './helper.js';
 
+import { _executeCallback, _isPlainObject, _mergeObjects } from './helper.js';
 import { _xhrCall } from './xhrCall.js';
 
 export function submit( options = {}, event = null ){
+
     const self = this,
           formEl = self.formEl,
           eventPreventDefault = ( enableBtn = true ) => {
@@ -23,7 +24,7 @@ export function submit( options = {}, event = null ){
         _executeCallback.call( self, options.fieldOptions.onValidation, formValidation.fields );
     }
     
-    let formDataJSON = (isAjaxForm ? self.getFormJSON() : null),
+    let formDataJSON = (isAjaxForm ? self.getFormData() : null),
         callbacksBeforeSend = [],
         beforeSendOpt = options.formOptions.beforeSend;
 
@@ -84,4 +85,5 @@ export function submit( options = {}, event = null ){
         formEl.dispatchEvent(submitEvent);
 
     }
+    
 }
