@@ -8,12 +8,14 @@ export const _callbackFns = {
         const fieldEl = eventOrField.target || eventOrField;
 
         if( fieldEl.matches( '[data-char-count]' ) ){
-            let containerEL = fieldEl.closest('[data-formjs-question]');
+            try {
+                let charLengthEl = fieldEl.closest('[data-formjs-question]').querySelector('[data-char-length]');
 
-            if( containerEL && containerEL.querySelector('[data-char-length]') ){
-                let usedChars = fieldEl.value.length;
-                containerEL.querySelector('[data-char-length]').textContent = usedChars;
-            }
+                if( charLengthEl !== null ){
+                    let usedChars = fieldEl.value.length;
+                    charLengthEl.textContent = usedChars;
+                }
+            } catch (error) {}
         }
 
     },
@@ -89,7 +91,9 @@ export const _callbackFns = {
                 if( isReqMore ){
 
                     if( findReqFromEl !== null ){
-                        findReqFromEl.required = true;
+                        if( fieldEl.required ){
+                            findReqFromEl.required = true;
+                        }
                         if( self.options.fieldOptions.focusOnRelated ){
                             findReqFromEl.focus();
                         }
@@ -123,11 +127,8 @@ export const _callbackFns = {
                 (!isFieldForChangeEvent && eventName === 'input') ||
                 (eventName !== 'change' && eventName !== 'input')
             ){
-
-                const validationResult = self.isValidField( fieldEl ),
-                    callbackData = [ { field: fieldEl, result: validationResult} ];
-
-                _executeCallback.call( self, self.options.fieldOptions.onValidation, callbackData );
+                
+                self.validateField( fieldEl );
 
             }
         }

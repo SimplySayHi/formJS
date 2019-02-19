@@ -1,5 +1,5 @@
 
-import { _toCamelCase } from './helper.js';
+import { _mergeObjects, _toCamelCase } from './helper.js';
 import { _validationRulesAttributes } from './validationRules.js';
 
 export function _isValid( fieldEl, fieldOptions = {} ){
@@ -10,11 +10,18 @@ export function _isValid( fieldEl, fieldOptions = {} ){
           isValidValue = fieldValue.trim().length > 0,
           // ALPHABETICAL REVERSE ORDER
           fieldAttributes = Array.from(fieldEl.attributes).sort(function(a,b){ return a.name < b.name });
-         
-    let attrValidations = [],
-        attrValidationsResult = true;
 
-    // SPECIFIC VALIDATIONS FOR _validationRulesAttributes
+    let attrValidations = [],
+        attrValidationsResult = isValidValue,
+        obj = { result: isValidValue };
+
+    if( !isValidValue ){
+        obj.errors = { empty: true };
+        obj.result = false;
+        return obj;
+    }
+
+    // COLLECT SPECIFIC VALIDATIONS FOR _validationRulesAttributes
     fieldAttributes.forEach(function(attr){
         // FOR data-* ATTRIBUTES -> REMOVE "data-" AND TRANSFORM TO CAMELCASE
         let attrName = _toCamelCase( attr.name.replace('data-', '') ),
@@ -41,17 +48,27 @@ export function _isValid( fieldEl, fieldOptions = {} ){
         }
     });
 
+    // RUN SPECIFIC VALIDATIONS FOR _validationRulesAttributes
     attrValidations.forEach(function(item){
         let extraVal = _validationRulesAttributes[item.attrName]( item, fieldEl );
-        if( !extraVal ){ attrValidationsResult = false; }
+        if( !extraVal.result ){
+            obj = _mergeObjects({}, extraVal, obj);
+            attrValidationsResult = false;
+        }
     });
 
-    attrValidationsResult = attrValidations.length > 0 ? (attrValidationsResult && isValidValue) : isValidValue; 
-    
-    return (
-        typeof self.validationRules[fieldType] === 'function' ? 
-        self.validationRules[fieldType]( fieldValue, fieldEl ) && attrValidationsResult : 
-        attrValidationsResult
-    );
+    // RUN VALIDATIONS FOR validationRules
+    if( typeof self.validationRules[fieldType] === 'function' ){
+        obj = _mergeObjects( {}, self.validationRules[fieldType](fieldValue, fieldEl), obj );
+        obj.result = obj.result && attrValidationsResult;
+        if( !obj.result ){
+            if( typeof obj.errors === 'undefined' ){
+                obj.errors = {};
+            }
+            obj.errors.rule = true;
+        }
+    }
+
+    return obj;
 
 }

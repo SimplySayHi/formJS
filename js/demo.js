@@ -30,10 +30,12 @@ var optionsPlugin = {
             },
             onValidation: function( fieldsArray ){
                 console.log('onValidation fieldsArray ', fieldsArray);
-                for(var f=0; f<fieldsArray.length; f++){
-                    var field = fieldsArray[f];
-                    console.log( 'field "' + field.field.name + '" is valid? ', field.result );
-                }
+                fieldsArray.forEach(function(obj){
+                    console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
+                    if( obj.errors ){
+                        console.log('field errors:', obj.errors);
+                    }
+                });
             }
         },
         formOptions: {
@@ -132,10 +134,12 @@ var optionsPlugin2 = {
             },
             onValidation: function( fieldsArray ){
                 console.log('onValidation fieldsArray ', fieldsArray);
-                for(var f=0; f<fieldsArray.length; f++){
-                    var field = fieldsArray[f];
-                    console.log( 'field "' + field.field.name + '" is valid? ', field.result );
-                }
+                fieldsArray.forEach(function(obj){
+                    console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
+                    if( obj.errors ){
+                        console.log('field errors:', obj.errors);
+                    }
+                });
             }
         },
         formOptions: {

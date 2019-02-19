@@ -5,7 +5,7 @@ export function getFormData( customFn = this.options.formOptions.getFormJSON ){
         self = this,
         formEl = self.formEl,
         formFieldsEl = formEl.querySelectorAll('input, select, textarea'),
-        excludeSelectors = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-json])',
+        excludeSelectors = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])',
         filteredFields = Array.from(formFieldsEl).filter(elem => elem.matches(excludeSelectors) );
     
     if( typeof customFn === 'function' ){

@@ -81,41 +81,30 @@
                 return Constructor;
             };
         }();
- /**! formJS v2.3.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
+        /**! formJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
         var _listenerCallbacks2 = __webpack_require__("./src/modules/listenerCallbacks.js");
         var _options = __webpack_require__("./src/modules/options.js");
         var _validationRules = __webpack_require__("./src/modules/validationRules.js");
-        var _formStartup2 = __webpack_require__("./src/modules/formStartup.js");
+        var _constructor2 = __webpack_require__("./src/modules/constructor.js");
         var _destroy2 = __webpack_require__("./src/modules/destroy.js");
-        var _getFormJSON2 = __webpack_require__("./src/modules/getFormJSON.js");
+        var _getFormData2 = __webpack_require__("./src/modules/getFormData.js");
         var _init2 = __webpack_require__("./src/modules/init.js");
         var _isValidField2 = __webpack_require__("./src/modules/isValidField.js");
         var _isValidForm2 = __webpack_require__("./src/modules/isValidForm.js");
         var _submit2 = __webpack_require__("./src/modules/submit.js");
+        var _validateField2 = __webpack_require__("./src/modules/validateField.js");
+        var _validateForm2 = __webpack_require__("./src/modules/validateForm.js");
         function _classCallCheck(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
                 throw new TypeError("Cannot call a class as a function");
             }
         }
-        var version = "2.3.0";
+        var version = "3.0.0";
         var _listenerCallbacks = new WeakMap();
         var Form = function() {
-            function Form(formEl) {
-                var optionsObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+            function Form(formEl, optionsObj) {
                 _classCallCheck(this, Form);
-                var self = this, argsL = arguments.length, checkFormEl = (0, _helper._checkFormEl)(formEl);
-                if (argsL === 0 || argsL > 0 && !formEl) {
-                    throw new Error('First argument "formEl" is missing or falsy!');
-                }
-                if ((0, _helper._isNodeList)(formEl)) {
-                    throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
-                }
-                if (!checkFormEl.result) {
-                    throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
-                }
-                self.isInitialized = false;
-                self.formEl = checkFormEl.element;
-                self.options = (0, _helper._mergeObjects)({}, optionsObj, Form.prototype.options);
+                var self = this;
                 _listenerCallbacks.set(self, {
                     charCount: _listenerCallbacks2._callbackFns.charCount,
                     dataTypeNumber: _listenerCallbacks2._callbackFns.dataTypeNumber,
@@ -124,7 +113,7 @@
                     submit: _listenerCallbacks2._callbackFns.submit.bind(self),
                     validation: _listenerCallbacks2._callbackFns.validation.bind(self)
                 });
-                _formStartup2._formStartup.call(self);
+                _constructor2._constructor.call(self, formEl, optionsObj);
             }
             _createClass(Form, [ {
                 key: "destroy",
@@ -132,17 +121,14 @@
                     _destroy2.destroy.call(this);
                 }
             }, {
-                key: "getFormJSON",
-                value: function getFormJSON(customFn) {
-                    return _getFormJSON2.getFormJSON.call(this, customFn);
+                key: "getFormData",
+                value: function getFormData(customFn) {
+                    return _getFormData2.getFormData.call(this, customFn);
                 }
             }, {
                 key: "init",
                 value: function init() {
-                    var self = this;
-                    _init2.init.call(self);
-                    self.isInitialized = true;
-                    return self;
+                    return _init2.init.call(this);
                 }
             }, {
                 key: "isValidField",
@@ -158,6 +144,16 @@
                 key: "submit",
                 value: function submit(optionsObj, event) {
                     _submit2.submit.call(this, optionsObj, event);
+                }
+            }, {
+                key: "validateField",
+                value: function validateField(fieldElem) {
+                    return _validateField2.validateField.call(this, fieldElem);
+                }
+            }, {
+                key: "validateForm",
+                value: function validateForm() {
+                    return _validateForm2.validateForm.call(this);
                 }
             }, {
                 key: "listenerCallbacks",
@@ -177,9 +173,10 @@
             } ]);
             return Form;
         }();
-        Form.prototype.version = version;
-        Form.prototype.validationRules = _validationRules.validationRules;
+        Form.prototype.isInitialized = false;
         Form.prototype.options = _options.options;
+        Form.prototype.validationRules = _validationRules.validationRules;
+        Form.prototype.version = version;
         if (!window.Form) {
             window.Form = Form;
         }
@@ -195,7 +192,7 @@
         exports._checkDirtyField = _checkDirtyField;
         var _helper = __webpack_require__("./src/modules/helper.js");
         function _checkDirtyField(fields) {
-            var cssClasses = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+            var cssClasses = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.options.fieldOptions.cssClasses.dirty;
             var fields = (0, _helper._isNodeList)(fields) ? Array.from(fields) : [ fields ];
             fields.forEach(function(fieldEl) {
                 if (fieldEl.type !== "checkbox" && fieldEl.type !== "radio") {
@@ -207,6 +204,33 @@
                     }
                 }
             });
+        }
+    },
+    "./src/modules/constructor.js": function(module, exports, __webpack_require__) {
+        "use strict";
+        Object.defineProperty(exports, "__esModule", {
+            value: true
+        });
+        exports._constructor = _constructor;
+        var _helper = __webpack_require__("./src/modules/helper.js");
+        var _options = __webpack_require__("./src/modules/options.js");
+        var _formStartup2 = __webpack_require__("./src/modules/formStartup.js");
+        function _constructor(formEl) {
+            var optionsObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+            var self = this, argsL = arguments.length, checkFormEl = (0, _helper._checkFormEl)(formEl);
+            if (argsL === 0 || argsL > 0 && !formEl) {
+                throw new Error('First argument "formEl" is missing or falsy!');
+            }
+            if ((0, _helper._isNodeList)(formEl)) {
+                throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
+            }
+            if (!checkFormEl.result) {
+                throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
+            }
+            self.formEl = checkFormEl.element;
+            self.options = (0, _helper._mergeObjects)({}, optionsObj, Form.prototype.options);
+            _options._setCallbackFunctionsInOptions.call(self);
+            _formStartup2._formStartup.call(self);
         }
     },
     "./src/modules/destroy.js": function(module, exports, __webpack_require__) {
@@ -222,6 +246,7 @@
             }
             if (self.options.fieldOptions.strictHtmlValidation) {
                 formEl.removeEventListener("keypress", self.listenerCallbacks.keypressMaxlength, false);
+                formEl.removeEventListener("input", self.listenerCallbacks.dataTypeNumber, false);
             }
             if (self.options.fieldOptions.preventPasteFields) {
                 formEl.removeEventListener("paste", self.listenerCallbacks.pastePrevent, false);
@@ -243,10 +268,36 @@
         exports._formStartup = _formStartup;
         function _formStartup() {
             var self = this, formEl = self.formEl;
-            if (!formEl || !formEl.matches("[novalidate]")) {
-                return false;
+            if (!formEl.matches("[novalidate]")) {
+                return null;
             }
             var fieldOptions = self.options.fieldOptions, formOptions = self.options.formOptions;
+            var charLengthElems = formEl.querySelectorAll("[data-char-length]");
+            if (charLengthElems.length > 0) {
+                Array.from(charLengthElems).forEach(function(element) {
+                    try {
+                        var containerEl = element.closest("[data-formjs-question]"), fieldEl = containerEl.querySelector("[data-char-count]");
+                        if (fieldEl !== null && fieldEl.matches("[maxlength]")) {
+                            var maxlength = fieldEl.getAttribute("maxlength");
+                            containerEl.querySelector("[data-char-maxlength]").textContent = maxlength;
+                        }
+                        self.listenerCallbacks.charCount.call(null, fieldEl);
+                    } catch (error) {}
+                });
+            }
+            if (fieldOptions.maxFileSize > 0) {
+                var maxFileSizeElems = formEl.querySelectorAll("[data-max-file-size]");
+                if (maxFileSizeElems.length > 0) {
+                    Array.from(maxFileSizeElems).forEach(function(element) {
+                        try {
+                            var fieldEl = element.closest("[data-formjs-question]").querySelector('[type="file"]');
+                            if (fieldEl !== null) {
+                                element.textContent = fieldOptions.maxFileSize;
+                            }
+                        } catch (error) {}
+                    });
+                }
+            }
             if (fieldOptions.handleValidation) {
                 if (fieldOptions.strictHtmlValidation) {
                     formEl.addEventListener("keypress", self.listenerCallbacks.keypressMaxlength, false);
@@ -279,15 +330,15 @@
             }
         }
     },
-    "./src/modules/getFormJSON.js": function(module, exports, __webpack_require__) {
+    "./src/modules/getFormData.js": function(module, exports, __webpack_require__) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
         });
-        exports.getFormJSON = getFormJSON;
-        function getFormJSON() {
+        exports.getFormData = getFormData;
+        function getFormData() {
             var customFn = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.options.formOptions.getFormJSON;
-            var formData = {}, self = this, formEl = self.formEl, formFieldsEl = formEl.querySelectorAll("input, select, textarea"), excludeSelectors = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-json])', filteredFields = Array.from(formFieldsEl).filter(function(elem) {
+            var formData = {}, self = this, formEl = self.formEl, formFieldsEl = formEl.querySelectorAll("input, select, textarea"), excludeSelectors = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])', filteredFields = Array.from(formFieldsEl).filter(function(elem) {
                 return elem.matches(excludeSelectors);
             });
             if (typeof customFn === "function") {
@@ -341,6 +392,12 @@
             cssClasses.split(" ").forEach(function(className) {
                 element.classList.add(className);
             });
+        }, _checkFormEl = exports._checkFormEl = function _checkFormEl(formEl) {
+            var isString = typeof formEl === "undefined" ? "undefined" : _typeof(formEl), isValidNodeSelector = isString === "string" && _isDOMNode(document.querySelector(formEl)), isFormSelector = isValidNodeSelector && document.querySelector(formEl).tagName.toLowerCase() === "form", obj = {
+                result: _isDOMNode(formEl) || isFormSelector,
+                element: isString === "string" ? document.querySelector(formEl) : formEl
+            };
+            return obj;
         }, _executeCallback = exports._executeCallback = function _executeCallback(callbackOption, callbackData) {
             var self = this, callbackFnList = [];
             if (typeof callbackOption === "function") {
@@ -357,12 +414,6 @@
             return NodeList.prototype.isPrototypeOf(nodeList);
         }, _isPlainObject = exports._isPlainObject = function _isPlainObject(object) {
             return Object.prototype.toString.call(object) === "[object Object]";
-        }, _checkFormEl = exports._checkFormEl = function _checkFormEl(formEl) {
-            var isString = typeof formEl === "undefined" ? "undefined" : _typeof(formEl), isValidNodeSelector = isString === "string" && _isDOMNode(document.querySelector(formEl)), isFormSelector = isValidNodeSelector && document.querySelector(formEl).tagName.toLowerCase() === "form", obj = {
-                result: _isDOMNode(formEl) || isFormSelector,
-                element: isString === "string" ? document.querySelector(formEl) : formEl
-            };
-            return obj;
         }, _mergeObjects = exports._mergeObjects = function _mergeObjects() {
             var out = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
             for (var i = 1; i < arguments.length; i++) {
@@ -407,34 +458,18 @@
         exports.init = undefined;
         var _helper = __webpack_require__("./src/modules/helper.js");
         var init = exports.init = function init() {
-            var self = this, fieldOptions = self.options.fieldOptions, formEl = self.formEl, formFields = formEl.querySelectorAll(_helper._fieldsStringSelector);
+            var self = this, formEl = self.formEl, formFields = formEl.querySelectorAll(_helper._fieldsStringSelector);
             Array.from(formFields).forEach(function(fieldEl) {
-                var containerEl = fieldEl.closest("[data-formjs-question]"), isCheckboxOrRadio = fieldEl.type === "checkbox" || fieldEl.type === "radio", fieldChecked = formEl.querySelector('[name="' + fieldEl.name + '"]:checked'), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isReqFrom ? formEl.querySelector(fieldEl.getAttribute("data-required-from")) : null;
-                if (!isCheckboxOrRadio) {
-                    if (fieldEl.matches("[data-char-count]")) {
-                        if (fieldEl.matches("[maxlength]") && containerEl.querySelector("[data-char-maxlength]")) {
-                            var maxlength = fieldEl.getAttribute("maxlength");
-                            containerEl.querySelector("[data-char-maxlength]").textContent = maxlength;
-                        }
-                        self.listenerCallbacks.charCount.call(null, fieldEl);
-                    }
-                    if (fieldEl.type === "file" && fieldOptions.maxFileSize > 0) {
-                        if (containerEl && containerEl.querySelector("[data-max-file-size]")) {
-                            containerEl.querySelector("[data-max-file-size]").textContent = fieldOptions.maxFileSize;
-                        }
-                    }
-                }
+                var isCheckboxOrRadio = fieldEl.type === "checkbox" || fieldEl.type === "radio", fieldChecked = formEl.querySelector('[name="' + fieldEl.name + '"]:checked'), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isReqFrom ? formEl.querySelector(fieldEl.getAttribute("data-required-from")) : null;
                 if (!isCheckboxOrRadio && fieldEl.value || isCheckboxOrRadio && fieldChecked !== null || isReqFrom && reqMoreEl.checked) {
                     if (isCheckboxOrRadio) {
                         fieldEl = fieldChecked;
                     }
-                    var validationResult = self.isValidField(fieldEl), callbackData = [ {
-                        field: fieldEl,
-                        result: validationResult
-                    } ];
-                    _helper._executeCallback.call(self, fieldOptions.onValidation, callbackData);
+                    self.validateField(fieldEl);
                 }
             });
+            self.isInitialized = true;
+            return self;
         };
     },
     "./src/modules/isValid.js": function(module, exports, __webpack_require__) {
@@ -450,7 +485,16 @@
             var self = this, fieldType = fieldEl.matches("[data-subtype]") ? (0, _helper._toCamelCase)(fieldEl.getAttribute("data-subtype")) : fieldEl.type, fieldValue = fieldEl.value, isValidValue = fieldValue.trim().length > 0, fieldAttributes = Array.from(fieldEl.attributes).sort(function(a, b) {
                 return a.name < b.name;
             });
-            var attrValidations = [], attrValidationsResult = true;
+            var attrValidations = [], attrValidationsResult = isValidValue, obj = {
+                result: isValidValue
+            };
+            if (!isValidValue) {
+                obj.errors = {
+                    empty: true
+                };
+                obj.result = false;
+                return obj;
+            }
             fieldAttributes.forEach(function(attr) {
                 var attrName = (0, _helper._toCamelCase)(attr.name.replace("data-", "")), attrValue = attr.value, isTypeValueWithFn = attrName === "type" && typeof _validationRules._validationRulesAttributes[attrValue] === "function", isAttrNameWithFn = typeof _validationRules._validationRulesAttributes[attrName] === "function";
                 if (isTypeValueWithFn || isAttrNameWithFn) {
@@ -469,12 +513,22 @@
             });
             attrValidations.forEach(function(item) {
                 var extraVal = _validationRules._validationRulesAttributes[item.attrName](item, fieldEl);
-                if (!extraVal) {
+                if (!extraVal.result) {
+                    obj = (0, _helper._mergeObjects)({}, extraVal, obj);
                     attrValidationsResult = false;
                 }
             });
-            attrValidationsResult = attrValidations.length > 0 ? attrValidationsResult && isValidValue : isValidValue;
-            return typeof self.validationRules[fieldType] === "function" ? self.validationRules[fieldType](fieldValue, fieldEl) && attrValidationsResult : attrValidationsResult;
+            if (typeof self.validationRules[fieldType] === "function") {
+                obj = (0, _helper._mergeObjects)({}, self.validationRules[fieldType](fieldValue, fieldEl), obj);
+                obj.result = obj.result && attrValidationsResult;
+                if (!obj.result) {
+                    if (typeof obj.errors === "undefined") {
+                        obj.errors = {};
+                    }
+                    obj.errors.rule = true;
+                }
+            }
+            return obj;
         }
     },
     "./src/modules/isValidField.js": function(module, exports, __webpack_require__) {
@@ -485,34 +539,24 @@
         exports.isValidField = isValidField;
         var _helper = __webpack_require__("./src/modules/helper.js");
         var _isValid2 = __webpack_require__("./src/modules/isValid.js");
-        var _checkDirtyField2 = __webpack_require__("./src/modules/checkDirtyField.js");
         function isValidField(fieldElem) {
             var fieldOptionsObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-            if (!fieldElem) {
-                return false;
-            }
             var self = this, fieldEl = typeof fieldElem === "string" ? self.formEl.querySelector(fieldElem) : fieldElem;
-            var options = (0, _helper._mergeObjects)({}, fieldOptionsObj, self.options.fieldOptions), isValidValue = fieldEl.value.trim().length > 0, isRequired = fieldEl.required, isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = self.formEl.querySelector(fieldEl.getAttribute("data-required-from")), isValidateIfFilled = fieldEl.matches("[data-validate-if-filled]"), isValid = isValidValue, containerEl = fieldEl.closest("[data-formjs-question]");
-            if (!isRequired && !isValidateIfFilled && !isReqFrom || isValidateIfFilled && !isValidValue || isReqFrom && !isRequired && !reqMoreEl.checked) {
-                isValid = true;
+            var obj = {
+                result: false,
+                fieldEl: null
+            };
+            if (!(0, _helper._isDOMNode)(fieldEl)) {
+                return obj;
+            }
+            var options = (0, _helper._mergeObjects)({}, fieldOptionsObj, self.options.fieldOptions), isValidValue = fieldEl.value.trim().length > 0, isRequired = fieldEl.required, isReqFrom = fieldEl.matches("[data-required-from]"), isValidateIfFilled = fieldEl.matches("[data-validate-if-filled]");
+            if (!isRequired && !isValidateIfFilled && !isReqFrom || isValidateIfFilled && !isValidValue || isReqFrom && !isRequired) {
+                obj.result = true;
             } else {
-                isValid = _isValid2._isValid.call(self, fieldEl, options);
+                obj = _isValid2._isValid.call(self, fieldEl, options);
             }
-            if (options.checkDirtyField) {
-                (0, _checkDirtyField2._checkDirtyField)(fieldEl, options.cssClasses.dirty);
-            }
-            if (containerEl !== null && !options.skipUIfeedback) {
-                if (isValid) {
-                    if (!isReqFrom || isReqFrom && reqMoreEl.checked) {
-                        (0, _helper._removeClass)(containerEl, options.cssClasses.error);
-                        (0, _helper._addClass)(containerEl, options.cssClasses.valid);
-                    }
-                } else {
-                    (0, _helper._removeClass)(containerEl, options.cssClasses.valid);
-                    (0, _helper._addClass)(containerEl, options.cssClasses.error);
-                }
-            }
-            return isValid;
+            obj.fieldEl = fieldEl;
+            return obj;
         }
     },
     "./src/modules/isValidForm.js": function(module, exports, __webpack_require__) {
@@ -525,21 +569,20 @@
         function isValidForm() {
             var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
             var self = this, formEl = self.formEl;
-            if (formEl === null || !formEl.matches("[novalidate]")) {
-                return false;
-            }
-            var fieldOptions = (0, _helper._mergeObjects)({}, options.fieldOptions || {}, self.options.fieldOptions), obj = {
+            var obj = {
                 fields: [],
                 result: true
-            }, currentFieldName = "", currentFieldType = "";
+            };
+            if (!(0, _helper._isDOMNode)(formEl) || !formEl.matches("[novalidate]")) {
+                obj.result = false;
+                return obj;
+            }
+            var fieldOptions = (0, _helper._mergeObjects)({}, options.fieldOptions || {}, self.options.fieldOptions), currentFieldName = "", currentFieldType = "";
             if (typeof fieldOptions.focusOnRelated === "undefined") {
                 fieldOptions.focusOnRelated = false;
             }
             Array.from(formEl.querySelectorAll(_helper._fieldsStringSelector)).forEach(function(fieldEl) {
-                var name = fieldEl.name, type = fieldEl.type, fieldData = {
-                    field: fieldEl,
-                    result: true
-                };
+                var name = fieldEl.name, type = fieldEl.type, fieldData = {};
                 if (name === currentFieldName && type === currentFieldType) {
                     return true;
                 }
@@ -547,9 +590,8 @@
                     currentFieldName = name;
                     currentFieldType = type;
                 }
-                var fieldResult = self.isValidField(fieldEl, fieldOptions);
-                fieldData.result = fieldResult;
-                if (!fieldResult) {
+                fieldData = self.isValidField(fieldEl, fieldOptions);
+                if (!fieldData.result) {
                     obj.result = false;
                 }
                 obj.fields.push(fieldData);
@@ -568,11 +610,13 @@
             charCount: function charCount(eventOrField) {
                 var fieldEl = eventOrField.target || eventOrField;
                 if (fieldEl.matches("[data-char-count]")) {
-                    var containerEL = fieldEl.closest("[data-formjs-question]");
-                    if (containerEL && containerEL.querySelector("[data-char-length]")) {
-                        var usedChars = fieldEl.value.length;
-                        containerEL.querySelector("[data-char-length]").textContent = usedChars;
-                    }
+                    try {
+                        var charLengthEl = fieldEl.closest("[data-formjs-question]").querySelector("[data-char-length]");
+                        if (charLengthEl !== null) {
+                            var usedChars = fieldEl.value.length;
+                            charLengthEl.textContent = usedChars;
+                        }
+                    } catch (error) {}
                 }
             },
             dataTypeNumber: function dataTypeNumber(event) {
@@ -614,7 +658,9 @@
                         var findReqMoreEl = isReqMore ? fieldEl : self.formEl.querySelector('[name="' + fieldEl.name + '"][data-require-more]'), findReqFromEl = findReqMoreEl !== null ? self.formEl.querySelector('[data-required-from="#' + findReqMoreEl.id + '"]') : null;
                         if (isReqMore) {
                             if (findReqFromEl !== null) {
-                                findReqFromEl.required = true;
+                                if (fieldEl.required) {
+                                    findReqFromEl.required = true;
+                                }
                                 if (self.options.fieldOptions.focusOnRelated) {
                                     findReqFromEl.focus();
                                 }
@@ -636,11 +682,7 @@
                         }
                     }
                     if (isFieldForChangeEvent && eventName === "change" || !isFieldForChangeEvent && eventName === "input" || eventName !== "change" && eventName !== "input") {
-                        var validationResult = self.isValidField(fieldEl), callbackData = [ {
-                            field: fieldEl,
-                            result: validationResult
-                        } ];
-                        _helper._executeCallback.call(self, self.options.fieldOptions.onValidation, callbackData);
+                        self.validateField(fieldEl);
                     }
                 }
             }
@@ -651,12 +693,48 @@
         Object.defineProperty(exports, "__esModule", {
             value: true
         });
+        exports._setCallbackFunctionsInOptions = exports.options = undefined;
+        var _helper = __webpack_require__("./src/modules/helper.js");
+        var _checkDirtyField2 = __webpack_require__("./src/modules/checkDirtyField.js");
+        var _defaultCallbacksInOptions = {
+            fieldOptions: {
+                onValidation: function onValidation(fieldsArray) {
+                    var self = this, options = self.options.fieldOptions;
+                    fieldsArray.forEach(function(obj) {
+                        var fieldEl = obj.fieldEl, hasTypedValue = fieldEl.value.trim().length > 0, containerEl = fieldEl.closest("[data-formjs-question]"), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = self.formEl.querySelector(fieldEl.getAttribute("data-required-from"));
+                        if (options.checkDirtyField) {
+                            _checkDirtyField2._checkDirtyField.call(self, fieldEl);
+                        }
+                        if (containerEl !== null && !options.skipUIfeedback) {
+                            if (obj.result) {
+                                if (!isReqFrom || isReqFrom && reqMoreEl.checked) {
+                                    var errorClasses = options.cssClasses.error + " " + options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
+                                    (0, _helper._removeClass)(containerEl, errorClasses);
+                                    (0, _helper._addClass)(containerEl, options.cssClasses.valid);
+                                }
+                            } else {
+                                var extraErrorClass = options.cssClasses.errorRule;
+                                var isChecks = fieldEl.matches("[data-checks]"), checkedElLength = isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0;
+                                if (!isChecks && !hasTypedValue || isChecks && checkedElLength === 0) {
+                                    extraErrorClass = options.cssClasses.errorEmpty;
+                                }
+                                var _errorClasses = options.cssClasses.error + " " + extraErrorClass, errorClassToRemove = options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
+                                (0, _helper._removeClass)(containerEl, options.cssClasses.valid + " " + errorClassToRemove);
+                                (0, _helper._addClass)(containerEl, _errorClasses);
+                            }
+                        }
+                    });
+                }
+            }
+        };
         var options = exports.options = {
             fieldOptions: {
                 checkDirtyField: false,
                 cssClasses: {
                     dirty: "is-dirty",
                     error: "has-error",
+                    errorEmpty: "has-error-empty",
+                    errorRule: "has-error-rule",
                     valid: "is-valid"
                 },
                 focusOnRelated: true,
@@ -690,6 +768,31 @@
                 onSubmitError: null,
                 onSubmitSuccess: null
             }
+        }, _setCallbackFunctionsInOptions = exports._setCallbackFunctionsInOptions = function _setCallbackFunctionsInOptions() {
+            var self = this, callbacks = {
+                fieldOptions: [ "onPastePrevented", "onValidation" ],
+                formOptions: [ "beforeSend", "onSubmitComplete", "onSubmitError", "onSubmitSuccess" ]
+            };
+            var _loop = function _loop(opt) {
+                var fjsOpt = callbacks[opt];
+                fjsOpt.forEach(function(fnName) {
+                    var fnInOptions = self.options[opt][fnName], fnList = [];
+                    if (typeof fnInOptions === "function") {
+                        fnList.push(fnInOptions);
+                    } else if (Array.isArray(fnInOptions)) {
+                        fnList.concat(fnInOptions);
+                    } else {
+                        return;
+                    }
+                    if (typeof _defaultCallbacksInOptions[opt] !== "undefined" && typeof _defaultCallbacksInOptions[opt][fnName] === "function") {
+                        fnList.unshift(_defaultCallbacksInOptions[opt][fnName]);
+                    }
+                    self.options[opt][fnName] = fnList;
+                });
+            };
+            for (var opt in callbacks) {
+                _loop(opt);
+            }
         };
     },
     "./src/modules/submit.js": function(module, exports, __webpack_require__) {
@@ -721,7 +824,7 @@
             if (handleValidation) {
                 _helper._executeCallback.call(self, options.fieldOptions.onValidation, formValidation.fields);
             }
-            var formDataJSON = isAjaxForm ? self.getFormJSON() : null, callbacksBeforeSend = [], beforeSendOpt = options.formOptions.beforeSend;
+            var formDataJSON = isAjaxForm ? self.getFormData() : null, callbacksBeforeSend = [], beforeSendOpt = options.formOptions.beforeSend;
             if (typeof beforeSendOpt === "function" || Array.isArray(beforeSendOpt)) {
                 var beforeSendData = {
                     stopExecution: false
@@ -769,6 +872,38 @@
             }
         }
     },
+    "./src/modules/validateField.js": function(module, exports, __webpack_require__) {
+        "use strict";
+        Object.defineProperty(exports, "__esModule", {
+            value: true
+        });
+        exports.validateField = validateField;
+        var _helper = __webpack_require__("./src/modules/helper.js");
+        function validateField(fieldElem) {
+            var self = this, fieldEl = typeof fieldElem === "string" ? self.formEl.querySelector(fieldElem) : fieldElem;
+            var obj = {
+                result: false
+            };
+            if ((0, _helper._isDOMNode)(fieldEl)) {
+                obj = self.isValidField(fieldEl);
+                _helper._executeCallback.call(self, self.options.fieldOptions.onValidation, [ obj ]);
+            }
+            return obj;
+        }
+    },
+    "./src/modules/validateForm.js": function(module, exports, __webpack_require__) {
+        "use strict";
+        Object.defineProperty(exports, "__esModule", {
+            value: true
+        });
+        exports.validateForm = validateForm;
+        var _helper = __webpack_require__("./src/modules/helper.js");
+        function validateForm() {
+            var self = this, obj = self.isValidForm();
+            _helper._executeCallback.call(self, self.options.fieldOptions.onValidation, obj.fields);
+            return obj;
+        }
+    },
     "./src/modules/validationRules.js": function(module, exports, __webpack_require__) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
@@ -776,121 +911,367 @@
         });
         var validationRules = exports.validationRules = {
             cap: function cap(string) {
-                return /^[0-9]{5}$/.test(string);
+                var regex = new RegExp(/^[0-9]{5}$/), obj = {
+                    result: regex.test(string)
+                };
+                if (!obj.result) {
+                    obj.errors = {};
+                    var strLength = string.length;
+                    if (strLength > 5) {
+                        obj.errors.maxlength = true;
+                    }
+                    if (strLength > 0 && strLength < 5) {
+                        obj.errors.minlength = true;
+                    }
+                    if (/[^0-9]/.test(string)) {
+                        obj.errors.invalidChars = true;
+                    }
+                }
+                return obj;
+            },
+            color: function color(string) {
+                var obj = {
+                    result: /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/.test(string)
+                };
+                return obj;
             },
             date: function date(string) {
-                var dateIT = /^(((0[1-9]|[12]\d|3[01])[ \/\-.](0[13578]|1[02])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)[ \/\-.](0[13456789]|1[012])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])[ \/\-.]02[ \/\-.]((19|[2-9]\d)\d{2}))|(29[ \/\-.]02[ \/\-.]((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/g.test(string), dateISO8601ext = /^(((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29)$/g.test(string);
-                return dateIT || dateISO8601ext;
+                var obj = {
+                    result: this.dateDDMMYYYY(string).result || this.dateYYYYMMDD(string).result
+                };
+                return obj;
+            },
+            dateDDMMYYYY: function dateDDMMYYYY(string) {
+                var date = /^(((0[1-9]|[12]\d|3[01])[ \/\-.](0[13578]|1[02])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)[ \/\-.](0[13456789]|1[012])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])[ \/\-.]02[ \/\-.]((19|[2-9]\d)\d{2}))|(29[ \/\-.]02[ \/\-.]((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/g.test(string), obj = {
+                    result: date
+                };
+                return obj;
+            },
+            dateYYYYMMDD: function dateYYYYMMDD(string) {
+                var date = /^(((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29)$/g.test(string), obj = {
+                    result: date
+                };
+                return obj;
             },
             email: function email(string) {
-                return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(string);
+                var obj = {
+                    result: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(string)
+                };
+                if (!obj.result) {
+                    obj.errors = {};
+                    if (string.indexOf("@") === -1) {
+                        obj.errors.missingAtChar = true;
+                    } else {
+                        var splitAt_at = string.split("@");
+                        if (splitAt_at[0].length === 0) {
+                            obj.errors.missingUserName = true;
+                        }
+                        if (splitAt_at[1].length === 0) {
+                            obj.errors.missingDomain = true;
+                            obj.errors.missingExtensionDot = true;
+                            obj.errors.missingExtension = true;
+                        } else if (splitAt_at[1].indexOf(".") === -1) {
+                            obj.errors.missingExtensionDot = true;
+                            obj.errors.missingExtension = true;
+                        } else {
+                            var splitAt_dot = splitAt_at[1].split("."), extLength = splitAt_dot[1].length;
+                            if (extLength === 0) {
+                                obj.errors.missingExtension = true;
+                            } else if (extLength < 2) {
+                                obj.errors.minlengthExtension = true;
+                            }
+                        }
+                    }
+                }
+                return obj;
             },
             fiscalCode: function fiscalCode(string) {
-                return /^(?:[B-DF-HJ-NP-TV-Z](?:[AEIOU]{2}|[AEIOU]X)|[AEIOU]{2}X|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[1256LMRS][\dLMNP-V])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[\dLMNP-V][1-9MNP-V]|[1-9MNP-V][0L]))[A-Z]$/i.test(string);
-            },
-            hexColor: function hexColor(string) {
-                return /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/.test(string);
+                var obj = {
+                    result: /^(?:[B-DF-HJ-NP-TV-Z](?:[AEIOU]{2}|[AEIOU]X)|[AEIOU]{2}X|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[1256LMRS][\dLMNP-V])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[\dLMNP-V][1-9MNP-V]|[1-9MNP-V][0L]))[A-Z]$/i.test(string)
+                };
+                return obj;
             },
             landlineNumber: function landlineNumber(string) {
-                return /^((00|\+)\d{2}[\-\. ]??)??(((0[\d]{1,4}))([\/\-\. ]){0,1}([\d, ]{5,10}))$/.test(string);
+                var obj = {
+                    result: /^((00|\+)\d{2}[\-\. ]??)??(((0[\d]{1,4}))([\/\-\. ]){0,1}([\d, ]{5,10}))$/.test(string)
+                };
+                return obj;
             },
             mobileNumber: function mobileNumber(string) {
-                return /^((00|\+)??\d{2}[\-\. ]??)??3\d{2}[\-\. ]??(\d{6,7}|\d{2}[\-\. ]??\d{2}[\-\. ]??\d{3})$/.test(string);
+                var obj = {
+                    result: /^((00|\+)??\d{2}[\-\. ]??)??3\d{2}[\-\. ]??(\d{6,7}|\d{2}[\-\. ]??\d{2}[\-\. ]??\d{3})$/.test(string)
+                };
+                return obj;
             },
             number: function number(string) {
-                return /[+-]?([0-9]*[.])?[0-9]+/.test(string);
+                var obj = {
+                    result: /[+-]?([0-9]*[.])?[0-9]+/.test(string)
+                };
+                return obj;
             },
             numberFloat: function numberFloat(string) {
-                return /[+-]?([0-9]*[.])[0-9]+/.test(string);
+                var obj = {
+                    result: /[+-]?([0-9]*[.])[0-9]+/.test(string)
+                };
+                return obj;
             },
             numberInteger: function numberInteger(string) {
-                return /^\d+$/.test(string);
+                var obj = {
+                    result: /^\d+$/.test(string)
+                };
+                return obj;
             },
             password: function password(string) {
-                return /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string);
+                var obj = {
+                    result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
+                };
+                if (!obj.result) {
+                    obj.errors = {};
+                    var strLength = string.length;
+                    if (strLength < 8) {
+                        obj.errors.minlength = true;
+                    }
+                    if (!/\d/.test(string)) {
+                        obj.errors.missingNumber = true;
+                    }
+                    if (!/[A-Z]/.test(string)) {
+                        obj.errors.missingUppercase = true;
+                    }
+                    if (/[^0-9a-zA-Z]/.test(string)) {
+                        obj.errors.invalidChars = true;
+                    }
+                }
+                return obj;
+            },
+            tel: function tel(string) {
+                var obj = {
+                    result: this.landlineNumber(string).result || this.mobileNumber(string).result
+                };
+                return obj;
             },
             url: function url(string) {
-                return /^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(string);
+                var obj = {
+                    result: /^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(string)
+                };
+                return obj;
             },
             username: function username(string) {
-                return /^(?=\w)(?=[\-\.\@]?)[\w\-\.\@]{3,24}$/.test(string);
+                var obj = {
+                    result: /^(?=\w)(?=[\-\.\@]?)[\w\-\.\@]{3,24}$/.test(string)
+                };
+                if (!obj.result) {
+                    obj.errors = {};
+                    var strLength = string.length;
+                    if (strLength < 3) {
+                        obj.errors.minlength = true;
+                    }
+                    if (strLength > 24) {
+                        obj.errors.maxlength = true;
+                    }
+                    if (/[^\w\-\.\@]/.test(string)) {
+                        obj.errors.invalidChars = true;
+                    }
+                    if (!/^[\w]/.test(string)) {
+                        obj.errors.invalidStartChar = true;
+                    }
+                }
+                return obj;
             },
             vatNumber: function vatNumber(string) {
-                return /^(IT){0,1}[0-9]{11}$/i.test(string);
+                var obj = {
+                    result: /^(IT){0,1}[0-9]{11}$/i.test(string)
+                };
+                if (!obj.result) {
+                    obj.errors = {};
+                    var strLength = string.length, indexOfIT = string.indexOf("IT"), checkLength = indexOfIT === 0 ? 13 : 11;
+                    if (indexOfIT < 1) {
+                        if (strLength < checkLength) {
+                            obj.errors.minlength = true;
+                        } else {
+                            obj.errors.maxlength = true;
+                        }
+                    }
+                }
+                return obj;
             }
         };
         var _validationRulesAttributes = exports._validationRulesAttributes = {
             checkbox: function checkbox(data) {
-                var isValid = data.fieldEl.checked, formEl = data.fieldEl.closest("form"), dataChecksEl = formEl.querySelector('[name="' + data.fieldEl.name + '"][data-checks]');
+                var formEl = data.fieldEl.closest("form"), dataChecksEl = formEl.querySelector('[name="' + data.fieldEl.name + '"][data-checks]'), obj = {
+                    result: data.fieldEl.checked
+                };
                 if (dataChecksEl !== null) {
-                    isValid = this.checks({
+                    obj = this.checks({
                         attrValue: dataChecksEl.getAttribute("data-checks"),
                         fieldEl: dataChecksEl
                     });
                 }
-                return isValid;
+                return obj;
             },
             checks: function checks(data) {
                 try {
-                    var attrValue = JSON.parse(data.attrValue), fieldEl = data.fieldEl, formEl = fieldEl.closest("form"), checkedElLength = formEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length;
-                    return checkedElLength >= attrValue[0] && checkedElLength <= attrValue[1];
+                    var attrValue = JSON.parse(data.attrValue), fieldEl = data.fieldEl, formEl = fieldEl.closest("form"), checkedElLength = formEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length, isMinOk = checkedElLength >= attrValue[0], isMaxOk = checkedElLength <= attrValue[1], obj = {
+                        result: isMinOk && isMaxOk
+                    };
+                    if (!obj.result) {
+                        obj.errors = {
+                            checks: true
+                        };
+                        if (!isMinOk) {
+                            obj.errors.minChecks = true;
+                        }
+                        if (!isMaxOk) {
+                            obj.errors.maxChecks = true;
+                        }
+                    }
+                    return obj;
                 } catch (e) {
                     throw new Error('"data-checks" attribute is not a valid array!');
                 }
             },
             equalTo: function equalTo(data) {
-                var fieldEl = data.fieldEl, formEl = fieldEl.closest("form"), checkFromEl = formEl.querySelector('[name="' + fieldEl.getAttribute("data-equal-to") + '"]');
-                return fieldEl.value === checkFromEl.value;
+                var fieldEl = data.fieldEl, formEl = fieldEl.closest("form"), checkFromEl = formEl.querySelector('[name="' + fieldEl.getAttribute("data-equal-to") + '"]'), obj = {
+                    result: fieldEl.value === checkFromEl.value
+                };
+                if (!obj.result) {
+                    obj.errors = {
+                        equalTo: true
+                    };
+                }
+                return obj;
             },
             exactLength: function exactLength(data) {
-                return data.fieldEl.value.length === data.attrValue * 1;
+                var valueLength = data.fieldEl.value.length, exactLength = data.attrValue * 1, obj = {
+                    result: valueLength === exactLength
+                };
+                if (!obj.result) {
+                    obj.errors = {
+                        exactLength: true
+                    };
+                    if (valueLength < exactLength) {
+                        obj.errors.minlength = true;
+                    } else {
+                        obj.errors.maxlength = true;
+                    }
+                }
+                return obj;
             },
             file: function file(data) {
-                var isValid = true, fieldEl = data.fieldEl, MIMEtype = fieldEl.accept ? new RegExp(fieldEl.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from(fieldEl.files);
+                var fieldEl = data.fieldEl, MIMEtype = fieldEl.accept ? new RegExp(fieldEl.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from(fieldEl.files), obj = {
+                    result: true
+                };
                 filesList.forEach(function(file) {
                     var exceedMaxFileSize = data.fieldOptions.maxFileSize > 0 && file.size / 1024 / 1024 > data.fieldOptions.maxFileSize, isAcceptedFileType = MIMEtype !== null ? MIMEtype.test(file.type) : true;
                     if (exceedMaxFileSize || !isAcceptedFileType) {
-                        isValid = false;
+                        obj.result = false;
+                        if (typeof obj.errors === "undefined") {
+                            obj.errors = {};
+                        }
+                        if (exceedMaxFileSize) {
+                            obj.errors.maxFileSize = true;
+                        }
+                        if (!isAcceptedFileType) {
+                            obj.errors.acceptedFileType = true;
+                        }
                     }
                 });
-                return isValid;
+                return obj;
             },
             length: function length(data) {
                 try {
-                    var valueL = data.fieldEl.value.length, attrValue = JSON.parse(data.attrValue);
-                    return valueL >= attrValue[0] && valueL <= attrValue[1];
+                    var valueL = data.fieldEl.value.length, attrValue = JSON.parse(data.attrValue), isMinlengthOk = valueL >= attrValue[0], isMaxlengthOk = valueL <= attrValue[1], obj = {
+                        result: isMinlengthOk && isMaxlengthOk
+                    };
+                    if (!obj.result) {
+                        obj.errors = {
+                            length: true
+                        };
+                        if (!isMinlengthOk) {
+                            obj.errors.minlength = true;
+                        }
+                        if (!isMaxlengthOk) {
+                            obj.errors.maxlength = true;
+                        }
+                    }
+                    return obj;
                 } catch (e) {
                     throw new Error('"data-length" attribute is not a valid array!');
                 }
             },
             max: function max(data) {
-                var value = data.fieldEl.value * 1, maxVal = data.attrValue * 1;
-                return value <= maxVal;
+                var value = data.fieldEl.value * 1, maxVal = data.attrValue * 1, obj = {
+                    result: value <= maxVal
+                };
+                if (!obj.result) {
+                    obj.errors = {
+                        max: true
+                    };
+                }
+                return obj;
             },
             maxlength: function maxlength(data) {
-                return data.fieldEl.value.length <= data.attrValue * 1;
+                var obj = {
+                    result: data.fieldEl.value.length <= data.attrValue * 1
+                };
+                if (!obj.result) {
+                    obj.errors = {
+                        maxlength: true
+                    };
+                }
+                return obj;
             },
             min: function min(data) {
-                var value = data.fieldEl.value * 1, minVal = data.attrValue * 1;
-                return value >= minVal;
+                var value = data.fieldEl.value * 1, minVal = data.attrValue * 1, obj = {
+                    result: value >= minVal
+                };
+                if (!obj.result) {
+                    obj.errors = {
+                        min: true
+                    };
+                }
+                return obj;
             },
             minlength: function minlength(data) {
-                return data.fieldEl.value.length >= data.attrValue * 1;
+                var obj = {
+                    result: data.fieldEl.value.length >= data.attrValue * 1
+                };
+                if (!obj.result) {
+                    obj.errors = {
+                        minlength: true
+                    };
+                }
+                return obj;
             },
             pattern: function pattern(data) {
-                var fieldEl = data.fieldEl, fieldPattern = fieldEl.pattern, fieldRegex = new RegExp(fieldPattern);
-                return fieldRegex.test(fieldEl.value);
+                var fieldEl = data.fieldEl, fieldPattern = fieldEl.pattern, fieldRegex = new RegExp(fieldPattern), obj = {
+                    result: fieldRegex.test(fieldEl.value)
+                };
+                if (!obj.result) {
+                    obj.errors = {
+                        pattern: true
+                    };
+                }
+                return obj;
             },
             radio: function radio(data) {
-                var fieldEl = data.fieldEl, fieldChecked = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"]:checked'), isValid = fieldChecked !== null && fieldChecked.value.trim().length > 0;
-                return isValid;
+                var fieldEl = data.fieldEl, fieldChecked = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"]:checked'), isValid = fieldChecked !== null && fieldChecked.value.trim().length > 0, obj = {
+                    result: isValid
+                };
+                return obj;
             },
             requiredFrom: function requiredFrom(data) {
-                var fieldEl = data.fieldEl, formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0, reqMoreEl = formEl.querySelector(fieldEl.getAttribute("data-required-from")), checkedEl = formEl.querySelector('[name="' + reqMoreEl.name + '"]:checked');
-                if (!reqMoreEl.checked) {
-                    return true;
+                var fieldEl = data.fieldEl, formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0, reqMoreEl = formEl.querySelector(fieldEl.getAttribute("data-required-from")), checkedEl = formEl.querySelector('[name="' + reqMoreEl.name + '"]:checked'), obj = {
+                    result: checkedEl !== null
+                };
+                if (reqMoreEl.checked && reqMoreEl.required) {
+                    obj.result = isValidValue;
                 }
-                return reqMoreEl.required && reqMoreEl.checked ? isValidValue : reqMoreEl.required ? checkedEl !== null : true;
+                if (!obj.result) {
+                    obj.errors = {
+                        requiredFrom: true
+                    };
+                }
+                return obj;
             }
         };
     },

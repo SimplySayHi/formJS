@@ -27,10 +27,7 @@ export function isValidForm( options = {} ){
     Array.from( formEl.querySelectorAll(_fieldsStringSelector) ).forEach(function( fieldEl ){
         let name = fieldEl.name,
             type = fieldEl.type,
-            fieldData = {
-                field: fieldEl,
-                result: true
-            };
+            fieldData = {};
         
         if( (name === currentFieldName && type === currentFieldType) ){ return true; }
         
@@ -39,10 +36,9 @@ export function isValidForm( options = {} ){
             currentFieldType = type;
         }
         
-        const fieldResult = self.isValidField( fieldEl, fieldOptions );
-        fieldData.result = fieldResult;
+        fieldData = self.isValidField( fieldEl, fieldOptions );
 
-        if( !fieldResult ){
+        if( !fieldData.result ){
             obj.result = false;
         }
         

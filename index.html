@@ -332,7 +332,7 @@
             <h3 class="sticky-title">HTML</h3>
             <p>
                 This is the basic HTML structure to make the validation works ( Bootstrap CSS classes are optional ).<br />
-                Some notations about form attributes:
+                Some notes about form attributes:
             </p>
             <ul>
                 <li class="my-2">
@@ -340,26 +340,29 @@
                 </li>
             </ul>
             <p>
-                And some notations about field attributes:
+                And some notes about field attributes:
             </p>
             <ul>
                 <li class="my-2">
-                    <code>data-formjs-question</code> ( optional empty attribute ) used for visual feedback on valid/invalid/dirty fields and/or character count functionality ( to be used on a container element for the field )
+                    <code>data-formjs-question</code> ( optional | empty attribute ) used for visual feedback on valid/invalid/dirty fields and/or character count functionality ( to be used on a container element for the field )
                 </li>
                 <li class="my-2">
-                    <code>required</code> ( required  ) for fields that require an answer
+                    <code>required</code> ( required ) for fields that require an answer.
                 </li>
                 <li class="my-2">
-                    <code>type</code> ( required )
+                    <code>name</code> ( required ) used inside "getFormData" method to collect form data.
+                </li>
+                <li class="my-2">
+                    <code>type</code> ( required ) used for field validation.
                 </li>
                 <li class="my-2">
                     <code>data-type</code> ( optional ) by now only "number" is supported. See "strictHtmlValidation" option in <a href="#field-options">Field Options</a> section for details. 
                 </li>
                 <li class="my-2">
-                    <code>data-subtype</code> ( optional ) for special field types ( eg: VAT number, fiscal code, etc - see the <a href="#builtin-validations">full list</a> )
+                    <code>data-subtype</code> ( optional ) for special field types ( eg: VAT number, fiscal code, etc - see the <a href="#builtin-validations">full list</a> ).
                 </li>
                 <li class="my-2">
-                    <code>data-exclude-json</code> ( optional empty attribute ) used to avoid the plugin to take in consideration the field when building the JSON ( used inside getFormData method )
+                    <code>data-exclude-data</code> ( optional | empty attribute ) used to avoid the plugin to take in consideration the field when collecting form data ( used inside "getFormData" method ).
                 </li>
             </ul>
             <p>
@@ -521,12 +524,15 @@ var formInstance = new Form( formEl, options ).init();
                                         <span class="text-green">errorEmpty</span>: ( string ) additional CSS class(es) to be applied if the field value is empty
                                     </li>
                                     <li>
-                                        <span class="text-green">errorRule</span>: ( string ) additional CSS class(es) to be applied if the field value does not respect the validation rule
+                                        <span class="text-green">errorRule</span>: ( string ) additional CSS class(es) to be applied if the field value does not comply the validation rule
                                     </li>
                                     <li>
                                         <span class="text-green">valid</span>: ( string ) CSS class(es) to be applied if the field is valid
                                     </li>
                                 </ul>
+                                <p>
+                                    These classes are useful to show different error messages based on the error type and/or change the UI.
+                                </p>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -637,8 +643,9 @@ var formInstance = new Form( formEl, options ).init();
                                             fieldsList: ( Array ) list of JS objects:
 <pre>
 [{
-    field: fieldEl,
-    result: true
+    fieldEl: fieldEl,
+    result: true,
+    errors: {}
 }]
 </pre>
                                             <ul>
@@ -647,6 +654,9 @@ var formInstance = new Form( formEl, options ).init();
                                                 </li>
                                                 <li>
                                                     result: boolean
+                                                </li>
+                                                <li>
+                                                    errors: JS object ( only in case of invalid field )
                                                 </li>
                                             </ul>
                                         </li>
@@ -865,7 +875,7 @@ var formInstance = new Form( formEl, options ).init();
                                     <code>type="submit"</code>
                                     <code>type="button"</code>
                                     <code>type="file"</code>
-                                    <code>data-exclude-json</code>
+                                    <code>data-exclude-data</code>
                                     <br />
                                     If you want to select fields by yourself, you can access the form element through "this.formEl".
                                 </p>
@@ -1097,7 +1107,7 @@ var formInstance = new Form( formEl, options ).init();
                             </div>
                             <div class="col-3">
                                 <p>
-                                    A JS object with pairs of field-name / field-value like:
+                                    Object like:
                                 </p>
                                 <pre>
 {
@@ -1113,12 +1123,12 @@ var formInstance = new Form( formEl, options ).init();
                             </div>
                             <div class="col-5">
                                 <p>
-                                    Run a first validation for fields that already have a value set and run the setup for form utilities ( as described in <a href="#utilities-list">Utilities</a> section ).<br />
+                                    Run a first validation for fields that already have a value set.<br />
                                     Useful to call after constructor function but not mandatory.
                                 </p>
                             </div>
                             <div class="col-3">
-                                Returns the Form instance
+                                The Form instance
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1149,8 +1159,25 @@ var formInstance = new Form( formEl, options ).init();
                             </div>
                             <div class="col-3">
                                 <p>
-                                    Boolean
+                                    Object like:
                                 </p>
+                                <pre>
+{
+    fieldEl: element,
+    result:  false,
+    errors:  {...}
+}</pre>
+                                <ul>
+                                    <li>
+                                        <span class="text-green">fieldEl</span>: JS node element
+                                    </li>
+                                    <li>
+                                        <span class="text-green">result</span>: boolean
+                                    </li>
+                                    <li>
+                                        <span class="text-green">errors</span>: ( JS object ) only in case of invalid field
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1174,14 +1201,15 @@ var formInstance = new Form( formEl, options ).init();
                                 <pre>
 {
     fields: [{
-        field:  element,
-        result: true
+        fieldEl:  element,
+        result:   false,
+        errors:   {...}
     }],
-    result:     true
+    result:       false
 }</pre>
                                 <ul>
                                     <li>
-                                        <span class="text-green">fields</span>: ( array of JS objects ) a list of the form fields with field ( JS node element ) and result ( boolean )
+                                        <span class="text-green">fields</span>: ( array of JS objects ) a list of the form fields as returned by "isValidField" method
                                     </li>
                                     <li>
                                         <span class="text-green">result</span>: ( boolean ) check for the form, if it is valid or not
@@ -1236,7 +1264,7 @@ var formInstance = new Form( formEl, options ).init();
                             <div class="col-5">
                                 <p>
                                     Fires validation for the specified field ( with "isValidField" method ).<br />
-                                    Then, this also fires feedback on UI ( basic feedback with css classes ) and callback function(s) ( "onValidation" in "fieldOptions" ) according to the initialization options for the form instance.
+                                    Then, this also fires feedback on UI ( basic feedback with css classes ) and callback function(s) ( "onValidation" in "fieldOptions" ) <u>according to the initialization options</u> for the form instance.
                                 </p>
                                 <ul>
                                     <li>
@@ -1255,7 +1283,7 @@ var formInstance = new Form( formEl, options ).init();
                             </div>
                             <div class="col-3">
                                 <p>
-                                    Returns the Form instance 
+                                    as for "isValidField" method
                                 </p>
                             </div>
                         </div>
@@ -1266,12 +1294,12 @@ var formInstance = new Form( formEl, options ).init();
                             <div class="col-5">
                                 <p>
                                     Fires validation for the form ( with "isValidForm" method ).<br />
-                                    Then, this also fires feedback on UI for each field ( basic feedback with css classes ) and callback function(s) passing the full array of fields ( "onValidation" in "fieldOptions" ) according to the initialization options for the form instance.
+                                    Then, this also fires feedback on UI for each field ( basic feedback with css classes ) and callback function(s) passing the full array of fields ( "onValidation" in "fieldOptions" ) <u>according to the initialization options</u> for the form instance.
                                 </p>
                             </div>
                             <div class="col-3">
                                 <p>
-                                    Returns the Form instance 
+                                    as for "isValidForm" method
                                 </p>
                             </div>
                         </div>
@@ -1309,11 +1337,7 @@ var formInstance = new Form( formEl, options ).init();
                             <div class="col-5">
                                 <ul>
                                     <li>
-                                        <span class="text-green">newRules</span>: JS object containing the new validation rule(s) to add:<br />
-                                        <pre class="">
-{
-    zip: function( string, fieldEl ){ return /[5-9]{3}$/.test( string ); }
-}</pre>
+                                        <span class="text-green">newRules</span>: JS object containing the new validation rule(s) to add ( see example below ).
                                     </li>
                                 </ul>
                                 <p>
@@ -1325,15 +1349,21 @@ var formInstance = new Form( formEl, options ).init();
                                         Eg: to validate "mobile-number" ( as data-subtype ) the rule is "mobileNumber"
                                     </li>
                                     <li>
-                                        value: a function that must return a boolean and with these arguments:
+                                        value: a function with these arguments:
                                         <ul>
                                             <li>
                                                 string: the string the user put in the field
                                             </li>
                                             <li>
-                                                fiedlEl: the JS DOM element of the field
+                                                fiedlEl: the JS node element of the field
                                             </li>
                                         </ul>
+                                        It must return a JS object ( at least ) like:
+                                        <pre>
+{
+    result: true
+}</pre>
+                                        In case of invalid field you can add the "errors" key to return the specific errors.
                                     </li>
                                 </ul>
                             </div>
@@ -1365,7 +1395,15 @@ var formInstance = new Form( formEl, options ).init();
                         </p>
                         <pre>
 Form.addValidationRules({
-    zip: function( string, fieldEl ){ return /^[5-9]{3}$/.test( string ); }
+    myPassword: function( string, fieldEl ){
+        let obj = {
+            result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
+        };
+        if( !obj.result ){
+            if( string.length &lt; 8 ){ obj.errors.minlength = true; }
+        }
+        return obj;
+    }
 });
 
 Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
@@ -1380,6 +1418,27 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
             <p>
                 Below the rules used to validate the fields depending on html basic/data-* attributes ( you can add new ones - or override the ones having JS key specified - with addValidationRules method ).
             </p>
+            <div class="row">
+                <div class="col-12 col-sm-6">
+                    <p>
+                In case of empty field value, "errors" object will return only the "empty" error like:
+            </p>
+            <pre>
+{
+    empty: true
+}</pre>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <p>
+                In case of invalid field value ( not compliant with validation rule ), "errors" object will return one or more specific errors, as described below, and "rule" error like:
+            </p>
+            <pre>
+{
+    rule: true,
+    ...
+}</pre>
+                </div>
+            </div>
             <div class="panel panel-default panel-transparent" style="background-color: transparent;">
                 <div class="card-header bg-white text-dark clearfix">
                     <div class="d-flex">
@@ -1412,6 +1471,16 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p class="small text-lowercase text-opacity">
                                     VALID ITALIAN CAP WITH 5 DIGITS
                                 </p>
+                                <br />
+                                <p>
+                                    "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    maxlength: true,
+    minlength: true,
+    invalidChars: true
+}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1439,6 +1508,47 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     Check that the number of checked checkboxes is between the the given numbers ( must be a valid - 2 values - array ).<br />
                                     The attribute can be applied to only one of the checkboxes, not mandatory for all.
                                 </p>
+                                <p>
+                                    "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    maxChecks: true,
+    minChecks: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Color
+                                <div>( color )</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="color"</code></div>
+                                <div><code>data-subtype="color"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/ 
+                                </p>
+                                <br />
+                                <p class="small text-lowercase text-opacity">
+                                    HEX COLOR WITH/WITHOUT #. <br />
+                                    LOWERCASE AND/OR UPPERCASE <br />
+                                    CAN BE 3 OR 6 CHARACTERS ( 0fa | 00FFaa )
+                                </p>
+                                <p>
+                                    <b>Important Note</b>:<br />
+                                    <code>type="color"</code> is not supported by:
+                                </p>
+                                <ul>
+                                    <li>
+                                        IE 11
+                                    </li>
+                                    <li>
+                                        Safari 9.1 and earlier
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1452,19 +1562,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                             </div>
                             <div class="col-4 col-sm-6">
                                 <p>
-                                    /^(((0[1-9]|[12]\d|3[01])[ \/\-.](0[13578]|1[02])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)[ \/\-.](0[13456789]|1[012])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])[ \/\-.]02[ \/\-.]((19|[2-9]\d)\d{2}))|(29[ \/\-.]02[ \/\-.]((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/
-                                    <br />or<br />
-                                    /^(((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29)$/
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    DATE AS ITALIAN SYNTAX<br />
-                                    DD MM YYYY | DD/MM/YYYY | DD.MM.YYYY | DD-MM-YYYY
-                                    <br /><br />
-                                    OR AS ISO 8601 DATE FORMAT<br />
-                                    YYYY MM DD | YYYY/MM/DD | YYYY.MM.DD | YYYY-MM-DD
-                                    <br /><br />
-                                    WITH SPACE / . - AS SEPARATOR
+                                    Check if "dateDDMMYYYY" or "dateYYYYMMDD" is valid.
                                 </p>
                                 <br />
                                 <p>
@@ -1479,13 +1577,68 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                         Safari for OS X ( tested on version 12 )
                                     </li>
                                     <li>
-                                        Firefox &lt; 57
+                                        Firefox 56 and earlier
                                     </li>
                                 </ul>
                                 <p>
                                     If you want to support these browsers you must also set <code>data-subtype="date"</code>
                                     <br />
                                     See <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date#Browser_compatibility" target="_blank">here</a> for details on browsers support.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Date in format DDMMYYYY
+                                <div>( dateDDMMYYYY )</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-subtype="dateDDMMYYYY"</code></div>
+                                <p class="small mt-3">
+                                    Cannot be used together with type="date" because it returns the date in format YYYY-MM-DD
+                                </p>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    /^(((0[1-9]|[12]\d|3[01])[ \/\-.](0[13578]|1[02])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)[ \/\-.](0[13456789]|1[012])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])[ \/\-.]02[ \/\-.]((19|[2-9]\d)\d{2}))|(29[ \/\-.]02[ \/\-.]((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/
+                                </p>
+                                <br />
+                                <p class="small text-lowercase text-opacity">
+                                    DATE AS ITALIAN SYNTAX<br />
+                                    DD MM YYYY | DD/MM/YYYY | DD.MM.YYYY | DD-MM-YYYY
+                                    <br /><br />
+                                    WITH SPACE / . - AS SEPARATOR
+                                </p>
+                                <p>
+                                    See notes for date validation.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Date in format YYYYMMDD
+                                <div>( dateYYYYMMDD )</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="date"</code></div>
+                                <div><code>data-subtype="dateYYYYMMDD"</code></div>
+                                <p class="small mt-3">
+                                    Used together or only data-subtype.
+                                </p>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    /^(((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29)$/
+                                </p>
+                                <br />
+                                <p class="small text-lowercase text-opacity">
+                                    DATE AS ISO 8601 DATE FORMAT<br />
+                                    YYYY MM DD | YYYY/MM/DD | YYYY.MM.DD | YYYY-MM-DD
+                                    <br /><br />
+                                    WITH SPACE / . - AS SEPARATOR
+                                </p>
+                                <p>
+                                    See notes for date validation.
                                 </p>
                             </div>
                         </div>
@@ -1502,12 +1655,22 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p>
                                     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                                 </p>
+                                <br />
                                 <p class="small text-lowercase text-opacity m-0">
                                     EMAIL MUST BE AT LEAST ( FOR EXAMPLE ): a@a.aa
                                 </p>
                                 <p class="small text-lowercase">
                                     <a href="https://emailregex.com" target="_blank">read this post</a>
                                 </p>
+                                <p>
+                                    "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    maxlength: true,
+    minlength: true,
+    invalidChars: true
+}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1525,6 +1688,13 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p class="small text-lowercase text-opacity m-0">
                                     Eg: for a confirm email/password field 
                                 </p>
+                                <p>
+                                    "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    equalTo: true
+}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1542,6 +1712,15 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p class="small text-lowercase text-opacity">
                                     Eg: a field that must have a specific number of characters, such as for cents ( 2 digits )
                                 </p>
+                                <p>
+                                    "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    exactLength: true,
+    maxlength: true,
+    minlength: true
+}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1556,6 +1735,14 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     Check if a file is selected or not.<br />
                                     "accept" attribute is supported for JS validation.
                                 </p>
+                                <p>
+                                    "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    maxFileSize: true,
+    acceptedFileType: true
+}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1573,26 +1760,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <br />
                                 <p class="small text-lowercase">
                                     <a href="http://blog.marketto.it/2016/01/regex-validazione-codice-fiscale-con-omocodia/" target="_blank">read this post</a>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4 col-sm-3 text-green">
-                                HEX Color
-                                <div>( hexColor )</div>
-                            </div>
-                            <div class="col-4 col-sm-3 text-green">
-                                <div><code>data-subtype="hex-color"</code></div>
-                            </div>
-                            <div class="col-4 col-sm-6">
-                                <p>
-                                    /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    HEX COLOR WITH/WITHOUT #. <br />
-                                    LOWERCASE AND/OR UPPERCASE <br />
-                                    CAN BE 3 OR 6 CHARACTERS ( 0fa | 00FFaa )
                                 </p>
                             </div>
                         </div>
@@ -1629,6 +1796,15 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p>
                                     Check that the field value length is between the the given numbers ( must be a valid - 2 values - array ).
                                 </p>
+                                <p>
+                                    "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    dataLength: true,
+    maxlength: true,
+    minlength: true
+}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1643,6 +1819,13 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     HTML5<br />
                                     Check that the input number is less or equal to the max value.
                                 </p>
+                                <p>
+                                    "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    max: true
+}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1657,6 +1840,13 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     HTML5<br />
                                     Check that the input length is less or equal to the maxlength value.
                                 </p>
+                                <p>
+                                    "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    maxlength: true
+}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1671,6 +1861,13 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     HTML5<br />
                                     Check that the input number is more or equal to the min value.
                                 </p>
+                                <p>
+                                    "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    min: true
+}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1685,6 +1882,13 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     HTML5<br />
                                     Check that the input length is more or equal to the minlength value.
                                 </p>
+                                <p>
+                                    "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    minlength: true
+}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1792,6 +1996,16 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     PASSWORD ( NO SPECIAL CHARACTERS ) WITH AT LEAST:<br />
                                     ONE DIGIT and ONE LOWERCASE and ONE UPPERCASE and MIN LENGTH OF 8 CHARACTERS
                                 </p>
+                                <p>
+                                    "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    minlength: true,
+    missingNumber: true,
+    missingUppercase: true,
+    invalidChars: true
+}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1806,6 +2020,13 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     HTML5<br />
                                     Check the field value against the RegExp in pattern attribute.
                                 </p>
+                                <p>
+                                    "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    pattern: true
+}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1837,6 +2058,37 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     <br /><br />
                                     Attribute "data-required-from" must be set to a field ( ideally a text input ) and the attribute value must be a CSS selector ( the id in the API example ) of the related input ( the one specified before ).
                                 </p>
+                                <p>
+                                    For Required From field, "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    requiredFrom: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Tel
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="tel"</code></div>
+                                <div><code>data-subtype="tel"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    Validate a phone number.<br />
+                                    Check if "mobileNumber" or "landlineNumber" is valid.
+                                </p>
+                                <p>
+                                    <b>Important Note</b>:<br />
+                                    <code>type="tel"</code> is supported by:
+                                </p>
+                                <ul>
+                                    <li>
+                                        Safari 8 and newer
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1875,6 +2127,16 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p class="small text-lowercase text-opacity">
                                     USERNAME MUST START WITH A LETTER/NUMBER/UNDERSCORE AND CAN ALSO CONTAIN . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
                                 </p>
+                                <p>
+                                    "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    minlength: true,
+    maxlength: true,
+    invalidChars: true,
+    invalidStartChar: true
+}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1926,7 +2188,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
         <div id="utilities-list">
             <h3 class="sticky-title">Utilities</h3>
             <p>
-                Fields utilities activated by setting a data-* attribute on the field:
+                Fields utilities activated by setting a data-* attribute on the field ( initialized at constructor call ):
             </p>
             <div class="panel panel-default panel-transparent" style="background-color: transparent;">
                 <div class="card-header bg-white text-dark clearfix">
@@ -2005,10 +2267,25 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 Added method "validateForm".
                             </li>
                             <li>
+                                Added validation rule for "color" - input type="color" - ( as replace of "hexColor" ).
+                            </li>
+                            <li>
+                                Added validation rules for "dateDDMMYYYY" and "dateYYYYMMDD".
+                            </li>
+                            <li>
+                                Added validation rule for "tel" ( input type="tel" ).
+                            </li>
+                            <li>
+                                Change in "isValidField" method: now it just checks the field validity without feedback on the user interface and returns a JS object with "fieldEl", "result" and "errors" ( same change for "isValidForm" method since it makes use of "isValidField" method ).
+                            </li>
+                            <li>
                                 Renamed method "getFormJSON" with "getFormData" ( and related option in "formOptions" ).
                             </li>
                             <li>
-                                Change in "isValidField" method: now it just checks the field validity without feedback on the user interface ( same change for "isValidForm" method since it makes use of "isValidField" method ).
+                                Renamed attribute "data-exclude-json" with "data-exclude-data" for consistency with related "getFormData" method.
+                            </li>
+                            <li>
+                                Fixed a bug that caused field "data-required-from" to be validated even if not mandatory.
                             </li>
                             <li>
                                 Minor improvements.
@@ -2244,10 +2521,12 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                     },
                     onValidation: function( fieldsArray ){
                         console.log('onValidation fieldsArray ', fieldsArray);
-                        for(var f=0; f<fieldsArray.length; f++){
-                            var field = fieldsArray[f];
-                            console.log( 'field "' + field.field.name + '" is valid? ', field.result );
-                        }
+                        fieldsArray.forEach(function(obj){
+                            console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
+                            if( obj.errors ){
+                                console.log('field errors:', obj.errors);
+                            }
+                        });
                     }
                 },
                 formOptions: {
