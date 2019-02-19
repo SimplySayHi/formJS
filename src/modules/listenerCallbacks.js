@@ -124,8 +124,7 @@ export const _callbackFns = {
             
             if(
                 (isFieldForChangeEvent && eventName === 'change') ||
-                (!isFieldForChangeEvent && eventName === 'input') ||
-                (eventName !== 'change' && eventName !== 'input')
+                (!isFieldForChangeEvent && eventName !== 'change')
             ){
                 
                 self.validateField( fieldEl );
