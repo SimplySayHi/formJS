@@ -56,9 +56,10 @@
                 Version 
                 <span class="dropdown d-inline-block ml-1">
                     <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button">
-                        2.3.0
+                        2.3.1
                     </button>
                     <span class="dropdown-menu w-100 py-1">
+                        <a class="dropdown-item px-2" href="/plugins/formJS/2.3.0/">2.3.0</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/2.2.1/">2.2.1</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/2.2.0/">2.2.0</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/2.1.0/">2.1.0</a>
@@ -1894,6 +1895,16 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
             <h3 class="sticky-title">Changelog</h3>
             <ul class="p-0">
                 <li class="media my-3">
+                    <div class="version-num text-red">2.3.1</div>
+                    <div class="media-body pl-2">
+                        <ul>
+                            <li>
+                                Fixed a bug that caused checkboxes and radios to be validated twice ( on Chrome ) if "validateOnEvents" option in "fieldOptions" was set to "change blur".
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="media my-3">
                     <div class="version-num text-red">2.3.0</div>
                     <div class="media-body pl-2">
                         <ul>
@@ -2125,7 +2136,8 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                             var field = fieldsArray[f];
                             console.log( 'field "' + field.field.name + '" is valid? ', field.result );
                         }
-                    }
+                    },
+                    validateOnEvents: 'change blur'
                 },
                 formOptions: {
                     beforeSend: function( data ){

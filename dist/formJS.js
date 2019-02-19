@@ -81,7 +81,7 @@
                 return Constructor;
             };
         }();
- /**! formJS v2.3.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
+ /**! formJS v2.3.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
         var _listenerCallbacks2 = __webpack_require__("./src/modules/listenerCallbacks.js");
         var _options = __webpack_require__("./src/modules/options.js");
         var _validationRules = __webpack_require__("./src/modules/validationRules.js");
@@ -97,7 +97,7 @@
                 throw new TypeError("Cannot call a class as a function");
             }
         }
-        var version = "2.3.0";
+        var version = "2.3.1";
         var _listenerCallbacks = new WeakMap();
         var Form = function() {
             function Form(formEl) {
@@ -636,7 +636,7 @@
                             }
                         }
                     }
-                    if (isFieldForChangeEvent && eventName === "change" || !isFieldForChangeEvent && eventName === "input" || eventName !== "change" && eventName !== "input") {
+                    if (isFieldForChangeEvent && eventName === "change" || !isFieldForChangeEvent && eventName !== "change") {
                         var validationResult = self.isValidField(fieldEl), callbackData = [ {
                             field: fieldEl,
                             result: validationResult
