@@ -56,9 +56,10 @@
                 Version 
                 <span class="dropdown d-inline-block ml-1">
                     <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button">
-                        2.3.1
+                        2.3.2
                     </button>
                     <span class="dropdown-menu w-100 py-1">
+                        <a class="dropdown-item px-2" href="/plugins/formJS/2.3.1/">2.3.1</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/2.3.0/">2.3.0</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/2.2.1/">2.2.1</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/2.2.0/">2.2.0</a>
@@ -1894,6 +1895,16 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
         <div id="changelog">
             <h3 class="sticky-title">Changelog</h3>
             <ul class="p-0">
+                <li class="media my-3">
+                    <div class="version-num text-red">2.3.2</div>
+                    <div class="media-body pl-2">
+                        <ul>
+                            <li>
+                                Fixed a bug that caused options functions ( in case on array of functions, like onValidation ) to be incorrectly merged.
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="media my-3">
                     <div class="version-num text-red">2.3.1</div>
                     <div class="media-body pl-2">

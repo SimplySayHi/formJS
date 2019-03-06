@@ -58,7 +58,16 @@ _mergeObjects = function( out = {} ){
             let isObject = Object.prototype.toString.call(obj[key]) === "[object Object]";
 
             if( (!out.hasOwnProperty(key) && !isObject) || isArray ){
-                out[key] = obj[key];
+                if( isArray ){
+                    if( typeof out[key] === 'undefined' ){
+                        out[key] = [];
+                    }
+                    obj[key].forEach(function( item ){
+                        out[key].unshift( item );
+                    });
+                } else {
+                    out[key] = obj[key];
+                }
             } else {
                 if( isObject ){
                     out[key] = _mergeObjects(out[key], obj[key]);

@@ -81,7 +81,7 @@
                 return Constructor;
             };
         }();
- /**! formJS v2.3.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
+ /**! formJS v2.3.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
         var _listenerCallbacks2 = __webpack_require__("./src/modules/listenerCallbacks.js");
         var _options = __webpack_require__("./src/modules/options.js");
         var _validationRules = __webpack_require__("./src/modules/validationRules.js");
@@ -97,7 +97,7 @@
                 throw new TypeError("Cannot call a class as a function");
             }
         }
-        var version = "2.3.1";
+        var version = "2.3.2";
         var _listenerCallbacks = new WeakMap();
         var Form = function() {
             function Form(formEl) {
@@ -371,16 +371,28 @@
                 if (!obj) {
                     continue;
                 }
-                for (var key in obj) {
+                var _loop = function _loop(key) {
                     var isArray = Object.prototype.toString.call(obj[key]) === "[object Array]";
                     var isObject = Object.prototype.toString.call(obj[key]) === "[object Object]";
                     if (!out.hasOwnProperty(key) && !isObject || isArray) {
-                        out[key] = obj[key];
+                        if (isArray) {
+                            if (typeof out[key] === "undefined") {
+                                out[key] = [];
+                            }
+                            obj[key].forEach(function(item) {
+                                out[key].unshift(item);
+                            });
+                        } else {
+                            out[key] = obj[key];
+                        }
                     } else {
                         if (isObject) {
                             out[key] = _mergeObjects(out[key], obj[key]);
                         }
                     }
+                };
+                for (var key in obj) {
+                    _loop(key);
                 }
             }
             return out;
