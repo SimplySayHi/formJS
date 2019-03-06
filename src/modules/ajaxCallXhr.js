@@ -1,7 +1,8 @@
 
 import { _executeCallback, _mergeObjects, _serialize } from './helper.js';
 
-export function _xhrCall( formDataJSON ){
+// AJAX CALL USING XMLHttpRequest API
+export function _ajaxCall( formDataObj ){
 
     let self = this,
         formEl = self.formEl,
@@ -9,11 +10,12 @@ export function _xhrCall( formDataJSON ){
         formOptions = self.options.formOptions,
         btnEl = formEl.querySelector('[type="submit"]'),
         timeoutTimer,
-        xhrOptions = _mergeObjects( {}, formOptions.ajaxOptions );
+        xhrOptions = _mergeObjects( {}, formOptions.ajaxOptions ),
+        isMultipart = xhrOptions.contentType === 'multipart/form-data';
 
-    xhrOptions.data = formDataJSON;
+    xhrOptions.data = formDataObj;
     
-    if( xhrOptions.contentType === 'multipart/form-data' && fieldOptions.handleFileUpload ){
+    if( isMultipart && fieldOptions.handleFileUpload ){
         let formDataMultipart = new FormData();
         
         for(let key in xhrOptions.data){
@@ -53,7 +55,7 @@ export function _xhrCall( formDataJSON ){
             
             return (getJSON() || getXML_HTML() || data);
         },
-        loadendFn = function(e) {
+        successFn = function(e) {
             let xhr = e.target,
                 responseData = parseResponse(xhr);
 
@@ -73,7 +75,7 @@ export function _xhrCall( formDataJSON ){
 
             _executeCallback.call( self, formOptions.onSubmitComplete, ajaxData );
         },
-        loadFn = function(e) {
+        completeFn = function(e) {
             let xhr = e.target;
 
             if( xhr.status === 200 ){
@@ -92,8 +94,8 @@ export function _xhrCall( formDataJSON ){
             _executeCallback.call( self, formOptions.onSubmitError, ajaxData );
         };
     
-    XHR.addEventListener('loadend', loadendFn,  false);
-    XHR.addEventListener('load',    loadFn,     false);
+    XHR.addEventListener('loadend', successFn,  false);
+    XHR.addEventListener('load',    completeFn, false);
     XHR.addEventListener('error',   errorFn,    false);
     
     if( xhrOptions.method === 'GET' ){
@@ -121,6 +123,10 @@ export function _xhrCall( formDataJSON ){
     
     for( let h in xhrOptions.headers ){
         XHR.setRequestHeader( h, xhrOptions.headers[h] );
+    }
+
+    if( !isMultipart ){
+        xhrOptions.data = JSON.stringify(xhrOptions.data);
     }
     
     XHR.send( (xhrOptions.method === 'GET' ? null : xhrOptions.data) );

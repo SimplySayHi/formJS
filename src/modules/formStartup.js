@@ -87,7 +87,13 @@ export function _formStartup(){
 
         if( formOptions.ajaxSubmit ){
             if( formEl.getAttribute('enctype') ){
+
+                // FOR XMLHttpRequest API
                 formOptions.ajaxOptions.contentType = formEl.getAttribute('enctype');
+
+                // FOR fetch API
+                formOptions.ajaxOptions.headers['Content-Type'] = formEl.getAttribute('enctype');
+                
             }
 
             if( formEl.getAttribute('method') ){

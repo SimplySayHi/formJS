@@ -1,5 +1,5 @@
 
-export function getFormData( customFn = this.options.formOptions.getFormJSON ){
+export function getFormData( customFn = this.options.formOptions.getFormData ){
 
     let formData = {},
         self = this,

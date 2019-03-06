@@ -243,7 +243,8 @@
         <!-- Demo Links -->
         <div id="demo-links" class="text-center mt-5">
             <p>
-                <a href="demos.html">More Demos</a>
+                <a href="demos.html">More Demos</a> | 
+                <a href="test.html">Tests</a>
             </p>
         </div>
         
@@ -304,7 +305,12 @@
             <hr />
             <p>
                 <span class="text-yellow">*</span> for compatibility with IE 10/11 and old versions of Edge you have to load some JS polyfills ( from <a href="https://polyfill.io" target="_blank">polyfill.io</a> or else ):<br />
-                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code> <code>WeakMap</code>
+                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code> <code>WeakMap</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>fetch</code>
+            </p>
+            <pre>
+&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap,Promise,Promise.prototype.finally,fetch"&gt;&lt;/script&gt;</pre>
+            <p>
+                If you are using the version with XMLHttpRequest ( formJS.xhr.js or formJS.xhr.min.js ) you can load this ( without support for Promise and Fetch APIs ):
             </p>
             <pre>
 &lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"&gt;&lt;/script&gt;</pre>
@@ -322,8 +328,13 @@
             </p>
             <div>
                     <pre>
-&lt;!-- FORM JS --&gt;
-&lt;script src="dist/formJS.min.js"&gt;&lt;/script&gt;</pre>
+&lt;!-- FORM JS Standard ( using fetch API for AJAX call ) --&gt;
+&lt;script src="dist/formJS.min.js"&gt;&lt;/script&gt;
+
+OR
+
+&lt;!-- FORM JS XHR ( using XMLHttpRequest API for AJAX call ) --&gt;
+&lt;script src="dist/formJS.xhr.min.js"&gt;&lt;/script&gt;</pre>
             </div>
         </div>
         
@@ -800,7 +811,7 @@ var formInstance = new Form( formEl, options ).init();
                             </div>
                             <div class="col-4">
                                 <p>
-                                    See below for default values.
+                                    See below for default values ( depending on AJAX API - "fetch" or "XMLHttpRequest" ).
                                     <br /><br />
                                     See <a href="#ajax-settings">AJAX Options</a> section for details.
                                 </p>
@@ -970,10 +981,39 @@ var formInstance = new Form( formEl, options ).init();
                         </div>
                     </div>
                     <div class="card-footer no-bg">
-                        <p>
-                            Default form options:
-                        </p>
-                        <pre>
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <p>
+                                    Default form options for formJS with fetch API:
+                                </p>
+                                <pre>
+{
+    ajaxOptions: {
+        cache:          'no-store',
+        credentials:    'same-origin',
+        headers: {
+                        'Content-Type': 'application/json'
+        },
+        method:         'POST',
+        mode:           'same-origin',
+        redirect:       'follow',
+        timeout:        0,
+        url:            location.href
+    },
+    ajaxSubmit:         true,
+    beforeSend:         null,
+    getFormData:        null,
+    handleSubmit:       true,
+    onSubmitComplete:   null,
+    onSubmitError:      null,
+    onSubmitSuccess:    null
+}</pre>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <p>
+                                    Default form options for formJS with XMLHttpRequest API:
+                                </p>
+                                <pre>
 {
     ajaxOptions: {
         async:          true,
@@ -994,6 +1034,8 @@ var formInstance = new Form( formEl, options ).init();
     onSubmitError:      null,
     onSubmitSuccess:    null
 }</pre>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1008,6 +1050,21 @@ var formInstance = new Form( formEl, options ).init();
             <div class="row mt-3">
                 <div class="col-12">
                     <div class="">
+                        <p>
+                            for formJS with fetch API: 
+                        </p>
+                        <ul class="m-0">
+                            <li>
+                                See <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters" target="_blank">MDN documentation</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-12 mt-4">
+                    <div class="">
+                        <p>
+                            for formJS with XMLHttpRequest API: 
+                        </p>
                         <ul class="m-0">
                             <li>
                                 async: if true will make an async ajax call, if false will make a sync ajax call.
@@ -1559,10 +1616,20 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>type="date"</code></div>
                                 <div><code>data-subtype="date"</code></div>
+                                <p class="small mt-3">
+                                    Used together or only data-subtype ( see note below ).
+                                </p>
                             </div>
                             <div class="col-4 col-sm-6">
                                 <p>
-                                    Check if "dateDDMMYYYY" or "dateYYYYMMDD" is valid.
+                                    /^(((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29)$/
+                                </p>
+                                <br />
+                                <p class="small text-lowercase text-opacity">
+                                    DATE AS ISO 8601 DATE FORMAT<br />
+                                    YYYY MM DD | YYYY/MM/DD | YYYY.MM.DD | YYYY-MM-DD
+                                    <br /><br />
+                                    WITH SPACE / . - AS SEPARATOR
                                 </p>
                                 <br />
                                 <p>
@@ -1606,34 +1673,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p class="small text-lowercase text-opacity">
                                     DATE AS ITALIAN SYNTAX<br />
                                     DD MM YYYY | DD/MM/YYYY | DD.MM.YYYY | DD-MM-YYYY
-                                    <br /><br />
-                                    WITH SPACE / . - AS SEPARATOR
-                                </p>
-                                <p>
-                                    See notes for date validation.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4 col-sm-3 text-green">
-                                Date in format YYYYMMDD
-                                <div>( dateYYYYMMDD )</div>
-                            </div>
-                            <div class="col-4 col-sm-3 text-green">
-                                <div><code>type="date"</code></div>
-                                <div><code>data-subtype="dateYYYYMMDD"</code></div>
-                                <p class="small mt-3">
-                                    Used together or only data-subtype.
-                                </p>
-                            </div>
-                            <div class="col-4 col-sm-6">
-                                <p>
-                                    /^(((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29)$/
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    DATE AS ISO 8601 DATE FORMAT<br />
-                                    YYYY MM DD | YYYY/MM/DD | YYYY.MM.DD | YYYY-MM-DD
                                     <br /><br />
                                     WITH SPACE / . - AS SEPARATOR
                                 </p>
@@ -1812,7 +1851,10 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 Max
                             </div>
                             <div class="col-4 col-sm-3 text-green">
+                                <p class="small mb-1">With Numbers</p>
                                 <div><code>max="13"</code></div>
+                                <p class="small mt-5 mb-1">With Dates</p>
+                                <div><code>max="2019-02-22"</code></div>
                             </div>
                             <div class="col-4 col-sm-6">
                                 <p>
@@ -1854,7 +1896,10 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 Min
                             </div>
                             <div class="col-4 col-sm-3 text-green">
-                                <div><code>min="7"</code></div>
+                                <p class="small mb-1">With Numbers</p>
+                                <div><code>max="7"</code></div>
+                                <p class="small mt-5 mb-1">With Dates</p>
+                                <div><code>max="1900-01-01"</code></div>
                             </div>
                             <div class="col-4 col-sm-6">
                                 <p>
@@ -2245,6 +2290,10 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                     </div>
                 </div>
             </div>
+            <p>
+                Other useful informations:
+            </p>
+            <!-- WRITE ABOUT version AND isInitialized PROPERTIES OF FORM JS -->
         </div>
 
         <!-- Changelog -->
@@ -2254,8 +2303,20 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                 <li class="media my-3">
                     <div class="version-num text-red">3.0.0</div>
                     <div class="media-body pl-2">
-                        <b>NEW MAJOR VERSION</b><br />
-                        Many relevant changes from previous version
+                        <b>NEW MAJOR VERSION</b>
+                        <br /><br />
+                        formJS now has 2 versions. The difference is about the API used for AJAX calls:
+                        <ul>
+                            <li>
+                                fetch
+                            </li>
+                            <li>
+                                XMLHttpRequest
+                            </li>
+                        </ul>
+                        <p class="mt-3 mb-0">
+                            Many relevant changes from previous version
+                        </p>
                         <ul>
                             <li>
                                 Added "errorEmpty" and "errorRule" to "cssClasses" in "fieldOptions" to show different error messages ( see implementation in CSS file ).
@@ -2267,13 +2328,21 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 Added method "validateForm".
                             </li>
                             <li>
-                                Added validation rule for "color" - input type="color" - ( as replace of "hexColor" ).
+                                Added validation rules for:
+                                <ul>
+                                    <li>
+                                        "color" ( input type="color" - as replace of "hexColor" )
+                                    </li>
+                                    <li>
+                                        "dateDDMMYYYY"
+                                    </li>
+                                    <li>
+                                        "tel" ( input type="tel" )
+                                    </li>
+                                </ul>
                             </li>
                             <li>
-                                Added validation rules for "dateDDMMYYYY" and "dateYYYYMMDD".
-                            </li>
-                            <li>
-                                Added validation rule for "tel" ( input type="tel" ).
+                                Added support for attributes "min" and "max" for date fields.
                             </li>
                             <li>
                                 Change in "isValidField" method: now it just checks the field validity without feedback on the user interface and returns a JS object with "fieldEl", "result" and "errors" ( same change for "isValidForm" method since it makes use of "isValidField" method ).
@@ -2286,6 +2355,9 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                             </li>
                             <li>
                                 Fixed a bug that caused field "data-required-from" to be validated even if not mandatory.
+                            </li>
+                            <li>
+                                Fixed a bug that caused checkboxes and radios to be validated twice when option "validateOnEvents" was set to "change blur" ( on Chrome ).
                             </li>
                             <li>
                                 Minor improvements.

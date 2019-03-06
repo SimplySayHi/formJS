@@ -184,7 +184,7 @@
             window.FormJS = Form;
         }
     },
-    "./src/modules/ajaxCall.js": function(module, exports, __webpack_require__) {
+    "./src/modules/ajaxCallXhr.js": function(module, exports, __webpack_require__) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -192,13 +192,13 @@
         exports._ajaxCall = _ajaxCall;
         var _helper = __webpack_require__("./src/modules/helper.js");
         function _ajaxCall(formDataObj) {
-            var self = this, formEl = self.formEl, fieldOptions = self.options.fieldOptions, formOptions = self.options.formOptions, btnEl = formEl.querySelector('[type="submit"]'), timeoutTimer = void 0, ajaxOptions = (0, 
-            _helper._mergeObjects)({}, formOptions.ajaxOptions), isMultipart = ajaxOptions.headers["Content-Type"] === "multipart/form-data";
-            ajaxOptions.body = formDataObj;
+            var self = this, formEl = self.formEl, fieldOptions = self.options.fieldOptions, formOptions = self.options.formOptions, btnEl = formEl.querySelector('[type="submit"]'), timeoutTimer = void 0, xhrOptions = (0, 
+            _helper._mergeObjects)({}, formOptions.ajaxOptions), isMultipart = xhrOptions.contentType === "multipart/form-data";
+            xhrOptions.data = formDataObj;
             if (isMultipart && fieldOptions.handleFileUpload) {
                 var formDataMultipart = new FormData();
-                for (var key in ajaxOptions.body) {
-                    formDataMultipart.append(key, ajaxOptions.body[key]);
+                for (var key in xhrOptions.data) {
+                    formDataMultipart.append(key, xhrOptions.data[key]);
                 }
                 Array.from(formEl.querySelectorAll('[type="file"]')).forEach(function(field) {
                     Array.from(field.files).forEach(function(file, idx) {
@@ -206,50 +206,90 @@
                         formDataMultipart.append(name, file, file.name);
                     });
                 });
-                ajaxOptions.body = formDataMultipart;
+                xhrOptions.data = formDataMultipart;
             }
-            if (ajaxOptions.method === "GET") {
-                ajaxOptions.url += (/\?/.test(ajaxOptions.url) ? "&" : "?") + (0, _helper._serialize)(ajaxOptions.body);
-                delete ajaxOptions.body;
-            } else {
-                if (ajaxOptions.headers["Content-Type"].indexOf("application/x-www-form-urlencoded") > -1) {
-                    ajaxOptions.body = (0, _helper._serialize)(ajaxOptions.body);
-                } else if (!isMultipart) {
-                    ajaxOptions.body = JSON.stringify(ajaxOptions.body);
-                }
-            }
-            ajaxOptions.headers = new Headers(ajaxOptions.headers);
-            if (ajaxOptions.timeout > 0) {
-                var controller = new AbortController();
-                var signal = controller.signal;
-                ajaxOptions.signal = signal;
-                timeoutTimer = window.setTimeout(function() {
-                    controller.abort();
-                }, ajaxOptions.timeout);
-            }
-            fetch(ajaxOptions.url, ajaxOptions).then(function(response) {
-                var getFetchMethod = function getFetchMethod(response) {
-                    var contentType = response.headers.get("Content-Type"), methodName = "blob";
-                    if (contentType.indexOf("application/json") > -1) {
-                        methodName = "json";
-                    } else if (contentType.indexOf("text/") > -1) {
-                        methodName = "text";
+            var XHR = new XMLHttpRequest(), parseResponse = function parseResponse(xhr) {
+                var data = xhr.responseText, getJSON = function getJSON() {
+                    try {
+                        var obj = JSON.parse(data);
+                        return obj;
+                    } catch (e) {
+                        return false;
                     }
-                    return methodName;
+                }, getXML_HTML = function getXML_HTML() {
+                    try {
+                        var isXML = xhr.responseXML !== null, obj = isXML ? new DOMParser().parseFromString(data, "text/xml") : data;
+                        return obj;
+                    } catch (e) {
+                        return false;
+                    }
                 };
-                var fetchMethod = getFetchMethod(response);
-                return response[fetchMethod]();
-            }).then(function(data) {
-                _helper._executeCallback.call(self, formOptions.onSubmitSuccess, data);
-            }).catch(function(error) {
-                _helper._executeCallback.call(self, formOptions.onSubmitError, error);
-            }).finally(function() {
+                return getJSON() || getXML_HTML() || data;
+            }, successFn = function successFn(e) {
+                var xhr = e.target, responseData = parseResponse(xhr);
+                var readyStateOK = xhr.readyState === 4, statusOK = xhr.status === 200, ajaxData = {
+                    dataOrXHR: readyStateOK && statusOK ? responseData : xhr,
+                    status: readyStateOK && statusOK ? "success" : "error",
+                    XHRorResponse: readyStateOK && statusOK ? xhr : responseData
+                };
                 if (timeoutTimer) {
                     window.clearTimeout(timeoutTimer);
                 }
                 btnEl.disabled = false;
-                _helper._executeCallback.call(self, formOptions.onSubmitComplete);
-            });
+                _helper._executeCallback.call(self, formOptions.onSubmitComplete, ajaxData);
+            }, completeFn = function completeFn(e) {
+                var xhr = e.target;
+                if (xhr.status === 200) {
+                    var responseData = parseResponse(xhr), ajaxData = {
+                        data: responseData,
+                        status: "success",
+                        response: xhr
+                    };
+                    _helper._executeCallback.call(self, formOptions.onSubmitSuccess, ajaxData);
+                } else {
+                    errorFn(e);
+                }
+            }, errorFn = function errorFn(e) {
+                var xhr = e.target, ajaxData = {
+                    errorThrown: xhr.statusText,
+                    status: "error",
+                    response: xhr
+                };
+                _helper._executeCallback.call(self, formOptions.onSubmitError, ajaxData);
+            };
+            XHR.addEventListener("loadend", successFn, false);
+            XHR.addEventListener("load", completeFn, false);
+            XHR.addEventListener("error", errorFn, false);
+            if (xhrOptions.method === "GET") {
+                xhrOptions.url += (/\?/.test(xhrOptions.url) ? "&" : "?") + (0, _helper._serialize)(xhrOptions.data);
+                if (xhrOptions.cache === false) {
+                    xhrOptions.url += (/\&/.test(xhrOptions.url) ? "&" : "") + "_=" + new Date().getTime();
+                }
+            }
+            XHR.open(xhrOptions.method, xhrOptions.url, xhrOptions.async);
+            if (xhrOptions.xhrFields) {
+                for (var i in xhrOptions.xhrFields) {
+                    XHR[i] = xhrOptions.xhrFields[i];
+                }
+            }
+            if (xhrOptions.mimeType && XHR.overrideMimeType) {
+                XHR.overrideMimeType(xhrOptions.mimeType);
+            }
+            if (xhrOptions.data && xhrOptions.contentType !== "multipart/form-data") {
+                XHR.setRequestHeader("Content-Type", xhrOptions.contentType);
+            }
+            for (var h in xhrOptions.headers) {
+                XHR.setRequestHeader(h, xhrOptions.headers[h]);
+            }
+            if (!isMultipart) {
+                xhrOptions.data = JSON.stringify(xhrOptions.data);
+            }
+            XHR.send(xhrOptions.method === "GET" ? null : xhrOptions.data);
+            if (xhrOptions.async && xhrOptions.timeout > 0) {
+                timeoutTimer = window.setTimeout(function() {
+                    XHR.abort();
+                }, xhrOptions.timeout);
+            }
         }
     },
     "./src/modules/checkDirtyField.js": function(module, exports, __webpack_require__) {
@@ -500,28 +540,16 @@
                 if (!obj) {
                     continue;
                 }
-                var _loop = function _loop(key) {
+                for (var key in obj) {
                     var isArray = Object.prototype.toString.call(obj[key]) === "[object Array]";
                     var isObject = Object.prototype.toString.call(obj[key]) === "[object Object]";
                     if (!out.hasOwnProperty(key) && !isObject || isArray) {
-                        if (isArray) {
-                            if (typeof out[key] === "undefined") {
-                                out[key] = [];
-                            }
-                            obj[key].forEach(function(item) {
-                                out[key].unshift(item);
-                            });
-                        } else {
-                            out[key] = obj[key];
-                        }
+                        out[key] = obj[key];
                     } else {
                         if (isObject) {
                             out[key] = _mergeObjects(out[key], obj[key]);
                         }
                     }
-                };
-                for (var key in obj) {
-                    _loop(key);
                 }
             }
             return out;
@@ -785,7 +813,7 @@
             value: true
         });
         exports.options = undefined;
-        var _optionsAjax = __webpack_require__("./src/modules/optionsAjax.js");
+        var _optionsAjaxXhr = __webpack_require__("./src/modules/optionsAjaxXhr.js");
         var options = exports.options = {
             fieldOptions: {
                 checkDirtyField: false,
@@ -808,7 +836,7 @@
                 validateOnEvents: "input change"
             },
             formOptions: {
-                ajaxOptions: _optionsAjax.ajaxOptions,
+                ajaxOptions: _optionsAjaxXhr.ajaxOptions,
                 ajaxSubmit: true,
                 beforeSend: null,
                 getFormData: null,
@@ -819,20 +847,19 @@
             }
         };
     },
-    "./src/modules/optionsAjax.js": function(module, exports, __webpack_require__) {
+    "./src/modules/optionsAjaxXhr.js": function(module, exports, __webpack_require__) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
         });
         var ajaxOptions = exports.ajaxOptions = {
-            cache: "no-store",
-            credentials: "same-origin",
+            async: true,
+            cache: false,
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
             headers: {
-                "Content-Type": "application/json"
+                "X-Requested-With": "XMLHttpRequest"
             },
             method: "POST",
-            mode: "same-origin",
-            redirect: "follow",
             timeout: 0,
             url: location.href
         };
@@ -910,7 +937,7 @@
         });
         exports.submit = submit;
         var _helper = __webpack_require__("./src/modules/helper.js");
-        var _ajaxCall2 = __webpack_require__("./src/modules/ajaxCall.js");
+        var _ajaxCallXhr = __webpack_require__("./src/modules/ajaxCallXhr.js");
         function submit() {
             var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
             var event = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
@@ -970,7 +997,7 @@
             }
             if (isAjaxForm) {
                 eventPreventDefault(false);
-                _ajaxCall2._ajaxCall.call(self, formDataObj);
+                _ajaxCallXhr._ajaxCall.call(self, formDataObj);
             } else if (!event) {
                 var submitEvent = new Event("submit", {
                     bubbles: true,

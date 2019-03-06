@@ -1,4 +1,7 @@
 
+import { ajaxOptions } from './optionsAjax.js';
+//import { ajaxOptions } from './optionsAjaxXhr.js';
+
 export const options = {
 
     fieldOptions: {
@@ -23,20 +26,10 @@ export const options = {
     },
 
     formOptions: {
-        ajaxOptions:            {
-            async:              true,
-            cache:              false,
-            contentType:        'application/x-www-form-urlencoded; charset=UTF-8',
-            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-            },
-            method:             'POST',
-            timeout:            0,
-            url:                location.href
-        },
+        ajaxOptions:            ajaxOptions,
         ajaxSubmit:             true,
         beforeSend:             null,
-        getFormJSON:            null,
+        getFormData:            null,
         handleSubmit:           true,
         onSubmitComplete:       null,
         onSubmitError:          null,

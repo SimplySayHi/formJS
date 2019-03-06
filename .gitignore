@@ -1,6 +1,4 @@
 node_modules
-test/
-**/test*
 package-lock.json
 yarn.lock
 *.zip

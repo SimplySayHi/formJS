@@ -1,6 +1,7 @@
 
 import { _executeCallback, _isPlainObject, _mergeObjects } from './helper.js';
-import { _xhrCall } from './xhrCall.js';
+import { _ajaxCall } from './ajaxCall.js';
+//import { _ajaxCall } from './ajaxCallXhr.js';
 
 export function submit( options = {}, event = null ){
 
@@ -24,7 +25,7 @@ export function submit( options = {}, event = null ){
         _executeCallback.call( self, options.fieldOptions.onValidation, formValidation.fields );
     }
     
-    let formDataJSON = (isAjaxForm ? self.getFormData() : null),
+    let formDataObj = (isAjaxForm ? self.getFormData() : null),
         callbacksBeforeSend = [],
         beforeSendOpt = options.formOptions.beforeSend;
 
@@ -34,8 +35,8 @@ export function submit( options = {}, event = null ){
             },
             stopCallbackLoop = false;
 
-        if( formDataJSON ){
-            beforeSendData.formData = formDataJSON;
+        if( formDataObj ){
+            beforeSendData.formData = formDataObj;
         }
 
         if( typeof beforeSendOpt === 'function' ){
@@ -49,7 +50,7 @@ export function submit( options = {}, event = null ){
                 let beforeSendFn = cbFn.call( self, beforeSendData );
                 
                 if( _isPlainObject(beforeSendFn) ){
-                    formDataJSON = beforeSendFn.formData || formDataJSON;
+                    formDataObj = beforeSendFn.formData || formDataObj;
                     if( beforeSendFn.stopExecution ){
                         stopCallbackLoop = true;
                     }
@@ -76,7 +77,7 @@ export function submit( options = {}, event = null ){
 
         // AJAX FORM SUBMIT
         eventPreventDefault(false);
-        _xhrCall.call( self, formDataJSON );
+        _ajaxCall.call(self, formDataObj);
 
     } else if( !event ){
 

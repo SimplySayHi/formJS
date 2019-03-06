@@ -1,4 +1,6 @@
 
+import { _getSplitChar } from './helper.js';
+
 export const validationRules = {
             
     cap: function( string ){
@@ -32,8 +34,11 @@ export const validationRules = {
     },
     
     date: function( string ){
-        let obj = {
-                result: this.dateDDMMYYYY(string).result || this.dateYYYYMMDD(string).result
+        // DATE AS ISO 8601 DATE FORMAT     YYYY MM DD | YYYY/MM/DD | YYYY.MM.DD | YYYY-MM-DD
+
+        let date = /^(((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29)$/g.test( string ),
+            obj = {
+                result: date
             };
 
         return obj;
@@ -43,17 +48,6 @@ export const validationRules = {
         // DATE AS ITALIAN SYNTAX       DD MM YYYY | DD/MM/YYYY | DD.MM.YYYY | DD-MM-YYYY
 
         let date = /^(((0[1-9]|[12]\d|3[01])[ \/\-.](0[13578]|1[02])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)[ \/\-.](0[13456789]|1[012])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])[ \/\-.]02[ \/\-.]((19|[2-9]\d)\d{2}))|(29[ \/\-.]02[ \/\-.]((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/g.test( string ),
-            obj = {
-                result: date
-            };
-
-        return obj;
-    },
-
-    dateYYYYMMDD: function( string ){
-        // DATE AS ISO 8601 DATE FORMAT     YYYY MM DD | YYYY/MM/DD | YYYY.MM.DD | YYYY-MM-DD
-
-        let date = /^(((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29)$/g.test( string ),
             obj = {
                 result: date
             };
@@ -387,9 +381,32 @@ export const _validationRulesAttributes = {
     },
     
     max: function( data ){
-        var value = data.fieldEl.value * 1,
-            maxVal = data.attrValue * 1,
-            obj = {
+        let fieldEl = data.fieldEl,
+            isDate = (fieldEl.matches('[type="date"]') || fieldEl.matches('[data-subtype="date"]') || fieldEl.matches('[data-subtype="dateDDMMYYYY"]')),
+            value = data.fieldEl.value,
+            maxVal = data.attrValue;
+        
+        if( isDate ){
+
+            let splitChar = _getSplitChar( value );
+
+            if( value.indexOf(splitChar) === 2 ){
+                // DD MM YYYY
+                value = value.split( splitChar ).reverse();
+            } else {
+                // YYYY MM DD
+                value = value.split( splitChar );
+            }
+
+            value = value.join('');
+            maxVal = maxVal.split('-').join('');
+
+        }
+
+        value = value * 1;
+        maxVal = maxVal * 1;
+
+        let obj = {
                 result: value <= maxVal
             };
 
@@ -415,9 +432,32 @@ export const _validationRulesAttributes = {
     },
     
     min: function( data ){
-        var value = data.fieldEl.value * 1,
-            minVal = data.attrValue * 1,
-            obj = {
+        let fieldEl = data.fieldEl,
+            isDate = (fieldEl.matches('[type="date"]') || fieldEl.matches('[data-subtype="date"]') || fieldEl.matches('[data-subtype="dateDDMMYYYY"]')),
+            value = data.fieldEl.value,
+            minVal = data.attrValue;
+        
+        if( isDate ){
+
+            let splitChar = _getSplitChar( value );
+
+            if( value.indexOf(splitChar) === 2 ){
+                // DD MM YYYY
+                value = value.split( splitChar ).reverse();
+            } else {
+                // YYYY MM DD
+                value = value.split( splitChar );
+            }
+
+            value = value.join('');
+            minVal = minVal.split('-').join('');
+
+        }
+
+        value = value * 1;
+        minVal = minVal * 1;
+
+        let obj = {
                 result: value >= minVal
             };
 

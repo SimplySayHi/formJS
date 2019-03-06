@@ -36,6 +36,20 @@ _executeCallback = function( callbackOption, callbackData ){
     });
 },
 
+_getSplitChar = function( string ){
+    let splitChar = '.';
+
+    if( string.indexOf(splitChar) === -1 ){
+        if( string.indexOf('-') >= 0 ){
+            splitChar = '-';
+        } else if( string.indexOf('/') >= 0 ){
+            splitChar = '/';
+        }
+    }
+
+    return splitChar;
+},
+
 _isDOMNode = function( node ){
     return Element.prototype.isPrototypeOf( node );
 },
@@ -59,7 +73,16 @@ _mergeObjects = function( out = {} ){
             let isObject = Object.prototype.toString.call(obj[key]) === "[object Object]";
 
             if( (!out.hasOwnProperty(key) && !isObject) || isArray ){
-                out[key] = obj[key];
+                if( isArray ){
+                    if( typeof out[key] === 'undefined' ){
+                        out[key] = [];
+                    }
+                    obj[key].forEach(function( item ){
+                        out[key].unshift( item );
+                    });
+                } else {
+                    out[key] = obj[key];
+                }
             } else {
                 if( isObject ){
                     out[key] = _mergeObjects(out[key], obj[key]);
@@ -80,7 +103,11 @@ _removeClass = function( element, cssClasses ){
 _serialize = function( obj ){
     var objToString = (
             (obj && typeof obj === 'object' && obj.constructor === Object) ? 
-            Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&') : 
+            Object.keys(obj)
+                .reduce(function(a,k){
+                    a.push(k+'='+encodeURIComponent(obj[k]));
+                    return a
+                },[]).join('&') : 
             obj
     );
     return objToString;
