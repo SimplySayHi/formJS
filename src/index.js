@@ -75,11 +75,11 @@ class Form {
     }
     
     static addValidationRules( rulesObj ){
-        this.prototype.validationRules = _mergeObjects({}, rulesObj, this.prototype.validationRules);
+        this.prototype.validationRules = _mergeObjects({}, this.prototype.validationRules, rulesObj);
     }
     
     static setOptions( optionsObj ){
-        this.prototype.options = _mergeObjects({}, optionsObj, this.prototype.options);
+        this.prototype.options = _mergeObjects({}, this.prototype.options, optionsObj);
     }
 
 }

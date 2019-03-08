@@ -72,20 +72,28 @@ _mergeObjects = function( out = {} ){
             let isArray = Object.prototype.toString.call(obj[key]) === "[object Array]";
             let isObject = Object.prototype.toString.call(obj[key]) === "[object Object]";
 
-            if( (!out.hasOwnProperty(key) && !isObject) || isArray ){
+            // COPY ONLY ENUMERABLE PROPERTIES
+            if( obj.hasOwnProperty(key) ){
                 if( isArray ){
+
+                    // ARRAY []
                     if( typeof out[key] === 'undefined' ){
                         out[key] = [];
                     }
                     obj[key].forEach(function( item ){
-                        out[key].unshift( item );
+                        out[key] = _mergeObjects(out[key], item);
                     });
-                } else {
-                    out[key] = obj[key];
-                }
-            } else {
-                if( isObject ){
+
+                } else if( isObject ){
+
+                    // OBJECT {}
                     out[key] = _mergeObjects(out[key], obj[key]);
+
+                } else {
+
+                    // STRING | NUMBER | BOOLEAN | FUNCTION
+                    out[key] = obj[key];
+
                 }
             }
         }

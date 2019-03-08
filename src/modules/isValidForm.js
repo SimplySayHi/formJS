@@ -16,7 +16,7 @@ export function isValidForm( options = {} ){
         return obj;
     }
     
-    var fieldOptions = _mergeObjects( {}, options.fieldOptions || {}, self.options.fieldOptions ),
+    var fieldOptions = _mergeObjects( {}, self.options.fieldOptions, options.fieldOptions ),
         currentFieldName = '',
         currentFieldType = '';
     

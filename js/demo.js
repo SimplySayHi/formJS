@@ -25,10 +25,10 @@ var optionsPlugin = {
         fieldOptions: {
             checkDirtyField: true,
             cssClasses: { dirty: 'is-dirty custom-dirty-field' },
-            onPastePrevented: function( fieldEl ){
+            onPastePrevented: function ccc ( fieldEl ){
                 console.log( 'Paste event prevented on field ', fieldEl );
             },
-            onValidation: function( fieldsArray ){
+            onValidation: function aaa ( fieldsArray ){
                 console.log('onValidation fieldsArray ', fieldsArray);
                 fieldsArray.forEach(function(obj){
                     console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
@@ -129,10 +129,10 @@ var optionsPlugin2 = {
         fieldOptions: {
             checkDirtyField: true,
             cssClasses: { dirty: 'is-dirty custom-dirty-field' },
-            onPastePrevented: function( fieldEl ){
+            onPastePrevented: function ddd ( fieldEl ){
                 console.log( 'Paste event prevented on field ', fieldEl );
             },
-            onValidation: function( fieldsArray ){
+            onValidation: function bbb ( fieldsArray ){
                 console.log('onValidation fieldsArray ', fieldsArray);
                 fieldsArray.forEach(function(obj){
                     console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );

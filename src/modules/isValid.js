@@ -52,14 +52,14 @@ export function _isValid( fieldEl, fieldOptions = {} ){
     attrValidations.forEach(function(item){
         let extraVal = _validationRulesAttributes[item.attrName]( item, fieldEl );
         if( !extraVal.result ){
-            obj = _mergeObjects({}, extraVal, obj);
+            obj = _mergeObjects({}, obj, extraVal);
             attrValidationsResult = false;
         }
     });
 
     // RUN VALIDATIONS FOR validationRules
     if( typeof self.validationRules[fieldType] === 'function' ){
-        obj = _mergeObjects( {}, self.validationRules[fieldType](fieldValue, fieldEl), obj );
+        obj = _mergeObjects( {}, obj, self.validationRules[fieldType](fieldValue, fieldEl) );
         obj.result = obj.result && attrValidationsResult;
         if( !obj.result ){
             if( typeof obj.errors === 'undefined' ){

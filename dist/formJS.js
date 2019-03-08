@@ -163,12 +163,12 @@
             } ], [ {
                 key: "addValidationRules",
                 value: function addValidationRules(rulesObj) {
-                    this.prototype.validationRules = (0, _helper._mergeObjects)({}, rulesObj, this.prototype.validationRules);
+                    this.prototype.validationRules = (0, _helper._mergeObjects)({}, this.prototype.validationRules, rulesObj);
                 }
             }, {
                 key: "setOptions",
                 value: function setOptions(optionsObj) {
-                    this.prototype.options = (0, _helper._mergeObjects)({}, optionsObj, this.prototype.options);
+                    this.prototype.options = (0, _helper._mergeObjects)({}, this.prototype.options, optionsObj);
                 }
             } ]);
             return Form;
@@ -296,7 +296,7 @@
                 throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
             }
             self.formEl = checkFormEl.element;
-            self.options = (0, _helper._mergeObjects)({}, optionsObj, Form.prototype.options);
+            self.options = (0, _helper._mergeObjects)({}, Form.prototype.options, optionsObj);
             _optionsUtils._setCallbackFunctionsInOptions.call(self);
             _formStartup2._formStartup.call(self);
         }
@@ -503,20 +503,18 @@
                 var _loop = function _loop(key) {
                     var isArray = Object.prototype.toString.call(obj[key]) === "[object Array]";
                     var isObject = Object.prototype.toString.call(obj[key]) === "[object Object]";
-                    if (!out.hasOwnProperty(key) && !isObject || isArray) {
+                    if (obj.hasOwnProperty(key)) {
                         if (isArray) {
                             if (typeof out[key] === "undefined") {
                                 out[key] = [];
                             }
                             obj[key].forEach(function(item) {
-                                out[key].unshift(item);
+                                out[key] = _mergeObjects(out[key], item);
                             });
+                        } else if (isObject) {
+                            out[key] = _mergeObjects(out[key], obj[key]);
                         } else {
                             out[key] = obj[key];
-                        }
-                    } else {
-                        if (isObject) {
-                            out[key] = _mergeObjects(out[key], obj[key]);
                         }
                     }
                 };
@@ -605,12 +603,12 @@
             attrValidations.forEach(function(item) {
                 var extraVal = _validationRules._validationRulesAttributes[item.attrName](item, fieldEl);
                 if (!extraVal.result) {
-                    obj = (0, _helper._mergeObjects)({}, extraVal, obj);
+                    obj = (0, _helper._mergeObjects)({}, obj, extraVal);
                     attrValidationsResult = false;
                 }
             });
             if (typeof self.validationRules[fieldType] === "function") {
-                obj = (0, _helper._mergeObjects)({}, self.validationRules[fieldType](fieldValue, fieldEl), obj);
+                obj = (0, _helper._mergeObjects)({}, obj, self.validationRules[fieldType](fieldValue, fieldEl));
                 obj.result = obj.result && attrValidationsResult;
                 if (!obj.result) {
                     if (typeof obj.errors === "undefined") {
@@ -640,7 +638,7 @@
             if (!(0, _helper._isDOMNode)(fieldEl)) {
                 return obj;
             }
-            var options = (0, _helper._mergeObjects)({}, fieldOptionsObj, self.options.fieldOptions), isValidValue = fieldEl.value.trim().length > 0, isRequired = fieldEl.required, isReqFrom = fieldEl.matches("[data-required-from]"), isValidateIfFilled = fieldEl.matches("[data-validate-if-filled]");
+            var options = (0, _helper._mergeObjects)({}, self.options.fieldOptions, fieldOptionsObj), isValidValue = fieldEl.value.trim().length > 0, isRequired = fieldEl.required, isReqFrom = fieldEl.matches("[data-required-from]"), isValidateIfFilled = fieldEl.matches("[data-validate-if-filled]");
             if (!isRequired && !isValidateIfFilled && !isReqFrom || isValidateIfFilled && !isValidValue || isReqFrom && !isRequired) {
                 obj.result = true;
             } else {
@@ -668,7 +666,7 @@
                 obj.result = false;
                 return obj;
             }
-            var fieldOptions = (0, _helper._mergeObjects)({}, options.fieldOptions || {}, self.options.fieldOptions), currentFieldName = "", currentFieldType = "";
+            var fieldOptions = (0, _helper._mergeObjects)({}, self.options.fieldOptions, options.fieldOptions), currentFieldName = "", currentFieldType = "";
             if (typeof fieldOptions.focusOnRelated === "undefined") {
                 fieldOptions.focusOnRelated = false;
             }
@@ -923,8 +921,8 @@
                     event.preventDefault();
                 }
             };
-            options.fieldOptions = (0, _helper._mergeObjects)({}, options.fieldOptions || {}, self.options.fieldOptions);
-            options.formOptions = (0, _helper._mergeObjects)({}, options.formOptions || {}, self.options.formOptions);
+            options.fieldOptions = (0, _helper._mergeObjects)({}, self.options.fieldOptions, options.fieldOptions);
+            options.formOptions = (0, _helper._mergeObjects)({}, self.options.formOptions, options.formOptions);
             var handleValidation = options.fieldOptions.handleValidation, formValidation = handleValidation ? self.isValidForm(options) : {
                 result: true
             };

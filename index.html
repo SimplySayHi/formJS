@@ -309,8 +309,10 @@
             </p>
             <pre>
 &lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap,Promise,Promise.prototype.finally,fetch"&gt;&lt;/script&gt;</pre>
+            <br />
             <p>
-                If you are using the version with XMLHttpRequest ( formJS.xhr.js or formJS.xhr.min.js ) you can load this ( without support for Promise and Fetch APIs ):
+                If you are using the version with XMLHttpRequest ( formJS.xhr.js or formJS.xhr.min.js ) you can load this ( without support for Promise and Fetch APIs ):<br />
+                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code> <code>WeakMap</code>
             </p>
             <pre>
 &lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"&gt;&lt;/script&gt;</pre>
@@ -2315,7 +2317,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                             </li>
                         </ul>
                         <p class="mt-3 mb-0">
-                            Many relevant changes from previous version
+                            Many relevant changes from the previous version:
                         </p>
                         <ul>
                             <li>
@@ -2361,6 +2363,26 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                             </li>
                             <li>
                                 Minor improvements.
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="media my-3">
+                    <div class="version-num text-red">2.3.2</div>
+                    <div class="media-body pl-2">
+                        <ul>
+                            <li>
+                                Fixed a bug that caused options functions ( in case on array of functions, like onValidation ) to be incorrectly merged.
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="media my-3">
+                    <div class="version-num text-red">2.3.1</div>
+                    <div class="media-body pl-2">
+                        <ul>
+                            <li>
+                                Fixed a bug that caused checkboxes and radios to be validated twice ( on Chrome ) if "validateOnEvents" option in "fieldOptions" was set to "change blur".
                             </li>
                         </ul>
                     </div>
@@ -2547,7 +2569,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
     </div>
     
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 -->
-    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"></script>
+    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap,Promise,Promise.prototype.finally,fetch"></script>
 
     <script src="dist/formJS.min.js"></script>
     <script type="text/javascript">

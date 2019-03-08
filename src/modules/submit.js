@@ -12,8 +12,8 @@ export function submit( options = {}, event = null ){
               if( event ){ event.preventDefault(); }
           };
     
-    options.fieldOptions = _mergeObjects( {}, (options.fieldOptions || {}), self.options.fieldOptions );
-    options.formOptions = _mergeObjects( {}, (options.formOptions || {}), self.options.formOptions );
+    options.fieldOptions = _mergeObjects( {}, self.options.fieldOptions, options.fieldOptions );
+    options.formOptions = _mergeObjects( {}, self.options.formOptions, options.formOptions );
     
     const handleValidation = options.fieldOptions.handleValidation,
           formValidation = (handleValidation ? self.isValidForm( options ) : { result: true });

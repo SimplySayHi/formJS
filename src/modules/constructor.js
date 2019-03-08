@@ -20,7 +20,7 @@ export function _constructor( formEl, optionsObj = {} ){
     }
 
     self.formEl = checkFormEl.element;
-    self.options = _mergeObjects({}, optionsObj, Form.prototype.options);
+    self.options = _mergeObjects({}, Form.prototype.options, optionsObj);
     _setCallbackFunctionsInOptions.call( self );
 
     _formStartup.call( self );

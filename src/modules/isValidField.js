@@ -11,7 +11,7 @@ export function isValidField( fieldElem, fieldOptionsObj = {} ){
 
     if( !_isDOMNode(fieldEl) ){ return obj; }
 
-    let options =           _mergeObjects( {}, fieldOptionsObj, self.options.fieldOptions ),
+    let options =           _mergeObjects( {}, self.options.fieldOptions, fieldOptionsObj ),
         isValidValue =      fieldEl.value.trim().length > 0,
         isRequired =        fieldEl.required,
         isReqFrom =         fieldEl.matches('[data-required-from]'),
