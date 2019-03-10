@@ -24,7 +24,7 @@
                     menu
                 </button>
                 <span class="dropdown-menu">
-                    <a class="dropdown-item" href="formJS.zip">Download</a>
+                    <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS/archive/master.zip">Download Latest Version</a>
                     <a class="dropdown-item" href="demos.html">Demos</a>
                     <a class="dropdown-item" href="#browsers-support">Browsers Support</a>
                     <a class="dropdown-item" href="#dependencies">Dependencies</a>
@@ -51,26 +51,28 @@
                     </a>
                 </p>
             </div>
-            <h1>formJS</h1>            
+            <h1>formJS</h1>
             <p>
+                Javascript Form Validation. Made Easy
+            </p>
+            <div class="mt-5">
+                <p class="d-inline-block mb-1">
                 Version 
-                <span class="dropdown d-inline-block ml-1">
+                </p>
+                <div class="dropdown d-inline-block ml-1">
                     <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button">
                         3.0.0
                     </button>
                     <span class="dropdown-menu w-100 py-1">
-                        <a class="dropdown-item px-2" href="/plugins/formJS/2.3.0/">2.3.0</a>
-                        <a class="dropdown-item px-2" href="/plugins/formJS/2.2.1/">2.2.1</a>
-                        <a class="dropdown-item px-2" href="/plugins/formJS/2.2.0/">2.2.0</a>
-                        <a class="dropdown-item px-2" href="/plugins/formJS/2.1.0/">2.1.0</a>
-                        <a class="dropdown-item px-2" href="/plugins/formJS/2.0.0/">2.0.0</a>
-                        <a class="dropdown-item px-2" href="/plugins/formJS/1.2.0/">1.2.0</a>
-                        <a class="dropdown-item px-2" href="/plugins/formJS/1.1.2/">1.1.2</a>
+                        <a class="dropdown-item px-2" target="_blank" href="https://github.com/SimplySayHi/formJS/releases">All</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/2.3.2/">2.3.2</a>
+                        <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/1.2.0/">1.2.0</a>
                     </span>
-                </span>
+                </div>
                 <br />
                 Documentation
-            </p>
+            </div>
         </div>
 
         <!-- Demo -->
@@ -250,9 +252,11 @@
         
         <!-- Download -->
         <div id="download" class="text-center">
-            <h3>Download</h3>
+            <h3>Downloads</h3>
             <p>
-                <a href="formJS.zip"><i class="fa fa-download"></i> Download the zip package</a>
+                <a href="https://github.com/SimplySayHi/formJS/archive/master.zip"><i class="fa fa-download"></i> Download Latest Version</a>
+                <br />
+                <a href="https://github.com/SimplySayHi/formJS/releases" target="_blank">Go To Releases Page</a>
             </p>
         </div>
         
@@ -2357,9 +2361,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                             </li>
                             <li>
                                 Fixed a bug that caused field "data-required-from" to be validated even if not mandatory.
-                            </li>
-                            <li>
-                                Fixed a bug that caused checkboxes and radios to be validated twice when option "validateOnEvents" was set to "change blur" ( on Chrome ).
                             </li>
                             <li>
                                 Minor improvements.
