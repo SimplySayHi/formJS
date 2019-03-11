@@ -2360,9 +2360,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 Renamed attribute "data-exclude-json" with "data-exclude-data" for consistency with related "getFormData" method.
                             </li>
                             <li>
-                                Fixed a bug that caused field "data-required-from" to be validated even if not mandatory.
-                            </li>
-                            <li>
                                 Minor improvements.
                             </li>
                         </ul>
@@ -2372,6 +2369,9 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                     <div class="version-num text-red">2.3.2</div>
                     <div class="media-body pl-2">
                         <ul>
+                            <li>
+                                Fixed a bug that caused field "data-required-from" to be validated even if not mandatory.
+                            </li>
                             <li>
                                 Fixed a bug that caused options functions ( in case on array of functions, like onValidation ) to be incorrectly merged.
                             </li>
