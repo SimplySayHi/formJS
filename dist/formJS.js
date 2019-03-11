@@ -506,7 +506,7 @@
             }
             var self = this, fieldEl = typeof fieldElem === "string" ? self.formEl.querySelector(fieldElem) : fieldElem;
             var options = (0, _helper._mergeObjects)({}, fieldOptionsObj, self.options.fieldOptions), isValidValue = fieldEl.value.trim().length > 0, isRequired = fieldEl.required, isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = self.formEl.querySelector(fieldEl.getAttribute("data-required-from")), isValidateIfFilled = fieldEl.matches("[data-validate-if-filled]"), isValid = isValidValue, containerEl = fieldEl.closest("[data-formjs-question]");
-            if (!isRequired && !isValidateIfFilled && !isReqFrom || isValidateIfFilled && !isValidValue || isReqFrom && !isRequired && !reqMoreEl.checked) {
+            if (!isRequired && !isValidateIfFilled && !isReqFrom || isValidateIfFilled && !isValidValue || isReqFrom && !isRequired) {
                 isValid = true;
             } else {
                 isValid = _isValid2._isValid.call(self, fieldEl, options);
@@ -627,7 +627,9 @@
                         var findReqMoreEl = isReqMore ? fieldEl : self.formEl.querySelector('[name="' + fieldEl.name + '"][data-require-more]'), findReqFromEl = findReqMoreEl !== null ? self.formEl.querySelector('[data-required-from="#' + findReqMoreEl.id + '"]') : null;
                         if (isReqMore) {
                             if (findReqFromEl !== null) {
-                                findReqFromEl.required = true;
+                                if (fieldEl.required) {
+                                    findReqFromEl.required = true;
+                                }
                                 if (self.options.fieldOptions.focusOnRelated) {
                                     findReqFromEl.focus();
                                 }
@@ -900,10 +902,10 @@
             },
             requiredFrom: function requiredFrom(data) {
                 var fieldEl = data.fieldEl, formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0, reqMoreEl = formEl.querySelector(fieldEl.getAttribute("data-required-from")), checkedEl = formEl.querySelector('[name="' + reqMoreEl.name + '"]:checked');
-                if (!reqMoreEl.checked) {
-                    return true;
+                if (reqMoreEl.checked && reqMoreEl.required) {
+                    return isValidValue;
                 }
-                return reqMoreEl.required && reqMoreEl.checked ? isValidValue : reqMoreEl.required ? checkedEl !== null : true;
+                return checkedEl !== null;
             }
         };
     },

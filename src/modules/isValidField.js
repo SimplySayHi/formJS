@@ -24,7 +24,7 @@ export function isValidField( fieldElem, fieldOptionsObj = {} ){
     if(
         (!isRequired && !isValidateIfFilled && !isReqFrom) || 
         (isValidateIfFilled && !isValidValue) ||
-        (isReqFrom && !isRequired && !reqMoreEl.checked)
+        (isReqFrom && !isRequired)
     ){
 
         isValid = true;

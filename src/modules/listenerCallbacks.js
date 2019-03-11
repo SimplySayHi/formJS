@@ -62,6 +62,7 @@ export const _callbackFns = {
     },
 
     validation: function( event ){
+
         const self = this,
             eventName = event.type,
             fieldEl = event.target;
@@ -81,8 +82,9 @@ export const _callbackFns = {
                 if( isReqMore ){
 
                     if( findReqFromEl !== null ){
-                        findReqFromEl.required = true;
-
+                        if( fieldEl.required ){
+                            findReqFromEl.required = true;
+                        }
                         if( self.options.fieldOptions.focusOnRelated ){
                             findReqFromEl.focus();
                         }
@@ -101,8 +103,8 @@ export const _callbackFns = {
             // HANDLE data-required-from FIELDS
             if( isReqFrom ){
                 if( isValidValue ){
-                    let reqMoreEl = self.formEl.querySelector( fieldEl.getAttribute('data-required-from') );
 
+                    let reqMoreEl = self.formEl.querySelector( fieldEl.getAttribute('data-required-from') );
                     reqMoreEl.checked = true;
 
                     if( reqMoreEl.required ){
@@ -115,7 +117,7 @@ export const _callbackFns = {
                 (isFieldForChangeEvent && eventName === 'change') ||
                 (!isFieldForChangeEvent && eventName !== 'change')
             ){
-
+                
                 const validationResult = self.isValidField( fieldEl ),
                     callbackData = [ { field: fieldEl, result: validationResult} ];
 
@@ -123,6 +125,7 @@ export const _callbackFns = {
 
             }
         }
+        
     }
 
 };

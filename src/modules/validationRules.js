@@ -208,11 +208,11 @@ export const _validationRulesAttributes = {
             reqMoreEl = formEl.querySelector( fieldEl.getAttribute('data-required-from') ),
             checkedEl = formEl.querySelector( '[name="'+ reqMoreEl.name +'"]:checked' );
 
-        if( !reqMoreEl.checked ){
-            return true;
+        if( reqMoreEl.checked && reqMoreEl.required ){
+            return isValidValue;
         }
         
-        return ((reqMoreEl.required && reqMoreEl.checked) ? isValidValue : (reqMoreEl.required ? checkedEl !== null : true));
+        return checkedEl !== null;
     }
     
 };
