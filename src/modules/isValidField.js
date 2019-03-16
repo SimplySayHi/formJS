@@ -1,5 +1,5 @@
 
-import { _isDOMNode, _mergeObjects } from './helper.js';
+import { _isDOMNode, _mergeObjects, _validateFieldObjDefault } from './helper.js';
 import { _isValid } from './isValid.js';
 
 export function isValidField( fieldElem, fieldOptionsObj = {} ){
@@ -7,7 +7,7 @@ export function isValidField( fieldElem, fieldOptionsObj = {} ){
     const self = this,
           fieldEl = (typeof fieldElem === 'string' ? self.formEl.querySelector(fieldElem) : fieldElem);
 
-    let obj = { result: false, fieldEl: null };
+    let obj = _mergeObjects({}, _validateFieldObjDefault);
 
     if( !_isDOMNode(fieldEl) ){ return obj; }
 

@@ -1,5 +1,5 @@
 
-import { _executeCallback, _fieldsStringSelector } from './helper.js';
+import { _executeCallback, _fieldsStringSelector, _isFieldForChangeEvent } from './helper.js';
 
 export const _callbackFns = {
 
@@ -77,7 +77,7 @@ export const _callbackFns = {
             fieldEl = event.target;
 
         if( fieldEl.matches( _fieldsStringSelector ) ){
-            const isFieldForChangeEvent = fieldEl.matches( 'select, [type="radio"], [type="checkbox"], [type="file"]' ),
+            const isFieldForChangeEvent = _isFieldForChangeEvent(fieldEl),
                 isRadio = fieldEl.type === 'radio',
                 isReqFrom = fieldEl.matches('[data-required-from]'),
                 isReqMore = fieldEl.matches('[data-require-more]'),

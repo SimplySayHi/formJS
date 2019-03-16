@@ -3,6 +3,7 @@
 
 import { _mergeObjects }        from './modules/helper.js';
 import { _callbackFns }         from './modules/listenerCallbacks.js';
+import { _setCallbackFunctionsInOptions } from './modules/optionsUtils.js';
 
 import { options }              from './modules/options.js';
 import { validationRules }      from './modules/validationRules.js';
@@ -66,12 +67,12 @@ class Form {
         submit.call(this, optionsObj, event);
     }
 
-    validateField( fieldElem ){
-        return validateField.call(this, fieldElem);
+    validateField( fieldElem, fieldOptions ){
+        return validateField.call(this, fieldElem, fieldOptions);
     }
 
-    validateForm(){
-        return validateForm.call(this);
+    validateForm( optionsObj ){
+        return validateForm.call(this, optionsObj);
     }
     
     static addValidationRules( rulesObj ){
@@ -88,6 +89,8 @@ Form.prototype.isInitialized = false;
 Form.prototype.options = options;
 Form.prototype.validationRules = validationRules;
 Form.prototype.version = version;
+
+_setCallbackFunctionsInOptions.call(Form.prototype);
 
 if( !window.Form ){ window.Form = Form; }
 if( !window.FormJS ) { window.FormJS = Form; }

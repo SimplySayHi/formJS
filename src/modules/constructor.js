@@ -1,6 +1,5 @@
 
 import { _checkFormEl, _isNodeList, _mergeObjects } from './helper.js';
-import { _setCallbackFunctionsInOptions }           from './optionsUtils.js';
 import { _formStartup }                             from './formStartup.js';
 
 export function _constructor( formEl, optionsObj = {} ){
@@ -21,7 +20,6 @@ export function _constructor( formEl, optionsObj = {} ){
 
     self.formEl = checkFormEl.element;
     self.options = _mergeObjects({}, Form.prototype.options, optionsObj);
-    _setCallbackFunctionsInOptions.call( self );
 
     _formStartup.call( self );
     

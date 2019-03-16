@@ -24,11 +24,11 @@ document.addEventListener('click', function(e){
 var options = {
         fieldOptions: {
             checkDirtyField: true,
-            onPastePrevented: function( fieldEl ){
+            onPastePrevented: function onPastePreventedTest ( fieldEl ){
                 console.log('onPastePrevented this', this);
                 console.log('onPastePrevented field', fieldEl);
             },
-            onValidation: function( fieldsArray ){
+            onValidation: function onValidationTest ( fieldsArray ){
                 console.log('onValidation this ', this);
                 console.log('onValidation fieldsArray', fieldsArray);
                 
@@ -48,7 +48,7 @@ var options = {
                     return url;
                 })()
             },
-            beforeSend: function( data ){
+            beforeSend: function beforeSendTest ( data ){
                 console.log('beforeSend this', this);
                 console.log('beforeSend data', data);
 
@@ -59,7 +59,7 @@ var options = {
 
                 return data;
             },
-            onSubmitSuccess: function( ajaxData ){
+            onSubmitSuccess: function onSubmitSuccessTest ( ajaxData ){
                 console.log('onSubmitSuccess this', this);
                 console.log('onSubmitSuccess ajaxData JSON string', ajaxData);
 
@@ -77,7 +77,7 @@ var options = {
                     feedbackEl.innerHTML = 'Great! Your infos have been sent :D';
                 }
             },
-            onSubmitError: function( ajaxData ){
+            onSubmitError: function onSubmitErrorTest ( ajaxData ){
                 console.log('onSubmitError this', this);
                 console.log('onSubmitError ajaxData', ajaxData);
 
@@ -91,7 +91,7 @@ var options = {
                     feedbackEl.innerHTML = 'Oh no, something went wrong! :( Retry';
                 }
             },
-            onSubmitComplete: function(){
+            onSubmitComplete: function onSubmitCompleteTest (){
                 console.log('onSubmitComplete this', this);
             }
         }

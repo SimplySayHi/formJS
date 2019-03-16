@@ -4,7 +4,7 @@ import { _checkDirtyField }         from './checkDirtyField.js';
 
 const _defaultCallbacksInOptions = {
     fieldOptions: {
-        onValidation: function ( fieldsArray ) {
+        onValidation: function onValidationDefault ( fieldsArray ) {
 
             let self = this,
                 options = self.options.fieldOptions;
@@ -57,8 +57,7 @@ const _defaultCallbacksInOptions = {
 };
 
 export const _setCallbackFunctionsInOptions = function(){
-
-    const self = this,
+    const   self = this,
             callbacks = {
                 fieldOptions: ['onPastePrevented', 'onValidation'],
                 formOptions: ['beforeSend', 'onSubmitComplete', 'onSubmitError', 'onSubmitSuccess']
@@ -71,12 +70,10 @@ export const _setCallbackFunctionsInOptions = function(){
             let fnInOptions = self.options[opt][fnName],
                 fnList = [];
 
-            if( typeof fnInOptions === 'function' ){
-                fnList.push(fnInOptions);
-            } else if( Array.isArray(fnInOptions) ) {
+            if( Array.isArray(fnInOptions) ) {
                 fnList.concat(fnInOptions);
-            } else {
-                return;
+            } else if( fnInOptions ) {
+                fnList.push(fnInOptions);
             }
 
             if( typeof _defaultCallbacksInOptions[opt] !== 'undefined' && typeof _defaultCallbacksInOptions[opt][fnName] === 'function' ){

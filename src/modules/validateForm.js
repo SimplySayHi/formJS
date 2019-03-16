@@ -1,12 +1,13 @@
 
-import { _executeCallback } from './helper.js';
+import { _executeCallback, _mergeObjects } from './helper.js';
 
-export function validateForm(){
+export function validateForm( optionsObj = {} ){
 
     const self = this,
-          obj = self.isValidForm();
+          obj = self.isValidForm( optionsObj );
+    let options = _mergeObjects({}, self.options, optionsObj);
 
-    _executeCallback.call( self, self.options.fieldOptions.onValidation, obj.fields );
+    _executeCallback.call( self, options.fieldOptions.onValidation, obj.fields );
 
     return obj;
     
