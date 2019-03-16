@@ -1136,7 +1136,7 @@ var formInstance = new Form( formEl, options ).init();
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <pre class="text-green">getFormData( customFn )</pre>
+                                <pre class="text-green">getFormData( [customFn] )</pre>
                             </div>
                             <div class="col-5">
                                 <p>
@@ -1160,7 +1160,7 @@ var formInstance = new Form( formEl, options ).init();
                                 </ul>
                                 <ul class="card-footer no-bg pt-3 pl-3 pr-0 pb-0">
                                     <li>
-                                        <span class="text-green">customFn</span>: custom function to collect data from the form answers ( MUST have a return statement ).<br />
+                                        <span class="text-green">customFn</span>: ( Optional ) custom function to collect data from the form answers ( MUST have a return statement ).<br />
                                             Can also be set as "getFormData" in "formOptions".<br />
                                             See <a href="#form-options">Form Options</a> section for details.
                                     </li>
@@ -1280,7 +1280,7 @@ var formInstance = new Form( formEl, options ).init();
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <pre class="text-green">submit( [options, [event]] )</pre>
+                                <pre class="text-green">submit( [options[, event]] )</pre>
                             </div>
                             <div class="col-5">
                                 <p>
@@ -1320,16 +1320,19 @@ var formInstance = new Form( formEl, options ).init();
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <pre class="text-green">validateField( field )</pre>
+                                <pre class="text-green">validateField( field[, fieldOptions] )</pre>
                             </div>
                             <div class="col-5">
                                 <p>
                                     Fires validation for the specified field ( with "isValidField" method ).<br />
-                                    Then, this also fires feedback on UI ( basic feedback with css classes ) and callback function(s) ( "onValidation" in "fieldOptions" ) <u>according to the initialization options</u> for the form instance.
+                                    Then, this also fires feedback on UI ( basic feedback with css classes ) and callback function(s) ( "onValidation" in "fieldOptions" ).
                                 </p>
                                 <ul>
                                     <li>
                                         <span class="text-green">field</span>: CSS string selector ( or node element <span class="text-yellow">*</span> ) for the form field ( input, select, textarea )
+                                    </li>
+                                    <li>
+                                        <span class="text-green">fieldOptions</span>: ( Optional ) JS object. For default values see <a href="#field-options">Field Options section</a>
                                     </li>
                                 </ul>
                                 <p class="d-flex">
@@ -1350,13 +1353,18 @@ var formInstance = new Form( formEl, options ).init();
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <pre class="text-green">validateForm()</pre>
+                                <pre class="text-green">validateForm( [options] )</pre>
                             </div>
                             <div class="col-5">
                                 <p>
                                     Fires validation for the form ( with "isValidForm" method ).<br />
-                                    Then, this also fires feedback on UI for each field ( basic feedback with css classes ) and callback function(s) passing the full array of fields ( "onValidation" in "fieldOptions" ) <u>according to the initialization options</u> for the form instance.
+                                    Then, this also fires feedback on UI for each field ( basic feedback with css classes ) and callback function(s) passing the full array of fields ( "onValidation" in "fieldOptions" ).
                                 </p>
+                                <ul>
+                                    <li>
+                                        <span class="text-green">options</span>: ( Optional ) JS object with fieldOptions and/or formOptions. For default values see <a href="#options-list">Options section</a>
+                                    </li>
+                                </ul>
                             </div>
                             <div class="col-3">
                                 <p>
