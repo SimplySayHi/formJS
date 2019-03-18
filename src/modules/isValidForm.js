@@ -6,7 +6,7 @@ export function isValidForm( options = {} ){
 
     if( formEl === null || !formEl.matches('[novalidate]') ){ return false; }
     
-    var fieldOptions = _mergeObjects( {}, options.fieldOptions || {}, self.options.fieldOptions ),
+    var fieldOptions = _mergeObjects( {}, self.options.fieldOptions, options.fieldOptions || {} ),
         obj = {
             fields: [],
             result: true

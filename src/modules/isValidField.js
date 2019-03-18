@@ -9,7 +9,7 @@ export function isValidField( fieldElem, fieldOptionsObj = {} ){
     const self = this,
           fieldEl = (typeof fieldElem === 'string' ? self.formEl.querySelector(fieldElem) : fieldElem);
 
-    let options =           _mergeObjects( {}, fieldOptionsObj, self.options.fieldOptions ),
+    let options =           _mergeObjects( {}, self.options.fieldOptions, fieldOptionsObj ),
         
         isValidValue =      fieldEl.value.trim().length > 0,
         

@@ -2,6 +2,7 @@
 
 import { _checkFormEl, _isNodeList, _mergeObjects } from './modules/helper.js';
 import { _callbackFns }         from './modules/listenerCallbacks.js';
+import { _setCallbackFunctionsInOptions } from './modules/optionsUtils.js';
 
 import { options }              from './modules/options.js';
 import { validationRules }      from './modules/validationRules.js';
@@ -28,9 +29,8 @@ class Form {
         if( _isNodeList(formEl) ){ throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!'); }
         if( !checkFormEl.result ){ throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!'); }
 
-        self.isInitialized = false;
         self.formEl = checkFormEl.element;
-        self.options = _mergeObjects({}, optionsObj, Form.prototype.options);
+        self.options = _mergeObjects({}, Form.prototype.options, optionsObj);
 
         _listenerCallbacks.set(self, {
             charCount:          _callbackFns.charCount,
@@ -57,12 +57,7 @@ class Form {
     }
 
     init(){
-        const self = this;
-
-        init.call(self);
-        self.isInitialized = true;
-
-        return self;
+        return init.call(this);
     }
     
     isValidField( fieldEl, fieldOptions ){
@@ -78,17 +73,20 @@ class Form {
     }
     
     static addValidationRules( rulesObj ){
-        this.prototype.validationRules = _mergeObjects({}, rulesObj, this.prototype.validationRules);
+        this.prototype.validationRules = _mergeObjects({}, this.prototype.validationRules, rulesObj);
     }
     
     static setOptions( optionsObj ){
-        this.prototype.options = _mergeObjects({}, optionsObj, this.prototype.options);
+        this.prototype.options = _mergeObjects({}, this.prototype.options, optionsObj);
     }
 }
 
-Form.prototype.version = version;
+Form.prototype.isInitialized = false;
 Form.prototype.validationRules = validationRules;
 Form.prototype.options = options;
+Form.prototype.version = version;
+
+_setCallbackFunctionsInOptions.call(Form.prototype);
 
 if( !window.Form ){ window.Form = Form; }
 if( !window.FormJS ) { window.FormJS = Form; }

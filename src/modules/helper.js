@@ -27,6 +27,10 @@ _isDOMNode = function( node ){
     return Element.prototype.isPrototypeOf( node );
 },
 
+_isFieldForChangeEvent = function ( fieldEl ) {
+    return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
+},
+
 _isNodeList = function( nodeList ){
     return NodeList.prototype.isPrototypeOf( nodeList );
 },
@@ -57,20 +61,28 @@ _mergeObjects = function( out = {} ){
             let isArray = Object.prototype.toString.call(obj[key]) === "[object Array]";
             let isObject = Object.prototype.toString.call(obj[key]) === "[object Object]";
 
-            if( (!out.hasOwnProperty(key) && !isObject) || isArray ){
+            // COPY ONLY ENUMERABLE PROPERTIES
+            if( obj.hasOwnProperty(key) ){
                 if( isArray ){
-                    if( typeof out[key] === 'undefined' ){
+
+                    if( typeof out[key] === 'undefined' || out[key] === null ){
                         out[key] = [];
                     }
-                    obj[key].forEach(function( item ){
-                        out[key].unshift( item );
-                    });
-                } else {
-                    out[key] = obj[key];
-                }
-            } else {
-                if( isObject ){
+                    out[key] = out[key].concat( obj[key].slice(0) );
+
+                } else if( isObject ){
+
                     out[key] = _mergeObjects(out[key], obj[key]);
+
+                } else {
+
+                    // STRING | NUMBER | BOOLEAN | FUNCTION
+                    if( Array.isArray(out[key]) ){
+                        out[key].push(obj[key]);
+                    } else {
+                        out[key] = obj[key];
+                    }
+
                 }
             }
         }

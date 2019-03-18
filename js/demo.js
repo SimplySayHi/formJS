@@ -25,10 +25,10 @@ var optionsPlugin = {
         fieldOptions: {
             checkDirtyField: true,
             cssClasses: { dirty: 'is-dirty custom-dirty-field' },
-            onPastePrevented: function( fieldEl ){
+            onPastePrevented: function onPastePreventedDemo01 ( fieldEl ){
                 console.log( 'Paste event prevented on field ', fieldEl );
             },
-            onValidation: function( fieldsArray ){
+            onValidation: function onValidationDemo01 ( fieldsArray ){
                 console.log('onValidation fieldsArray ', fieldsArray);
                 for(var f=0; f<fieldsArray.length; f++){
                     var field = fieldsArray[f];
@@ -37,7 +37,7 @@ var optionsPlugin = {
             }
         },
         formOptions: {
-            beforeSend: function( data ){
+            beforeSend: function beforeSendDemo01 ( data ){
                 console.log('this', this);
                 console.log( 'beforeSend data ', data );
 
@@ -48,7 +48,7 @@ var optionsPlugin = {
 
                 return data;
             },
-            onSubmitSuccess: function( ajaxData ){
+            onSubmitSuccess: function onSubmitSuccessDemo01 ( ajaxData ){
                 console.log('this', this);
                 console.log( 'onSubmitSuccess ajaxData ', ajaxData );
 
@@ -62,7 +62,7 @@ var optionsPlugin = {
                     feedbackEl.innerHTML = 'Great! Your infos have been sent :D';
                 }
             },
-            onSubmitError: function( ajaxData ){
+            onSubmitError: function onSubmitErrorDemo01 ( ajaxData ){
                 console.log('this', this);
                 console.log( 'onSubmitError ajaxData ', ajaxData );
 
@@ -76,7 +76,7 @@ var optionsPlugin = {
                     feedbackEl.innerHTML = 'Oh no, something went wrong! :( Retry';
                 }
             },
-            onSubmitComplete: function( ajaxData ){
+            onSubmitComplete: function onSubmitCompleteDemo01 ( ajaxData ){
                 console.log('this', this);
                 console.log( 'onSubmitComplete ajaxData ', ajaxData );
             }
@@ -97,6 +97,7 @@ Form.addValidationRules({
 // WORKS ONLY FOR NEW INSTANCES
 var addToDefOpts = {
         fieldOptions: {
+            onValidation: function onValidationDemoDefaultNew ( fieldsArray ){},
             maxFileSize: 99,
             validateOnEvents: 'change blur',
             cssClasses: { error: 'has-error custom-error-class' }
@@ -127,10 +128,10 @@ var optionsPlugin2 = {
         fieldOptions: {
             checkDirtyField: true,
             cssClasses: { dirty: 'is-dirty custom-dirty-field' },
-            onPastePrevented: function( fieldEl ){
+            onPastePrevented: function onPastePreventedDemo02 ( fieldEl ){
                 console.log( 'Paste event prevented on field ', fieldEl );
             },
-            onValidation: function( fieldsArray ){
+            onValidation: function onValidationDemo02 ( fieldsArray ){
                 console.log('onValidation fieldsArray ', fieldsArray);
                 for(var f=0; f<fieldsArray.length; f++){
                     var field = fieldsArray[f];
