@@ -1,38 +1,4 @@
 
-document.addEventListener('click', function(e){
-    var key = e.which || e.keyCode;
-
-    if( key === 1 ){
-        var elem = e.target,
-            cardHeaderSelector = '.panel-collapsible .card-header',
-            dropDownSelector = '[data-toggle="dropdown"]',
-            checkElement = function( cssSelector ){
-                return (elem.matches(cssSelector) ? elem : (elem.closest(cssSelector) || null));
-            };
-        
-        if( checkElement(cardHeaderSelector) ){
-            e.preventDefault();
-            
-            var cardHeader = checkElement(cardHeaderSelector),
-                panelEl = elem.closest('.panel').querySelector('.card-body'),
-                panelDisplay = panelEl.style.display;
-            
-            cardHeader.classList.toggle('active');
-            panelEl.style.display = (panelDisplay === '' || panelDisplay === 'none' ? 'block' : 'none');
-        } else if( checkElement(dropDownSelector) ){
-            e.preventDefault();
-
-            var dropDown = checkElement(dropDownSelector),
-                dropDownList = dropDown.nextElementSibling,
-                dropDownAriaExpanded = dropDown.getAttribute('aria-expanded'),
-                ariaExpValue = ( !dropDownAriaExpanded || dropDownAriaExpanded === 'false' ? 'true' : 'false' );
-
-            dropDown.setAttribute('aria-expanded', ariaExpValue);
-            dropDownList.classList.toggle('show');
-        }
-    }
-}, false);
-
 var optionsPlugin = {
         fieldOptions: {
             checkDirtyField: true,

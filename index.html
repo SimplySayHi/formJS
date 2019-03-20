@@ -92,31 +92,10 @@
                                 </div>
                                 <div data-formjs-question="" class="form-group">
                                     <div class="answers-box label-move-up">
-                                        <input name="surname" type="text" class="form-control" required="" />
-                                        <label>Surname</label>
-                                    </div>
-                                    <div class="field-error-message small">Write your surname!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="fiscalCode" type="text" data-subtype="fiscal-code" class="form-control text-uppercase" required="" />
-                                        <label>Fiscal Code</label>
-                                    </div>
-                                    <div class="field-error-message small">Check your fiscal code, it is not valid!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="vatNumber" type="text" data-subtype="vat-number" class="form-control" required="" />
-                                        <label>VAT Number</label>
-                                    </div>
-                                    <div class="field-error-message small">Check your VAT number, it is not valid!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
                                         <input name="username" type="text" data-subtype="username" class="form-control" required="" />
                                         <label>Username</label>
                                     </div>
-                                    <div class="field-error-message small">Username must have at least 3 characters (no special chars allowed)!</div>
+                                    <div class="field-error-message small">Username must have at least 3 chars ( no special chars allowed )!</div>
                                 </div>
                                 <div data-formjs-question="" class="form-group">
                                     <div class="answers-box label-move-up">
@@ -127,52 +106,10 @@
                                 </div>
                                 <div data-formjs-question="" class="form-group">
                                     <div class="answers-box label-move-up">
-                                        <input name="mobileNumber" type="text" data-subtype="mobile-number" class="form-control" required="" />
-                                        <label>Mobile number</label>
-                                    </div>
-                                    <div class="field-error-message small">Check your mobile number, it is not valid!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="landlineNumber" type="text" data-subtype="landline-number" class="form-control" data-validate-if-filled="" />
-                                        <label>Landline number</label>
-                                    </div>
-                                    <div class="field-error-message small">Check your landline number, it is not valid!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="zipCode" type="text" data-subtype="cap" class="form-control" data-validate-if-filled="" />
-                                        <label>ZIP</label>
-                                    </div>
-                                    <div class="field-error-message small">Check your ZIP code, it is not valid!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
                                         <input name="websiteUrl" type="text" data-subtype="url" class="form-control" data-validate-if-filled="" />
                                         <label>Website</label>
                                     </div>
                                     <div class="field-error-message small">Check your website url, it is not valid!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="date" type="text" data-subtype="date" class="form-control" data-validate-if-filled="" />
-                                        <label>Date</label>
-                                    </div>
-                                    <div class="field-error-message small">Check the date, it is not valid!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="hexColor" type="text" data-subtype="hex-color" class="form-control" data-validate-if-filled="" />
-                                        <label>HEX color</label>
-                                    </div>
-                                    <div class="field-error-message small">Check your HEX color, it is not valid!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="test" type="number" min="10" max="50" data-exact-length="2" class="form-control" required="" />
-                                        <label>Number ( min 10 - max 50 )</label>
-                                    </div>
-                                    <div class="field-error-message small">Check your number, it is not valid (min 10, max 50, exact-length 2)!</div>
                                 </div>
                                 <div data-formjs-question="" class="form-group">
                                     <div class="answers-box label-move-up">
@@ -253,7 +190,7 @@
             <h3>Downloads</h3>
             <p>
                 <a href="https://github.com/SimplySayHi/formJS/archive/master.zip"><i class="fa fa-download"></i> Download Latest Version</a>
-                <br />
+                <br class="d-block mt-2" />
                 <a href="https://github.com/SimplySayHi/formJS/releases" target="_blank">Go To Releases Page</a>
             </p>
         </div>
@@ -1718,9 +1655,12 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                                 <pre>
 {
-    maxlength: true,
-    minlength: true,
-    invalidChars: true
+    missingAtChar: true,
+    missingUserName: true,
+    missingDomain: true,
+    missingExtensionDot: true,
+    missingExtension: true,
+    minlengthExtension: true
 }</pre>
                             </div>
                         </div>
@@ -1791,6 +1731,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                                 <pre>
 {
+    file: true,
     maxFileSize: true,
     acceptedFileType: true
 }</pre>
@@ -1852,7 +1793,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                                 <pre>
 {
-    dataLength: true,
+    stringLength: true,
     maxlength: true,
     minlength: true
 }</pre>
@@ -2060,6 +2001,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
 {
     minlength: true,
     missingNumber: true,
+    missingLowercase: true,
     missingUppercase: true,
     invalidChars: true
 }</pre>
@@ -2226,6 +2168,14 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p class="small text-lowercase text-opacity">
                                     VAT NUMBER CAN CONTAIN OR NOT THE 'IT' STRING ( AS FOR ITALIAN VAT NUMBERS ) AND THEN 11 NUMBERS
                                 </p>
+                                <p>
+                                    "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    minlength: true,
+    maxlength: true
+}</pre>
                             </div>
                         </div>
                     </div>
@@ -2307,7 +2257,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
             </p>
             <ul>
                 <li>
-                    isInitialized: wether or not the init method was called.
+                    isInitialized: wether or not the init method was called on the Form instance.
                 </li>
                 <li>
                     version: the version number.
@@ -2585,7 +2535,9 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EGDE VERSIONS -->
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap,Promise,Promise.prototype.finally,fetch"></script>
 
+    <script src="js/include.js"></script>
     <script src="dist/formJS.min.js"></script>
     <script src="js/doc.js"></script>
+    
 </body>
 </html>

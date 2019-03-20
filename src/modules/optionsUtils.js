@@ -11,7 +11,6 @@ const _defaultCallbacksInOptions = {
 
             fieldsArray.forEach(function( obj ){
                 let fieldEl = obj.fieldEl,
-                    hasTypedValue = fieldEl.value.trim().length > 0,
                     containerEl = fieldEl.closest('[data-formjs-question]'),
                     isReqFrom = fieldEl.matches('[data-required-from]'),
                     reqMoreEl = self.formEl.querySelector( fieldEl.getAttribute('data-required-from') );
@@ -39,7 +38,7 @@ const _defaultCallbacksInOptions = {
                         let isChecks = fieldEl.matches('[data-checks]'),
                             checkedElLength = (isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0);
 
-                        if( (!isChecks && !hasTypedValue) || (isChecks && checkedElLength === 0) ){
+                        if( (!isChecks && (obj.errors && obj.errors.empty)) || (isChecks && checkedElLength === 0) ){
                             extraErrorClass = options.cssClasses.errorEmpty;
                         }
 

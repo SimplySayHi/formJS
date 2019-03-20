@@ -1,25 +1,3 @@
-document.addEventListener('click', function(e){
-    var key = e.which || e.keyCode;
-
-    if( key === 1 ){
-        var elem = e.target,
-            elemSelector = '.panel-collapsible .card-header',
-            panelHeadingEL = (
-                elem.matches(elemSelector) ? 
-                elem : elem.closest(elemSelector)
-            );
-        
-        if( panelHeadingEL ){
-            e.preventDefault();
-            
-            var panelEl = elem.closest('.panel').querySelector('.card-body'),
-                panelDisplay = panelEl.style.display;
-            
-            panelHeadingEL.classList.toggle('active');
-            panelEl.style.display = (panelDisplay === '' || panelDisplay === 'none' ? 'block' : 'none');
-        }
-    }
-}, false);
 
 var options = {
         fieldOptions: {

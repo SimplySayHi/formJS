@@ -2,6 +2,7 @@
 * text=auto
 index.html linguist-documentation
 demos.html linguist-documentation
+test.html linguist-documentation
 css/* linguist-documentation
 js/* linguist-documentation
 json/* linguist-documentation

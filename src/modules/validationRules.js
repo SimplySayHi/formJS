@@ -187,6 +187,7 @@ export const validationRules = {
             let strLength = string.length;
             if( strLength < 8 ){ obj.errors.minlength = true; }
             if( !/\d/.test(string) ){ obj.errors.missingNumber = true; }
+            if( !/[a-z]/.test(string) ){ obj.errors.missingLowercase = true; }
             if( !/[A-Z]/.test(string) ){ obj.errors.missingUppercase = true; }
             if( /[^0-9a-zA-Z]/.test(string) ){ obj.errors.invalidChars = true; }
 
@@ -349,6 +350,7 @@ export const _validationRulesAttributes = {
                 if( typeof obj.errors === 'undefined' ){
                     obj.errors = {};
                 }
+                obj.errors.file = true;
                 if( exceedMaxFileSize ){ obj.errors.maxFileSize = true; }
                 if( !isAcceptedFileType ){ obj.errors.acceptedFileType = true; }
 
@@ -368,7 +370,7 @@ export const _validationRulesAttributes = {
 
             if( !obj.result ){
 
-                obj.errors = { length: true };
+                obj.errors = { stringLength: true };
                 if( !isMinlengthOk ){ obj.errors.minlength = true; }
                 if( !isMaxlengthOk ){ obj.errors.maxlength = true; }
 

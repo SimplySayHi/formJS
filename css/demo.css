@@ -353,12 +353,35 @@ label, .radio label, .checkbox label {
 }
 
 /* FIELD ERROR MESSAGE */
-.field-error-message {
+.field-error-message,
+[data-error-type] {
     display: none;
     color: #a94442;
 }
-.has-error .field-error-message {
+.has-error .field-error-message,
+.has-error.has-error-empty [data-error-type="empty"],
+.has-error.has-error-rule [data-error-type="rule"] {
     display: block;
+}
+.has-error.has-error-empty li[data-error-type="empty"],
+.has-error.has-error-rule li[data-error-type="rule"] {
+    display: list-item;
+}
+
+.has-error.has-error-rule-maxlength li[data-error-type="maxlength"],
+.has-error.has-error-rule-minlength li[data-error-type="minlength"],
+.has-error.has-error-rule-missingNumber li[data-error-type="missingNumber"],
+.has-error.has-error-rule-missingLowercase li[data-error-type="missingLowercase"],
+.has-error.has-error-rule-missingUppercase li[data-error-type="missingUppercase"],
+.has-error.has-error-rule-invalidChars li[data-error-type="invalidChars"],
+.has-error.has-error-rule-invalidStartChar li[data-error-type="invalidStartChar"]
+.has-error.has-error-rule-missingAtChar li[data-error-type="missingAtChar"],
+.has-error.has-error-rule-missingUserName li[data-error-type="missingUserName"],
+.has-error.has-error-rule-missingDomain li[data-error-type="missingDomain"],
+.has-error.has-error-rule-missingExtensionDot li[data-error-type="missingExtensionDot"],
+.has-error.has-error-rule-missingExtension li[data-error-type="missingExtension"],
+.has-error.has-error-rule-minlengthExtension li[data-error-type="minlengthExtension"] {
+    display: list-item;
 }
 
 /* PANELS */

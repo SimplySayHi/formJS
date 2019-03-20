@@ -907,7 +907,7 @@
                 onValidation: function onValidationDefault(fieldsArray) {
                     var self = this, options = self.options.fieldOptions;
                     fieldsArray.forEach(function(obj) {
-                        var fieldEl = obj.fieldEl, hasTypedValue = fieldEl.value.trim().length > 0, containerEl = fieldEl.closest("[data-formjs-question]"), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = self.formEl.querySelector(fieldEl.getAttribute("data-required-from"));
+                        var fieldEl = obj.fieldEl, containerEl = fieldEl.closest("[data-formjs-question]"), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = self.formEl.querySelector(fieldEl.getAttribute("data-required-from"));
                         if (options.checkDirtyField) {
                             _checkDirtyField2._checkDirtyField.call(self, fieldEl);
                         }
@@ -921,7 +921,7 @@
                             } else {
                                 var extraErrorClass = options.cssClasses.errorRule;
                                 var isChecks = fieldEl.matches("[data-checks]"), checkedElLength = isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0;
-                                if (!isChecks && !hasTypedValue || isChecks && checkedElLength === 0) {
+                                if (!isChecks && obj.errors && obj.errors.empty || isChecks && checkedElLength === 0) {
                                     extraErrorClass = options.cssClasses.errorEmpty;
                                 }
                                 var _errorClasses = options.cssClasses.error + " " + extraErrorClass, errorClassToRemove = options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
@@ -1195,6 +1195,9 @@
                     if (!/\d/.test(string)) {
                         obj.errors.missingNumber = true;
                     }
+                    if (!/[a-z]/.test(string)) {
+                        obj.errors.missingLowercase = true;
+                    }
                     if (!/[A-Z]/.test(string)) {
                         obj.errors.missingUppercase = true;
                     }
@@ -1328,6 +1331,7 @@
                         if (typeof obj.errors === "undefined") {
                             obj.errors = {};
                         }
+                        obj.errors.file = true;
                         if (exceedMaxFileSize) {
                             obj.errors.maxFileSize = true;
                         }
@@ -1345,7 +1349,7 @@
                     };
                     if (!obj.result) {
                         obj.errors = {
-                            length: true
+                            stringLength: true
                         };
                         if (!isMinlengthOk) {
                             obj.errors.minlength = true;
