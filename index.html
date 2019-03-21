@@ -689,7 +689,11 @@ var formInstance = new Form( formEl, options ).init();
                             <div class="col-5">
                                 <p>
                                     Events on which the validation will fire ( only for required fields )
+                                    <br /><br />
+                                    <span class="text-green">Tip</span>: always add "change" to the events in order to properly validate checkbox, radio, file inputs and selects.
                                     <br />
+                                    For example: "change input" or "change blur".
+                                    <br /><br />
                                     <span class="small">( NOT used if <code>handleValidation: false</code> )</span>
                                 </p>
                             </div>
