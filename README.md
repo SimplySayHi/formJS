@@ -1,3 +1,5 @@
+[![](https://data.jsdelivr.com/v1/package/gh/simplysayhi/formJS/badge)](https://www.jsdelivr.com/package/gh/simplysayhi/formJS)
+
 # formJS
 
 Visit the [Plugin Documentation Page](http://simplysayhi.github.io/formJS) for more info.
