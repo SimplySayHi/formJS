@@ -1,8 +1,29 @@
 {
-  "dependencies": {},
   "name": "formjs",
+  "title": "formJS",
+  "description": "Javascript Form Validation. Made Easy",
   "version": "3.0.0",
-  "main": "webpack.config.js",
+  "main": "dist/formJS.js",
+  "homepage": "http://simplysayhi.github.io/formJS",
+  "author": {
+    "name": "Valerio Di Punzio <sayhi@valeriodipunzio.com>",
+    "url": "https://valeriodipunzio.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SimplySayHi/formJS.git"
+  },
+  "keywords": [
+    "form",
+    "validation",
+    "javascript",
+    "plugin"
+  ],
+  "bugs": {
+    "url": "https://github.com/SimplySayHi/formJS/issues"
+  },
+  "license": "MIT",
+  "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
@@ -13,22 +34,5 @@
   },
   "scripts": {
     "build": "webpack -w"
-  },
-  "keywords": [
-    "form",
-    "validation",
-    "javascript",
-    "plugin"
-  ],
-  "author": "Valerio Di Punzio <sayhi@valeriodipunzio.com> (https://valeriodipunzio.com)",
-  "license": "MIT",
-  "description": "Javascript Form Validation Made Easy",
-  "homepage": "https://valeriodipunzio.com/plugins/formJS/",
-  "bugs": {
-    "url": "https://github.com/SimplySayHi/formJS/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/SimplySayHi/formJS.git"
   }
 }
