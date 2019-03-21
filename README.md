@@ -1,12 +1,12 @@
 # formJS
 
-Visit the [Plugin Documentation Page](http://valeriodipunzio.com/plugins/formJS/) for more info.
+Visit the [Plugin Documentation Page](http://simplysayhi.github.io/formJS) for more info.
 
 
 
 ## Changelog
 
-See the [Changelog Page](http://valeriodipunzio.com/plugins/formJS/#changelog) for details.
+See the [Changelog Page](http://simplysayhi.github.io/formJS/#changelog) for details.
 
 
 

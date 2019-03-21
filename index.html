@@ -244,13 +244,13 @@
             <hr />
             <p>
                 <span class="text-yellow">*</span> for compatibility with IE 10/11 and old versions of Edge you have to load some JS polyfills ( from <a href="https://polyfill.io" target="_blank">polyfill.io</a> or else ):<br />
-                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code> <code>WeakMap</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>fetch</code>
+                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code> <code>WeakMap</code> <code>AbortController</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>fetch</code>
             </p>
             <pre>
 &lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap,Promise,Promise.prototype.finally,fetch"&gt;&lt;/script&gt;</pre>
             <br />
             <p>
-                If you are using the version with XMLHttpRequest ( formJS.xhr.js or formJS.xhr.min.js ) you can load these ( without support for Promise and Fetch APIs ):<br />
+                If you are using the version with XMLHttpRequest ( formJS.xhr.js or formJS.xhr.min.js ) you can load these ( without support for Fetch API and related ):<br />
                 <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code> <code>WeakMap</code>
             </p>
             <pre>
