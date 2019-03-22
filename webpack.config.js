@@ -13,12 +13,10 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = [{
 	entry: './src/index',
-
 	output: {
 		filename: 'formJS.js',
 		path: path.resolve(__dirname, 'dist')
 	},
-
 	module: {
 		rules: [
 			{
@@ -32,13 +30,11 @@ module.exports = [{
 			}
 		]
 	},
-
 	optimization: {
 		minimize: false,
 		namedModules: true,
 		namedChunks: true
 	},
-
 	plugins: [
 		new UglifyJSPlugin({
 			uglifyOptions: {
@@ -54,12 +50,10 @@ module.exports = [{
 },
 {
 	entry: './src/index',
-
 	output: {
 		filename: 'formJS.min.js',
 		path: path.resolve(__dirname, 'dist')
 	},
-
 	module: {
 		rules: [
 			{
@@ -73,9 +67,7 @@ module.exports = [{
 			}
 		]
 	},
-
 	devtool: 'source-map',
-
 	plugins: [
 		new UglifyJSPlugin({
 			sourceMap: true,
