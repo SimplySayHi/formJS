@@ -11,12 +11,18 @@ document.addEventListener('click', function(e){
             };
 
         // CLOSE ALL OPEN DROPDOWNS
-        var dropdownsOpen = document.querySelectorAll(dropDownSelector);
-        if( dropdownsOpen.length > 0 ){
-            Array.from(dropdownsOpen).forEach(function(elem){
-                elem.setAttribute('aria-expanded', false);
-                elem.nextElementSibling.classList.remove('show');
-            });
+        if(
+            !checkElement(dropDownSelector) ||
+            elem.matches(dropDownSelector+'[aria-expanded="false"]') ||
+            elem.matches(dropDownSelector+':not([aria-expanded])')
+        ){
+            var dropdownsOpen = document.querySelectorAll(dropDownSelector);
+            if( dropdownsOpen.length > 0 ){
+                Array.from(dropdownsOpen).forEach(function(dropdownEl){
+                    dropdownEl.setAttribute('aria-expanded', false);
+                    dropdownEl.nextElementSibling.classList.remove('show');
+                });
+            }
         }
         
         if( checkElement(cardHeaderSelector) ){
