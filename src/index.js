@@ -1,5 +1,5 @@
 
-/**! formJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/**! formJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | http://simplysayhi.github.io/formJS | https://github.com/SimplySayHi/formJS | MIT license */
 
 import { _mergeObjects }        from './modules/helper.js';
 import { _callbackFns }         from './modules/listenerCallbacks.js';

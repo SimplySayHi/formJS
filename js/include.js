@@ -9,6 +9,15 @@ document.addEventListener('click', function(e){
             checkElement = function( cssSelector ){
                 return (elem.matches(cssSelector) ? elem : (elem.closest(cssSelector) || null));
             };
+
+        // CLOSE ALL OPEN DROPDOWNS
+        var dropdownsOpen = document.querySelectorAll(dropDownSelector);
+        if( dropdownsOpen.length > 0 ){
+            Array.from(dropdownsOpen).forEach(function(elem){
+                elem.setAttribute('aria-expanded', false);
+                elem.nextElementSibling.classList.remove('show');
+            });
+        }
         
         if( checkElement(cardHeaderSelector) ){
             
@@ -34,17 +43,6 @@ document.addEventListener('click', function(e){
 
             dropDown.setAttribute('aria-expanded', ariaExpValue);
             dropDownList.classList.toggle('show');
-
-        } else {
-
-            // CLOSE ALL OPEN DROPDOWNS
-            var dropdownsOpen = document.querySelectorAll(dropDownSelector);
-            if( dropdownsOpen.length > 0 ){
-                Array.from(dropdownsOpen).forEach(function(elem){
-                    elem.setAttribute('aria-expanded', false);
-                    elem.nextElementSibling.classList.remove('show');
-                });
-            }
 
         }
     }

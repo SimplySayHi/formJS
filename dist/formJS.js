@@ -81,7 +81,7 @@
                 return Constructor;
             };
         }();
-        /**! formJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
+        /**! formJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | http://simplysayhi.github.io/formJS | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
         var _listenerCallbacks2 = __webpack_require__("./src/modules/listenerCallbacks.js");
         var _optionsUtils = __webpack_require__("./src/modules/optionsUtils.js");
         var _options = __webpack_require__("./src/modules/options.js");
