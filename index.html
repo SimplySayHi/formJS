@@ -32,7 +32,9 @@
                     <a class="dropdown-item" href="#initialization">Initialization</a>
                     <a class="dropdown-item" href="#options-list">Options</a>
                     <a class="dropdown-item" href="#methods">Methods</a>
-                    <a class="dropdown-item" href="#builtin-validations">Validation Rules &amp; Utilities</a>
+                    <a class="dropdown-item" href="#builtin-validations">Validation Rules</a>
+                    <a class="dropdown-item" href="#builtin-errors">Validation Errors</a>
+                    <a class="dropdown-item" href="#utilities-list">Utilities</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS" target="_blank">View on Github</a>
                     <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS/issues" target="_blank">Report a Bug</a>
@@ -249,17 +251,17 @@
             <hr />
             <p>
                 <span class="text-yellow">*</span> for compatibility with IE 10/11 and old versions of Edge you have to load some JS polyfills ( from <a href="https://polyfill.io" target="_blank">polyfill.io</a> or else ):<br />
-                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code> <code>WeakMap</code> <code>AbortController</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>fetch</code>
+                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code> <code>AbortController</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>fetch</code>
             </p>
             <pre>
-&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap,AbortController,Promise,Promise.prototype.finally,fetch"&gt;&lt;/script&gt;</pre>
+&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,AbortController,Promise,Promise.prototype.finally,fetch"&gt;&lt;/script&gt;</pre>
             <br />
             <p>
                 If you are using the version with XMLHttpRequest ( formJS.xhr.js or formJS.xhr.min.js ) you can load these ( without support for Fetch API and related ):<br />
-                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code> <code>WeakMap</code>
+                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code>
             </p>
             <pre>
-&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"&gt;&lt;/script&gt;</pre>
+&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event"&gt;&lt;/script&gt;</pre>
         </div>
         
         <!-- Dependencies -->
@@ -440,7 +442,7 @@ var formInstance = new Form( formEl, options ).init();
             <!-- Field Options -->
             <div id="field-options">
                 <h3 class="sticky-title mt-0 ml-4em"><span class="small">Field Options</span></h3>
-                <div class="panel panel-default panel-transparent" style="background-color: transparent;">
+                <div class="panel panel-default panel-transparent no-bg">
                     <div class="card-header bg-white text-dark clearfix">
                         <div class="d-flex">
                             <div class="col-4">
@@ -747,7 +749,7 @@ var formInstance = new Form( formEl, options ).init();
             <!-- Form Options -->
             <div id="form-options">
                 <h3 class="sticky-title mt-0 ml-4em"><span class="small">Form Options</span></h3>
-                <div class="panel panel-default panel-transparent" style="background-color: transparent;">
+                <div class="panel panel-default panel-transparent no-bg">
                     <div class="card-header bg-white text-dark clearfix">
                         <div class="d-flex">
                             <div class="col-3">
@@ -1062,7 +1064,7 @@ var formInstance = new Form( formEl, options ).init();
         <!-- Methods -->
         <div id="methods">
             <h3 class="sticky-title">Methods</h3>
-            <div class="panel panel-default panel-transparent" style="background-color: transparent;">
+            <div class="panel panel-default panel-transparent no-bg">
                 <div class="card-header bg-white text-dark clearfix">
                     <div class="d-flex">
                         <div class="col-4">
@@ -1337,9 +1339,9 @@ var formInstance = new Form( formEl, options ).init();
         <div id="prototype-methods">
             <h3 class="sticky-title">Prototype Methods</h3>
             <p>
-                You can use these methods <b>ONLY</b> from the original Form object ( not from a new instance - examples below ):
+                You can use these methods <b>ONLY</b> from the original Form object ( not from a new instance - but you can always set each single property/method from the class prototype ):
             </p>
-            <div class="panel panel-default panel-transparent" style="background-color: transparent;">
+            <div class="panel panel-default panel-transparent no-bg">
                 <div class="card-header bg-white text-dark clearfix">
                     <div class="d-flex">
                         <div class="col-4">
@@ -1355,6 +1357,40 @@ var formInstance = new Form( formEl, options ).init();
                 </div>
                 <div class="card-body">
                     <div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4">
+                                <pre class="text-green">addValidationErrors( newErrors )</pre>
+                            </div>
+                            <div class="col-5">
+                                <ul>
+                                    <li>
+                                        <span class="text-green">newErrors</span>: JS object containing the new validation error(s) to add ( see example below ).
+                                    </li>
+                                </ul>
+                                <p>
+                                    The key / value pairs must be passed as:
+                                </p>
+                                <ul>
+                                    <li>
+                                        key: the same used as data-subtype ( or type ) attribute, without dash and with Capital letter instead.<br />
+                                        Eg: to validate "mobile-number" ( as data-subtype ) the rule is "mobileNumber"
+                                    </li>
+                                    <li>
+                                        value: a function with these arguments:
+                                        <ul>
+                                            <li>
+                                                string: the string the user put in the field
+                                            </li>
+                                        </ul>
+                                        It must return a JS object with all the specific errors.
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-3">
+                                This will affect both old and new instances.<br />
+                                Can also be used to override existing validation errors.
+                            </div>
+                        </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
                                 <pre class="text-green">addValidationRules( newRules )</pre>
@@ -1419,9 +1455,21 @@ var formInstance = new Form( formEl, options ).init();
                             Examples of usage:
                         </p>
                         <pre>
+Form.addValidationErrors({
+    username: function ( string ) {
+        var obj = {};
+        var strLength = string.length;
+        if( strLength &lt; 3 ){ obj.minlength = true; }
+        if( strLength &gt; 24 ){ obj.maxlength = true; }
+        if( /[^\w\-\.\@]/.test(string) ){ obj.invalidChars = true; }
+        if( !/^[\w]/.test(string) ){ obj.invalidStartChar = true; }
+        return obj;
+    }
+});
+
 Form.addValidationRules({
     myPassword: function( string, fieldEl ){
-        let obj = {
+        var obj = {
             result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
         };
         if( !obj.result ){
@@ -1433,7 +1481,54 @@ Form.addValidationRules({
 
 Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
 </pre>
+                    <br />
+                    <p>
+                        Or directly put it in the prototype:
+                    </p>
+                    <pre>
+// ADD/OVERRIDE A VALIDATION ERROR METHOD
+Form.prototype.validationErrors.email = function( string ){ ... }
+
+// ADD/OVERRIDE A VALIDATION METHOD
+Form.prototype.validationRules.myPassword = function( string, fieldEl ){ ... }
+
+// OVERRIDE AN OPTION
+Form.prototype.options.fieldOptions.maxFileSize = 100;
+</pre>
+                    <br />
+                    <p>
+                        Or directly put it in the specific Form instance ( for example to update an option ):
+                    </p>
+                    <pre>
+// OVERRIDE AN OPTION
+formInstance.options.fieldOptions.maxFileSize = 50;
+</pre>
+                    <p class="small">
+                        You can also add/override validation rules/errors from the Form instance but it doesn't have much sense.
+                    </p>
+                    <div id="inherit-validation-errors">
+                        <br />
+                        <p>
+                                How to override a validation method but still use its validation errors:
+                            </p>
+                            <pre>
+// FROM addValidationRules METHOD
+Form.addValidationRules({
+    email: function( string, fieldEl ){
+        var obj = {
+            result: /^([\w-.]+)\@([\w-.]+)\.[a-zA-Z]{2,}$/.test(string)
+        };
+        if( !obj.result ){
+            obj.errors = this.validationErrors.email( string );
+        }
+    }
+});
+
+// FROM PROTOTYPE OBJECT
+Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
+</pre>
                     </div>
+                </div>
             </div>
         </div>
 
@@ -1442,29 +1537,12 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
             <h3 class="sticky-title">Built-in Validations</h3>
             <p>
                 Below the rules used to validate the fields depending on html basic/data-* attributes ( you can add new ones - or override the ones having JS key specified - with addValidationRules method ).
+                <br /><br />
+                Additionally, in each validation, the "this" keyword is bound to the Form instance.
+                <br /><br />
+                After validation, in case of invalid field, the validation method will return the "errors" object ( see <a href="#builtin-errors">Built-in Errors Section</a> for details ).
             </p>
-            <div class="row">
-                <div class="col-12 col-sm-6">
-                    <p>
-                In case of empty field value, "errors" object will return only the "empty" error like:
-            </p>
-            <pre>
-{
-    empty: true
-}</pre>
-                </div>
-                <div class="col-12 col-sm-6">
-                    <p>
-                In case of invalid field value ( not compliant with validation rule ), "errors" object will return one or more specific errors, as described below, and "rule" error like:
-            </p>
-            <pre>
-{
-    rule: true,
-    ...
-}</pre>
-                </div>
-            </div>
-            <div class="panel panel-default panel-transparent" style="background-color: transparent;">
+            <div class="panel panel-default panel-transparent no-bg">
                 <div class="card-header bg-white text-dark clearfix">
                     <div class="d-flex">
                         <div class="col-4 col-sm-3">
@@ -1496,16 +1574,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p class="small text-lowercase text-opacity">
                                     VALID ITALIAN CAP WITH 5 DIGITS
                                 </p>
-                                <br />
-                                <p>
-                                    "errors" object can return these specific errors:
-                                </p>
-                                <pre>
-{
-    maxlength: true,
-    minlength: true,
-    invalidChars: true
-}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1533,15 +1601,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     Check that the number of checked checkboxes is between the the given numbers ( must be a valid - 2 values - array ).<br />
                                     The attribute can be applied to only one of the checkboxes, not mandatory for all.
                                 </p>
-                                <p>
-                                    "errors" object can return these specific errors:
-                                </p>
-                                <pre>
-{
-    checks: true,
-    maxChecks: true,
-    minChecks: true
-}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1670,18 +1729,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p class="small text-lowercase">
                                     <a href="https://emailregex.com" target="_blank">read this post</a>
                                 </p>
-                                <p>
-                                    "errors" object can return these specific errors:
-                                </p>
-                                <pre>
-{
-    missingAtChar: true,
-    missingUserName: true,
-    missingDomain: true,
-    missingExtensionDot: true,
-    missingExtension: true,
-    minlengthExtension: true
-}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1699,13 +1746,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p class="small text-lowercase text-opacity m-0">
                                     Eg: for a confirm email/password field 
                                 </p>
-                                <p>
-                                    "errors" object can return these specific errors:
-                                </p>
-                                <pre>
-{
-    equalTo: true
-}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1723,15 +1763,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p class="small text-lowercase text-opacity">
                                     Eg: a field that must have a specific number of characters, such as for cents ( 2 digits )
                                 </p>
-                                <p>
-                                    "errors" object can return these specific errors:
-                                </p>
-                                <pre>
-{
-    exactLength: true,
-    maxlength: true,
-    minlength: true
-}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1746,15 +1777,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     Check if a file is selected or not.<br />
                                     "accept" attribute is supported for JS validation.
                                 </p>
-                                <p>
-                                    "errors" object can return these specific errors:
-                                </p>
-                                <pre>
-{
-    file: true,
-    maxFileSize: true,
-    acceptedFileType: true
-}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1808,15 +1830,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p>
                                     Check that the field value length is between the the given numbers ( must be a valid - 2 values - array ).
                                 </p>
-                                <p>
-                                    "errors" object can return these specific errors:
-                                </p>
-                                <pre>
-{
-    stringLength: true,
-    maxlength: true,
-    minlength: true
-}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1834,13 +1847,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     HTML5<br />
                                     Check that the input number is less or equal to the max value.
                                 </p>
-                                <p>
-                                    "errors" object can return these specific errors:
-                                </p>
-                                <pre>
-{
-    max: true
-}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1855,13 +1861,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     HTML5<br />
                                     Check that the input length is less or equal to the maxlength value.
                                 </p>
-                                <p>
-                                    "errors" object can return these specific errors:
-                                </p>
-                                <pre>
-{
-    maxlength: true
-}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1879,13 +1878,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     HTML5<br />
                                     Check that the input number is more or equal to the min value.
                                 </p>
-                                <p>
-                                    "errors" object can return these specific errors:
-                                </p>
-                                <pre>
-{
-    min: true
-}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1900,13 +1892,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     HTML5<br />
                                     Check that the input length is more or equal to the minlength value.
                                 </p>
-                                <p>
-                                    "errors" object can return these specific errors:
-                                </p>
-                                <pre>
-{
-    minlength: true
-}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -2014,17 +1999,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     PASSWORD ( NO SPECIAL CHARACTERS ) WITH AT LEAST:<br />
                                     ONE DIGIT and ONE LOWERCASE and ONE UPPERCASE and MIN LENGTH OF 8 CHARACTERS
                                 </p>
-                                <p>
-                                    "errors" object can return these specific errors:
-                                </p>
-                                <pre>
-{
-    minlength: true,
-    missingNumber: true,
-    missingLowercase: true,
-    missingUppercase: true,
-    invalidChars: true
-}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -2039,13 +2013,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     HTML5<br />
                                     Check the field value against the RegExp in pattern attribute.
                                 </p>
-                                <p>
-                                    "errors" object can return these specific errors:
-                                </p>
-                                <pre>
-{
-    pattern: true
-}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -2077,13 +2044,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     <br /><br />
                                     Attribute "data-required-from" must be set to a field ( ideally a text input ) and the attribute value must be a CSS selector ( the id in the API example ) of the related input ( the one specified before ).
                                 </p>
-                                <p>
-                                    For Required From field, "errors" object can return these specific errors:
-                                </p>
-                                <pre>
-{
-    requiredFrom: true
-}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -2146,16 +2106,6 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p class="small text-lowercase text-opacity">
                                     USERNAME MUST START WITH A LETTER/NUMBER/UNDERSCORE AND CAN ALSO CONTAIN . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
                                 </p>
-                                <p>
-                                    "errors" object can return these specific errors:
-                                </p>
-                                <pre>
-{
-    minlength: true,
-    maxlength: true,
-    invalidChars: true,
-    invalidStartChar: true
-}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -2188,6 +2138,366 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p class="small text-lowercase text-opacity">
                                     VAT NUMBER CAN CONTAIN OR NOT THE 'IT' STRING ( AS FOR ITALIAN VAT NUMBERS ) AND THEN 11 NUMBERS
                                 </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div>
+                        <p>
+                            <span class="text-yellow">*</span> you can also set <code>type="number"</code> together with the specific data-subtype attribute related to numbers, to let the device show the numeric keyboard, because type="number" is not well implemented in all browsers ( some allow users to write non-numeric characters and/or not related to the number format ).<br />
+                                Better to use <code>type="text"</code> together with the specific data-subtype related to numbers attribute to validate a numeric field. You can also use <code>data-type="number"</code> to emulate <code>type="number"</code> inputs. See "strictHtmlValidation" option in <a href="#field-options">Field Options</a> section for details.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Built-in Errors -->
+        <div id="builtin-errors">
+            <h3 class="sticky-title">Built-in Errors</h3>
+            <p>
+                After validation, in case of invalid field, the validation method will return the "errors" object.<br />
+                The listed errors can also be inherited in your custom validations ( for example if you override the "email" validation - see <a href="#inherit-validation-errors">This Example</a> for details ).
+            </p>
+            <div class="row">
+                <div class="col-12 col-sm-6">
+                    <p>
+                In case of empty field value, "errors" object will return only the "empty" error like:
+            </p>
+            <pre>
+{
+    empty: true
+}</pre>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <p>
+                In case of invalid field value ( not compliant with validation rule ), "errors" object will return "rule" error and more specific errors as described below:
+            </p>
+            <pre>
+{
+    rule: true,
+    ...
+}</pre>
+                </div>
+            </div>
+            <div class="panel panel-default panel-transparent no-bg">
+                <div class="card-header bg-white text-dark clearfix">
+                    <div class="d-flex">
+                        <div class="col-4 col-sm-3">
+                            validation name ( JS key )
+                        </div>
+                        <div class="col-4 col-sm-3">
+                            validation API
+                        </div>
+                        <div class="col-4 col-sm-6">
+                            returned "errors" object
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                CAP
+                                <div>( cap )</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-subtype="cap"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    maxlength: true,
+    minlength: true,
+    invalidChars: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Checks <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-checks="[1,3]"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    checks: true,
+    maxChecks: true,
+    minChecks: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Email
+                                <div>( email )</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="email"</code></div>
+                                <div><code>data-subtype="email"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    missingAtChar: true,
+    missingUserName: true,
+    missingDomain: true,
+    missingExtensionDot: true,
+    missingExtension: true,
+    minlengthExtension: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Equal To <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-equal-to="password"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    equalTo: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Exact Length <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-exact-length="24"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    exactLength: true,
+    maxlength: true,
+    minlength: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                File <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="file"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    file: true,
+    maxFileSize: true,
+    acceptedFileType: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Length <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-length="[5,30]"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    stringLength: true,
+    maxlength: true,
+    minlength: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Max <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <p class="small mb-1">With Numbers</p>
+                                <div><code>max="13"</code></div>
+                                <p class="small mt-5 mb-1">With Dates</p>
+                                <div><code>max="2019-02-22"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    max: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Maxlength <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>maxlength="150"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    maxlength: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Min <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <p class="small mb-1">With Numbers</p>
+                                <div><code>max="7"</code></div>
+                                <p class="small mt-5 mb-1">With Dates</p>
+                                <div><code>max="1900-01-01"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    min: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Minlength <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>minlength="10"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    minlength: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Password
+                                <div>( password )</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="password"</code></div>
+                                <div><code>data-subtype="password"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    minlength: true,
+    missingNumber: true,
+    missingLowercase: true,
+    missingUppercase: true,
+    invalidChars: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Pattern <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>pattern="[RegExp]"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    pattern: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Require More &amp; Required From <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div>
+                                    <code>data-require-more="" id="element-that-requires-more"</code>
+                                    <code>data-required-from="#element-that-requires-more"</code>
+                                </div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    For Required From field, "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    requiredFrom: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Username
+                                <div>( username )</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-subtype="username"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    minlength: true,
+    maxlength: true,
+    invalidChars: true,
+    invalidStartChar: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                VAT Number
+                                <div>( vatNumber )</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-subtype="vat-number"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
                                     "errors" object can return these specific errors:
                                 </p>
@@ -2203,8 +2513,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                 <div class="card-footer">
                     <div>
                         <p>
-                            <span class="text-yellow">*</span> you can also set <code>type="number"</code> together with the specific data-subtype attribute related to numbers, to let the device show the numeric keyboard, because type="number" is not well implemented in all browsers ( some allow users to write non-numeric characters and/or not related to the number format ).<br />
-                                Better to use <code>type="text"</code> together with the specific data-subtype related to numbers attribute to validate a numeric field. You can also use <code>data-type="number"</code> to emulate <code>type="number"</code> inputs. See "strictHtmlValidation" option in <a href="#field-options">Field Options</a> section for details.
+                            <span class="text-yellow">*</span> returned errors cannot be changed.
                         </p>
                     </div>
                 </div>
@@ -2217,7 +2526,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
             <p>
                 Fields utilities activated by setting a data-* attribute on the field ( initialized at constructor call ):
             </p>
-            <div class="panel panel-default panel-transparent" style="background-color: transparent;">
+            <div class="panel panel-default panel-transparent no-bg">
                 <div class="card-header bg-white text-dark clearfix">
                     <div class="d-flex">
                         <div class="col-4">
@@ -2307,6 +2616,9 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                             Many relevant changes from the previous version:
                         </p>
                         <ul>
+                            <li>
+                                Added prototype method "addValidationErrors".
+                            </li>
                             <li>
                                 Added "errorEmpty" and "errorRule" to "cssClasses" in "fieldOptions" to show different error messages ( see implementation in CSS file ).
                             </li>
@@ -2553,7 +2865,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
     </div>
     
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EGDE VERSIONS -->
-    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap,AbortController,Promise,Promise.prototype.finally,fetch"></script>
+    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,AbortController,Promise,Promise.prototype.finally,fetch"></script>
 
     <script src="js/include.js"></script>
     <script src="dist/formJS.min.js"></script>

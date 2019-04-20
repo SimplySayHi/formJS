@@ -2,11 +2,11 @@
 /**! formJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | http://simplysayhi.github.io/formJS | https://github.com/SimplySayHi/formJS | MIT license */
 
 import { _mergeObjects }        from './modules/helper.js';
-import { _callbackFns }         from './modules/listenerCallbacks.js';
 import { _setCallbackFunctionsInOptions } from './modules/optionsUtils.js';
 
 import { options }              from './modules/options.js';
 import { validationRules }      from './modules/validationRules.js';
+import { validationErrors }     from './modules/validationErrors.js';
 
 // CONSTRUCTOR FUNCTION & PUBLIC METHODS
 import { _constructor }         from './modules/constructor.js';
@@ -20,27 +20,11 @@ import { validateField }        from './modules/validateField.js';
 import { validateForm }         from './modules/validateForm.js';
 
 const version = '3.0.0';
-const _listenerCallbacks = new WeakMap();
 
 class Form {
 
     constructor( formEl, optionsObj ){
-        const self = this;
-
-        _listenerCallbacks.set(self, {
-            charCount:          _callbackFns.charCount,
-            dataTypeNumber:     _callbackFns.dataTypeNumber,
-            keypressMaxlength:  _callbackFns.keypressMaxlength,
-            pastePrevent:       _callbackFns.pastePrevent.bind(self),
-            submit:             _callbackFns.submit.bind(self),
-            validation:         _callbackFns.validation.bind(self)
-        });
-        
-        _constructor.call( self, formEl, optionsObj );
-    }
-
-    get listenerCallbacks(){
-        return _listenerCallbacks.get(this);
+        _constructor.call(this, formEl, optionsObj);
     }
 
     destroy(){
@@ -75,6 +59,10 @@ class Form {
         return validateForm.call(this, optionsObj);
     }
     
+    static addValidationErrors( errorsObj ){
+        this.prototype.validationErrors = _mergeObjects({}, this.prototype.validationErrors, errorsObj);
+    }
+
     static addValidationRules( rulesObj ){
         this.prototype.validationRules = _mergeObjects({}, this.prototype.validationRules, rulesObj);
     }
@@ -86,7 +74,9 @@ class Form {
 }
 
 Form.prototype.isInitialized = false;
+Form.prototype.listenerCallbacks = {};
 Form.prototype.options = options;
+Form.prototype.validationErrors = validationErrors;
 Form.prototype.validationRules = validationRules;
 Form.prototype.version = version;
 

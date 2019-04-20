@@ -82,10 +82,10 @@
             };
         }();
         /**! formJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | http://simplysayhi.github.io/formJS | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
-        var _listenerCallbacks2 = __webpack_require__("./src/modules/listenerCallbacks.js");
         var _optionsUtils = __webpack_require__("./src/modules/optionsUtils.js");
         var _options = __webpack_require__("./src/modules/options.js");
         var _validationRules = __webpack_require__("./src/modules/validationRules.js");
+        var _validationErrors = __webpack_require__("./src/modules/validationErrors.js");
         var _constructor2 = __webpack_require__("./src/modules/constructor.js");
         var _destroy2 = __webpack_require__("./src/modules/destroy.js");
         var _getFormData2 = __webpack_require__("./src/modules/getFormData.js");
@@ -101,20 +101,10 @@
             }
         }
         var version = "3.0.0";
-        var _listenerCallbacks = new WeakMap();
         var Form = function() {
             function Form(formEl, optionsObj) {
                 _classCallCheck(this, Form);
-                var self = this;
-                _listenerCallbacks.set(self, {
-                    charCount: _listenerCallbacks2._callbackFns.charCount,
-                    dataTypeNumber: _listenerCallbacks2._callbackFns.dataTypeNumber,
-                    keypressMaxlength: _listenerCallbacks2._callbackFns.keypressMaxlength,
-                    pastePrevent: _listenerCallbacks2._callbackFns.pastePrevent.bind(self),
-                    submit: _listenerCallbacks2._callbackFns.submit.bind(self),
-                    validation: _listenerCallbacks2._callbackFns.validation.bind(self)
-                });
-                _constructor2._constructor.call(self, formEl, optionsObj);
+                _constructor2._constructor.call(this, formEl, optionsObj);
             }
             _createClass(Form, [ {
                 key: "destroy",
@@ -156,12 +146,12 @@
                 value: function validateForm(optionsObj) {
                     return _validateForm2.validateForm.call(this, optionsObj);
                 }
-            }, {
-                key: "listenerCallbacks",
-                get: function get() {
-                    return _listenerCallbacks.get(this);
-                }
             } ], [ {
+                key: "addValidationErrors",
+                value: function addValidationErrors(errorsObj) {
+                    this.prototype.validationErrors = (0, _helper._mergeObjects)({}, this.prototype.validationErrors, errorsObj);
+                }
+            }, {
                 key: "addValidationRules",
                 value: function addValidationRules(rulesObj) {
                     this.prototype.validationRules = (0, _helper._mergeObjects)({}, this.prototype.validationRules, rulesObj);
@@ -175,7 +165,9 @@
             return Form;
         }();
         Form.prototype.isInitialized = false;
+        Form.prototype.listenerCallbacks = {};
         Form.prototype.options = _options.options;
+        Form.prototype.validationErrors = _validationErrors.validationErrors;
         Form.prototype.validationRules = _validationRules.validationRules;
         Form.prototype.version = version;
         _optionsUtils._setCallbackFunctionsInOptions.call(Form.prototype);
@@ -283,6 +275,7 @@
         });
         exports._constructor = _constructor;
         var _helper = __webpack_require__("./src/modules/helper.js");
+        var _listenerCallbacks = __webpack_require__("./src/modules/listenerCallbacks.js");
         var _formStartup2 = __webpack_require__("./src/modules/formStartup.js");
         function _constructor(formEl) {
             var optionsObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -296,9 +289,21 @@
             if (!checkFormEl.result) {
                 throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
             }
+            if (!Object.isFrozen(Form.prototype.listenerCallbacks)) {
+                Form.prototype.listenerCallbacks = {
+                    charCount: _listenerCallbacks._callbackFns.charCount,
+                    dataTypeNumber: _listenerCallbacks._callbackFns.dataTypeNumber,
+                    keypressMaxlength: _listenerCallbacks._callbackFns.keypressMaxlength,
+                    pastePrevent: _listenerCallbacks._callbackFns.pastePrevent.bind(self),
+                    submit: _listenerCallbacks._callbackFns.submit.bind(self),
+                    validation: _listenerCallbacks._callbackFns.validation.bind(self)
+                };
+                Object.freeze(Form.prototype.listenerCallbacks);
+            }
             self.formEl = checkFormEl.element;
             self.options = (0, _helper._mergeObjects)({}, Form.prototype.options, optionsObj);
             _formStartup2._formStartup.call(self);
+            self.formEl.formjs = self;
         }
     },
     "./src/modules/destroy.js": function(module, exports, __webpack_require__) {
@@ -326,6 +331,7 @@
                 var useCapturing = eventName === "blur" ? true : false;
                 formEl.removeEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
             });
+            delete self.formEl.formjs;
         }
     },
     "./src/modules/formStartup.js": function(module, exports, __webpack_require__) {
@@ -634,7 +640,7 @@
                 }
             });
             if (typeof self.validationRules[fieldType] === "function") {
-                obj = (0, _helper._mergeObjects)({}, obj, self.validationRules[fieldType](fieldValue, fieldEl));
+                obj = (0, _helper._mergeObjects)({}, obj, self.validationRules[fieldType].call(self, fieldValue, fieldEl));
                 obj.result = obj.result && attrValidationsResult;
                 if (!obj.result) {
                     if (typeof obj.errors === "undefined") {
@@ -1030,6 +1036,103 @@
             return obj;
         }
     },
+    "./src/modules/validationErrors.js": function(module, exports, __webpack_require__) {
+        "use strict";
+        Object.defineProperty(exports, "__esModule", {
+            value: true
+        });
+        var validationErrors = exports.validationErrors = {
+            cap: function cap(string) {
+                var obj = {};
+                var strLength = string.length;
+                if (strLength > 5) {
+                    obj.maxlength = true;
+                }
+                if (strLength > 0 && strLength < 5) {
+                    obj.minlength = true;
+                }
+                if (/[^0-9]/.test(string)) {
+                    obj.invalidChars = true;
+                }
+                return obj;
+            },
+            email: function email(string) {
+                var obj = {};
+                if (string.indexOf("@") === -1) {
+                    obj.missingAtChar = true;
+                } else {
+                    var splitAt_at = string.split("@");
+                    if (splitAt_at[0].length === 0) {
+                        obj.missingUserName = true;
+                    }
+                    if (splitAt_at[1].length === 0) {
+                        obj.missingDomain = true;
+                        obj.missingExtensionDot = true;
+                        obj.missingExtension = true;
+                    } else if (splitAt_at[1].indexOf(".") === -1) {
+                        obj.missingExtensionDot = true;
+                        obj.missingExtension = true;
+                    } else {
+                        var splitAt_dot = splitAt_at[1].split("."), extLength = splitAt_dot[1].length;
+                        if (extLength === 0) {
+                            obj.missingExtension = true;
+                        } else if (extLength < 2) {
+                            obj.minlengthExtension = true;
+                        }
+                    }
+                }
+                return obj;
+            },
+            password: function password(string) {
+                var obj = {};
+                if (string.length < 8) {
+                    obj.minlength = true;
+                }
+                if (!/\d/.test(string)) {
+                    obj.missingNumber = true;
+                }
+                if (!/[a-z]/.test(string)) {
+                    obj.missingLowercase = true;
+                }
+                if (!/[A-Z]/.test(string)) {
+                    obj.missingUppercase = true;
+                }
+                if (/[^0-9a-zA-Z]/.test(string)) {
+                    obj.invalidChars = true;
+                }
+                return obj;
+            },
+            username: function username(string) {
+                var obj = {};
+                var strLength = string.length;
+                if (strLength < 3) {
+                    obj.minlength = true;
+                }
+                if (strLength > 24) {
+                    obj.maxlength = true;
+                }
+                if (/[^\w\-\.\@]/.test(string)) {
+                    obj.invalidChars = true;
+                }
+                if (!/^[\w]/.test(string)) {
+                    obj.invalidStartChar = true;
+                }
+                return obj;
+            },
+            vatNumber: function vatNumber(string) {
+                var obj = {};
+                var strLength = string.length, indexOfIT = string.indexOf("IT"), checkLength = indexOfIT === 0 ? 13 : 11;
+                if (indexOfIT < 1) {
+                    if (strLength < checkLength) {
+                        obj.minlength = true;
+                    } else {
+                        obj.maxlength = true;
+                    }
+                }
+                return obj;
+            }
+        };
+    },
     "./src/modules/validationRules.js": function(module, exports, __webpack_require__) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
@@ -1042,18 +1145,8 @@
                 var regex = new RegExp(/^[0-9]{5}$/), obj = {
                     result: regex.test(string)
                 };
-                if (!obj.result) {
-                    obj.errors = {};
-                    var strLength = string.length;
-                    if (strLength > 5) {
-                        obj.errors.maxlength = true;
-                    }
-                    if (strLength > 0 && strLength < 5) {
-                        obj.errors.minlength = true;
-                    }
-                    if (/[^0-9]/.test(string)) {
-                        obj.errors.invalidChars = true;
-                    }
+                if (!obj.result && typeof this.validationErrors.cap === "function") {
+                    obj.errors = this.validationErrors.cap(string);
                 }
                 return obj;
             },
@@ -1061,49 +1154,35 @@
                 var obj = {
                     result: /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/.test(string)
                 };
+                if (!obj.result && typeof this.validationErrors.color === "function") {
+                    obj.errors = this.validationErrors.color(string);
+                }
                 return obj;
             },
             date: function date(string) {
                 var date = /^(((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29)$/g.test(string), obj = {
                     result: date
                 };
+                if (!obj.result && typeof this.validationErrors.date === "function") {
+                    obj.errors = this.validationErrors.date(string);
+                }
                 return obj;
             },
             dateDDMMYYYY: function dateDDMMYYYY(string) {
                 var date = /^(((0[1-9]|[12]\d|3[01])[ \/\-.](0[13578]|1[02])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)[ \/\-.](0[13456789]|1[012])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])[ \/\-.]02[ \/\-.]((19|[2-9]\d)\d{2}))|(29[ \/\-.]02[ \/\-.]((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/g.test(string), obj = {
                     result: date
                 };
+                if (!obj.result && typeof this.validationErrors.dateDDMMYYYY === "function") {
+                    obj.errors = this.validationErrors.dateDDMMYYYY(string);
+                }
                 return obj;
             },
             email: function email(string) {
                 var obj = {
                     result: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(string)
                 };
-                if (!obj.result) {
-                    obj.errors = {};
-                    if (string.indexOf("@") === -1) {
-                        obj.errors.missingAtChar = true;
-                    } else {
-                        var splitAt_at = string.split("@");
-                        if (splitAt_at[0].length === 0) {
-                            obj.errors.missingUserName = true;
-                        }
-                        if (splitAt_at[1].length === 0) {
-                            obj.errors.missingDomain = true;
-                            obj.errors.missingExtensionDot = true;
-                            obj.errors.missingExtension = true;
-                        } else if (splitAt_at[1].indexOf(".") === -1) {
-                            obj.errors.missingExtensionDot = true;
-                            obj.errors.missingExtension = true;
-                        } else {
-                            var splitAt_dot = splitAt_at[1].split("."), extLength = splitAt_dot[1].length;
-                            if (extLength === 0) {
-                                obj.errors.missingExtension = true;
-                            } else if (extLength < 2) {
-                                obj.errors.minlengthExtension = true;
-                            }
-                        }
-                    }
+                if (!obj.result && typeof this.validationErrors.email === "function") {
+                    obj.errors = this.validationErrors.email(string);
                 }
                 return obj;
             },
@@ -1111,94 +1190,89 @@
                 var obj = {
                     result: /^(?:[B-DF-HJ-NP-TV-Z](?:[AEIOU]{2}|[AEIOU]X)|[AEIOU]{2}X|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[1256LMRS][\dLMNP-V])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[\dLMNP-V][1-9MNP-V]|[1-9MNP-V][0L]))[A-Z]$/i.test(string)
                 };
+                if (!obj.result && typeof this.validationErrors.fiscalCode === "function") {
+                    obj.errors = this.validationErrors.fiscalCode(string);
+                }
                 return obj;
             },
             landlineNumber: function landlineNumber(string) {
                 var obj = {
                     result: /^((00|\+)\d{2}[\-\. ]??)??(((0[\d]{1,4}))([\/\-\. ]){0,1}([\d, ]{5,10}))$/.test(string)
                 };
+                if (!obj.result && typeof this.validationErrors.landlineNumber === "function") {
+                    obj.errors = this.validationErrors.landlineNumber(string);
+                }
                 return obj;
             },
             mobileNumber: function mobileNumber(string) {
                 var obj = {
                     result: /^((00|\+)??\d{2}[\-\. ]??)??3\d{2}[\-\. ]??(\d{6,7}|\d{2}[\-\. ]??\d{2}[\-\. ]??\d{3})$/.test(string)
                 };
+                if (!obj.result && typeof this.validationErrors.mobileNumber === "function") {
+                    obj.errors = this.validationErrors.mobileNumber(string);
+                }
                 return obj;
             },
             number: function number(string) {
                 var obj = {
                     result: /[+-]?([0-9]*[.])?[0-9]+/.test(string)
                 };
+                if (!obj.result && typeof this.validationErrors.number === "function") {
+                    obj.errors = this.validationErrors.number(string);
+                }
                 return obj;
             },
             numberFloat: function numberFloat(string) {
                 var obj = {
                     result: /[+-]?([0-9]*[.])[0-9]+/.test(string)
                 };
+                if (!obj.result && typeof this.validationErrors.numberFloat === "function") {
+                    obj.errors = this.validationErrors.numberFloat(string);
+                }
                 return obj;
             },
             numberInteger: function numberInteger(string) {
                 var obj = {
                     result: /^\d+$/.test(string)
                 };
+                if (!obj.result && typeof this.validationErrors.numberInteger === "function") {
+                    obj.errors = this.validationErrors.numberInteger(string);
+                }
                 return obj;
             },
             password: function password(string) {
                 var obj = {
                     result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
                 };
-                if (!obj.result) {
-                    obj.errors = {};
-                    var strLength = string.length;
-                    if (strLength < 8) {
-                        obj.errors.minlength = true;
-                    }
-                    if (!/\d/.test(string)) {
-                        obj.errors.missingNumber = true;
-                    }
-                    if (!/[a-z]/.test(string)) {
-                        obj.errors.missingLowercase = true;
-                    }
-                    if (!/[A-Z]/.test(string)) {
-                        obj.errors.missingUppercase = true;
-                    }
-                    if (/[^0-9a-zA-Z]/.test(string)) {
-                        obj.errors.invalidChars = true;
-                    }
+                if (!obj.result && typeof this.validationErrors.password === "function") {
+                    obj.errors = this.validationErrors.password(string);
                 }
                 return obj;
             },
             tel: function tel(string) {
                 var obj = {
-                    result: this.landlineNumber(string).result || this.mobileNumber(string).result
+                    result: this.validationRules.landlineNumber(string).result || this.validationRules.mobileNumber(string).result
                 };
+                if (!obj.result && typeof this.validationErrors.tel === "function") {
+                    obj.errors = this.validationErrors.tel(string);
+                }
                 return obj;
             },
             url: function url(string) {
                 var obj = {
                     result: /^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(string)
                 };
+                if (!obj.result && typeof this.validationErrors.url === "function") {
+                    obj.errors = this.validationErrors.url(string);
+                }
                 return obj;
             },
             username: function username(string) {
                 var obj = {
                     result: /^(?=\w)(?=[\-\.\@]?)[\w\-\.\@]{3,24}$/.test(string)
                 };
-                if (!obj.result) {
-                    obj.errors = {};
-                    var strLength = string.length;
-                    if (strLength < 3) {
-                        obj.errors.minlength = true;
-                    }
-                    if (strLength > 24) {
-                        obj.errors.maxlength = true;
-                    }
-                    if (/[^\w\-\.\@]/.test(string)) {
-                        obj.errors.invalidChars = true;
-                    }
-                    if (!/^[\w]/.test(string)) {
-                        obj.errors.invalidStartChar = true;
-                    }
+                if (!obj.result && typeof this.validationErrors.username === "function") {
+                    obj.errors = this.validationErrors.username(string);
                 }
                 return obj;
             },
@@ -1206,16 +1280,8 @@
                 var obj = {
                     result: /^(IT){0,1}[0-9]{11}$/i.test(string)
                 };
-                if (!obj.result) {
-                    obj.errors = {};
-                    var strLength = string.length, indexOfIT = string.indexOf("IT"), checkLength = indexOfIT === 0 ? 13 : 11;
-                    if (indexOfIT < 1) {
-                        if (strLength < checkLength) {
-                            obj.errors.minlength = true;
-                        } else {
-                            obj.errors.maxlength = true;
-                        }
-                    }
+                if (!obj.result && typeof this.validationErrors.vatNumber === "function") {
+                    obj.errors = this.validationErrors.vatNumber(string);
                 }
                 return obj;
             }

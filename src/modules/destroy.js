@@ -26,5 +26,7 @@ export function destroy(){
         let useCapturing = (eventName === 'blur' ? true : false);
         formEl.removeEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
     });
+
+    delete self.formEl.formjs;
     
 }

@@ -11,13 +11,8 @@ export const validationRules = {
                 result: regex.test( string )
             };
 
-        if( !obj.result ){
-
-            obj.errors = {};
-            const strLength = string.length;
-            if( strLength > 5 ){ obj.errors.maxlength = true; }
-            if( strLength > 0 && strLength < 5 ){ obj.errors.minlength = true; }
-            if( /[^0-9]/.test(string) ){ obj.errors.invalidChars = true; }
+        if( !obj.result && typeof this.validationErrors.cap === 'function' ){
+            obj.errors = this.validationErrors.cap( string );
         }
 
         return obj;
@@ -30,6 +25,10 @@ export const validationRules = {
             result: /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/.test( string )
         };
 
+        if( !obj.result && typeof this.validationErrors.color === 'function' ){
+            obj.errors = this.validationErrors.color( string );
+        }
+
         return obj;
     },
     
@@ -40,6 +39,10 @@ export const validationRules = {
             obj = {
                 result: date
             };
+
+        if( !obj.result && typeof this.validationErrors.date === 'function' ){
+            obj.errors = this.validationErrors.date( string );
+        }
 
         return obj;
     },
@@ -52,6 +55,10 @@ export const validationRules = {
                 result: date
             };
 
+        if( !obj.result && typeof this.validationErrors.dateDDMMYYYY === 'function' ){
+            obj.errors = this.validationErrors.dateDDMMYYYY( string );
+        }
+
         return obj;
     },
     
@@ -63,51 +70,8 @@ export const validationRules = {
             result: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test( string )
         };
 
-        if( !obj.result ){
-
-            obj.errors = {};
-            if( string.indexOf('@') === -1 ){
-
-                // @ IS MISSING
-                obj.errors.missingAtChar = true;
-
-            } else {
-
-                let splitAt_at = string.split('@');
-                if( splitAt_at[0].length === 0 ){
-
-                    // USER NAME IS MISSING
-                    obj.errors.missingUserName = true;
-
-                }
-
-                if( splitAt_at[1].length === 0 ){
-
-                    // IS EMPTY AFTER @
-                    obj.errors.missingDomain = true;
-                    obj.errors.missingExtensionDot = true;
-                    obj.errors.missingExtension = true;
-
-                } else if( splitAt_at[1].indexOf('.') === -1 ) {
-
-                    // DOT IS MISSING
-                    obj.errors.missingExtensionDot = true;
-                    obj.errors.missingExtension = true;
-
-                } else {
-
-                    // EXTENSION MISSING OR NOT LONG ENOUGH
-                    let splitAt_dot = splitAt_at[1].split('.'),
-                        extLength = splitAt_dot[1].length;
-                    if( extLength === 0 ) {
-                        obj.errors.missingExtension = true;
-                    } else if( extLength < 2 ){
-                        obj.errors.minlengthExtension = true;
-                    }
-
-                }
-            }
-
+        if( !obj.result && typeof this.validationErrors.email === 'function' ){
+            obj.errors = this.validationErrors.email( string );
         }
 
         return obj;
@@ -118,6 +82,10 @@ export const validationRules = {
         let obj = {
                 result: /^(?:[B-DF-HJ-NP-TV-Z](?:[AEIOU]{2}|[AEIOU]X)|[AEIOU]{2}X|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[1256LMRS][\dLMNP-V])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[\dLMNP-V][1-9MNP-V]|[1-9MNP-V][0L]))[A-Z]$/i.test( string )
             };
+
+        if( !obj.result && typeof this.validationErrors.fiscalCode === 'function' ){
+            obj.errors = this.validationErrors.fiscalCode( string );
+        }
         
         return obj;
     },
@@ -131,6 +99,10 @@ export const validationRules = {
             result: /^((00|\+)\d{2}[\-\. ]??)??(((0[\d]{1,4}))([\/\-\. ]){0,1}([\d, ]{5,10}))$/.test( string )
         };
 
+        if( !obj.result && typeof this.validationErrors.landlineNumber === 'function' ){
+            obj.errors = this.validationErrors.landlineNumber( string );
+        }
+
         return obj; 
     },
     
@@ -142,6 +114,10 @@ export const validationRules = {
             result: /^((00|\+)??\d{2}[\-\. ]??)??3\d{2}[\-\. ]??(\d{6,7}|\d{2}[\-\. ]??\d{2}[\-\. ]??\d{3})$/.test( string )
         };
 
+        if( !obj.result && typeof this.validationErrors.mobileNumber === 'function' ){
+            obj.errors = this.validationErrors.mobileNumber( string );
+        }
+
         return obj;
     },
     
@@ -151,6 +127,10 @@ export const validationRules = {
         let obj = {
             result: /[+-]?([0-9]*[.])?[0-9]+/.test( string )
         };
+
+        if( !obj.result && typeof this.validationErrors.number === 'function' ){
+            obj.errors = this.validationErrors.number( string );
+        }
 
         return obj;
     },
@@ -162,6 +142,10 @@ export const validationRules = {
             result: /[+-]?([0-9]*[.])[0-9]+/.test( string )
         };
 
+        if( !obj.result && typeof this.validationErrors.numberFloat === 'function' ){
+            obj.errors = this.validationErrors.numberFloat( string );
+        }
+
         return obj;
     },
     
@@ -170,6 +154,10 @@ export const validationRules = {
         let obj = {
             result: /^\d+$/.test( string )
         };
+
+        if( !obj.result && typeof this.validationErrors.numberInteger === 'function' ){
+            obj.errors = this.validationErrors.numberInteger( string );
+        }
 
         return obj;
     },
@@ -181,16 +169,8 @@ export const validationRules = {
             result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
         };
 
-        if( !obj.result ){
-
-            obj.errors = {};
-            let strLength = string.length;
-            if( strLength < 8 ){ obj.errors.minlength = true; }
-            if( !/\d/.test(string) ){ obj.errors.missingNumber = true; }
-            if( !/[a-z]/.test(string) ){ obj.errors.missingLowercase = true; }
-            if( !/[A-Z]/.test(string) ){ obj.errors.missingUppercase = true; }
-            if( /[^0-9a-zA-Z]/.test(string) ){ obj.errors.invalidChars = true; }
-
+        if( !obj.result && typeof this.validationErrors.password === 'function' ){
+            obj.errors = this.validationErrors.password( string );
         }
 
         return obj;
@@ -199,8 +179,12 @@ export const validationRules = {
     tel: function( string ){
         // CHECK IF ONE OF landlineNumber OR mobileNumber IS VALID
         let obj = {
-            result: this.landlineNumber(string).result || this.mobileNumber(string).result
+            result: this.validationRules.landlineNumber(string).result || this.validationRules.mobileNumber(string).result
         };
+
+        if( !obj.result && typeof this.validationErrors.tel === 'function' ){
+            obj.errors = this.validationErrors.tel( string );
+        }
 
         return obj;
     },
@@ -212,6 +196,10 @@ export const validationRules = {
         let obj = {
             result: /^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test( string )
         };
+
+        if( !obj.result && typeof this.validationErrors.url === 'function' ){
+            obj.errors = this.validationErrors.url( string );
+        }
 
         return obj;
     },
@@ -225,15 +213,8 @@ export const validationRules = {
             result: /^(?=\w)(?=[\-\.\@]?)[\w\-\.\@]{3,24}$/.test( string )
         };
 
-        if( !obj.result ){
-
-            obj.errors = {};
-            let strLength = string.length;
-            if( strLength < 3 ){ obj.errors.minlength = true; }
-            if( strLength > 24 ){ obj.errors.maxlength = true; }
-            if( /[^\w\-\.\@]/.test(string) ){ obj.errors.invalidChars = true; }
-            if( !/^[\w]/.test(string) ){ obj.errors.invalidStartChar = true; }
-
+        if( !obj.result && typeof this.validationErrors.username === 'function' ){
+            obj.errors = this.validationErrors.username( string );
         }
 
         return obj;
@@ -245,15 +226,8 @@ export const validationRules = {
             result: /^(IT){0,1}[0-9]{11}$/i.test( string )
         };
 
-        if( !obj.result ){
-            obj.errors = {};
-            var strLength = string.length,
-                indexOfIT = string.indexOf('IT'),
-                checkLength = (indexOfIT === 0 ? 13 : 11);
-            if( indexOfIT < 1 ){
-                if( strLength < checkLength ){ obj.errors.minlength = true; }
-                else { obj.errors.maxlength = true; }
-            }
+        if( !obj.result && typeof this.validationErrors.vatNumber === 'function' ){
+            obj.errors = this.validationErrors.vatNumber( string );
         }
 
         return obj;
@@ -276,7 +250,7 @@ export const _validationRulesAttributes = {
     },
 
     checks: function( data ){
-        try{
+        try {
             let attrValue = JSON.parse(data.attrValue),
                 fieldEl = data.fieldEl,
                 formEl = fieldEl.closest('form'),
@@ -361,7 +335,7 @@ export const _validationRulesAttributes = {
     },
 
     length: function( data ){
-        try{
+        try {
             let valueL = data.fieldEl.value.length,
                 attrValue = JSON.parse(data.attrValue),
                 isMinlengthOk = valueL >= attrValue[0],

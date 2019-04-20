@@ -59,7 +59,7 @@ export function _isValid( fieldEl, fieldOptions = {} ){
 
     // RUN VALIDATIONS FOR validationRules
     if( typeof self.validationRules[fieldType] === 'function' ){
-        obj = _mergeObjects( {}, obj, self.validationRules[fieldType](fieldValue, fieldEl) );
+        obj = _mergeObjects( {}, obj, self.validationRules[fieldType].call(self, fieldValue, fieldEl) );
         obj.result = obj.result && attrValidationsResult;
         if( !obj.result ){
             if( typeof obj.errors === 'undefined' ){
