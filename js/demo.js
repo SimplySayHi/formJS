@@ -125,7 +125,7 @@ var formsList = document.querySelectorAll('form'),
         },
         form_2: {},
         form_3: { formOptions: { ajaxSubmit: false } },
-        optionsPlugin04: {
+        form_4: {
             fieldOptions: {
                 checkDirtyField: true,
                 cssClasses: { dirty: 'is-dirty custom-dirty-field' },
@@ -178,7 +178,7 @@ var formsList = document.querySelectorAll('form'),
                             }
                         }
                     });
-                },
+                }
             }
         },
         form_7: {
@@ -208,7 +208,10 @@ var formsList = document.querySelectorAll('form'),
                                     } else {
                                         for(var errorName in obj.errors){
                                             if( errorName !== 'rule' ){
-                                                errorsHTML += '<li>Error: '+ errorName +'</li>';
+                                                var printError = errorName.replace(/([A-Z])/g, function(all, letter){
+                                                        return ' ' + letter.toLowerCase();
+                                                    });
+                                                errorsHTML += '<li>Error: '+ printError +'</li>';
                                             }
                                         }
                                         errorsHTML = 'This field is not valid:<ul>' + errorsHTML + '</ul>';
@@ -220,7 +223,7 @@ var formsList = document.querySelectorAll('form'),
                             }
                         }
                     });
-                },
+                }
             }
         }
     };

@@ -165,7 +165,6 @@
             return Form;
         }();
         Form.prototype.isInitialized = false;
-        Form.prototype.listenerCallbacks = {};
         Form.prototype.options = _options.options;
         Form.prototype.validationErrors = _validationErrors.validationErrors;
         Form.prototype.validationRules = _validationRules.validationRules;
@@ -329,21 +328,19 @@
             if (!checkFormEl.result) {
                 throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
             }
-            if (!Object.isFrozen(Form.prototype.listenerCallbacks)) {
-                Form.prototype.listenerCallbacks = {
-                    charCount: _listenerCallbacks._callbackFns.charCount,
-                    dataTypeNumber: _listenerCallbacks._callbackFns.dataTypeNumber,
-                    keypressMaxlength: _listenerCallbacks._callbackFns.keypressMaxlength,
-                    pastePrevent: _listenerCallbacks._callbackFns.pastePrevent.bind(self),
-                    submit: _listenerCallbacks._callbackFns.submit.bind(self),
-                    validation: _listenerCallbacks._callbackFns.validation.bind(self)
-                };
-                Object.freeze(Form.prototype.listenerCallbacks);
-            }
             self.formEl = checkFormEl.element;
-            self.options = (0, _helper._mergeObjects)({}, Form.prototype.options, optionsObj);
-            _formStartup2._formStartup.call(self);
             self.formEl.formjs = self;
+            self.options = (0, _helper._mergeObjects)({}, Form.prototype.options, optionsObj);
+            self.listenerCallbacks = {
+                charCount: _listenerCallbacks._callbackFns.charCount,
+                dataTypeNumber: _listenerCallbacks._callbackFns.dataTypeNumber,
+                keypressMaxlength: _listenerCallbacks._callbackFns.keypressMaxlength,
+                pastePrevent: _listenerCallbacks._callbackFns.pastePrevent.bind(self),
+                submit: _listenerCallbacks._callbackFns.submit.bind(self),
+                validation: _listenerCallbacks._callbackFns.validation.bind(self)
+            };
+            Object.freeze(self.listenerCallbacks);
+            _formStartup2._formStartup.call(self);
         }
     },
     "./src/modules/destroy.js": function(module, exports, __webpack_require__) {

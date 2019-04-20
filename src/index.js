@@ -74,7 +74,6 @@ class Form {
 }
 
 Form.prototype.isInitialized = false;
-Form.prototype.listenerCallbacks = {};
 Form.prototype.options = options;
 Form.prototype.validationErrors = validationErrors;
 Form.prototype.validationRules = validationRules;
