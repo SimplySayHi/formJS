@@ -1,5 +1,4 @@
 node_modules
-package-lock.json
 *.lock
 *.zip
 .DS_Store
