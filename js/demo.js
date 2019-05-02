@@ -49,6 +49,7 @@ function removeClass ( element, cssClasses ){
 function setNewDefaultOptions () {
     var addToDefOpts = {
             fieldOptions: {
+                checkDirtyField: true,
                 onValidation: function onValidationDemoDefaultNew ( fieldsArray ){},
                 maxFileSize: 99,
                 validateOnEvents: 'blur change',
@@ -79,7 +80,6 @@ var formsList = document.querySelectorAll('form'),
             },
             formOptions: {
                 beforeSend: function beforeSendDemo01 ( data ){
-                    console.log('this', this);
                     console.log( 'beforeSend data ', data );
 
                     var feedbackEl = this.formEl.querySelector('[data-formjs-global-feedback]');
@@ -90,7 +90,6 @@ var formsList = document.querySelectorAll('form'),
                     return data;
                 },
                 onSubmitSuccess: function onSubmitSuccessDemo01 ( ajaxData ){
-                    console.log('this', this);
                     console.log( 'onSubmitSuccess ajaxData ', ajaxData );
 
                     let formEl = this.formEl;
@@ -104,7 +103,6 @@ var formsList = document.querySelectorAll('form'),
                     }
                 },
                 onSubmitError: function onSubmitErrorDemo01 ( ajaxData ){
-                    console.log('this', this);
                     console.log( 'onSubmitError ajaxData ', ajaxData );
 
                     let formEl = this.formEl;
@@ -117,9 +115,8 @@ var formsList = document.querySelectorAll('form'),
                         feedbackEl.innerHTML = 'Oh no, something went wrong! :( Retry';
                     }
                 },
-                onSubmitComplete: function onSubmitCompleteDemo01 ( ajaxData ){
-                    console.log('this', this);
-                    console.log( 'onSubmitComplete ajaxData ', ajaxData );
+                onSubmitComplete: function onSubmitCompleteDemo01 (){
+                    console.log('onSubmitComplete...');
                 }
             }
         },

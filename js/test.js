@@ -3,11 +3,9 @@ var options = {
         fieldOptions: {
             checkDirtyField: true,
             onPastePrevented: function onPastePreventedTest ( fieldEl ){
-                console.log('onPastePrevented this', this);
                 console.log('onPastePrevented field', fieldEl);
             },
             onValidation: function onValidationTest ( fieldsArray ){
-                console.log('onValidation this ', this);
                 console.log('onValidation fieldsArray', fieldsArray);
                 
                 fieldsArray.forEach(function(obj){
@@ -27,7 +25,6 @@ var options = {
                 })()
             },
             beforeSend: function beforeSendTest ( data ){
-                console.log('beforeSend this', this);
                 console.log('beforeSend data', data);
 
                 var feedbackEl = this.formEl.querySelector('[data-formjs-global-feedback]');
@@ -38,7 +35,6 @@ var options = {
                 return data;
             },
             onSubmitSuccess: function onSubmitSuccessTest ( ajaxData ){
-                console.log('onSubmitSuccess this', this);
                 console.log('onSubmitSuccess ajaxData JSON string', ajaxData);
 
                 if( typeof ajaxData === 'string' ){
@@ -56,7 +52,6 @@ var options = {
                 }
             },
             onSubmitError: function onSubmitErrorTest ( ajaxData ){
-                console.log('onSubmitError this', this);
                 console.log('onSubmitError ajaxData', ajaxData);
 
                 var formEl = this.formEl;
@@ -70,7 +65,7 @@ var options = {
                 }
             },
             onSubmitComplete: function onSubmitCompleteTest (){
-                console.log('onSubmitComplete this', this);
+                console.log('onSubmitComplete...');
             }
         }
     };

@@ -17,7 +17,6 @@ var optionsPlugin = {
         },
         formOptions: {
             beforeSend: function( data ){
-                console.log('this', this);
                 console.log( 'beforeSend data ', data );
 
                 var feedbackEl = this.formEl.querySelector('[data-formjs-global-feedback]');
@@ -26,7 +25,6 @@ var optionsPlugin = {
                 return data;
             },
             onSubmitSuccess: function( ajaxData ){
-                console.log('this', this);
                 console.log( 'onSubmitSuccess ajaxData ', ajaxData );
 
                 let formEl = this.formEl;
@@ -40,7 +38,6 @@ var optionsPlugin = {
                 }
             },
             onSubmitError: function( ajaxData ){
-                console.log('this', this);
                 console.log( 'onSubmitError ajaxData ', ajaxData );
 
                 let formEl = this.formEl;
@@ -53,9 +50,8 @@ var optionsPlugin = {
                     feedbackEl.innerHTML = 'Oh no, something went wrong! :( Retry';
                 }
             },
-            onSubmitComplete: function( ajaxData ){
-                console.log('this', this);
-                console.log( 'onSubmitComplete ajaxData ', ajaxData );
+            onSubmitComplete: function(){
+                console.log('onSubmitComplete...');
             }
         }
     };
