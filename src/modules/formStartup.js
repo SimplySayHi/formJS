@@ -1,5 +1,5 @@
 
-export function _formStartup(){
+export function formStartup(){
 
     const self = this,
           formEl = self.formEl;

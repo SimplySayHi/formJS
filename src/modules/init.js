@@ -1,11 +1,11 @@
 
-import { _fieldsStringSelector, _isFieldForChangeEvent } from './helper.js';
+import { fieldsStringSelector, isFieldForChangeEvent } from './helper.js';
 
 export const init = function(){
 
     const self = this,
           formEl = self.formEl,
-          formFields = formEl.querySelectorAll( _fieldsStringSelector );
+          formFields = formEl.querySelectorAll( fieldsStringSelector );
 
     let currentFieldName = '',
         currentFieldType = '';
@@ -18,7 +18,7 @@ export const init = function(){
         if( (name === currentFieldName && type === currentFieldType) ){ return true; }
 
         const isCheckboxOrRadio = (fieldEl.type === 'checkbox' || fieldEl.type === 'radio'),
-              isFieldForChangeEvent = _isFieldForChangeEvent(fieldEl),
+              isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl),
               fieldChecked = formEl.querySelector('[name="' + fieldEl.name + '"]:checked'),
               isReqFrom = fieldEl.matches('[data-required-from]'),
               reqMoreEl = (isReqFrom ? formEl.querySelector(fieldEl.getAttribute('data-required-from')) : null);
@@ -39,7 +39,7 @@ export const init = function(){
 
             if( isCheckboxOrRadio ){
                 fieldEl = fieldChecked;
-            } else if( !isFieldForChangeEvent ) {
+            } else if( !isFieldForChangeEventBoolean ) {
                 eventToTrigger = self.options.fieldOptions.validateOnEvents.split(' ').filter(function(evName){
                     return evName !== 'change';
                 })[0] || 'input';

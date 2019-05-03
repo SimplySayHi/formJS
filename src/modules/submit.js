@@ -1,8 +1,8 @@
 
-import { _executeCallback, _isPlainObject, _mergeObjects } from './helper.js';
+import { executeCallback, isPlainObject, mergeObjects } from './helper.js';
 
-import { _ajaxCall } from './ajaxCall.js';
-//import { _ajaxCall } from './ajaxCallXhr.js';
+import { ajaxCall } from './ajaxCall.js';
+//import { ajaxCall } from './ajaxCallXhr.js';
 
 export function submit( options = {}, event = null ){
 
@@ -13,8 +13,8 @@ export function submit( options = {}, event = null ){
               if( event ){ event.preventDefault(); }
           };
     
-    options.fieldOptions = _mergeObjects( {}, self.options.fieldOptions, options.fieldOptions );
-    options.formOptions = _mergeObjects( {}, self.options.formOptions, options.formOptions );
+    options.fieldOptions = mergeObjects( {}, self.options.fieldOptions, options.fieldOptions );
+    options.formOptions = mergeObjects( {}, self.options.formOptions, options.formOptions );
     
     const handleValidation = options.fieldOptions.handleValidation,
           formValidation = (handleValidation ? self.isValidForm( options ) : { result: true });
@@ -23,7 +23,7 @@ export function submit( options = {}, event = null ){
           isAjaxForm = options.formOptions.ajaxSubmit;
     
     if( handleValidation ){
-        _executeCallback.call( self, options.fieldOptions.onValidation, formValidation.fields );
+        executeCallback.call( self, options.fieldOptions.onValidation, formValidation.fields );
     }
     
     let formDataObj = (isAjaxForm ? self.getFormData() : null),
@@ -50,7 +50,7 @@ export function submit( options = {}, event = null ){
             if( !stopCallbackLoop ){
                 let beforeSendFn = cbFn.call( self, beforeSendData );
                 
-                if( _isPlainObject(beforeSendFn) ){
+                if( isPlainObject(beforeSendFn) ){
                     formDataObj = beforeSendFn.formData || formDataObj;
                     if( beforeSendFn.stopExecution ){
                         stopCallbackLoop = true;
@@ -78,7 +78,7 @@ export function submit( options = {}, event = null ){
 
         // AJAX FORM SUBMIT
         eventPreventDefault(false);
-        _ajaxCall.call(self, formDataObj);
+        ajaxCall.call(self, formDataObj);
 
     } else if( !event ){
 

@@ -1,5 +1,5 @@
 
-import { _getSplitChar } from './helper.js';
+import { getSplitChar } from './helper.js';
 
 export const validationRules = {
             
@@ -235,7 +235,7 @@ export const validationRules = {
     
 }
 
-export const _validationRulesAttributes = {
+export const validationRulesAttributes = {
 
     checkbox: function( data ){
         let formEl = data.fieldEl.closest('form'),
@@ -364,7 +364,7 @@ export const _validationRulesAttributes = {
         
         if( isDate ){
 
-            let splitChar = _getSplitChar( value );
+            let splitChar = getSplitChar( value );
 
             if( value.indexOf(splitChar) === 2 ){
                 // DD MM YYYY
@@ -415,7 +415,7 @@ export const _validationRulesAttributes = {
         
         if( isDate ){
 
-            let splitChar = _getSplitChar( value );
+            let splitChar = getSplitChar( value );
 
             if( value.indexOf(splitChar) === 2 ){
                 // DD MM YYYY

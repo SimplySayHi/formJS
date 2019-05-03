@@ -1,8 +1,8 @@
 
-import { _executeCallback, _mergeObjects, _serialize } from './helper.js';
+import { executeCallback, mergeObjects, serializeObject } from './helper.js';
 
 // AJAX CALL USING fetch API
-export function _ajaxCall( formDataObj ){
+export function ajaxCall( formDataObj ){
 
     let self = this,
         formEl = self.formEl,
@@ -10,7 +10,7 @@ export function _ajaxCall( formDataObj ){
         formOptions = self.options.formOptions,
         btnEl = formEl.querySelector('[type="submit"]'),
         timeoutTimer,
-        ajaxOptions = _mergeObjects( {}, formOptions.ajaxOptions ),
+        ajaxOptions = mergeObjects( {}, formOptions.ajaxOptions ),
         isMultipart = ajaxOptions.headers['Content-Type'] === 'multipart/form-data';
 
     ajaxOptions.body = formDataObj;
@@ -36,14 +36,14 @@ export function _ajaxCall( formDataObj ){
     if( ajaxOptions.method === 'GET' ){
 
         // FETCH WITH "GET" METHOD CAN'T HAVE "body". SO IT IS APPENDED TO THE URL
-        ajaxOptions.url += ( /\?/.test(ajaxOptions.url) ? '&' : '?' ) + _serialize( ajaxOptions.body );
+        ajaxOptions.url += ( /\?/.test(ajaxOptions.url) ? '&' : '?' ) + serializeObject( ajaxOptions.body );
         delete ajaxOptions.body;
 
     } else {
 
         if( ajaxOptions.headers['Content-Type'].indexOf('application/x-www-form-urlencoded') > -1 ){
             // POST A NORMAL FORM
-            ajaxOptions.body = _serialize( ajaxOptions.body );
+            ajaxOptions.body = serializeObject( ajaxOptions.body );
         } else if( !isMultipart ){
             // POST A JSON STRING
             ajaxOptions.body = JSON.stringify(ajaxOptions.body);
@@ -85,12 +85,12 @@ export function _ajaxCall( formDataObj ){
         })
         .then(function( data ){
 
-            _executeCallback.call( self, formOptions.onSubmitSuccess, data );
+            executeCallback.call( self, formOptions.onSubmitSuccess, data );
 
         })
         .catch(function( error ){
 
-            _executeCallback.call( self, formOptions.onSubmitError, error );
+            executeCallback.call( self, formOptions.onSubmitError, error );
 
         })
         .finally(function(){
@@ -99,7 +99,7 @@ export function _ajaxCall( formDataObj ){
                 window.clearTimeout( timeoutTimer );
             }
             btnEl.disabled = false;
-            _executeCallback.call( self, formOptions.onSubmitComplete );
+            executeCallback.call( self, formOptions.onSubmitComplete );
 
         });
     

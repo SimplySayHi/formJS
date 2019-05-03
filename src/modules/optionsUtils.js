@@ -1,6 +1,6 @@
 
-import { _addClass, _removeClass }  from './helper.js';
-import { _checkDirtyField }         from './checkDirtyField.js';
+import { addClass, removeClass }  from './helper.js';
+import { checkDirtyField }         from './checkDirtyField.js';
 
 const _defaultCallbacksInOptions = {
     fieldOptions: {
@@ -16,7 +16,7 @@ const _defaultCallbacksInOptions = {
                     reqMoreEl = self.formEl.querySelector( fieldEl.getAttribute('data-required-from') );
 
                 if( options.checkDirtyField ){
-                    _checkDirtyField.call( self, fieldEl );
+                    checkDirtyField.call( self, fieldEl );
                 }
                 
                 if( containerEl !== null && !options.skipUIfeedback ){
@@ -25,8 +25,8 @@ const _defaultCallbacksInOptions = {
                         if( !isReqFrom || (isReqFrom && reqMoreEl.checked) ){
                             // IF FIELD IS VALID
                             let errorClasses = options.cssClasses.error + ' ' + options.cssClasses.errorEmpty + ' ' + options.cssClasses.errorRule;
-                            _removeClass( containerEl, errorClasses );
-                            _addClass( containerEl, options.cssClasses.valid );
+                            removeClass( containerEl, errorClasses );
+                            addClass( containerEl, options.cssClasses.valid );
                         }
 
                     } else {
@@ -44,8 +44,8 @@ const _defaultCallbacksInOptions = {
 
                         let errorClasses = options.cssClasses.error + ' ' + extraErrorClass,
                             errorClassToRemove = options.cssClasses.errorEmpty + ' ' + options.cssClasses.errorRule;
-                        _removeClass( containerEl, options.cssClasses.valid + ' ' + errorClassToRemove );
-                        _addClass( containerEl, errorClasses );
+                        removeClass( containerEl, options.cssClasses.valid + ' ' + errorClassToRemove );
+                        addClass( containerEl, errorClasses );
 
                     }
                 }
@@ -55,7 +55,7 @@ const _defaultCallbacksInOptions = {
     }
 };
 
-export const _setCallbackFunctionsInOptions = function(){
+export const setCallbackFunctionsInOptions = function(){
     const   self = this,
             callbacks = {
                 fieldOptions: ['onPastePrevented', 'onValidation'],

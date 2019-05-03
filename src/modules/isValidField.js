@@ -1,17 +1,17 @@
 
-import { _isDOMNode, _mergeObjects, _validateFieldObjDefault } from './helper.js';
-import { _isValid } from './isValid.js';
+import { isDOMNode, mergeObjects, validateFieldObjDefault } from './helper.js';
+import { isValid } from './isValid.js';
 
 export function isValidField( fieldElem, fieldOptionsObj = {} ){
 
     const self = this,
           fieldEl = (typeof fieldElem === 'string' ? self.formEl.querySelector(fieldElem) : fieldElem);
 
-    let obj = _mergeObjects({}, _validateFieldObjDefault);
+    let obj = mergeObjects({}, validateFieldObjDefault);
 
-    if( !_isDOMNode(fieldEl) ){ return obj; }
+    if( !isDOMNode(fieldEl) ){ return obj; }
 
-    let options =           _mergeObjects( {}, self.options.fieldOptions, fieldOptionsObj ),
+    let options =           mergeObjects( {}, self.options.fieldOptions, fieldOptionsObj ),
         isValidValue =      fieldEl.value.trim().length > 0,
         isRequired =        fieldEl.required,
         isReqFrom =         fieldEl.matches('[data-required-from]'),
@@ -27,7 +27,7 @@ export function isValidField( fieldElem, fieldOptionsObj = {} ){
        
     } else {
         
-        obj =  _isValid.call( self, fieldEl, options );
+        obj =  isValid.call( self, fieldEl, options );
         
     }
 

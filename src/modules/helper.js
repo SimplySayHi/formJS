@@ -1,27 +1,27 @@
 
 export const
 
-_fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type=button]):not([type=hidden]), select, textarea',
+fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type=button]):not([type=hidden]), select, textarea',
 
-_addClass = function( element, cssClasses ){
+addClass = function( element, cssClasses ){
     cssClasses.split(' ').forEach(function(className){
         element.classList.add( className );
     });
 },
 
-_checkFormEl = function( formEl ){
+checkFormEl = function( formEl ){
     let isString = typeof formEl,
-        isValidNodeSelector = isString === 'string' && _isDOMNode(document.querySelector(formEl)),
+        isValidNodeSelector = isString === 'string' && isDOMNode(document.querySelector(formEl)),
         isFormSelector = isValidNodeSelector && document.querySelector(formEl).tagName.toLowerCase() === 'form',
         obj = {
-            result: _isDOMNode(formEl) || isFormSelector,
+            result: isDOMNode(formEl) || isFormSelector,
             element: (isString === 'string' ? document.querySelector(formEl) : formEl)
         };
 
     return obj;
 },
 
-_executeCallback = function( callbackOption, callbackData ){
+executeCallback = function( callbackOption, callbackData ){
     let self = this,
         callbackFnList = [];
 
@@ -36,7 +36,7 @@ _executeCallback = function( callbackOption, callbackData ){
     });
 },
 
-_getSplitChar = function( string ){
+getSplitChar = function( string ){
     let splitChar = '.';
 
     if( string.indexOf(splitChar) === -1 ){
@@ -50,23 +50,23 @@ _getSplitChar = function( string ){
     return splitChar;
 },
 
-_isDOMNode = function( node ){
+isDOMNode = function( node ){
     return Element.prototype.isPrototypeOf( node );
 },
 
-_isFieldForChangeEvent = function ( fieldEl ) {
+isFieldForChangeEvent = function ( fieldEl ) {
     return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
 },
 
-_isNodeList = function( nodeList ){
+isNodeList = function( nodeList ){
     return NodeList.prototype.isPrototypeOf( nodeList );
 },
 
-_isPlainObject = function( object ){
+isPlainObject = function( object ){
     return Object.prototype.toString.call( object ) === '[object Object]';
 },
 
-_mergeObjects = function( out = {} ){
+mergeObjects = function( out = {} ){
     for(let i=1; i<arguments.length; i++){
         let obj = arguments[i];
 
@@ -87,7 +87,7 @@ _mergeObjects = function( out = {} ){
 
                 } else if( isObject ){
 
-                    out[key] = _mergeObjects(out[key], obj[key]);
+                    out[key] = mergeObjects(out[key], obj[key]);
 
                 } else {
 
@@ -106,13 +106,13 @@ _mergeObjects = function( out = {} ){
     return out;
 },
 
-_removeClass = function( element, cssClasses ){
+removeClass = function( element, cssClasses ){
     cssClasses.split(' ').forEach(function(className){
         element.classList.remove( className );
     });
 },
 
-_serialize = function( obj ){
+serializeObject = function( obj ){
     var objToString = (
             (obj && typeof obj === 'object' && obj.constructor === Object) ? 
             Object.keys(obj)
@@ -125,10 +125,10 @@ _serialize = function( obj ){
     return objToString;
 },
 
-_toCamelCase = function( string ){
+toCamelCase = function( string ){
     return string.replace(/-([a-z])/ig, function(all, letter){ return letter.toUpperCase(); });
 },
 
-_validateFieldObjDefault = { result: false, fieldEl: null },
+validateFieldObjDefault = { result: false, fieldEl: null },
 
-_validateFormObjDefault = { result: true, fields: [] }
+validateFormObjDefault = { result: true, fields: [] }

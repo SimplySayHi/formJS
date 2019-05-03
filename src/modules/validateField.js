@@ -1,17 +1,17 @@
 
-import { _executeCallback, _isDOMNode, _mergeObjects, _validateFieldObjDefault } from './helper.js';
+import { executeCallback, isDOMNode, mergeObjects, validateFieldObjDefault } from './helper.js';
 
 export function validateField( fieldElem, fieldOptionsObj = {} ){
 
     const self = this,
           fieldEl = (typeof fieldElem === 'string' ? self.formEl.querySelector(fieldElem) : fieldElem);
-    let obj = _mergeObjects({}, _validateFieldObjDefault);
+    let obj = mergeObjects({}, validateFieldObjDefault);
 
-    if( _isDOMNode(fieldEl) ){
+    if( isDOMNode(fieldEl) ){
 
         obj = self.isValidField( fieldEl, fieldOptionsObj );
-        let fieldOptions = _mergeObjects({}, self.options.fieldOptions, fieldOptionsObj);
-        _executeCallback.call( self, fieldOptions.onValidation, [obj] );
+        let fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptionsObj);
+        executeCallback.call( self, fieldOptions.onValidation, [obj] );
         
     }
 

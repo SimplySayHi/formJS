@@ -1,11 +1,11 @@
 
-import { _mergeObjects, _toCamelCase } from './helper.js';
-import { _validationRulesAttributes } from './validationRules.js';
+import { mergeObjects, toCamelCase } from './helper.js';
+import { validationRulesAttributes } from './validationRules.js';
 
-export function _isValid( fieldEl, fieldOptions = {} ){
+export function isValid( fieldEl, fieldOptions = {} ){
 
     const self = this,
-          fieldType = ( fieldEl.matches('[data-subtype]') ? _toCamelCase( fieldEl.getAttribute('data-subtype') ) : fieldEl.type ),
+          fieldType = ( fieldEl.matches('[data-subtype]') ? toCamelCase( fieldEl.getAttribute('data-subtype') ) : fieldEl.type ),
           fieldValue = fieldEl.value,
           isValidValue = fieldValue.trim().length > 0,
           // ALPHABETICAL REVERSE ORDER
@@ -21,13 +21,13 @@ export function _isValid( fieldEl, fieldOptions = {} ){
         return obj;
     }
 
-    // COLLECT SPECIFIC VALIDATIONS FOR _validationRulesAttributes
+    // COLLECT SPECIFIC VALIDATIONS FOR validationRulesAttributes
     fieldAttributes.forEach(function(attr){
         // FOR data-* ATTRIBUTES -> REMOVE "data-" AND TRANSFORM TO CAMELCASE
-        let attrName = _toCamelCase( attr.name.replace('data-', '') ),
+        let attrName = toCamelCase( attr.name.replace('data-', '') ),
             attrValue = attr.value,
-            isTypeValueWithFn = attrName === 'type' && typeof _validationRulesAttributes[attrValue] === 'function',
-            isAttrNameWithFn = typeof _validationRulesAttributes[attrName] === 'function';
+            isTypeValueWithFn = attrName === 'type' && typeof validationRulesAttributes[attrValue] === 'function',
+            isAttrNameWithFn = typeof validationRulesAttributes[attrName] === 'function';
 
         if( isTypeValueWithFn || isAttrNameWithFn ){
 
@@ -48,18 +48,18 @@ export function _isValid( fieldEl, fieldOptions = {} ){
         }
     });
 
-    // RUN SPECIFIC VALIDATIONS FOR _validationRulesAttributes
+    // RUN SPECIFIC VALIDATIONS FOR validationRulesAttributes
     attrValidations.forEach(function(item){
-        let extraVal = _validationRulesAttributes[item.attrName]( item, fieldEl );
+        let extraVal = validationRulesAttributes[item.attrName]( item, fieldEl );
         if( !extraVal.result ){
-            obj = _mergeObjects({}, obj, extraVal);
+            obj = mergeObjects({}, obj, extraVal);
             attrValidationsResult = false;
         }
     });
 
     // RUN VALIDATIONS FOR validationRules
     if( typeof self.validationRules[fieldType] === 'function' ){
-        obj = _mergeObjects( {}, obj, self.validationRules[fieldType].call(self, fieldValue, fieldEl) );
+        obj = mergeObjects( {}, obj, self.validationRules[fieldType].call(self, fieldValue, fieldEl) );
         obj.result = obj.result && attrValidationsResult;
         if( !obj.result ){
             if( typeof obj.errors === 'undefined' ){

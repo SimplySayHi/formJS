@@ -1,7 +1,7 @@
 
-import { _executeCallback, _fieldsStringSelector, _isFieldForChangeEvent } from './helper.js';
+import { executeCallback, fieldsStringSelector, isFieldForChangeEvent } from './helper.js';
 
-export const _callbackFns = {
+export const callbackFns = {
 
     charCount: function( eventOrField ){
 
@@ -61,7 +61,7 @@ export const _callbackFns = {
 
         if( fieldEl.matches( fieldOptions.preventPasteFields ) ){     
             event.preventDefault();
-            _executeCallback.call( self, fieldOptions.onPastePrevented, fieldEl );
+            executeCallback.call( self, fieldOptions.onPastePrevented, fieldEl );
         }
 
     },
@@ -76,8 +76,8 @@ export const _callbackFns = {
             eventName = event.type,
             fieldEl = event.target;
 
-        if( fieldEl.matches( _fieldsStringSelector ) ){
-            const isFieldForChangeEvent = _isFieldForChangeEvent(fieldEl),
+        if( fieldEl.matches( fieldsStringSelector ) ){
+            const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl),
                 isRadio = fieldEl.type === 'radio',
                 isReqFrom = fieldEl.matches('[data-required-from]'),
                 isReqMore = fieldEl.matches('[data-require-more]'),
@@ -123,8 +123,8 @@ export const _callbackFns = {
             }
             
             if(
-                (isFieldForChangeEvent && eventName === 'change') ||
-                (!isFieldForChangeEvent && eventName !== 'change')
+                (isFieldForChangeEventBoolean && eventName === 'change') ||
+                (!isFieldForChangeEventBoolean && eventName !== 'change')
             ){
                 
                 self.validateField( fieldEl );
