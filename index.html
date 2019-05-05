@@ -459,20 +459,6 @@ var formInstance = new Form( formEl, options ).init();
                     <div class="card-body">
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <p class="text-green">checkDirtyField</p>
-                            </div>
-                            <div class="col-3">
-                                boolean
-                            </div>
-                            <div class="col-5">
-                                <p>
-                                    Whether or not to check if the field is dirty ( has some value ) or not.<br />
-                                    If set to true, the "dirty CSS class" will be applied to the container element with data-formjs-question attribute - or the field itself, if not.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4">
                                 <p class="text-green">cssClasses</p>
                             </div>
                             <div class="col-3">
@@ -585,6 +571,9 @@ var formInstance = new Form( formEl, options ).init();
                                         <li>
                                             fieldEl: JS node element
                                         </li>
+                                        <li>
+                                            tempOptions: temporary options ( this object can be useful when manually validating a field with new options used only for that specific case )
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -628,6 +617,9 @@ var formInstance = new Form( formEl, options ).init();
                                                     errors: JS object ( only in case of invalid field )
                                                 </li>
                                             </ul>
+                                        </li>
+                                        <li>
+                                            tempOptions: temporary options ( this object can be useful when manually validating a field with new options used only for that specific case )
                                         </li>
                                     </ul>
                                 </div>
@@ -722,7 +714,6 @@ var formInstance = new Form( formEl, options ).init();
                         </p>
                         <pre>
 {
-    checkDirtyField:        false,
     cssClasses: {
         dirty:              'is-dirty',
         error:              'has-error',
@@ -815,6 +806,9 @@ var formInstance = new Form( formEl, options ).init();
                                             </li>
                                         </ul>
                                     </li>
+                                    <li>
+                                        <span class="text-green">tempOptions</span>: ( JS object ) temporary options <span class="text-yellow">*</span>
+                                    </li>
                                 </ul>
                                 <p>
                                     Additionally, the "this" keyword is bound to the Form instance.
@@ -886,7 +880,10 @@ var formInstance = new Form( formEl, options ).init();
                             <div class="col-5">
                                 <ul>
                                     <li>
-                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( dataOrXHR, status, XHRorResponse ).
+                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( data/message, status, code - according to <a href="https://github.com/omniti-labs/jsend" target="_blank">JSend format</a> for success or error ).
+                                    </li>
+                                    <li>
+                                        <span class="text-green">tempOptions</span>: ( JS object ) temporary options <span class="text-yellow">*</span>
                                     </li>
                                 </ul>
                                 <p>
@@ -907,7 +904,10 @@ var formInstance = new Form( formEl, options ).init();
                             <div class="col-5">
                                 <ul>
                                     <li>
-                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( errorThrown, status, response ).
+                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( message, status, code - according to <a href="https://github.com/omniti-labs/jsend" target="_blank">JSend format</a> ).
+                                    </li>
+                                    <li>
+                                        <span class="text-green">tempOptions</span>: ( JS object ) temporary options <span class="text-yellow">*</span>
                                     </li>
                                 </ul>
                                 <p>
@@ -928,7 +928,10 @@ var formInstance = new Form( formEl, options ).init();
                             <div class="col-5">
                                 <ul>
                                     <li>
-                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( data, status, response ).
+                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( data, status, code - according to <a href="https://github.com/omniti-labs/jsend" target="_blank">JSend format</a> ).
+                                    </li>
+                                    <li>
+                                        <span class="text-green">tempOptions</span>: ( JS object ) temporary options <span class="text-yellow">*</span>
                                     </li>
                                 </ul>
                                 <p>
@@ -943,7 +946,12 @@ var formInstance = new Form( formEl, options ).init();
                         </div>
                     </div>
                     <div class="card-footer no-bg">
-                        <div class="row">
+                        <div class="">
+                            <p class="small">
+                                * this object can be useful when manually submitting the form with new options used only for that specific case.
+                            </p>
+                        </div>
+                        <div class="row mt-3">
                             <div class="col-12 col-sm-6">
                                 <p>
                                     Default form options for formJS with fetch API:
@@ -1152,11 +1160,52 @@ var formInstance = new Form( formEl, options ).init();
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <pre class="text-green">isValidField( field[, fieldOptions] )</pre>
+                                <pre class="text-green">submit( [options[, event]] )</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    Validate the field based on the field options of the instance or the ones passed as second argument.
+                                    To manually trigger the form submit.
+                                </p>
+                                <ul>
+                                    <li>
+                                        <span class="text-green">options</span>: ( Optional ) JS object. Can contain fieldOptions and formOptions. For default values see <a href="#options-list">Options section</a>
+                                    </li>
+                                    <li>
+                                        <span class="text-green">event</span>: ( Optional | Required if <code>handleSubmit: false</code> ) JS event object for submit event.
+                                    </li>
+                                </ul>
+                                <p>
+                                    It will:
+                                </p>
+                                <ul>
+                                    <li>
+                                        validate the form according to the fieldOptions and formOptions ( passed inside options param or the instance ones )
+                                    </li>
+                                    <li>
+                                        ( for AJAX forms ) create the JSON data to send via AJAX call as for getFormData method
+                                    </li>
+                                    <li>
+                                        ( for AJAX forms ) make the AJAX call to the url specified as action of the HTML form
+                                    </li>
+                                    <li>
+                                        ( for AJAX forms ) trigger callback functions as defined in options param
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-3">
+                                <p>
+
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4">
+                                <pre class="text-green">validateField( field[, fieldOptions] )</pre>
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    Fires validation for the specified field.<br />
+                                    Then, this also fires feedback on UI ( basic feedback with css classes ) and callback function(s) ( "onValidation" in "fieldOptions" ).
                                 </p>
                                 <ul>
                                     <li>
@@ -1170,11 +1219,11 @@ var formInstance = new Form( formEl, options ).init();
                                     <span class="text-yellow mr-2">*</span> 
                                     <span class="small">
                                             best to use a CSS string selector so that it looks for the field inside the instance form element.
-                                            <br />
-                                            Example:<br />
+                                            <br>
+                                            Example:<br>
                                     </span>
-                                    <pre>formInstance.isValidField('[name="myEmail"]');</pre>
                                 </p>
+                                <pre>formInstance.validateField('[name="myEmail"]');</pre>
                             </div>
                             <div class="col-3">
                                 <p>
@@ -1201,15 +1250,16 @@ var formInstance = new Form( formEl, options ).init();
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <pre class="text-green">isValidForm( [options] )</pre>
+                                <pre class="text-green">validateForm( [fieldOptions] )</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    Validate the form based on the form options of the instance or the ones passed as argument.
+                                    Fires validation for the form.<br />
+                                    Then, this also fires feedback on UI for each field ( basic feedback with css classes ) and callback function(s) passing the full array of fields ( "onValidation" in "fieldOptions" ).
                                 </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">options</span>: ( Optional ) JS object with fieldOptions and/or formOptions. For default values see <a href="#options-list">Options section</a>
+                                        <span class="text-green">fieldOptions</span>: ( Optional ) JS object. For default values see <a href="#field-options">Field Options section</a>
                                     </li>
                                 </ul>
                             </div>
@@ -1234,100 +1284,6 @@ var formInstance = new Form( formEl, options ).init();
                                         <span class="text-green">result</span>: ( boolean ) check for the form, if it is valid or not
                                     </li>
                                 </ul>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4">
-                                <pre class="text-green">submit( [options[, event]] )</pre>
-                            </div>
-                            <div class="col-5">
-                                <p>
-                                    To manually trigger the form submit.
-                                </p>
-                                <ul>
-                                    <li>
-                                        <span class="text-green">options</span>: ( Optional ) JS object. Can contain fieldOptions and formOptions. For default values see <a href="#options-list">Options section</a>
-                                    </li>
-                                    <li>
-                                        <span class="text-green">event</span>: ( Optional | Required if <code>handleSubmit: false</code> ) JS event object for submit event.
-                                    </li>
-                                </ul>
-                                <p>
-                                    It will:
-                                </p>
-                                <ul>
-                                    <li>
-                                        validate the form according to the fieldOptions and formOptions ( passed inside options param )
-                                    </li>
-                                    <li>
-                                        ( for AJAX forms ) create the JSON data to send via AJAX call as for getFormData method
-                                    </li>
-                                    <li>
-                                        ( for AJAX forms ) make the AJAX call to the url specified as action of the HTML form
-                                    </li>
-                                    <li>
-                                        ( for AJAX forms ) trigger callback functions as defined in options param
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-3">
-                                <p>
-
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4">
-                                <pre class="text-green">validateField( field[, fieldOptions] )</pre>
-                            </div>
-                            <div class="col-5">
-                                <p>
-                                    Fires validation for the specified field ( with "isValidField" method ).<br />
-                                    Then, this also fires feedback on UI ( basic feedback with css classes ) and callback function(s) ( "onValidation" in "fieldOptions" ).
-                                </p>
-                                <ul>
-                                    <li>
-                                        <span class="text-green">field</span>: CSS string selector ( or node element <span class="text-yellow">*</span> ) for the form field ( input, select, textarea )
-                                    </li>
-                                    <li>
-                                        <span class="text-green">fieldOptions</span>: ( Optional ) JS object. For default values see <a href="#field-options">Field Options section</a>
-                                    </li>
-                                </ul>
-                                <p class="d-flex">
-                                    <span class="text-yellow mr-2">*</span> 
-                                    <span class="small">
-                                            best to use a CSS string selector so that it looks for the field inside the instance form element.
-                                            <br>
-                                            Example:<br>
-                                    </span>
-                                </p>
-                                <pre>formInstance.validateField('[name="myEmail"]');</pre>
-                            </div>
-                            <div class="col-3">
-                                <p>
-                                    as for "isValidField" method
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4">
-                                <pre class="text-green">validateForm( [options] )</pre>
-                            </div>
-                            <div class="col-5">
-                                <p>
-                                    Fires validation for the form ( with "isValidForm" method ).<br />
-                                    Then, this also fires feedback on UI for each field ( basic feedback with css classes ) and callback function(s) passing the full array of fields ( "onValidation" in "fieldOptions" ).
-                                </p>
-                                <ul>
-                                    <li>
-                                        <span class="text-green">options</span>: ( Optional ) JS object with fieldOptions and/or formOptions. For default values see <a href="#options-list">Options section</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-3">
-                                <p>
-                                    as for "isValidForm" method
-                                </p>
                             </div>
                         </div>
                     </div>
@@ -2650,13 +2606,25 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                                 Added support for attributes "min" and "max" for date fields.
                             </li>
                             <li>
-                                Change in "isValidField" method: now it just checks the field validity without feedback on the user interface and returns a JS object with "fieldEl", "result" and "errors" ( same change for "isValidForm" method since it makes use of "isValidField" method ).
+                                Added "tempOptions" parameter to "onPastePrevented", "onValidation", "beforeSend", "onSubmitComplete", "onSubmitError", "onSubmitSuccess" callback functions.
                             </li>
                             <li>
                                 Renamed method "getFormJSON" with "getFormData" ( and related option in "formOptions" ).
                             </li>
                             <li>
+                                Renamed method "isValidField" with "validateField".
+                            </li>
+                            <li>
+                                Renamed method "isValidForm" with "validateForm".
+                            </li>
+                            <li>
                                 Renamed attribute "data-exclude-json" with "data-exclude-data" for consistency with related "getFormData" method.
+                            </li>
+                            <li>
+                                Changed "ajaxData" parameter in "onSubmitComplete", "onSubmitError", "onSubmitSuccess" to be compliant with JSend standard.
+                            </li>
+                            <li>
+                                Removed "checkDirtyField" option from "fieldOptions" ( the related callback is automatically executed ).
                             </li>
                             <li>
                                 Minor improvements.

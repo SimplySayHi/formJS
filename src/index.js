@@ -1,5 +1,5 @@
 
-/**! formJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | http://simplysayhi.github.io/formJS | https://github.com/SimplySayHi/formJS | MIT license */
+/**! formJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 
 import { mergeObjects }         from './modules/helper.js';
 import { setCallbackFunctionsInOptions } from './modules/optionsUtils.js';
@@ -13,8 +13,6 @@ import { constructorFn }        from './modules/constructor.js';
 import { destroy }              from './modules/destroy.js';
 import { getFormData }          from './modules/getFormData.js';
 import { init }                 from './modules/init.js';
-import { isValidField }         from './modules/isValidField.js';
-import { isValidForm }          from './modules/isValidForm.js';
 import { submit }               from './modules/submit.js';
 import { validateField }        from './modules/validateField.js';
 import { validateForm }         from './modules/validateForm.js';
@@ -38,14 +36,6 @@ class Form {
     init(){
         return init.call(this);
     }
-    
-    isValidField( fieldEl, fieldOptions ){
-        return isValidField.call(this, fieldEl, fieldOptions);
-    }
-    
-    isValidForm( optionsObj ){
-        return isValidForm.call(this, optionsObj);
-    }
 
     submit( optionsObj, event ){
         submit.call(this, optionsObj, event);
@@ -55,8 +45,8 @@ class Form {
         return validateField.call(this, fieldElem, fieldOptions);
     }
 
-    validateForm( optionsObj ){
-        return validateForm.call(this, optionsObj);
+    validateForm( fieldOptions ){
+        return validateForm.call(this, fieldOptions);
     }
     
     static addValidationErrors( errorsObj ){

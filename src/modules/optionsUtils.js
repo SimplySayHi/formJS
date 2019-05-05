@@ -1,13 +1,13 @@
 
-import { addClass, removeClass }  from './helper.js';
-import { checkDirtyField }         from './checkDirtyField.js';
+import { addClass, removeClass }    from './helper.js';
+import { checkDirtyField }          from './checkDirtyField.js';
 
-const _defaultCallbacksInOptions = {
+const defaultCallbacksInOptions = {
     fieldOptions: {
-        onValidation: function onValidationDefault ( fieldsArray ) {
+        onValidation: function onValidationDefault ( fieldsArray, tempOptions ) {
 
             let self = this,
-                options = self.options.fieldOptions;
+                options = tempOptions.fieldOptions;
 
             fieldsArray.forEach(function( obj ){
                 let fieldEl = obj.fieldEl,
@@ -15,9 +15,7 @@ const _defaultCallbacksInOptions = {
                     isReqFrom = fieldEl.matches('[data-required-from]'),
                     reqMoreEl = self.formEl.querySelector( fieldEl.getAttribute('data-required-from') );
 
-                if( options.checkDirtyField ){
-                    checkDirtyField.call( self, fieldEl );
-                }
+                checkDirtyField.call( self, fieldEl );
                 
                 if( containerEl !== null && !options.skipUIfeedback ){
                     if( obj.result ){
@@ -75,8 +73,8 @@ export const setCallbackFunctionsInOptions = function(){
                 fnList.push(fnInOptions);
             }
 
-            if( typeof _defaultCallbacksInOptions[opt] !== 'undefined' && typeof _defaultCallbacksInOptions[opt][fnName] === 'function' ){
-                fnList.unshift(_defaultCallbacksInOptions[opt][fnName]);
+            if( typeof defaultCallbacksInOptions[opt] !== 'undefined' && typeof defaultCallbacksInOptions[opt][fnName] === 'function' ){
+                fnList.unshift(defaultCallbacksInOptions[opt][fnName]);
             }
 
             self.options[opt][fnName] = fnList;

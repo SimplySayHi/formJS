@@ -90,8 +90,6 @@
         var _destroy2 = __webpack_require__("./src/modules/destroy.js");
         var _getFormData2 = __webpack_require__("./src/modules/getFormData.js");
         var _init2 = __webpack_require__("./src/modules/init.js");
-        var _isValidField2 = __webpack_require__("./src/modules/isValidField.js");
-        var _isValidForm2 = __webpack_require__("./src/modules/isValidForm.js");
         var _submit2 = __webpack_require__("./src/modules/submit.js");
         var _validateField2 = __webpack_require__("./src/modules/validateField.js");
         var _validateForm2 = __webpack_require__("./src/modules/validateForm.js");
@@ -122,16 +120,6 @@
                     return _init2.init.call(this);
                 }
             }, {
-                key: "isValidField",
-                value: function isValidField(fieldEl, fieldOptions) {
-                    return _isValidField2.isValidField.call(this, fieldEl, fieldOptions);
-                }
-            }, {
-                key: "isValidForm",
-                value: function isValidForm(optionsObj) {
-                    return _isValidForm2.isValidForm.call(this, optionsObj);
-                }
-            }, {
                 key: "submit",
                 value: function submit(optionsObj, event) {
                     _submit2.submit.call(this, optionsObj, event);
@@ -143,8 +131,8 @@
                 }
             }, {
                 key: "validateForm",
-                value: function validateForm(optionsObj) {
-                    return _validateForm2.validateForm.call(this, optionsObj);
+                value: function validateForm(fieldOptions) {
+                    return _validateForm2.validateForm.call(this, fieldOptions);
                 }
             } ], [ {
                 key: "addValidationErrors",
@@ -184,8 +172,8 @@
         });
         exports.ajaxCall = ajaxCall;
         var _helper = __webpack_require__("./src/modules/helper.js");
-        function ajaxCall(formDataObj) {
-            var self = this, formEl = self.formEl, fieldOptions = self.options.fieldOptions, formOptions = self.options.formOptions, btnEl = formEl.querySelector('[type="submit"]'), timeoutTimer = void 0, ajaxOptions = (0, 
+        function ajaxCall(formDataObj, options) {
+            var self = this, formEl = self.formEl, fieldOptions = options.fieldOptions, formOptions = options.formOptions, btnEl = formEl.querySelector('[type="submit"]'), timeoutTimer = void 0, ajaxOptions = (0, 
             _helper.mergeObjects)({}, formOptions.ajaxOptions), isMultipart = ajaxOptions.headers["Content-Type"] === "multipart/form-data";
             ajaxOptions.body = formDataObj;
             if (isMultipart && fieldOptions.handleFileUpload) {
@@ -220,7 +208,12 @@
                     controller.abort();
                 }, ajaxOptions.timeout);
             }
+            var ajaxResponse = {};
             fetch(ajaxOptions.url, ajaxOptions).then(function(response) {
+                ajaxResponse.code = response.status;
+                if (!response.ok) {
+                    return Promise.reject(response);
+                }
                 var getFetchMethod = function getFetchMethod(response) {
                     var contentType = response.headers.get("Content-Type"), methodName = "blob";
                     if (contentType.indexOf("application/json") > -1) {
@@ -233,15 +226,19 @@
                 var fetchMethod = getFetchMethod(response);
                 return response[fetchMethod]();
             }).then(function(data) {
-                _helper.executeCallback.call(self, formOptions.onSubmitSuccess, data);
+                ajaxResponse.status = "success";
+                ajaxResponse.data = data;
+                _helper.executeCallback.call(self, formOptions.onSubmitSuccess, ajaxResponse);
             }).catch(function(error) {
-                _helper.executeCallback.call(self, formOptions.onSubmitError, error);
+                ajaxResponse.status = "error";
+                ajaxResponse.message = error.statusText;
+                _helper.executeCallback.call(self, formOptions.onSubmitError, ajaxResponse);
             }).finally(function() {
                 if (timeoutTimer) {
                     window.clearTimeout(timeoutTimer);
                 }
                 btnEl.disabled = false;
-                _helper.executeCallback.call(self, formOptions.onSubmitComplete);
+                _helper.executeCallback.call(self, formOptions.onSubmitComplete, ajaxResponse);
             });
         }
     },
@@ -471,14 +468,15 @@
             };
             return obj;
         }, executeCallback = exports.executeCallback = function executeCallback(callbackOption, callbackData) {
-            var self = this, callbackFnList = [];
+            var tempOptions = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+            var self = this, options = mergeObjects({}, self.options, tempOptions), callbackFnList = [];
             if (typeof callbackOption === "function") {
                 callbackFnList.push(callbackOption);
             } else if (Array.isArray(callbackOption)) {
                 callbackFnList = callbackOption;
             }
             callbackFnList.forEach(function(cbFn) {
-                cbFn.call(self, callbackData);
+                cbFn.call(self, callbackData, options);
             });
         }, getSplitChar = exports.getSplitChar = function getSplitChar(string) {
             var splitChar = ".";
@@ -681,18 +679,18 @@
         });
         exports.isValidForm = isValidForm;
         var _helper = __webpack_require__("./src/modules/helper.js");
+        var _isValidField = __webpack_require__("./src/modules/isValidField.js");
         function isValidForm() {
-            var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+            var fieldOptionsObj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
             var self = this, formEl = self.formEl;
             var obj = (0, _helper.mergeObjects)({}, _helper.validateFormObjDefault);
             if (!(0, _helper.isDOMNode)(formEl) || !formEl.matches("[novalidate]")) {
                 obj.result = false;
                 return obj;
             }
-            var fieldOptions = (0, _helper.mergeObjects)({}, self.options.fieldOptions, options.fieldOptions), currentFieldName = "", currentFieldType = "";
-            if (typeof fieldOptions.focusOnRelated === "undefined") {
-                fieldOptions.focusOnRelated = false;
-            }
+            var fieldOptions = (0, _helper.mergeObjects)({}, self.options.fieldOptions, fieldOptionsObj, {
+                focusOnRelated: false
+            }), currentFieldName = "", currentFieldType = "";
             Array.from(formEl.querySelectorAll(_helper.fieldsStringSelector)).forEach(function(fieldEl) {
                 var name = fieldEl.name, type = fieldEl.type, fieldData = {};
                 if (name === currentFieldName && type === currentFieldType) {
@@ -702,7 +700,7 @@
                     currentFieldName = name;
                     currentFieldType = type;
                 }
-                fieldData = self.isValidField(fieldEl, fieldOptions);
+                fieldData = _isValidField.isValidField.call(self, fieldEl, fieldOptions);
                 if (!fieldData.result) {
                     obj.result = false;
                 }
@@ -809,7 +807,6 @@
         var _optionsAjax = __webpack_require__("./src/modules/optionsAjax.js");
         var options = exports.options = {
             fieldOptions: {
-                checkDirtyField: false,
                 cssClasses: {
                     dirty: "is-dirty",
                     error: "has-error",
@@ -866,15 +863,13 @@
         exports.setCallbackFunctionsInOptions = undefined;
         var _helper = __webpack_require__("./src/modules/helper.js");
         var _checkDirtyField = __webpack_require__("./src/modules/checkDirtyField.js");
-        var _defaultCallbacksInOptions = {
+        var defaultCallbacksInOptions = {
             fieldOptions: {
-                onValidation: function onValidationDefault(fieldsArray) {
-                    var self = this, options = self.options.fieldOptions;
+                onValidation: function onValidationDefault(fieldsArray, tempOptions) {
+                    var self = this, options = tempOptions.fieldOptions;
                     fieldsArray.forEach(function(obj) {
                         var fieldEl = obj.fieldEl, containerEl = fieldEl.closest("[data-formjs-question]"), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = self.formEl.querySelector(fieldEl.getAttribute("data-required-from"));
-                        if (options.checkDirtyField) {
-                            _checkDirtyField.checkDirtyField.call(self, fieldEl);
-                        }
+                        _checkDirtyField.checkDirtyField.call(self, fieldEl);
                         if (containerEl !== null && !options.skipUIfeedback) {
                             if (obj.result) {
                                 if (!isReqFrom || isReqFrom && reqMoreEl.checked) {
@@ -911,8 +906,8 @@
                     } else if (fnInOptions) {
                         fnList.push(fnInOptions);
                     }
-                    if (typeof _defaultCallbacksInOptions[opt] !== "undefined" && typeof _defaultCallbacksInOptions[opt][fnName] === "function") {
-                        fnList.unshift(_defaultCallbacksInOptions[opt][fnName]);
+                    if (typeof defaultCallbacksInOptions[opt] !== "undefined" && typeof defaultCallbacksInOptions[opt][fnName] === "function") {
+                        fnList.unshift(defaultCallbacksInOptions[opt][fnName]);
                     }
                     self.options[opt][fnName] = fnList;
                 });
@@ -929,6 +924,7 @@
         });
         exports.submit = submit;
         var _helper = __webpack_require__("./src/modules/helper.js");
+        var _isValidForm = __webpack_require__("./src/modules/isValidForm.js");
         var _ajaxCall = __webpack_require__("./src/modules/ajaxCall.js");
         function submit() {
             var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -944,12 +940,12 @@
             };
             options.fieldOptions = (0, _helper.mergeObjects)({}, self.options.fieldOptions, options.fieldOptions);
             options.formOptions = (0, _helper.mergeObjects)({}, self.options.formOptions, options.formOptions);
-            var handleValidation = options.fieldOptions.handleValidation, formValidation = handleValidation ? self.isValidForm(options) : {
+            var handleValidation = options.fieldOptions.handleValidation, formValidation = handleValidation ? _isValidForm.isValidForm.call(self, options) : {
                 result: true
             };
             var btnEl = formEl.querySelector('[type="submit"]'), isAjaxForm = options.formOptions.ajaxSubmit;
             if (handleValidation) {
-                _helper.executeCallback.call(self, options.fieldOptions.onValidation, formValidation.fields);
+                _helper.executeCallback.call(self, options.fieldOptions.onValidation, formValidation.fields, options);
             }
             var formDataObj = isAjaxForm ? self.getFormData() : null, callbacksBeforeSend = [], beforeSendOpt = options.formOptions.beforeSend;
             if (typeof beforeSendOpt === "function" || Array.isArray(beforeSendOpt)) {
@@ -966,7 +962,7 @@
                 }
                 callbacksBeforeSend.forEach(function(cbFn) {
                     if (!stopCallbackLoop) {
-                        var beforeSendFn = cbFn.call(self, beforeSendData);
+                        var beforeSendFn = cbFn.call(self, beforeSendData, options);
                         if ((0, _helper.isPlainObject)(beforeSendFn)) {
                             formDataObj = beforeSendFn.formData || formDataObj;
                             if (beforeSendFn.stopExecution) {
@@ -989,7 +985,7 @@
             }
             if (isAjaxForm) {
                 eventPreventDefault(false);
-                _ajaxCall.ajaxCall.call(self, formDataObj);
+                _ajaxCall.ajaxCall.call(self, formDataObj, options);
             } else if (!event) {
                 var submitEvent = new Event("submit", {
                     bubbles: true,
@@ -1006,14 +1002,17 @@
         });
         exports.validateField = validateField;
         var _helper = __webpack_require__("./src/modules/helper.js");
+        var _isValidField = __webpack_require__("./src/modules/isValidField.js");
         function validateField(fieldElem) {
             var fieldOptionsObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
             var self = this, fieldEl = typeof fieldElem === "string" ? self.formEl.querySelector(fieldElem) : fieldElem;
             var obj = (0, _helper.mergeObjects)({}, _helper.validateFieldObjDefault);
             if ((0, _helper.isDOMNode)(fieldEl)) {
-                obj = self.isValidField(fieldEl, fieldOptionsObj);
                 var fieldOptions = (0, _helper.mergeObjects)({}, self.options.fieldOptions, fieldOptionsObj);
-                _helper.executeCallback.call(self, fieldOptions.onValidation, [ obj ]);
+                obj = _isValidField.isValidField.call(self, fieldEl, fieldOptionsObj);
+                _helper.executeCallback.call(self, fieldOptions.onValidation, [ obj ], {
+                    fieldOptions: fieldOptions
+                });
             }
             return obj;
         }
@@ -1025,11 +1024,13 @@
         });
         exports.validateForm = validateForm;
         var _helper = __webpack_require__("./src/modules/helper.js");
+        var _isValidForm = __webpack_require__("./src/modules/isValidForm.js");
         function validateForm() {
-            var optionsObj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-            var self = this, obj = self.isValidForm(optionsObj);
-            var options = (0, _helper.mergeObjects)({}, self.options, optionsObj);
-            _helper.executeCallback.call(self, options.fieldOptions.onValidation, obj.fields);
+            var fieldOptionsObj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+            var self = this, fieldOptions = (0, _helper.mergeObjects)({}, self.options.fieldOptions, fieldOptionsObj), obj = _isValidForm.isValidForm.call(self, fieldOptions);
+            _helper.executeCallback.call(self, fieldOptions.onValidation, obj.fields, {
+                fieldOptions: fieldOptions
+            });
             return obj;
         }
     },

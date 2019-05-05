@@ -2,12 +2,12 @@
 import { executeCallback, mergeObjects, serializeObject } from './helper.js';
 
 // AJAX CALL USING XMLHttpRequest API
-export function ajaxCall( formDataObj ){
+export function ajaxCall( formDataObj, options ){
 
     let self = this,
         formEl = self.formEl,
-        fieldOptions = self.options.fieldOptions,
-        formOptions = self.options.formOptions,
+        fieldOptions = options.fieldOptions,
+        formOptions = options.formOptions,
         btnEl = formEl.querySelector('[type="submit"]'),
         timeoutTimer,
         xhrOptions = mergeObjects( {}, formOptions.ajaxOptions ),
@@ -31,8 +31,9 @@ export function ajaxCall( formDataObj ){
         
         xhrOptions.data = formDataMultipart;
     }
-    
+
     let XHR = new XMLHttpRequest(),
+        ajaxResponse = {},
         parseResponse = function( xhr ){
             let data = xhr.responseText,
                 getJSON = function(){
@@ -56,47 +57,33 @@ export function ajaxCall( formDataObj ){
             return (getJSON() || getXML_HTML() || data);
         },
         successFn = function(e) {
-            let xhr = e.target,
-                responseData = parseResponse(xhr);
-
-            let readyStateOK = xhr.readyState === 4,
-                statusOK = xhr.status === 200,
-                ajaxData = {
-                    dataOrXHR:      ( readyStateOK && statusOK ? responseData   : xhr           ),
-                    status:         ( readyStateOK && statusOK ? 'success'      : 'error'       ),
-                    XHRorResponse:  ( readyStateOK && statusOK ? xhr            : responseData  )
-                };
-            
-            if( timeoutTimer ){
-                window.clearTimeout( timeoutTimer );
-            }
-
-            btnEl.disabled = false;
-
-            executeCallback.call( self, formOptions.onSubmitComplete, ajaxData );
-        },
-        completeFn = function(e) {
             let xhr = e.target;
 
             if( xhr.status === 200 ){
-                let responseData = parseResponse(xhr),
-                    ajaxData = { data: responseData, status: 'success', response: xhr };
-
-                executeCallback.call( self, formOptions.onSubmitSuccess, ajaxData );
+                let responseData = parseResponse(xhr);
+                ajaxResponse = { status: 'success', code: xhr.status, data: responseData };
+                executeCallback.call( self, formOptions.onSubmitSuccess, ajaxResponse );
             } else {
                 errorFn(e);
             }
         },
         errorFn = function(e) {
-            let xhr = e.target,
-                ajaxData = { errorThrown: xhr.statusText, status: 'error', response: xhr };
+            let xhr = e.target;
+            ajaxResponse = { status: 'error', code: xhr.status, message: xhr.statusText };
+            executeCallback.call( self, formOptions.onSubmitError, ajaxResponse );
+        },
+        completeFn = function(e) {
+            if( timeoutTimer ){
+                window.clearTimeout( timeoutTimer );
+            }
 
-            executeCallback.call( self, formOptions.onSubmitError, ajaxData );
+            btnEl.disabled = false;
+            executeCallback.call( self, formOptions.onSubmitComplete, ajaxResponse );
         };
     
-    XHR.addEventListener('loadend', successFn,  false);
-    XHR.addEventListener('load',    completeFn, false);
+    XHR.addEventListener('load',    successFn, false);
     XHR.addEventListener('error',   errorFn,    false);
+    XHR.addEventListener('loadend', completeFn,  false);
     
     if( xhrOptions.method === 'GET' ){
         xhrOptions.url += ( /\?/.test(xhrOptions.url) ? '&' : '?' ) + serializeObject( xhrOptions.data );

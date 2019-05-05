@@ -1,8 +1,8 @@
 
 import { executeCallback, isPlainObject, mergeObjects } from './helper.js';
-
-import { ajaxCall } from './ajaxCall.js';
-//import { ajaxCall } from './ajaxCallXhr.js';
+import { isValidForm }  from './isValidForm.js';
+import { ajaxCall }     from './ajaxCall.js';
+//import { ajaxCall }     from './ajaxCallXhr.js';
 
 export function submit( options = {}, event = null ){
 
@@ -17,13 +17,13 @@ export function submit( options = {}, event = null ){
     options.formOptions = mergeObjects( {}, self.options.formOptions, options.formOptions );
     
     const handleValidation = options.fieldOptions.handleValidation,
-          formValidation = (handleValidation ? self.isValidForm( options ) : { result: true });
+          formValidation = (handleValidation ? isValidForm.call( self, options ) : { result: true });
 
     const btnEl = formEl.querySelector('[type="submit"]'),
           isAjaxForm = options.formOptions.ajaxSubmit;
     
     if( handleValidation ){
-        executeCallback.call( self, options.fieldOptions.onValidation, formValidation.fields );
+        executeCallback.call( self, options.fieldOptions.onValidation, formValidation.fields, options );
     }
     
     let formDataObj = (isAjaxForm ? self.getFormData() : null),
@@ -48,7 +48,7 @@ export function submit( options = {}, event = null ){
 
         callbacksBeforeSend.forEach(function(cbFn){
             if( !stopCallbackLoop ){
-                let beforeSendFn = cbFn.call( self, beforeSendData );
+                let beforeSendFn = cbFn.call( self, beforeSendData, options );
                 
                 if( isPlainObject(beforeSendFn) ){
                     formDataObj = beforeSendFn.formData || formDataObj;
@@ -78,7 +78,7 @@ export function submit( options = {}, event = null ){
 
         // AJAX FORM SUBMIT
         eventPreventDefault(false);
-        ajaxCall.call(self, formDataObj);
+        ajaxCall.call(self, formDataObj, options);
 
     } else if( !event ){
 

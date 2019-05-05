@@ -1,5 +1,6 @@
 
 import { executeCallback, isDOMNode, mergeObjects, validateFieldObjDefault } from './helper.js';
+import { isValidField } from './isValidField.js';
 
 export function validateField( fieldElem, fieldOptionsObj = {} ){
 
@@ -8,11 +9,9 @@ export function validateField( fieldElem, fieldOptionsObj = {} ){
     let obj = mergeObjects({}, validateFieldObjDefault);
 
     if( isDOMNode(fieldEl) ){
-
-        obj = self.isValidField( fieldEl, fieldOptionsObj );
         let fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptionsObj);
-        executeCallback.call( self, fieldOptions.onValidation, [obj] );
-        
+        obj = isValidField.call( self, fieldEl, fieldOptionsObj );
+        executeCallback.call( self, fieldOptions.onValidation, [obj], {fieldOptions} );
     }
 
     return obj;

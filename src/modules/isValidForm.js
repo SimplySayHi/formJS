@@ -1,7 +1,8 @@
 
 import { fieldsStringSelector, isDOMNode, mergeObjects, validateFormObjDefault } from './helper.js';
+import { isValidField } from './isValidField.js';
 
-export function isValidForm( options = {} ){
+export function isValidForm( fieldOptionsObj = {} ){
 
     const self = this,
           formEl = self.formEl;
@@ -13,13 +14,9 @@ export function isValidForm( options = {} ){
         return obj;
     }
     
-    let fieldOptions = mergeObjects( {}, self.options.fieldOptions, options.fieldOptions ),
+    let fieldOptions = mergeObjects( {}, self.options.fieldOptions, fieldOptionsObj, {focusOnRelated: false} ),
         currentFieldName = '',
         currentFieldType = '';
-    
-    if( typeof fieldOptions.focusOnRelated === 'undefined' ){
-        fieldOptions.focusOnRelated = false;
-    }
     
     Array.from( formEl.querySelectorAll(fieldsStringSelector) ).forEach(function( fieldEl ){
         let name = fieldEl.name,
@@ -33,7 +30,7 @@ export function isValidForm( options = {} ){
             currentFieldType = type;
         }
         
-        fieldData = self.isValidField( fieldEl, fieldOptions );
+        fieldData = isValidField.call( self, fieldEl, fieldOptions );
 
         if( !fieldData.result ){
             obj.result = false;

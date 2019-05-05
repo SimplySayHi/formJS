@@ -1,12 +1,13 @@
 
 var options = {
         fieldOptions: {
-            checkDirtyField: true,
-            onPastePrevented: function onPastePreventedTest ( fieldEl ){
+            onPastePrevented: function onPastePreventedTest ( fieldEl, tempOptions ){
                 console.log('onPastePrevented field', fieldEl);
+                console.log('onPastePrevented tempOptions', tempOptions);
             },
-            onValidation: function onValidationTest ( fieldsArray ){
+            onValidation: function onValidationTest ( fieldsArray, tempOptions ){
                 console.log('onValidation fieldsArray', fieldsArray);
+                console.log('onValidation tempOptions', tempOptions);
                 
                 fieldsArray.forEach(function(obj){
                     console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
@@ -24,8 +25,9 @@ var options = {
                     return url;
                 })()
             },
-            beforeSend: function beforeSendTest ( data ){
+            beforeSend: function beforeSendTest ( data, tempOptions ){
                 console.log('beforeSend data', data);
+                console.log('beforeSend tempOptions', tempOptions);
 
                 var feedbackEl = this.formEl.querySelector('[data-formjs-global-feedback]');
                 if( feedbackEl ){
@@ -34,11 +36,12 @@ var options = {
 
                 return data;
             },
-            onSubmitSuccess: function onSubmitSuccessTest ( ajaxData ){
-                console.log('onSubmitSuccess ajaxData JSON string', ajaxData);
+            onSubmitSuccess: function onSubmitSuccessTest ( ajaxData, tempOptions ){
+                console.log('onSubmitSuccess ajaxData', ajaxData);
+                console.log('onSubmitSuccess tempOptions', tempOptions);
 
                 if( typeof ajaxData === 'string' ){
-                    console.log('onSubmitSuccess ajaxData JSON object', JSON.parse(ajaxData));
+                    ajaxData = JSON.parse(ajaxData);
                 }
 
                 var formEl = this.formEl;
@@ -51,8 +54,9 @@ var options = {
                     feedbackEl.innerHTML = 'Great! Your infos have been sent :D';
                 }
             },
-            onSubmitError: function onSubmitErrorTest ( ajaxData ){
+            onSubmitError: function onSubmitErrorTest ( ajaxData, tempOptions ){
                 console.log('onSubmitError ajaxData', ajaxData);
+                console.log('onSubmitError tempOptions', tempOptions);
 
                 var formEl = this.formEl;
 
@@ -64,8 +68,9 @@ var options = {
                     feedbackEl.innerHTML = 'Oh no, something went wrong! :( Retry';
                 }
             },
-            onSubmitComplete: function onSubmitCompleteTest (){
-                console.log('onSubmitComplete...');
+            onSubmitComplete: function onSubmitCompleteTest ( ajaxData, tempOptions ){
+                console.log('onSubmitComplete ajaxData', ajaxData);
+                console.log('onSubmitComplete tempOptions', tempOptions);
             }
         }
     };

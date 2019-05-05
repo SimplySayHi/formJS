@@ -2,12 +2,12 @@
 import { executeCallback, mergeObjects, serializeObject } from './helper.js';
 
 // AJAX CALL USING fetch API
-export function ajaxCall( formDataObj ){
+export function ajaxCall( formDataObj, options ){
 
     let self = this,
         formEl = self.formEl,
-        fieldOptions = self.options.fieldOptions,
-        formOptions = self.options.formOptions,
+        fieldOptions = options.fieldOptions,
+        formOptions = options.formOptions,
         btnEl = formEl.querySelector('[type="submit"]'),
         timeoutTimer,
         ajaxOptions = mergeObjects( {}, formOptions.ajaxOptions ),
@@ -64,8 +64,16 @@ export function ajaxCall( formDataObj ){
         }, ajaxOptions.timeout);
     }
 
+    let ajaxResponse = {};
+
     fetch(ajaxOptions.url, ajaxOptions)
         .then(function( response ){
+
+            ajaxResponse.code = response.status;
+
+            if( !response.ok ){
+                return Promise.reject(response);
+            }
 
             let getFetchMethod = function( response ){
                 let contentType = response.headers.get('Content-Type'),
@@ -80,17 +88,22 @@ export function ajaxCall( formDataObj ){
                 return methodName;
             };
             let fetchMethod = getFetchMethod( response );
+
             return response[fetchMethod]();
 
         })
         .then(function( data ){
 
-            executeCallback.call( self, formOptions.onSubmitSuccess, data );
+            ajaxResponse.status = 'success';
+            ajaxResponse.data = data;
+            executeCallback.call( self, formOptions.onSubmitSuccess, ajaxResponse );
 
         })
         .catch(function( error ){
 
-            executeCallback.call( self, formOptions.onSubmitError, error );
+            ajaxResponse.status = 'error';
+            ajaxResponse.message = error.statusText;
+            executeCallback.call( self, formOptions.onSubmitError, ajaxResponse );
 
         })
         .finally(function(){
@@ -99,7 +112,7 @@ export function ajaxCall( formDataObj ){
                 window.clearTimeout( timeoutTimer );
             }
             btnEl.disabled = false;
-            executeCallback.call( self, formOptions.onSubmitComplete );
+            executeCallback.call( self, formOptions.onSubmitComplete, ajaxResponse );
 
         });
     

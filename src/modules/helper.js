@@ -21,8 +21,9 @@ checkFormEl = function( formEl ){
     return obj;
 },
 
-executeCallback = function( callbackOption, callbackData ){
+executeCallback = function( callbackOption, callbackData, tempOptions = {} ){
     let self = this,
+        options = mergeObjects({}, self.options, tempOptions),
         callbackFnList = [];
 
     if( typeof callbackOption === 'function' ){
@@ -32,7 +33,7 @@ executeCallback = function( callbackOption, callbackData ){
     }
 
     callbackFnList.forEach(function(cbFn){
-        cbFn.call(self, callbackData );
+        cbFn.call( self, callbackData, options );
     });
 },
 

@@ -1,7 +1,6 @@
 
 var optionsPlugin = {
         fieldOptions: {
-            checkDirtyField: true,
             onPastePrevented: function( fieldEl ){
                 console.log( 'Paste event prevented on field ', fieldEl );
             },

@@ -5,7 +5,6 @@ import { ajaxOptions } from './optionsAjax.js';
 export const options = {
 
     fieldOptions: {
-        checkDirtyField:        false,
         cssClasses: {
             dirty:              'is-dirty',
             error:              'has-error',

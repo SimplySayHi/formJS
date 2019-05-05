@@ -27,7 +27,7 @@ export function isValidField( fieldElem, fieldOptionsObj = {} ){
        
     } else {
         
-        obj =  isValid.call( self, fieldEl, options );
+        obj = isValid.call( self, fieldEl, options );
         
     }
 

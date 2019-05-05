@@ -49,7 +49,6 @@ function removeClass ( element, cssClasses ){
 function setNewDefaultOptions () {
     var addToDefOpts = {
             fieldOptions: {
-                checkDirtyField: true,
                 onValidation: function onValidationDemoDefaultNew ( fieldsArray ){},
                 maxFileSize: 99,
                 validateOnEvents: 'blur change',
@@ -63,7 +62,6 @@ var formsList = document.querySelectorAll('form'),
     optionsObjs = {
         form_1: {
             fieldOptions: {
-                checkDirtyField: true,
                 cssClasses: { dirty: 'is-dirty custom-dirty-field' },
                 onPastePrevented: function onPastePreventedDemo01 ( fieldEl ){
                     console.log( 'Paste event prevented on field ', fieldEl );
@@ -124,7 +122,6 @@ var formsList = document.querySelectorAll('form'),
         form_3: { formOptions: { ajaxSubmit: false } },
         form_4: {
             fieldOptions: {
-                checkDirtyField: true,
                 cssClasses: { dirty: 'is-dirty custom-dirty-field' },
                 onPastePrevented: function onPastePreventedDemo02 ( fieldEl ){
                     console.log( 'Paste event prevented on field ', fieldEl );
@@ -144,12 +141,10 @@ var formsList = document.querySelectorAll('form'),
             }
         },
         form_5: {
-            fieldOptions: { checkDirtyField: true },
             formOptions: { formOptions: { ajaxSubmit: false } }
         },
         form_6: {
             fieldOptions: {
-                checkDirtyField: true,
                 onValidation: function onValidationDemoErrorsCss ( fieldsArray ){
                     var self = this;
                     fieldsArray.forEach(function( obj ){
@@ -180,7 +175,6 @@ var formsList = document.querySelectorAll('form'),
         },
         form_7: {
             fieldOptions: {
-                checkDirtyField: true,
                 onValidation: function onValidationDemoErrorsCss ( fieldsArray ){
                     var self = this;
                     fieldsArray.forEach(function( obj ){
@@ -255,7 +249,7 @@ Array.from(formsList).forEach(function(formEl, idx){
     if( num === 5 ){
         f5.formEl.addEventListener('submit', function(event){
             // MANUALLY VALIDATE THE FORM
-            /* var checkForm = f5.isValidForm();
+            /* var checkForm = f5.validateForm();
             if( !checkForm.result ){
                 event.preventDefault();
                 return false;
