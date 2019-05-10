@@ -81,7 +81,7 @@
                 return Constructor;
             };
         }();
-        /**! formJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | http://simplysayhi.github.io/formJS | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
+        /**! formJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
         var _optionsUtils = __webpack_require__("./src/modules/optionsUtils.js");
         var _options = __webpack_require__("./src/modules/options.js");
         var _validationRules = __webpack_require__("./src/modules/validationRules.js");
@@ -924,7 +924,6 @@
         });
         exports.submit = submit;
         var _helper = __webpack_require__("./src/modules/helper.js");
-        var _isValidForm = __webpack_require__("./src/modules/isValidForm.js");
         var _ajaxCall = __webpack_require__("./src/modules/ajaxCall.js");
         function submit() {
             var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -940,13 +939,10 @@
             };
             options.fieldOptions = (0, _helper.mergeObjects)({}, self.options.fieldOptions, options.fieldOptions);
             options.formOptions = (0, _helper.mergeObjects)({}, self.options.formOptions, options.formOptions);
-            var handleValidation = options.fieldOptions.handleValidation, formValidation = handleValidation ? _isValidForm.isValidForm.call(self, options) : {
+            var handleValidation = options.fieldOptions.handleValidation, formValidation = handleValidation ? self.validateForm(options.fieldOptions) : {
                 result: true
             };
             var btnEl = formEl.querySelector('[type="submit"]'), isAjaxForm = options.formOptions.ajaxSubmit;
-            if (handleValidation) {
-                _helper.executeCallback.call(self, options.fieldOptions.onValidation, formValidation.fields, options);
-            }
             var formDataObj = isAjaxForm ? self.getFormData() : null, callbacksBeforeSend = [], beforeSendOpt = options.formOptions.beforeSend;
             if (typeof beforeSendOpt === "function" || Array.isArray(beforeSendOpt)) {
                 var beforeSendData = {

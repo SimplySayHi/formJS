@@ -1,6 +1,5 @@
 
-import { executeCallback, isPlainObject, mergeObjects } from './helper.js';
-import { isValidForm }  from './isValidForm.js';
+import { isPlainObject, mergeObjects } from './helper.js';
 import { ajaxCall }     from './ajaxCall.js';
 //import { ajaxCall }     from './ajaxCallXhr.js';
 
@@ -17,14 +16,10 @@ export function submit( options = {}, event = null ){
     options.formOptions = mergeObjects( {}, self.options.formOptions, options.formOptions );
     
     const handleValidation = options.fieldOptions.handleValidation,
-          formValidation = (handleValidation ? isValidForm.call( self, options ) : { result: true });
+          formValidation = (handleValidation ? self.validateForm( options.fieldOptions ) : { result: true });
 
     const btnEl = formEl.querySelector('[type="submit"]'),
           isAjaxForm = options.formOptions.ajaxSubmit;
-    
-    if( handleValidation ){
-        executeCallback.call( self, options.fieldOptions.onValidation, formValidation.fields, options );
-    }
     
     let formDataObj = (isAjaxForm ? self.getFormData() : null),
         callbacksBeforeSend = [],

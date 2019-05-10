@@ -647,7 +647,7 @@ var formInstance = new Form( formEl, options ).init();
                             </div>
                             <div class="col-5">
                                 <p>
-                                    If true, the "has-error/has-error-switch" class will not be added ( for UI feedback as said by the name ) 
+                                    If true, the css classes for error ( any type ) and valid fields will not be added ( for UI feedback as said by the name ) 
                                 </p>
                             </div>
                         </div>
@@ -2581,12 +2581,6 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             </li>
                             <li>
                                 Added "errorEmpty" and "errorRule" to "cssClasses" in "fieldOptions" to show different error messages ( see implementation in CSS file ).
-                            </li>
-                            <li>
-                                Added method "validateField".
-                            </li>
-                            <li>
-                                Added method "validateForm".
                             </li>
                             <li>
                                 Added validation rules for:
