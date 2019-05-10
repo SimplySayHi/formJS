@@ -1,5 +1,5 @@
 
-import { isPlainObject, mergeObjects } from './helper.js';
+import { isPlainObject, mergeObjects, validateFormObjDefault } from './helper.js';
 import { ajaxCall }     from './ajaxCall.js';
 //import { ajaxCall }     from './ajaxCallXhr.js';
 
@@ -16,7 +16,7 @@ export function submit( options = {}, event = null ){
     options.formOptions = mergeObjects( {}, self.options.formOptions, options.formOptions );
     
     const handleValidation = options.fieldOptions.handleValidation,
-          formValidation = (handleValidation ? self.validateForm( options.fieldOptions ) : { result: true });
+          formValidation = (handleValidation ? self.validateForm( options.fieldOptions ) : validateFormObjDefault);
 
     const btnEl = formEl.querySelector('[type="submit"]'),
           isAjaxForm = options.formOptions.ajaxSubmit;

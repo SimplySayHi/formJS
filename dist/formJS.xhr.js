@@ -965,9 +965,7 @@
             };
             options.fieldOptions = (0, _helper.mergeObjects)({}, self.options.fieldOptions, options.fieldOptions);
             options.formOptions = (0, _helper.mergeObjects)({}, self.options.formOptions, options.formOptions);
-            var handleValidation = options.fieldOptions.handleValidation, formValidation = handleValidation ? self.validateForm(options.fieldOptions) : {
-                result: true
-            };
+            var handleValidation = options.fieldOptions.handleValidation, formValidation = handleValidation ? self.validateForm(options.fieldOptions) : _helper.validateFormObjDefault;
             var btnEl = formEl.querySelector('[type="submit"]'), isAjaxForm = options.formOptions.ajaxSubmit;
             var formDataObj = isAjaxForm ? self.getFormData() : null, callbacksBeforeSend = [], beforeSendOpt = options.formOptions.beforeSend;
             if (typeof beforeSendOpt === "function" || Array.isArray(beforeSendOpt)) {
