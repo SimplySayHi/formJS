@@ -1,34 +1,43 @@
 
-import { isPlainObject, mergeObjects, validateFormObjDefault } from './helper.js';
+import { isPlainObject, validateFormObjDefault } from './helper.js';
 import { ajaxCall }     from './ajaxCall.js';
 //import { ajaxCall }     from './ajaxCallXhr.js';
 
-export function submit( options = {}, event = null ){
+export function submit( event ){
 
     const self = this,
+          options = self.options,
           formEl = self.formEl,
+          btnEl = formEl.querySelector('[type="submit"]'),
           eventPreventDefault = ( enableBtn = true ) => {
               if( btnEl && enableBtn ){ btnEl.disabled = false; }
               if( event ){ event.preventDefault(); }
           };
+
+    if( btnEl && btnEl.disabled ){
+        eventPreventDefault();
+        return false;
+    }
     
-    options.fieldOptions = mergeObjects( {}, self.options.fieldOptions, options.fieldOptions );
-    options.formOptions = mergeObjects( {}, self.options.formOptions, options.formOptions );
-    
-    const handleValidation = options.fieldOptions.handleValidation,
+    const isAjaxForm = options.formOptions.ajaxSubmit,
+          handleValidation = options.fieldOptions.handleValidation,
           formValidation = (handleValidation ? self.validateForm( options.fieldOptions ) : validateFormObjDefault);
 
-    const btnEl = formEl.querySelector('[type="submit"]'),
-          isAjaxForm = options.formOptions.ajaxSubmit;
+    if( !formValidation.result ){
+        eventPreventDefault();
+        return false;
+    }
+
+    if( btnEl ){
+        btnEl.disabled = true;
+    }
     
     let formDataObj = (isAjaxForm ? self.getFormData() : null),
         callbacksBeforeSend = [],
         beforeSendOpt = options.formOptions.beforeSend;
 
     if( typeof beforeSendOpt === 'function' || Array.isArray(beforeSendOpt) ){
-        let beforeSendData = {
-                stopExecution: false
-            },
+        let beforeSendData = { stopExecution: false },
             stopCallbackLoop = false;
 
         if( formDataObj ){
@@ -59,28 +68,10 @@ export function submit( options = {}, event = null ){
             return false;
         }
     }
-
-    if( !formValidation.result || (btnEl && btnEl.disabled) ){
-        eventPreventDefault();
-        return false;
-    }
-
-    if( btnEl ){
-        btnEl.disabled = true;
-    }
     
     if( isAjaxForm ){
-
-        // AJAX FORM SUBMIT
         eventPreventDefault(false);
         ajaxCall.call(self, formDataObj, options);
-
-    } else if( !event ){
-
-        // TRIGGER SUBMIT EVENT
-        let submitEvent = new Event('submit', {'bubbles': true, 'cancelable': true});
-        formEl.dispatchEvent(submitEvent);
-
     }
     
 }

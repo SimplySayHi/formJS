@@ -440,106 +440,6 @@
             <!-- separator -->
             <div class="w-100"></div>
 
-            <!-- Demo Form Manual Submit -->
-            <div id="demo-05" class="col-md-6 py-3">
-                <div class="panel no-bg">
-                    <div class="card-header bg-white text-dark">
-                        <div>
-                            <p class="m-0">Form Manual Submit</p>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <form method="POST" action="json/data.json" name="basic-form-post-02" novalidate>
-                            <div data-formjs-question class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="name" type="text" class="form-control" required />
-                                    <label>Name</label>
-                                </div>
-                                <div class="field-error-message small">Write your name!</div>
-                            </div>
-                            <div data-formjs-question class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="surname" type="text" class="form-control" />
-                                    <label>Surname</label>
-                                </div>
-                                <div class="field-error-message small">Write your surname!</div>
-                            </div>
-                            <div data-formjs-question class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="email" type="email" class="form-control" required />
-                                    <label>Email</label>
-                                </div>
-                                <div class="field-error-message small">Check your email address, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="mobileNumber" type="text" data-subtype="mobile-number" class="form-control" data-validate-if-filled />
-                                    <label>Mobile number</label>
-                                </div>
-                                <div class="field-error-message small">Check your mobile number, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="username" type="text" data-subtype="username" class="form-control" required />
-                                    <label>Username</label>
-                                </div>
-                                <div class="field-error-message small">Username must have at least 3 characters (no special chars allowed)!</div>
-                            </div>
-                            <div data-formjs-question class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="password" type="password" class="form-control" required />
-                                    <label>Password</label>
-                                </div>
-                                <div class="field-error-message small">Password must have minimum 8 characters with one digit, one lowercase, one uppercase</div>
-                            </div>
-                            <div data-formjs-question class="form-group">
-                                <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
-                                <div class="answers-box">
-                                    <div class="form-check">
-                                        <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-e" data-checks="[1,2]" required="" />
-                                        <label class="form-check-label" for="checkbox-1-e">SMS</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input name="contactPrefCheck" type="checkbox" value="email" class="form-check-input" id="checkbox-2-e" required="" />
-                                        <label class="form-check-label" for="checkbox-2-e">Email</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input name="contactPrefCheck" type="checkbox" value="app-notiifcation" class="form-check-input" id="checkbox-3-e" required="" />
-                                        <label class="form-check-label" for="checkbox-3-e">App Notification</label>
-                                    </div>
-                                </div>
-                                <div class="field-error-message small">
-                                    <span>Select al least one of the options!</span>
-                                    <span>You can select 2 answers max!</span>
-                                </div>
-                            </div>
-                            <div data-formjs-question class="form-group">
-                                <div class="answers-box">
-                                    <div class="small">
-                                        I agree with the <a href="#" target="_blank">Privacy Policy</a>.
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="privacyCheck" id="privacyCheck-1-e" value="accepted" required />
-                                        <label class="form-check-label" for="privacyCheck-1-e">Yes</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="privacyCheck" id="privacyCheck-2-e" value="" required />
-                                        <label class="form-check-label" for="privacyCheck-2-e">No</label>
-                                    </div>
-                                </div>
-                                <div class="field-error-message small">You must agree!</div>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-light">SEND</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- separator -->
-            <div class="w-100"></div>
-
             <!-- Demo Ajax Form ( POST ) CSS Error Messages -->
             <div id="demo-06" class="col-md-6 py-3">
                 <div class="panel no-bg">
@@ -706,11 +606,11 @@
     
     <script src="js/include.js"></script>
 
-    <!-- <script type="module" src="src/index.js"></script>
-    <script type="module" src="js/demo.js"></script> -->
+    <script type="module" src="src/index.js"></script>
+    <script type="module" src="js/demo.js"></script>
 
-    <script src="dist/formJS.min.js"></script>
-    <script src="js/demo.js"></script>
+    <!-- <script src="dist/formJS.min.js"></script>
+    <script src="js/demo.js"></script> -->
     
 </body>
 </html>

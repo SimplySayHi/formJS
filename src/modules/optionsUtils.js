@@ -2,8 +2,9 @@
 import { addClass, removeClass }    from './helper.js';
 import { checkDirtyField }          from './checkDirtyField.js';
 
-const defaultCallbacksInOptions = {
+export const defaultCallbacksInOptions = {
     fieldOptions: {
+
         onValidation: function onValidationDefault ( fieldsArray, tempOptions ) {
 
             let self = this,
@@ -50,35 +51,61 @@ const defaultCallbacksInOptions = {
             });
             
         }
+
+    },
+    formOptions: {
+
+        getFormData: function getFormDataDefault ( filteredFields ) {
+
+            let formData = {},
+                self = this,
+                formEl = self.formEl;
+
+            filteredFields.forEach(function( fieldEl ){
+                let isCheckbox = fieldEl.type === 'checkbox',
+                    isRadio = fieldEl.type === 'radio',
+                    isSelect = fieldEl.matches('select'),
+                    name = fieldEl.name,
+                    value = fieldEl.value;
+                                
+                if( isCheckbox ) {
+                    
+                    value = fieldEl.checked;
+                    let checkboxes = Array.from( formEl.querySelectorAll('[name="'+ name +'"]') );
+                    if( checkboxes.length > 1 ){
+
+                        value = [];
+                        let checkedElems = checkboxes.filter(field => field.checked);
+                        checkedElems.forEach(fieldEl => {
+                            value.push( fieldEl.value );
+                        });
+
+                    }
+                        
+                } else if( isRadio ){
+                    
+                    let checkedRadio = formEl.querySelector('[name="'+ name +'"]:checked');
+                    value = (checkedRadio === null ? null : checkedRadio.value);
+                    
+                } else if( isSelect ){
+
+                    let selectedOpts = Array.from( fieldEl.options ).filter(option => option.selected);
+                    if( selectedOpts.length > 1 ){
+
+                        value = [];
+                        selectedOpts.forEach(fieldEl => {
+                            value.push( fieldEl.value );
+                        });
+
+                    }
+                }
+
+                formData[ name ] = value;
+            });
+
+            return formData;
+
+        }
+
     }
-};
-
-export const setCallbackFunctionsInOptions = function(){
-    const   self = this,
-            callbacks = {
-                fieldOptions: ['onPastePrevented', 'onValidation'],
-                formOptions: ['beforeSend', 'onSubmitComplete', 'onSubmitError', 'onSubmitSuccess']
-            };
-
-    for(let opt in callbacks){
-        let fjsOpt = callbacks[opt];
-
-        fjsOpt.forEach(function(fnName){
-            let fnInOptions = self.options[opt][fnName],
-                fnList = [];
-
-            if( Array.isArray(fnInOptions) ) {
-                fnList.concat(fnInOptions);
-            } else if( fnInOptions ) {
-                fnList.push(fnInOptions);
-            }
-
-            if( typeof defaultCallbacksInOptions[opt] !== 'undefined' && typeof defaultCallbacksInOptions[opt][fnName] === 'function' ){
-                fnList.unshift(defaultCallbacksInOptions[opt][fnName]);
-            }
-
-            self.options[opt][fnName] = fnList;
-        });
-    }
-
 }

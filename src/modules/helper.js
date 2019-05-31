@@ -81,7 +81,7 @@ mergeObjects = function( out = {} ){
             if( obj.hasOwnProperty(key) ){
                 if( isArray ){
 
-                    if( typeof out[key] === 'undefined' || out[key] === null ){
+                    if( typeof out[key] === 'undefined' ){
                         out[key] = [];
                     }
                     out[key] = out[key].concat( obj[key].slice(0) );
@@ -92,8 +92,9 @@ mergeObjects = function( out = {} ){
 
                 } else {
 
-                    // STRING | NUMBER | BOOLEAN | FUNCTION
+                    // * STRING | NUMBER | BOOLEAN | FUNCTION
                     if( Array.isArray(out[key]) ){
+                        // IF THIS IS ONE OF ABOVE (*) AND THE DESTINATION OBJECT IS AN ARRAY
                         out[key].push(obj[key]);
                     } else {
                         out[key] = obj[key];

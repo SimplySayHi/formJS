@@ -257,6 +257,9 @@ textarea {
     height: 50px;
     padding: 12px 0 6px;
 }
+.label-move-up textarea.form-control + label {
+    top: 24px;
+}
 .label-move-up .form-control[type="file"] {
     height: inherit;
 }
@@ -292,8 +295,10 @@ textarea {
 .form-control.smaller {
     font-size: 75%;
 }
+.label-move-up textarea.form-control,
 textarea.form-control {
     line-height: inherit;
+    height: 6em;
 }
 label, .radio label, .checkbox label {
     font-weight: 300;

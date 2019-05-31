@@ -1,6 +1,5 @@
 
-import { checkFormEl, isNodeList, mergeObjects } from './helper.js';
-
+import { checkFormEl, isNodeList, mergeObjects }   from './helper.js';
 import { callbackFns }                             from './listenerCallbacks.js';
 import { formStartup }                             from './formStartup.js';
 

@@ -141,9 +141,6 @@ var formsList = document.querySelectorAll('form'),
             }
         },
         form_5: {
-            formOptions: { formOptions: { ajaxSubmit: false } }
-        },
-        form_6: {
             fieldOptions: {
                 onValidation: function onValidationDemoErrorsCss ( fieldsArray ){
                     var self = this;
@@ -173,9 +170,9 @@ var formsList = document.querySelectorAll('form'),
                 }
             }
         },
-        form_7: {
+        form_6: {
             fieldOptions: {
-                onValidation: function onValidationDemoErrorsCss ( fieldsArray ){
+                onValidation: function onValidationDemoErrorsJs ( fieldsArray ){
                     var self = this;
                     fieldsArray.forEach(function( obj ){
                         var isValid = obj.result,
@@ -245,20 +242,6 @@ Array.from(formsList).forEach(function(formEl, idx){
     console.groupEnd();
     
     window[fNum].init();
-
-    if( num === 5 ){
-        f5.formEl.addEventListener('submit', function(event){
-            // MANUALLY VALIDATE THE FORM
-            /* var checkForm = f5.validateForm();
-            if( !checkForm.result ){
-                event.preventDefault();
-                return false;
-            } */
-            
-            // OR JUST MANUALLY TRIGGER THE SUBMIT
-            f5.submit({}, event);
-        });
-    }
 });
 
 // WORKS FOR BOTH OLD AND NEW INSTANCES

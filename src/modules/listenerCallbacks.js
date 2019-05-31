@@ -1,5 +1,6 @@
 
 import { executeCallback, fieldsStringSelector, isFieldForChangeEvent } from './helper.js';
+import { submit } from './submit.js';
 
 export const callbackFns = {
 
@@ -67,7 +68,7 @@ export const callbackFns = {
     },
 
     submit: function( event ){
-        this.submit( {}, event );
+        submit.call( this, event );
     },
 
     validation: function( event ){
@@ -134,4 +135,4 @@ export const callbackFns = {
         
     }
 
-};
+}

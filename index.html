@@ -556,6 +556,7 @@ var formInstance = new Form( formEl, options ).init();
                             </div>
                             <div class="col-5">
                                 <p>
+                                    Each function:<br /><br />
                                     Fires when the paste event has been prevented on the field(s) ( see "preventPasteFields" option ).
                                     <br />
                                     <span class="small">( NOT fired if <code>handleValidation: false</code> )</span>
@@ -587,6 +588,7 @@ var formInstance = new Form( formEl, options ).init();
                             </div>
                             <div class="col-5">
                                 <p>
+                                    Each function:<br /><br />
                                     Fires just after a field has been validated.
                                 </p>
                                 <p>
@@ -725,8 +727,8 @@ var formInstance = new Form( formEl, options ).init();
     handleFileUpload:       true,
     handleValidation:       true,
     maxFileSize:            10,
-    onPastePrevented:       null,
-    onValidation:           null,
+    onPastePrevented:       [],
+    onValidation:           [onValidation],
     preventPasteFields:     '[type="password"], [data-equal-to]',
     skipUIfeedback:         false,
     strictHtmlValidation:   true,
@@ -789,6 +791,9 @@ var formInstance = new Form( formEl, options ).init();
                                 ( function / array of functions )
                             </div>
                             <div class="col-5">
+                                <p>
+                                    Each function:
+                                </p>
                                 <ul>
                                     <li>
                                         <span class="text-green">data</span>: ( JS object )
@@ -816,6 +821,7 @@ var formInstance = new Form( formEl, options ).init();
                             </div>
                             <div class="col-4">
                                 <p>
+                                    Each function:<br /><br />
                                     For AJAX forms:<br />
                                     Fires before the AJAX call starts. If used to modify the JSON or prevent the AJAX call to start, it must have a return statement. 
                                     <br /><br />
@@ -852,8 +858,7 @@ var formInstance = new Form( formEl, options ).init();
                             </div>
                             <div class="col-4">
                                 <p>
-                                    If set, it will be passed as function parameter for "getFormData" method.<br />
-                                    See <a href="#methods">Methods</a> section for details
+                                    If set, it will be will replace the default function for "getFormData" method.
                                 </p>
                             </div>
                         </div>
@@ -878,6 +883,9 @@ var formInstance = new Form( formEl, options ).init();
                                 ( function / array of functions )
                             </div>
                             <div class="col-5">
+                                <p>
+                                    Each function:
+                                </p>
                                 <ul>
                                     <li>
                                         <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( data/message, status, code - according to <a href="https://github.com/omniti-labs/jsend" target="_blank">JSend format</a> for success or error ).
@@ -892,6 +900,7 @@ var formInstance = new Form( formEl, options ).init();
                             </div>
                             <div class="col-4">
                                 <p>
+                                    Each function:<br />
                                     Fires at AJAX call equivalent. 
                                 </p>
                             </div>
@@ -902,6 +911,9 @@ var formInstance = new Form( formEl, options ).init();
                                 ( function / array of functions )
                             </div>
                             <div class="col-5">
+                                <p>
+                                    Each function:
+                                </p>
                                 <ul>
                                     <li>
                                         <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( message, status, code - according to <a href="https://github.com/omniti-labs/jsend" target="_blank">JSend format</a> ).
@@ -916,6 +928,7 @@ var formInstance = new Form( formEl, options ).init();
                             </div>
                             <div class="col-4">
                                 <p>
+                                    Each function:<br />
                                     Fires at AJAX call equivalent. 
                                 </p>
                             </div>
@@ -926,6 +939,9 @@ var formInstance = new Form( formEl, options ).init();
                                 ( function / array of functions )
                             </div>
                             <div class="col-5">
+                                <p>
+                                    Each function:
+                                </p>
                                 <ul>
                                     <li>
                                         <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( data, status, code - according to <a href="https://github.com/omniti-labs/jsend" target="_blank">JSend format</a> ).
@@ -940,6 +956,7 @@ var formInstance = new Form( formEl, options ).init();
                             </div>
                             <div class="col-4">
                                 <p>
+                                    Each function:<br />
                                     Fires at AJAX call equivalent. 
                                 </p>
                             </div>
@@ -971,12 +988,12 @@ var formInstance = new Form( formEl, options ).init();
         url:            location.href
     },
     ajaxSubmit:         true,
-    beforeSend:         null,
-    getFormData:        null,
+    beforeSend:         [],
+    getFormData:        getFormDataDefault,
     handleSubmit:       true,
-    onSubmitComplete:   null,
-    onSubmitError:      null,
-    onSubmitSuccess:    null
+    onSubmitComplete:   [],
+    onSubmitError:      [],
+    onSubmitSuccess:    []
 }</pre>
                             </div>
                             <div class="col-12 col-sm-6">
@@ -997,12 +1014,12 @@ var formInstance = new Form( formEl, options ).init();
         url:            location.href
     },
     ajaxSubmit:         true,
-    beforeSend:         null,
-    getFormData:        null,
+    beforeSend:         [],
+    getFormData:        getFormDataDefault,
     handleSubmit:       true,
-    onSubmitComplete:   null,
-    onSubmitError:      null,
-    onSubmitSuccess:    null
+    onSubmitComplete:   [],
+    onSubmitError:      [],
+    onSubmitSuccess:    []
 }</pre>
                             </div>
                         </div>
@@ -1102,11 +1119,11 @@ var formInstance = new Form( formEl, options ).init();
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <pre class="text-green">getFormData( [customFn] )</pre>
+                                <pre class="text-green">getFormData()</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    Get a JS object of the form with all the answers.
+                                    Get a JS object of the form data with all the answers.
                                     <br />
                                     Collected data depends on the field as follow:
                                 </p>
@@ -1124,13 +1141,15 @@ var formInstance = new Form( formEl, options ).init();
                                         otherwise: set/given value
                                     </li>
                                 </ul>
-                                <ul class="card-footer no-bg pt-3 pl-3 pr-0 pb-0">
-                                    <li>
-                                        <span class="text-green">customFn</span>: ( Optional ) custom function to collect data from the form answers ( MUST have a return statement ).<br />
-                                            Can also be set as "getFormData" in "formOptions".<br />
-                                            See <a href="#form-options">Form Options</a> section for details.
-                                    </li>
-                                </ul>
+                                <div class="card-footer no-bg pt-3">
+                                    <p>
+                                        The function set in options.formOptions.getFormData will be used to collect data.<br />
+                                        See <a href="#form-options">Form Options Section</a> for details.
+                                    </p>
+                                    <p class="m-0">
+                                        Additionally, the "this" keyword is bound to the Form instance.
+                                    </p>
+                                </div>
                             </div>
                             <div class="col-3">
                                 <p>
@@ -1156,46 +1175,6 @@ var formInstance = new Form( formEl, options ).init();
                             </div>
                             <div class="col-3">
                                 The Form instance
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4">
-                                <pre class="text-green">submit( [options[, event]] )</pre>
-                            </div>
-                            <div class="col-5">
-                                <p>
-                                    To manually trigger the form submit.
-                                </p>
-                                <ul>
-                                    <li>
-                                        <span class="text-green">options</span>: ( Optional ) JS object. Can contain fieldOptions and formOptions. For default values see <a href="#options-list">Options section</a>
-                                    </li>
-                                    <li>
-                                        <span class="text-green">event</span>: ( Optional | Required if <code>handleSubmit: false</code> ) JS event object for submit event.
-                                    </li>
-                                </ul>
-                                <p>
-                                    It will:
-                                </p>
-                                <ul>
-                                    <li>
-                                        validate the form according to the fieldOptions and formOptions ( passed inside options param or the instance ones )
-                                    </li>
-                                    <li>
-                                        ( for AJAX forms ) create the JSON data to send via AJAX call as for getFormData method
-                                    </li>
-                                    <li>
-                                        ( for AJAX forms ) make the AJAX call to the url specified as action of the HTML form
-                                    </li>
-                                    <li>
-                                        ( for AJAX forms ) trigger callback functions as defined in options param
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-3">
-                                <p>
-
-                                </p>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -2616,6 +2595,12 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             </li>
                             <li>
                                 Changed "ajaxData" parameter in "onSubmitComplete", "onSubmitError", "onSubmitSuccess" to be compliant with JSend standard.
+                            </li>
+                            <li>
+                                Removed "submit" method since it was not so useful.
+                            </li>
+                            <li>
+                                Removed the parameter from "getFormData" method. Now the function to collect data is taken in options.formOptions.getFotmData.
                             </li>
                             <li>
                                 Removed "checkDirtyField" option from "fieldOptions" ( the related callback is automatically executed ).
