@@ -526,19 +526,11 @@
                     currentFieldType = type;
                 }
                 if (!isCheckboxOrRadio && fieldEl.value || isCheckboxOrRadio && fieldChecked !== null || isReqFrom && reqMoreEl.checked) {
-                    var eventToTrigger = "change";
-                    if (isCheckboxOrRadio) {
-                        fieldEl = fieldChecked;
-                    } else if (!isFieldForChangeEventBoolean) {
-                        eventToTrigger = self.options.fieldOptions.validateOnEvents.split(" ").filter(function(evName) {
-                            return evName !== "change";
-                        })[0] || "input";
-                    }
-                    var newEvent = new Event(eventToTrigger, {
-                        bubbles: eventToTrigger !== "blur",
-                        cancelable: true
-                    });
-                    fieldEl.dispatchEvent(newEvent);
+                    var fakeEventObj = {
+                        target: fieldEl,
+                        type: isFieldForChangeEventBoolean ? "change" : ""
+                    };
+                    self.listenerCallbacks.validation.call(self, fakeEventObj);
                 }
             });
             self.isInitialized = true;
@@ -726,16 +718,14 @@
                         var findReqMoreEl = isReqMore ? fieldEl : self.formEl.querySelector('[name="' + fieldEl.name + '"][data-require-more]'), findReqFromEl = findReqMoreEl !== null ? self.formEl.querySelector('[data-required-from="#' + findReqMoreEl.id + '"]') : null;
                         if (isReqMore) {
                             if (findReqFromEl !== null) {
-                                if (fieldEl.required) {
-                                    findReqFromEl.required = true;
-                                }
+                                findReqFromEl.required = fieldEl.required;
                                 if (self.options.fieldOptions.focusOnRelated) {
                                     findReqFromEl.focus();
                                 }
                             }
                         } else if (findReqMoreEl !== null) {
                             if (findReqFromEl !== null) {
-                                findReqFromEl.required = false;
+                                findReqFromEl.required = findReqMoreEl.required && findReqMoreEl.checked;
                                 findReqFromEl.value = "";
                             }
                         }
@@ -744,9 +734,7 @@
                         if (isValidValue) {
                             var reqMoreEl = self.formEl.querySelector(fieldEl.getAttribute("data-required-from"));
                             reqMoreEl.checked = true;
-                            if (reqMoreEl.required) {
-                                fieldEl.required = true;
-                            }
+                            fieldEl.required = reqMoreEl.required;
                         }
                     }
                     if (isFieldForChangeEventBoolean && eventName === "change" || !isFieldForChangeEventBoolean && eventName !== "change") {

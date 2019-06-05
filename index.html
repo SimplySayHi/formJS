@@ -251,17 +251,17 @@
             <hr />
             <p>
                 <span class="text-yellow">*</span> for compatibility with IE 10/11 and old versions of Edge you have to load some JS polyfills ( from <a href="https://polyfill.io" target="_blank">polyfill.io</a> or else ):<br />
-                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code> <code>AbortController</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>fetch</code>
+                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>AbortController</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>fetch</code>
             </p>
             <pre>
-&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,AbortController,Promise,Promise.prototype.finally,fetch"&gt;&lt;/script&gt;</pre>
+&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,AbortController,Promise,Promise.prototype.finally,fetch"&gt;&lt;/script&gt;</pre>
             <br />
             <p>
                 If you are using the version with XMLHttpRequest ( formJS.xhr.js or formJS.xhr.min.js ) you can load these ( without support for Fetch API and related ):<br />
-                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code>
+                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code>
             </p>
             <pre>
-&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event"&gt;&lt;/script&gt;</pre>
+&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches"&gt;&lt;/script&gt;</pre>
         </div>
         
         <!-- Dependencies -->
@@ -728,7 +728,7 @@ var formInstance = new Form( formEl, options ).init();
     handleValidation:       true,
     maxFileSize:            10,
     onPastePrevented:       [],
-    onValidation:           [onValidation],
+    onValidation:           [onValidationDefault],
     preventPasteFields:     '[type="password"], [data-equal-to]',
     skipUIfeedback:         false,
     strictHtmlValidation:   true,
@@ -2459,7 +2459,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
         <div id="utilities-list">
             <h3 class="sticky-title">Utilities</h3>
             <p>
-                Fields utilities activated by setting a data-* attribute on the field ( initialized at constructor call ):
+                Fields utilities initialized at constructor call:
             </p>
             <div class="panel panel-default panel-transparent no-bg">
                 <div class="card-header bg-white text-dark clearfix">
@@ -2492,10 +2492,10 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                                         <code class="text-green">data-char-length</code> used on a tag where you want to print the number of characters typed inside the field.
                                     </li>
                                     <li class="my-2">
-                                        <code class="text-green">maxlength</code> used on the field to set the maxlength ( can be validated via JS by setting strictHtmlValidation to true ). the value will be printed as text inside the tag with data-char-maxlength attribute.
+                                        <code class="text-green">data-char-maxlength</code> used on a tag where you want to print the value of maxlength of the field.
                                     </li>
                                     <li class="my-2">
-                                        <code class="text-green">data-char-maxlength</code> used on a tag where you want to print the value of maxlength of the field.
+                                        <code class="text-green">maxlength</code> used on the field to set the maxlength ( can be validated via JS by setting strictHtmlValidation to true ). the value will be printed as text inside the tag with data-char-maxlength attribute.
                                     </li>
                                 </ul>
                             </div>
@@ -2509,7 +2509,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             </div>
                             <div class="col-8">
                                 <p>
-                                    Write the max file size ( as for "maxFileSize" option in "fieldOptions" ) inside an HTML element ( for example as part of the error message for an input <code>type="file"</code> ).
+                                    Write the max file size ( as for "maxFileSize" option in "fieldOptions" ) inside an HTML element with attribute "data-max-file-size" ( for example as part of the error message for an input <code>type="file"</code> ).
                                 </p>
                             </div>
                         </div>
@@ -2604,6 +2604,9 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             </li>
                             <li>
                                 Removed "checkDirtyField" option from "fieldOptions" ( the related callback is automatically executed ).
+                            </li>
+                            <li>
+                                Removed some polyfills thanks to code change.
                             </li>
                             <li>
                                 Minor improvements.

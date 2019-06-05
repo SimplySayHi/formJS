@@ -92,9 +92,7 @@ export const callbackFns = {
                 if( isReqMore ){
 
                     if( findReqFromEl !== null ){
-                        if( fieldEl.required ){
-                            findReqFromEl.required = true;
-                        }
+                        findReqFromEl.required = fieldEl.required;
                         if( self.options.fieldOptions.focusOnRelated ){
                             findReqFromEl.focus();
                         }
@@ -103,7 +101,7 @@ export const callbackFns = {
                 } else if( findReqMoreEl !== null ){
 
                     if( findReqFromEl !== null ){
-                        findReqFromEl.required = false;
+                        findReqFromEl.required = findReqMoreEl.required && findReqMoreEl.checked;
                         findReqFromEl.value = '';
                     }
 
@@ -116,10 +114,7 @@ export const callbackFns = {
 
                     let reqMoreEl = self.formEl.querySelector( fieldEl.getAttribute('data-required-from') );
                     reqMoreEl.checked = true;
-
-                    if( reqMoreEl.required ){
-                        fieldEl.required = true;
-                    }
+                    fieldEl.required = reqMoreEl.required;
                 }
             }
             

@@ -28,25 +28,15 @@ export const init = function(){
             currentFieldType = type;
         }
         
-        // VALIDATE FIELD ( BY TRIGGERING THE EVENT LISTENER ) IF IT ALREADY HAS A VALUE
+        // VALIDATE FIELD ( BY TRIGGERING THE validation CALLBACK ) IF IT ALREADY HAS A VALUE
         if(
             (!isCheckboxOrRadio && fieldEl.value) || 
             (isCheckboxOrRadio && fieldChecked !== null) ||
             (isReqFrom && reqMoreEl.checked)
         ){
 
-            let eventToTrigger = 'change';
-
-            if( isCheckboxOrRadio ){
-                fieldEl = fieldChecked;
-            } else if( !isFieldForChangeEventBoolean ) {
-                eventToTrigger = self.options.fieldOptions.validateOnEvents.split(' ').filter(function(evName){
-                    return evName !== 'change';
-                })[0] || 'input';
-            }
-
-            let newEvent = new Event(eventToTrigger, {'bubbles': (eventToTrigger !== 'blur'), 'cancelable': true});
-            fieldEl.dispatchEvent(newEvent);
+            let fakeEventObj = { target: fieldEl, type: (isFieldForChangeEventBoolean ? 'change': '') };
+            self.listenerCallbacks.validation.call( self, fakeEventObj );
 
         }
     });
