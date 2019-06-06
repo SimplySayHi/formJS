@@ -56,9 +56,10 @@
                 Version 
                 <span class="dropdown d-inline-block ml-1">
                     <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button">
-                        2.3.2
+                        2.3.3
                     </button>
                     <span class="dropdown-menu w-100 py-1">
+                        <a class="dropdown-item px-2" href="/plugins/formJS/2.3.2/">2.3.2</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/2.3.1/">2.3.1</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/2.3.0/">2.3.0</a>
                         <a class="dropdown-item px-2" href="/plugins/formJS/2.2.1/">2.2.1</a>
@@ -183,13 +184,13 @@
                                 </div>
                                 <div data-formjs-question="" class="form-group">
                                     <div class="input-container form-check">
-                                        <input required="" id="radio-5-20-6-1" name="radio-list-1" value="1" type="radio" class="form-check-input" />
+                                        <input id="radio-5-20-6-1" name="radio-list-1" value="1" type="radio" class="form-check-input" required="" />
                                         <label for="radio-5-20-6-1" class="form-check-label">
                                             Answer One
                                         </label>
                                     </div>
                                     <div class="input-container form-check">
-                                        <input required="" id="radio-5-20-6-2" name="radio-list-1" value="2" type="radio" class="form-check-input" />
+                                        <input id="radio-5-20-6-2" name="radio-list-1" value="2" type="radio" class="form-check-input" required="" />
                                         <label for="radio-5-20-6-2" class="form-check-label">
                                             Answer Two
                                         </label>
@@ -197,7 +198,7 @@
                                     <div class="input-group">
                                         <span class="input-group-prepend">
                                             <div class="input-group-text">
-                                                <input id="radio-5-200-6-3" name="radio-list-1" value="3" required="" data-require-more="" type="radio" />
+                                                <input id="radio-5-200-6-3" name="radio-list-1" value="3" data-require-more="" type="radio" required="" />
                                                 <label for="radio-5-200-6-3">&nbsp;Other:</label>
                                             </div>
                                         </span>
@@ -1896,6 +1897,19 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
             <h3 class="sticky-title">Changelog</h3>
             <ul class="p-0">
                 <li class="media my-3">
+                    <div class="version-num text-red">2.3.3</div>
+                    <div class="media-body pl-2">
+                        <ul>
+                            <li>
+                                Fixed a bug on fields "data-require-more"/"data-required-from".
+                            </li>
+                            <li>
+                                Little improvement on submit method.
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="media my-3">
                     <div class="version-num text-red">2.3.2</div>
                     <div class="media-body pl-2">
                         <ul>
@@ -2103,7 +2117,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"></script>
 
     <script src="dist/formJS.min.js"></script>
-    <script type="text/javascript">
+    <script>
         document.addEventListener('click', function(e){
             var key = e.which || e.keyCode;
 

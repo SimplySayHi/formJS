@@ -5,22 +5,34 @@ import { _xhrCall } from './xhrCall.js';
 export function submit( options = {}, event = null ){
     const self = this,
           formEl = self.formEl,
+          btnEl = formEl.querySelector('[type="submit"]'),
           eventPreventDefault = ( enableBtn = true ) => {
               if( btnEl && enableBtn ){ btnEl.disabled = false; }
               if( event ){ event.preventDefault(); }
           };
+
+    if( btnEl ){
+        if( btnEl.disabled ){
+            eventPreventDefault(false);
+            return false;
+        }
+        btnEl.disabled = true;
+    }
     
     options.fieldOptions = _mergeObjects( {}, self.options.fieldOptions, options.fieldOptions || {} );
     options.formOptions = _mergeObjects( {}, self.options.formOptions, options.formOptions || {} );
     
-    const handleValidation = options.fieldOptions.handleValidation,
+    const isAjaxForm = options.formOptions.ajaxSubmit,
+          handleValidation = options.fieldOptions.handleValidation,
           formValidation = (handleValidation ? self.isValidForm( options ) : { result: true });
 
-    const btnEl = formEl.querySelector('[type="submit"]'),
-          isAjaxForm = options.formOptions.ajaxSubmit;
-    
     if( handleValidation ){
         _executeCallback.call( self, options.fieldOptions.onValidation, formValidation.fields );
+    }
+
+    if( !formValidation.result ){
+        eventPreventDefault();
+        return false;
     }
     
     let formDataJSON = (isAjaxForm ? self.getFormJSON() : null),
@@ -60,15 +72,6 @@ export function submit( options = {}, event = null ){
             eventPreventDefault();
             return false;
         }
-    }
-
-    if( !formValidation.result || (btnEl && btnEl.disabled) ){
-        eventPreventDefault();
-        return false;
-    }
-
-    if( btnEl ){
-        btnEl.disabled = true;
     }
     
     if( isAjaxForm ){

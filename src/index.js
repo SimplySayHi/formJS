@@ -1,4 +1,4 @@
-/**! formJS v2.3.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/**! formJS v2.3.3 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 
 import { _checkFormEl, _isNodeList, _mergeObjects } from './modules/helper.js';
 import { _callbackFns }         from './modules/listenerCallbacks.js';
@@ -16,7 +16,7 @@ import { isValidField }         from './modules/isValidField.js';
 import { isValidForm }          from './modules/isValidForm.js';
 import { submit }               from './modules/submit.js';
 
-const version = '2.3.2';
+const version = '2.3.3';
 const _listenerCallbacks = new WeakMap();
 
 class Form {
