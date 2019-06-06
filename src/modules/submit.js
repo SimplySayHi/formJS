@@ -14,9 +14,12 @@ export function submit( event ){
               if( event ){ event.preventDefault(); }
           };
 
-    if( btnEl && btnEl.disabled ){
-        eventPreventDefault();
-        return false;
+    if( btnEl ){
+        if( btnEl.disabled ){
+            eventPreventDefault(false);
+            return false;
+        }
+        btnEl.disabled = true;
     }
     
     const isAjaxForm = options.formOptions.ajaxSubmit,
@@ -26,10 +29,6 @@ export function submit( event ){
     if( !formValidation.result ){
         eventPreventDefault();
         return false;
-    }
-
-    if( btnEl ){
-        btnEl.disabled = true;
     }
     
     let formDataObj = (isAjaxForm ? self.getFormData() : null),

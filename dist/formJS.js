@@ -894,17 +894,17 @@
                     event.preventDefault();
                 }
             };
-            if (btnEl && btnEl.disabled) {
-                eventPreventDefault();
-                return false;
+            if (btnEl) {
+                if (btnEl.disabled) {
+                    eventPreventDefault(false);
+                    return false;
+                }
+                btnEl.disabled = true;
             }
             var isAjaxForm = options.formOptions.ajaxSubmit, handleValidation = options.fieldOptions.handleValidation, formValidation = handleValidation ? self.validateForm(options.fieldOptions) : _helper.validateFormObjDefault;
             if (!formValidation.result) {
                 eventPreventDefault();
                 return false;
-            }
-            if (btnEl) {
-                btnEl.disabled = true;
             }
             var formDataObj = isAjaxForm ? self.getFormData() : null, callbacksBeforeSend = [], beforeSendOpt = options.formOptions.beforeSend;
             if (typeof beforeSendOpt === "function" || Array.isArray(beforeSendOpt)) {
