@@ -27,7 +27,7 @@
                     <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS/archive/master.zip">Download Latest Version</a>
                     <a class="dropdown-item" href="demos.html">Demos</a>
                     <a class="dropdown-item" href="#browsers-support">Browsers Support</a>
-                    <a class="dropdown-item" href="#dependencies">Dependencies</a>
+                    <a class="dropdown-item" href="#usage">Usage</a>
                     <a class="dropdown-item" href="#html">HTML</a>
                     <a class="dropdown-item" href="#initialization">Initialization</a>
                     <a class="dropdown-item" href="#options-list">Options</a>
@@ -67,7 +67,7 @@
                         3.0.0
                     </button>
                     <span class="dropdown-menu w-100 py-1">
-                        <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/2.3.2/">2.3.2</a>
+                        <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/2.3.3/">2.3.3</a>
                         <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/1.2.0/">1.2.0</a>
                     </span>
                 </div>
@@ -86,49 +86,49 @@
                     <div class="card-body">
                         <form action="json/data.json" name="my-form-4" novalidate>
                             <div>
-                                <div data-formjs-question="" class="form-group">
+                                <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
-                                        <input name="name" type="text" class="form-control" required="" />
+                                        <input name="name" type="text" class="form-control" required />
                                         <label>Name</label>
                                     </div>
                                     <div class="field-error-message small">Write your name!</div>
                                 </div>
-                                <div data-formjs-question="" class="form-group">
+                                <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
-                                        <input name="username" type="text" data-subtype="username" class="form-control" required="" />
+                                        <input name="username" type="text" data-subtype="username" class="form-control" required />
                                         <label>Username</label>
                                     </div>
                                     <div class="field-error-message small">Username must have at least 3 chars ( no special chars allowed )!</div>
                                 </div>
-                                <div data-formjs-question="" class="form-group">
+                                <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
-                                        <input name="email" type="email" class="form-control" required="" />
+                                        <input name="email" type="email" class="form-control" required />
                                         <label>Email</label>
                                     </div>
                                     <div class="field-error-message small">Check your email address, it is not valid!</div>
                                 </div>
-                                <div data-formjs-question="" class="form-group">
+                                <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
-                                        <input name="websiteUrl" type="text" data-subtype="url" class="form-control" data-validate-if-filled="" />
+                                        <input name="websiteUrl" type="text" data-subtype="url" class="form-control" data-validate-if-filled />
                                         <label>Website</label>
                                     </div>
                                     <div class="field-error-message small">Check your website url, it is not valid!</div>
                                 </div>
-                                <div data-formjs-question="" class="form-group">
+                                <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
                                         <textarea name="message" class="form-control" rows="3" maxlength="100" data-char-count></textarea>
                                         <label>Message ( <span data-char-length></span>/<span data-char-maxlength></span> )</label>
                                     </div>
                                 </div>
-                                <div data-formjs-question="" class="form-group">
+                                <div data-formjs-question class="form-group">
                                     <div class="input-container form-check">
-                                        <input required="" id="radio-5-20-6-1" name="radio-list-1" value="1" type="radio" class="form-check-input" />
+                                        <input required id="radio-5-20-6-1" name="radio-list-1" value="1" type="radio" class="form-check-input" />
                                         <label for="radio-5-20-6-1" class="form-check-label">
                                             Answer One
                                         </label>
                                     </div>
                                     <div class="input-container form-check">
-                                        <input required="" id="radio-5-20-6-2" name="radio-list-1" value="2" type="radio" class="form-check-input" />
+                                        <input required id="radio-5-20-6-2" name="radio-list-1" value="2" type="radio" class="form-check-input" />
                                         <label for="radio-5-20-6-2" class="form-check-label">
                                             Answer Two
                                         </label>
@@ -136,7 +136,7 @@
                                     <div class="input-group">
                                         <span class="input-group-prepend">
                                             <div class="input-group-text">
-                                                <input id="radio-5-200-6-3" name="radio-list-1" value="3" required="" data-require-more="" type="radio" />
+                                                <input id="radio-5-200-6-3" name="radio-list-1" value="3" required data-require-more="" type="radio" />
                                                 <label for="radio-5-200-6-3">&nbsp;Other:</label>
                                             </div>
                                         </span>
@@ -144,26 +144,26 @@
                                     </div>
                                     <div class="field-error-message small">You must choose an answer ( and fill the text field if you selected "Other" )!</div>
                                 </div>
-                                <div data-formjs-question="" class="form-group">
+                                <div data-formjs-question class="form-group">
                                     <div class="answers-box">
                                         <div class="small">
                                             I agree with the <a href="">Privacy Policy</a>.
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input id="privacyCheck-01" class="form-check-input" name="privacyCheck" type="radio" value="accept" required="" />
+                                            <input id="privacyCheck-01" class="form-check-input" name="privacyCheck" type="radio" value="accept" required />
                                             <label for="privacyCheck-01" class="form-check-label">Yes</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input id="privacyCheck-02" class="form-check-input" name="privacyCheck" type="radio" value="" required="" />
+                                            <input id="privacyCheck-02" class="form-check-input" name="privacyCheck" type="radio" value="" required />
                                             <label for="privacyCheck-02" class="form-check-label">No</label>
                                         </div>
                                     </div>
                                     <div class="field-error-message small">You must agree!</div>
                                 </div>
-                                <div data-formjs-question="" class="form-group">
+                                <div data-formjs-question class="form-group">
                                     <div class="answers-box">
                                         <div class="form-check">
-                                            <input id="regulationCheck" class="form-check-input" name="regulationCheck" type="checkbox" value="read" required="" />
+                                            <input id="regulationCheck" class="form-check-input" name="regulationCheck" type="checkbox" value="read" required />
                                             <label for="regulationCheck" class="form-check-label">I have read the <a href="#">Regulation</a></label>
                                         </div>
                                     </div>
@@ -206,26 +206,29 @@
         <div id="intro">
             <h2>Intro</h2>
             <p>
-                This module lets you validate forms.<br />
-                You can specify form/field options to:
+                formJS lets you validate and manage forms.<br />
+                You can specify:
             </p>
             <ul>
-            <li>
-                skip feedback on UI
-            </li>
-            <li>
-                specify CSS class(es) for dirty/error/valid fields
-            </li>
-            <li>
-                specify which events will fire the validation
-            </li>
-            <li>
-                manage AJAX calls: handle JSON data, change settings and set callbacks
-            </li>
-            <li>
-                and more...
-            </li>
-        </ul>
+                <li>
+                    Validation rules, errors and callback(s)
+                </li>
+                <li>
+                    Custom CSS class(es) for dirty/error/valid fields
+                </li>
+                <li>
+                    Events on which the validation will fire
+                </li>
+                <li>
+                    How to collect data to send
+                </li>
+                <li>
+                    AJAX call callbacks
+                </li>
+                <li>
+                    and more...
+                </li>
+            </ul>
         </div>
         
         <!-- Browsers Support -->
@@ -264,44 +267,97 @@
 &lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches"&gt;&lt;/script&gt;</pre>
         </div>
         
-        <!-- Dependencies -->
-        <div id="dependencies">
-            <h3 class="sticky-title">Dependencies</h3>
+        <!-- Usage -->
+        <div id="usage">
+            <h3 class="sticky-title">Usage</h3>
+            <p>
+                Include the plugin script in your page ( examples below from CDN ).<br />
+                You can inculde the standard version ( using fetch API for AJAX call ):
+            </p>
+            <div>
+            <pre>
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.0.0/dist/formJS.min.js"&gt;&lt;/script&gt;
+</pre>
+            <p>
+                or the XHR version ( using XMLHttpRequest API for AJAX call ):
+            </p>
+            <pre>
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.0.0/dist/formJS.xhr.min.js"&gt;&lt;/script&gt;
+</pre>
+            </div>
+            <p>
+                From local, you can find the JS file <code>dist/formJS.min.js</code> or <code>dist/formJS.xhr.min.js</code>
+            </p>
             <p>
                 No dependencies.<br />
                 <span class="small">This demo is developed with Bootstrap CSS but it is not a dependency.</span>
             </p>
-            <p>
-                Include the formJS script in your page:
-            </p>
-            <div>
-                    <pre>
-FORM JS Standard ( using fetch API for AJAX call )
-
-&lt;!-- FROM JSDELIVR CDN --&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.0.0/dist/formJS.min.js"&gt;&lt;/script&gt;
-
-&lt;!-- FROM LOCAL --&gt;
-&lt;script src="dist/formJS.min.js"&gt;&lt;/script&gt;
-
-OR
-
-FORM JS XHR ( using XMLHttpRequest API for AJAX call )
-
-&lt;!-- FROM JSDELIVR CDN --&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.0.0/dist/formJS.xhr.min.js"&gt;&lt;/script&gt;
-
-&lt;!-- FROM LOCAL --&gt;
-&lt;script src="dist/formJS.xhr.min.js"&gt;&lt;/script&gt;</pre>
-            </div>
         </div>
         
         <!-- HTML -->
         <div id="html">
             <h3 class="sticky-title">HTML</h3>
             <p>
-                This is the basic HTML structure to make the validation works ( Bootstrap CSS classes are optional ).<br />
-                Some notes about form attributes:
+                This is the basic HTML structure to make the validation works.<br />
+                <span class="small">( Bootstrap CSS classes are optional )</span>
+            </p>
+            <pre>
+&lt;form action="/mypath/mypage.php" method="POST" name="my-form-example" novalidate&gt;
+
+    &lt;!-- BASIC REQUIRED TEXT INPUT --&gt;
+    &lt;div data-formjs-question&gt;
+        &lt;div class="answers-box form-group"&gt;
+            &lt;input name="myName" type="text" class="form-control" required /&gt;
+            &lt;label&gt;Name&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div class="field-error-message small"&gt;Write your name!&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;!-- REQUIRED FIELD WITH HTML STANDARD TYPE ( EMAIL ) --&gt;
+    &lt;div data-formjs-question class="form-group"&gt;
+        &lt;div class="answers-box"&gt;
+            &lt;input name="myEmail" type="email" class="form-control" required /&gt;
+            &lt;label&gt;Email&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div class="field-error-message small"&gt;Check your email address, it is not valid!&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;!-- REQUIRED FIELD WITH SPECIAL TYPE:
+         BASIC TYPE IS text
+         SPECIAL TYPE ( NAMED SUBTYPE ) IS INSIDE data-subtype ATTRIBUTE --&gt;
+    &lt;div data-formjs-question class="form-group"&gt;
+        &lt;div class="answers-box"&gt;
+            &lt;input name="myMobileNumber" type="text" data-subtype="mobile-number" class="form-control" required /&gt;
+            &lt;label&gt;Mobile number&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div class="field-error-message small"&gt;Check your mobile number, it is not valid!&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;!-- FIELD WITH SPECIAL TYPE AND VALIDATED ONLY IF FILLED:
+         BASIC TYPE IS text
+         SPECIAL TYPE ( NAMED SUBTYPE ) IS INSIDE data-subtype ATTRIBUTE
+         FIELD VALUE IS EVALUATED ONLY IF FILLED ( SEE data-validate-if-filled ATTRIBUTE ) --&gt;
+    &lt;div data-formjs-question class="form-group"&gt;
+        &lt;div class="answers-box"&gt;
+            &lt;input name="websiteUrl" type="text" data-subtype="url" class="form-control" data-validate-if-filled /&gt;
+            &lt;label&gt;Website&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div class="field-error-message small"&gt;Check your website url, it is not valid!&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;!-- BASIC TEXT INPUT NOT MANDATORY --&gt;
+    &lt;div data-formjs-question&gt;
+        &lt;div class="answers-box form-group"&gt;
+            &lt;input name="myInfo" type="text" class="form-control" /&gt;
+            &lt;label&gt;Info&lt;/label&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;button type="submit" class="btn btn-default"&gt;SEND&lt;/button&gt;
+    
+&lt;/form&gt;</pre>
+            <p>
+                Some notes about form / field attributes:
             </p>
             <ul>
                 <li class="my-2">
@@ -313,7 +369,7 @@ FORM JS XHR ( using XMLHttpRequest API for AJAX call )
             </p>
             <ul>
                 <li class="my-2">
-                    <code>data-formjs-question</code> ( optional | empty attribute ) used for visual feedback on valid/invalid/dirty fields and/or character count functionality ( to be used on a container element for the field )
+                    <code>data-formjs-question</code> ( optional | empty attribute ) used for visual feedback on valid / invalid / dirty fields and / or character count functionality ( to be used on a container element for the field )
                 </li>
                 <li class="my-2">
                     <code>required</code> ( required ) for fields that require an answer.
@@ -334,64 +390,6 @@ FORM JS XHR ( using XMLHttpRequest API for AJAX call )
                     <code>data-exclude-data</code> ( optional | empty attribute ) used to avoid the plugin to take in consideration the field when collecting form data ( used inside "getFormData" method ).
                 </li>
             </ul>
-            <p>
-                Below, the HTML example:
-            </p>
-            <pre>
-&lt;form action="/mypath/mypage.php" method="POST" name="my-form-example" novalidate&gt;
-
-    &lt;!-- BASIC REQUIRED TEXT INPUT --&gt;
-    &lt;div data-formjs-question=""&gt;
-        &lt;div class="answers-box form-group"&gt;
-            &lt;input name="myName" type="text" class="form-control" required /&gt;
-            &lt;label&gt;Name&lt;/label&gt;
-        &lt;/div&gt;
-        &lt;div class="field-error-message small"&gt;Write your name!&lt;/div&gt;
-    &lt;/div&gt;
-    
-    &lt;!-- REQUIRED FIELD WITH HTML STANDARD TYPE ( EMAIL ) --&gt;
-    &lt;div data-formjs-question="" class="form-group"&gt;
-        &lt;div class="answers-box"&gt;
-            &lt;input name="myEmail" type="email" class="form-control" required /&gt;
-            &lt;label&gt;Email&lt;/label&gt;
-        &lt;/div&gt;
-        &lt;div class="field-error-message small"&gt;Check your email address, it is not valid!&lt;/div&gt;
-    &lt;/div&gt;
-    
-    &lt;!-- REQUIRED FIELD WITH SPECIAL TYPE:
-         BASIC TYPE IS text
-         SPECIAL TYPE ( NAMED SUBTYPE ) IS INSIDE data-subtype ATTRIBUTE --&gt;
-    &lt;div data-formjs-question="" class="form-group"&gt;
-        &lt;div class="answers-box"&gt;
-            &lt;input name="myMobileNumber" type="text" data-subtype="mobile-number" class="form-control" required /&gt;
-            &lt;label&gt;Mobile number&lt;/label&gt;
-        &lt;/div&gt;
-        &lt;div class="field-error-message small"&gt;Check your mobile number, it is not valid!&lt;/div&gt;
-    &lt;/div&gt;
-    
-    &lt;!-- FIELD WITH SPECIAL TYPE AND VALIDATED ONLY IF FILLED:
-         BASIC TYPE IS text
-         SPECIAL TYPE ( NAMED SUBTYPE ) IS INSIDE data-subtype ATTRIBUTE
-         FIELD VALUE IS EVALUATED ONLY IF FILLED ( SEE data-validate-if-filled ATTRIBUTE ) --&gt;
-    &lt;div data-formjs-question="" class="form-group"&gt;
-        &lt;div class="answers-box"&gt;
-            &lt;input name="websiteUrl" type="text" data-subtype="url" class="form-control" data-validate-if-filled="" /&gt;
-            &lt;label&gt;Website&lt;/label&gt;
-        &lt;/div&gt;
-        &lt;div class="field-error-message small"&gt;Check your website url, it is not valid!&lt;/div&gt;
-    &lt;/div&gt;
-    
-    &lt;!-- BASIC TEXT INPUT NOT MANDATORY --&gt;
-    &lt;div data-formjs-question=""&gt;
-        &lt;div class="answers-box form-group"&gt;
-            &lt;input name="myInfo" type="text" class="form-control" /&gt;
-            &lt;label&gt;Info&lt;/label&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    
-    &lt;button type="submit" class="btn btn-default"&gt;SEND&lt;/button&gt;
-    
-&lt;/form&gt;</pre>
         </div>
         
         <!-- Initialization -->
@@ -486,7 +484,7 @@ var formInstance = new Form( formEl, options ).init();
                                     </li>
                                 </ul>
                                 <p>
-                                    These classes are useful to show different error messages based on the error type and/or change the UI.
+                                    These classes are useful to show different error messages based on the error type and / or change the UI.
                                 </p>
                             </div>
                         </div>
@@ -499,7 +497,7 @@ var formInstance = new Form( formEl, options ).init();
                             </div>
                             <div class="col-5">
                                 <p>
-                                    Whether or not to focus on the related (input/select) field when selecting its radio answer 
+                                    Whether or not to focus on the related ( input / select ) field when selecting its radio answer 
                                 </p>
                             </div>
                         </div>
@@ -543,7 +541,7 @@ var formInstance = new Form( formEl, options ).init();
                                 <p>
                                     Size limit ( in MB ) for each file to upload.<br />
                                     Set to 0 ( zero ) if you want to disable the size check.<br />
-                                    Inside the field error message container you can put a span (or else) with data-max-file-size attribute to print the size limit
+                                    Inside the field error message container you can put a span ( or else ) with data-max-file-size attribute to print the size limit
                                 </p>
                             </div>
                         </div>
@@ -1129,16 +1127,16 @@ var formInstance = new Form( formEl, options ).init();
                                 </p>
                                 <ul>
                                     <li>
-                                        checkbox/select ( single ): boolean
+                                        checkbox / select ( single ): boolean
                                     </li>
                                     <li>
-                                        checkbox/select ( multiple ): array of strings
+                                        checkbox / select ( multiple ): array of strings
                                     </li>
                                     <li>
                                         radio: value set or null
                                     </li>
                                     <li>
-                                        otherwise: set/given value
+                                        otherwise: set / given value
                                     </li>
                                 </ul>
                                 <div class="card-footer no-bg pt-3">
@@ -1439,7 +1437,7 @@ Form.prototype.options.fieldOptions.maxFileSize = 100;
 formInstance.options.fieldOptions.maxFileSize = 50;
 </pre>
                     <p class="small">
-                        You can also add/override validation rules/errors from the Form instance but it doesn't have much sense.
+                        You can also add / override validation rules/errors from the Form instance but it doesn't have much sense.
                     </p>
                     <div id="inherit-validation-errors">
                         <br />
@@ -2039,7 +2037,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                                 </p>
                                 <br />
                                 <p class="small text-lowercase text-opacity">
-                                    USERNAME MUST START WITH A LETTER/NUMBER/UNDERSCORE AND CAN ALSO CONTAIN . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
+                                    USERNAME MUST START WITH A LETTER / NUMBER / UNDERSCORE AND CAN ALSO CONTAIN . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
                                 </p>
                             </div>
                         </div>
@@ -2048,7 +2046,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                                     Validate if Filled
                                 </div>
                                 <div class="col-4 col-sm-3 text-green">
-                                    <div><code>data-validate-if-filled=""</code></div>
+                                    <div><code>data-validate-if-filled</code></div>
                                 </div>
                                 <div class="col-4 col-sm-6">
                                     <p>
@@ -2080,7 +2078,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                 <div class="card-footer">
                     <div>
                         <p>
-                            <span class="text-yellow">*</span> you can also set <code>type="number"</code> together with the specific data-subtype attribute related to numbers, to let the device show the numeric keyboard, because type="number" is not well implemented in all browsers ( some allow users to write non-numeric characters and/or not related to the number format ).<br />
+                            <span class="text-yellow">*</span> you can also set <code>type="number"</code> together with the specific data-subtype attribute related to numbers, to let the device show the numeric keyboard, because type="number" is not well implemented in all browsers ( some allow users to write non-numeric characters and / or not related to the number format ).<br />
                                 Better to use <code>type="text"</code> together with the specific data-subtype related to numbers attribute to validate a numeric field. You can also use <code>data-type="number"</code> to emulate <code>type="number"</code> inputs. See "strictHtmlValidation" option in <a href="#field-options">Field Options</a> section for details.
                         </p>
                     </div>
