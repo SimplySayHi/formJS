@@ -701,9 +701,6 @@
         Object.defineProperty(exports, "__esModule", {
             value: true
         });
-        exports._setCallbackFunctionsInOptions = undefined;
-        var _helper = __webpack_require__("./src/modules/helper.js");
-        var _checkDirtyField2 = __webpack_require__("./src/modules/checkDirtyField.js");
         var _setCallbackFunctionsInOptions = exports._setCallbackFunctionsInOptions = function _setCallbackFunctionsInOptions() {
             var self = this, callbacks = {
                 fieldOptions: [ "onPastePrevented", "onValidation" ],

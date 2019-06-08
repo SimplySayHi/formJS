@@ -1,7 +1,4 @@
 
-import { _addClass, _removeClass }  from './helper.js';
-import { _checkDirtyField }         from './checkDirtyField.js';
-
 export const _setCallbackFunctionsInOptions = function(){
     const   self = this,
             callbacks = {
