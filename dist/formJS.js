@@ -164,8 +164,8 @@
         });
         exports.ajaxCall = ajaxCall;
         var _helper = __webpack_require__("./src/modules/helper.js");
-        function ajaxCall(formDataObj, options) {
-            var self = this, formEl = self.formEl, fieldOptions = options.fieldOptions, formOptions = options.formOptions, btnEl = formEl.querySelector('[type="submit"]'), timeoutTimer = void 0, ajaxOptions = (0, 
+        function ajaxCall(formDataObj) {
+            var self = this, formEl = self.formEl, fieldOptions = self.options.fieldOptions, formOptions = self.options.formOptions, btnEl = formEl.querySelector('[type="submit"]'), timeoutTimer = void 0, ajaxOptions = (0, 
             _helper.mergeObjects)({}, formOptions.ajaxOptions), isMultipart = ajaxOptions.headers["Content-Type"] === "multipart/form-data";
             ajaxOptions.body = formDataObj;
             if (isMultipart && fieldOptions.handleFileUpload) {
@@ -344,6 +344,9 @@
                         self.listenerCallbacks.charCount.call(null, fieldEl);
                     } catch (error) {}
                 });
+                if (formEl.querySelectorAll("[data-char-count]").length > 0) {
+                    formEl.addEventListener("input", self.listenerCallbacks.charCount, false);
+                }
             }
             if (fieldOptions.maxFileSize > 0) {
                 var maxFileSizeElems = formEl.querySelectorAll("[data-max-file-size]");
@@ -365,9 +368,6 @@
                 }
                 if (fieldOptions.preventPasteFields && formEl.querySelectorAll(fieldOptions.preventPasteFields).length) {
                     formEl.addEventListener("paste", self.listenerCallbacks.pastePrevent, false);
-                }
-                if (formEl.querySelectorAll("[data-char-count]").length > 0) {
-                    formEl.addEventListener("input", self.listenerCallbacks.charCount, false);
                 }
                 fieldOptions.validateOnEvents.split(" ").forEach(function(eventName) {
                     var useCapturing = eventName === "blur" ? true : false;
@@ -937,7 +937,7 @@
             }
             if (isAjaxForm) {
                 eventPreventDefault(false);
-                _ajaxCall.ajaxCall.call(self, formDataObj, options);
+                _ajaxCall.ajaxCall.call(self, formDataObj);
             }
         }
     },

@@ -2,12 +2,12 @@
 import { executeCallback, mergeObjects, serializeObject } from './helper.js';
 
 // AJAX CALL USING fetch API
-export function ajaxCall( formDataObj, options ){
+export function ajaxCall( formDataObj ){
 
     let self = this,
         formEl = self.formEl,
-        fieldOptions = options.fieldOptions,
-        formOptions = options.formOptions,
+        fieldOptions = self.options.fieldOptions,
+        formOptions = self.options.formOptions,
         btnEl = formEl.querySelector('[type="submit"]'),
         timeoutTimer,
         ajaxOptions = mergeObjects( {}, formOptions.ajaxOptions ),

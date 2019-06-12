@@ -245,20 +245,15 @@ textarea {
 .label-fade-down .form-control:focus + label,
 .is-dirty .label-fade-down .form-control + label {
     -webkit-transform: translateY(100%);
-    -moz-transform: translateY(100%);
-    -ms-transform: translateY(100%);
-    -o-transform: translateY(100%);
     transform: translateY(100%);
     opacity: 0;
 }
 
 /* LABEL MOVE UP */
 .label-move-up .form-control {
-    height: 50px;
-    padding: 12px 0 6px;
-}
-.label-move-up textarea.form-control + label {
-    top: 24px;
+    height: 3em;
+    padding: 0.5em 0;
+    margin-top: 1.5em;
 }
 .label-move-up .form-control[type="file"] {
     height: inherit;
@@ -267,22 +262,20 @@ textarea {
     margin: 0;
     line-height: 1;
     top: 50%;
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
+     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
+}
+.label-move-up textarea.form-control + label {
+    top: 0.5em;
 }
 .label-move-up .form-control[type="date"] + label,
 .label-move-up .form-control[type="file"] + label,
 .has-error.is-dirty .label-move-up .form-control + label,
 .label-move-up .form-control:focus + label,
 .is-dirty .label-move-up .form-control + label {
-    -webkit-transform: translateY(-200%);
-    -moz-transform: translateY(-200%);
-    -ms-transform: translateY(-200%);
-    -o-transform: translateY(-200%);
-    transform: translateY(-200%);
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+    top: 0;
     font-size: 0.75em;
 }
 
@@ -402,9 +395,6 @@ label, .radio label, .checkbox label {
     top: 50%;
     right: 15px;
     -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
     transform: translateY(-50%);
 }
 .panel-collapsible .panel-heading.active:after {

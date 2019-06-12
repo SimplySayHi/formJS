@@ -27,6 +27,10 @@ export function formStartup(){
                 self.listenerCallbacks.charCount.call( null, fieldEl );
             } catch (error) {}
         });
+        if( formEl.querySelectorAll('[data-char-count]').length > 0 ){
+            // INIT EVENT LISTENER FOR FIELDS WITH "data-char-count" ATTRIBUTE
+            formEl.addEventListener('input', self.listenerCallbacks.charCount, false);
+        }
     }
 
     if( fieldOptions.maxFileSize > 0 ){
@@ -53,7 +57,7 @@ export function formStartup(){
         if( fieldOptions.strictHtmlValidation ){
             
             // maxlength
-            // BUGGY IN ANDROID BROWSERS
+            // MAXLENGTH IS BUGGY IN ANDROID BROWSERS
             formEl.addEventListener('keypress', self.listenerCallbacks.keypressMaxlength, false);
 
             // data-type="number"
@@ -65,11 +69,6 @@ export function formStartup(){
         if( fieldOptions.preventPasteFields && formEl.querySelectorAll( fieldOptions.preventPasteFields ).length ){
             // INIT EVENT LISTENER FOR "PASTE" EVENT TO PREVENT IT ON SPECIFIED FIELDS
             formEl.addEventListener('paste', self.listenerCallbacks.pastePrevent, false);
-        }
-
-        if( formEl.querySelectorAll('[data-char-count]').length > 0 ){
-            // INIT EVENT LISTENER FOR FIELDS WITH "data-char-count" ATTRIBUTE
-            formEl.addEventListener('input', self.listenerCallbacks.charCount, false);
         }
 
         // INIT EVENTS LISTENER ( AS IN fieldOptions )

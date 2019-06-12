@@ -70,7 +70,7 @@ export function submit( event ){
     
     if( isAjaxForm ){
         eventPreventDefault(false);
-        ajaxCall.call(self, formDataObj, options);
+        ajaxCall.call(self, formDataObj);
     }
     
 }
