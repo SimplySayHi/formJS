@@ -399,25 +399,27 @@
                 Here an example of initialization:
             </p>
             <pre>var formEl = document.querySelector('form');
-
-// OR WITH CSS STRING SELECTOR:
-// var formEl = '.my-container .my-form';
-
-var options = {};
-
+var options = {...};
 var formInstance = new Form( formEl, options ).init();
-
-// IN SOME CASES YOU COULD NEED TO INITIALIZE THE FORM IN THIS WAY:
-// var formInstance = new Form( formEl, options );
-// formInstance.init();</pre>
+</pre>
             <ul>
                 <li>
-                    formEl: ( required ) must be a <u>single form node</u> ( not a nodelist! ) or a <u>CSS string selector</u>
+                    formEl: ( required ) must be a <u>single form node</u> ( not a nodelist! ) or a <u>CSS string selector</u> <code>var formEl = '.my-container .my-form';</code>
                 </li>
                 <li>
                     options: ( optional ) a JS object with fieldOptions and formOptions ( see <a href="#options-list">Options section</a> )
                 </li>
             </ul>
+            <hr />
+            <p>
+                In some cases you could need to initialize the form in this way to run the "init" method after some time:
+            </p>
+            <pre>var formEl = document.querySelector('form');
+var formInstance = new Form( formEl );
+// ... SOME OTHER CODE ...
+formInstance.init();
+</pre>
+            <hr />
             <p>
                 <b>IMPORTANT</b>: If <code>Form</code> namespace is not available, you can use <code>FormJS</code> namespace.
             </p>
