@@ -658,15 +658,11 @@
         var _isValidField = __webpack_require__("./src/modules/isValidField.js");
         function isValidForm() {
             var fieldOptionsObj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-            var self = this, formEl = self.formEl;
-            var obj = (0, _helper.mergeObjects)({}, _helper.validateFormObjDefault);
-            if (!(0, _helper.isDOMNode)(formEl) || !formEl.matches("[novalidate]")) {
-                obj.result = false;
-                return obj;
-            }
-            var fieldOptions = (0, _helper.mergeObjects)({}, self.options.fieldOptions, fieldOptionsObj, {
+            var self = this, formEl = self.formEl, obj = (0, _helper.mergeObjects)({}, _helper.validateFormObjDefault), fieldOptions = (0, 
+            _helper.mergeObjects)({}, self.options.fieldOptions, fieldOptionsObj, {
                 focusOnRelated: false
-            }), currentFieldName = "", currentFieldType = "";
+            });
+            var currentFieldName = "", currentFieldType = "";
             Array.from(formEl.querySelectorAll(_helper.fieldsStringSelector)).forEach(function(fieldEl) {
                 var name = fieldEl.name, type = fieldEl.type, fieldData = {};
                 if (name === currentFieldName && type === currentFieldType) {
@@ -977,11 +973,9 @@
         var _isValidField = __webpack_require__("./src/modules/isValidField.js");
         function validateField(fieldElem) {
             var fieldOptionsObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-            var self = this, fieldEl = typeof fieldElem === "string" ? self.formEl.querySelector(fieldElem) : fieldElem;
-            var obj = (0, _helper.mergeObjects)({}, _helper.validateFieldObjDefault);
-            if ((0, _helper.isDOMNode)(fieldEl)) {
-                var fieldOptions = (0, _helper.mergeObjects)({}, self.options.fieldOptions, fieldOptionsObj);
-                obj = _isValidField.isValidField.call(self, fieldEl, fieldOptionsObj);
+            var self = this, fieldEl = typeof fieldElem === "string" ? self.formEl.querySelector(fieldElem) : fieldElem, fieldOptions = (0, 
+            _helper.mergeObjects)({}, self.options.fieldOptions, fieldOptionsObj), obj = _isValidField.isValidField.call(self, fieldEl, fieldOptionsObj);
+            if (obj.fieldEl) {
                 _helper.executeCallback.call(self, fieldOptions.onValidation, [ obj ], {
                     fieldOptions: fieldOptions
                 });
