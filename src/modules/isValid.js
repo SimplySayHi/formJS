@@ -50,7 +50,7 @@ export function isValid( fieldEl, fieldOptions = {} ){
 
     // RUN SPECIFIC VALIDATIONS FOR validationRulesAttributes
     attrValidations.forEach(function(item){
-        let extraVal = validationRulesAttributes[item.attrName]( item, fieldEl );
+        let extraVal = validationRulesAttributes[item.attrName]( item );
         if( !extraVal.result ){
             obj = mergeObjects({}, obj, extraVal);
             attrValidationsResult = false;

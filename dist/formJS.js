@@ -577,7 +577,7 @@
                 }
             });
             attrValidations.forEach(function(item) {
-                var extraVal = _validationRules.validationRulesAttributes[item.attrName](item, fieldEl);
+                var extraVal = _validationRules.validationRulesAttributes[item.attrName](item);
                 if (!extraVal.result) {
                     obj = (0, _helper.mergeObjects)({}, obj, extraVal);
                     attrValidationsResult = false;

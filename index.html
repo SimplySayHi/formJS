@@ -600,7 +600,7 @@ formInstance.init();
                                     </p>
                                     <ul>
                                         <li>
-                                            fieldsList: ( Array ) list of JS objects:
+                                            fieldsList: ( Array ) list of JS objects<span class="text-yellow">*</span>:
 <pre>
 [{
     fieldEl: fieldEl,
@@ -624,6 +624,9 @@ formInstance.init();
                                             tempOptions: temporary options ( this object can be useful when manually validating a field with new options used only for that specific case )
                                         </li>
                                     </ul>
+                                    <p class="small">
+                                        <span class="text-yellow">*</span> in case of single field validation, as per method <code>validateField</code>, the array will contain only one object. In case of full form validation, as per method <code>validateForm</code>, the array will contain one object for each form field.
+                                    </p>
                                 </div>
                             </div>
                         </div>
