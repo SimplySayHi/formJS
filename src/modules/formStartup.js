@@ -9,47 +9,6 @@ export function formStartup(){
     let fieldOptions = self.options.fieldOptions,
         formOptions = self.options.formOptions;
 
-    // INIT FORM UTILITIES - START
-    let charLengthElems = formEl.querySelectorAll('[data-char-length]');
-    if( charLengthElems.length > 0 ){
-        Array.from( charLengthElems ).forEach(function( element ){
-            try {
-                let containerEl = element.closest('[data-formjs-question]'),
-                    fieldEl = containerEl.querySelector('[data-char-count]');
-
-                if( fieldEl !== null && fieldEl.matches('[maxlength]') ){
-                    // PRINT RELATED MAX LENGTH IN HTML
-                    let maxlength = fieldEl.getAttribute('maxlength');
-                    containerEl.querySelector('[data-char-maxlength]').textContent = maxlength;
-                }
-
-                // PRINT CHAR COUNT IN HTML
-                self.listenerCallbacks.charCount.call( null, fieldEl );
-            } catch (error) {}
-        });
-        if( formEl.querySelectorAll('[data-char-count]').length > 0 ){
-            // INIT EVENT LISTENER FOR FIELDS WITH "data-char-count" ATTRIBUTE
-            formEl.addEventListener('input', self.listenerCallbacks.charCount, false);
-        }
-    }
-
-    if( fieldOptions.maxFileSize > 0 ){
-        let maxFileSizeElems = formEl.querySelectorAll('[data-max-file-size]');
-        if( maxFileSizeElems.length > 0 ){
-            Array.from( maxFileSizeElems ).forEach(function( element ){
-                try {
-                    let fieldEl = element.closest('[data-formjs-question]').querySelector('[type="file"]');
-
-                    if( fieldEl !== null ){
-                        // PRINT MAX FILE SIZE FOR INPUTS WITH type="file"
-                        element.textContent = fieldOptions.maxFileSize;
-                    }
-                } catch (error) {}
-            });
-        }
-    }
-    // INIT FORM UTILITIES - END
-
     // HANDLE FIELD VALIDATION
     if( fieldOptions.handleValidation ){
         

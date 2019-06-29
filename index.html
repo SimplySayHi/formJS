@@ -34,7 +34,6 @@
                     <a class="dropdown-item" href="#methods">Methods</a>
                     <a class="dropdown-item" href="#builtin-validations">Validation Rules</a>
                     <a class="dropdown-item" href="#builtin-errors">Validation Errors</a>
-                    <a class="dropdown-item" href="#utilities-list">Utilities</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS" target="_blank">View on Github</a>
                     <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS/issues" target="_blank">Report a Bug</a>
@@ -369,7 +368,7 @@
             </p>
             <ul>
                 <li class="my-2">
-                    <code>data-formjs-question</code> ( optional | empty attribute ) used for visual feedback on valid / invalid / dirty fields and / or character count functionality ( to be used on a container element for the field )
+                    <code>data-formjs-question</code> ( optional | empty attribute ) used for visual feedback on valid / invalid / dirty fields ( to be used on a container element for the field )
                 </li>
                 <li class="my-2">
                     <code>required</code> ( required ) for fields that require an answer.
@@ -423,6 +422,18 @@ formInstance.init();
             <p>
                 <b>IMPORTANT</b>: If <code>Form</code> namespace is not available, you can use <code>FormJS</code> namespace.
             </p>
+            <hr />
+            <p>
+                formJS has some more properties:
+            </p>
+            <ul>
+                <li>
+                    isInitialized: whether or not the init method was called on the Form instance.
+                </li>
+                <li>
+                    version: the version number.
+                </li>
+            </ul>
         </div>
         
         <!-- Options -->
@@ -1410,6 +1421,7 @@ Form.addValidationRules({
         var obj = {
             result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
         };
+        // ERRORS CAN BE ATTACHED HERE BUT IT'S BETTER TO USE METHOD addValidationErrors
         if( !obj.result ){
             if( string.length &lt; 8 ){ obj.errors.minlength = true; }
         }
@@ -1444,28 +1456,6 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                     <p class="small">
                         You can also add / override validation rules/errors from the Form instance but it doesn't have much sense.
                     </p>
-                    <div id="inherit-validation-errors">
-                        <br />
-                        <p>
-                                How to override a validation method but still use its validation errors:
-                            </p>
-                            <pre>
-// FROM addValidationRules METHOD
-Form.addValidationRules({
-    email: function( string, fieldEl ){
-        var obj = {
-            result: /^([\w-.]+)\@([\w-.]+)\.[a-zA-Z]{2,}$/.test(string)
-        };
-        if( !obj.result ){
-            obj.errors = this.validationErrors.email( string );
-        }
-    }
-});
-
-// FROM PROTOTYPE OBJECT
-Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
-</pre>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1479,6 +1469,8 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                 Additionally, in each validation, the "this" keyword is bound to the Form instance.
                 <br /><br />
                 After validation, in case of invalid field, the validation method will return the "errors" object ( see <a href="#builtin-errors">Built-in Errors Section</a> for details ).
+                <hr />
+                <span class="text-red">[ add. ]</span> : Additional validation that is not part of the core plugin. Can be found in file <code>js/additionals/validationRules.js</code>.
             </p>
             <div class="panel panel-default panel-transparent no-bg">
                 <div class="card-header bg-white text-dark clearfix">
@@ -1500,6 +1492,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             <div class="col-4 col-sm-3 text-green">
                                 CAP <span class="text-yellow">*</span>
                                 <div>( cap )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="cap"</code></div>
@@ -1545,6 +1538,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             <div class="col-4 col-sm-3 text-green">
                                 Color
                                 <div>( color )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>type="color"</code></div>
@@ -1624,6 +1618,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             <div class="col-4 col-sm-3 text-green">
                                 Date in format DDMMYYYY
                                 <div>( dateDDMMYYYY )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="dateDDMMYYYY"</code></div>
@@ -1721,6 +1716,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             <div class="col-4 col-sm-3 text-green">
                                 Fiscal Code
                                 <div>( fiscalCode )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="fiscal-code"</code></div>
@@ -1739,6 +1735,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             <div class="col-4 col-sm-3 text-green">
                                 Landline Number
                                 <div>( landlineNumber )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="landline-number"</code></div>
@@ -1836,6 +1833,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             <div class="col-4 col-sm-3 text-green">
                                 Mobile Number
                                 <div>( mobileNumber )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="mobile-number"</code></div>
@@ -1923,6 +1921,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             <div class="col-4 col-sm-3 text-green">
                                 Password
                                 <div>( password )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>type="password"</code></div>
@@ -1987,6 +1986,8 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Tel
+                                <div>( tel )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>type="tel"</code></div>
@@ -2012,6 +2013,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             <div class="col-4 col-sm-3 text-green">
                                 Url
                                 <div>( url )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="url"</code></div>
@@ -2032,6 +2034,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             <div class="col-4 col-sm-3 text-green">
                                 Username
                                 <div>( username )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="username"</code></div>
@@ -2064,6 +2067,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             <div class="col-4 col-sm-3 text-green">
                                 VAT Number
                                 <div>( vatNumber )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="vat-number"</code></div>
@@ -2095,8 +2099,9 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
         <div id="builtin-errors">
             <h3 class="sticky-title">Built-in Errors</h3>
             <p>
-                After validation, in case of invalid field, the validation method will return the "errors" object.<br />
-                The listed errors can also be inherited in your custom validations ( for example if you override the "email" validation - see <a href="#inherit-validation-errors">This Example</a> for details ).
+                After validation, in case of invalid field, the validation method will return the "errors" object.
+                <br /><br />
+                Additionally, in each error method, the "this" keyword is bound to the Form instance.
             </p>
             <div class="row">
                 <div class="col-12 col-sm-6">
@@ -2119,6 +2124,10 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
 }</pre>
                 </div>
             </div>
+            <hr />
+            <p>
+                <span class="text-red">[ add. ]</span> : Additional error that is not part of the core plugin. Can be found in file <code>js/additionals/validationErrors.js</code>.
+            </p>
             <div class="panel panel-default panel-transparent no-bg">
                 <div class="card-header bg-white text-dark clearfix">
                     <div class="d-flex">
@@ -2139,6 +2148,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             <div class="col-4 col-sm-3 text-green">
                                 CAP
                                 <div>( cap )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="cap"</code></div>
@@ -2350,6 +2360,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             <div class="col-4 col-sm-3 text-green">
                                 Password
                                 <div>( password )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>type="password"</code></div>
@@ -2410,6 +2421,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             <div class="col-4 col-sm-3 text-green">
                                 Username
                                 <div>( username )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="username"</code></div>
@@ -2431,6 +2443,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             <div class="col-4 col-sm-3 text-green">
                                 VAT Number
                                 <div>( vatNumber )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="vat-number"</code></div>
@@ -2456,80 +2469,6 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Utilities -->
-        <div id="utilities-list">
-            <h3 class="sticky-title">Utilities</h3>
-            <p>
-                Fields utilities initialized at constructor call:
-            </p>
-            <div class="panel panel-default panel-transparent no-bg">
-                <div class="card-header bg-white text-dark clearfix">
-                    <div class="d-flex">
-                        <div class="col-4">
-                            HTML attribute
-                        </div>
-                        <div class="col-8">
-                            description
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4 text-green">
-                                <code>data-char-count</code>
-                                <div class="small">
-                                    ( use together with data-char-length ) <br />
-                                    ( optionally with maxlength and data-char-maxlength )
-                                </div>
-                            </div>
-                            <div class="col-8">
-                                <p>
-                                    Set a counter for the field ( for example for a message in a textarea ).<br />
-                                    Related HTML attributes:
-                                </p>
-                                <ul>
-                                    <li class="my-2">
-                                        <code class="text-green">data-char-length</code> used on a tag where you want to print the number of characters typed inside the field.
-                                    </li>
-                                    <li class="my-2">
-                                        <code class="text-green">data-char-maxlength</code> used on a tag where you want to print the value of maxlength of the field.
-                                    </li>
-                                    <li class="my-2">
-                                        <code class="text-green">maxlength</code> used on the field to set the maxlength ( can be validated via JS by setting strictHtmlValidation to true ). the value will be printed as text inside the tag with data-char-maxlength attribute.
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4 text-green">
-                                <code>data-max-file-size</code>
-                                <div class="small">
-                                    related to fields with type="file"
-                                </div>
-                            </div>
-                            <div class="col-8">
-                                <p>
-                                    Write the max file size ( as for "maxFileSize" option in "fieldOptions" ) inside an HTML element with attribute "data-max-file-size" ( for example as part of the error message for an input <code>type="file"</code> ).
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <p class="mt-3">
-                formJS has some more properties:
-            </p>
-            <ul>
-                <li>
-                    isInitialized: whether or not the init method was called on the Form instance.
-                </li>
-                <li>
-                    version: the version number.
-                </li>
-            </ul>
         </div>
 
         <!-- Changelog -->
@@ -2559,7 +2498,7 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                         </p>
                         <ul>
                             <li>
-                                Added prototype method "addValidationErrors".
+                                Added built-in errors: prototype method "addValidationErrors" and object "validationErrors".
                             </li>
                             <li>
                                 Added "errorEmpty" and "errorRule" to "cssClasses" in "fieldOptions" to show different error messages ( see implementation in CSS file ).
@@ -2598,6 +2537,9 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
                             </li>
                             <li>
                                 Changed "ajaxData" parameter in "onSubmitComplete", "onSubmitError", "onSubmitSuccess" to be compliant with JSend standard.
+                            </li>
+                            <li>
+                                Removed "Utilities" since it was going outside the plugin's scope.
                             </li>
                             <li>
                                 Removed "submit" method since it was not so useful.
@@ -2839,7 +2781,10 @@ Form.prototype.validationRules.email = function( string, fieldEl ){ ... }
 
     <script src="js/include.js"></script>
     <script src="dist/formJS.min.js"></script>
+    <script src="js/additionals/validationRules.js"></script>
+    <script src="js/additionals/validationErrors.js"></script>
     <script src="js/doc.js"></script>
+    <script src="js/additionals/utils.js"></script>
     
 </body>
 </html>

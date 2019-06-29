@@ -4,23 +4,6 @@ import { submit } from './submit.js';
 
 export const callbackFns = {
 
-    charCount: function( eventOrField ){
-
-        const fieldEl = eventOrField.target || eventOrField;
-
-        if( fieldEl.matches( '[data-char-count]' ) ){
-            try {
-                let charLengthEl = fieldEl.closest('[data-formjs-question]').querySelector('[data-char-length]');
-
-                if( charLengthEl !== null ){
-                    let usedChars = fieldEl.value.length;
-                    charLengthEl.textContent = usedChars;
-                }
-            } catch (error) {}
-        }
-
-    },
-
     dataTypeNumber: function( event ){
 
         const fieldEl = event.target;

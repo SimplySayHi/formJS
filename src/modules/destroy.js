@@ -5,10 +5,6 @@ export function destroy(){
           formEl = self.formEl,
           validationListenerNames = self.options.fieldOptions.validateOnEvents;
 
-    if( formEl.querySelectorAll('[data-char-count]').length > 0 ){
-        formEl.removeEventListener('input', self.listenerCallbacks.charCount, false);
-    }
-
     if( self.options.fieldOptions.strictHtmlValidation ){
         formEl.removeEventListener('keypress', self.listenerCallbacks.keypressMaxlength, false);
         formEl.removeEventListener('input', self.listenerCallbacks.dataTypeNumber, false);

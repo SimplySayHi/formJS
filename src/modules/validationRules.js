@@ -3,35 +3,6 @@ import { getSplitChar } from './helper.js';
 
 export const validationRules = {
             
-    cap: function( string ){
-        // VALID ITALIAN CAP WITH 5 DIGITS
-        const
-            regex = new RegExp(/^[0-9]{5}$/),
-            obj = {
-                result: regex.test( string )
-            };
-
-        if( !obj.result && typeof this.validationErrors.cap === 'function' ){
-            obj.errors = this.validationErrors.cap( string );
-        }
-
-        return obj;
-    },
-
-    color: function( string ){
-        // HEX COLOR WITH/WITHOUT #
-        // CAN BE 3 OR 6 CHARACTERS ( fff | FFF | ffffff | FFFFFF )
-        let obj = {
-            result: /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/.test( string )
-        };
-
-        if( !obj.result && typeof this.validationErrors.color === 'function' ){
-            obj.errors = this.validationErrors.color( string );
-        }
-
-        return obj;
-    },
-    
     date: function( string ){
         // DATE AS ISO 8601 DATE FORMAT     YYYY MM DD | YYYY/MM/DD | YYYY.MM.DD | YYYY-MM-DD
 
@@ -39,25 +10,6 @@ export const validationRules = {
             obj = {
                 result: date
             };
-
-        if( !obj.result && typeof this.validationErrors.date === 'function' ){
-            obj.errors = this.validationErrors.date( string );
-        }
-
-        return obj;
-    },
-
-    dateDDMMYYYY: function( string ){
-        // DATE AS ITALIAN SYNTAX       DD MM YYYY | DD/MM/YYYY | DD.MM.YYYY | DD-MM-YYYY
-
-        let date = /^(((0[1-9]|[12]\d|3[01])[ \/\-.](0[13578]|1[02])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)[ \/\-.](0[13456789]|1[012])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])[ \/\-.]02[ \/\-.]((19|[2-9]\d)\d{2}))|(29[ \/\-.]02[ \/\-.]((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/g.test( string ),
-            obj = {
-                result: date
-            };
-
-        if( !obj.result && typeof this.validationErrors.dateDDMMYYYY === 'function' ){
-            obj.errors = this.validationErrors.dateDDMMYYYY( string );
-        }
 
         return obj;
     },
@@ -70,54 +22,6 @@ export const validationRules = {
             result: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test( string )
         };
 
-        if( !obj.result && typeof this.validationErrors.email === 'function' ){
-            obj.errors = this.validationErrors.email( string );
-        }
-
-        return obj;
-    },
-    
-    fiscalCode: function( string ){
-        // http://blog.marketto.it/2016/01/regex-validazione-codice-fiscale-con-omocodia/
-        let obj = {
-                result: /^(?:[B-DF-HJ-NP-TV-Z](?:[AEIOU]{2}|[AEIOU]X)|[AEIOU]{2}X|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[1256LMRS][\dLMNP-V])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[\dLMNP-V][1-9MNP-V]|[1-9MNP-V][0L]))[A-Z]$/i.test( string )
-            };
-
-        if( !obj.result && typeof this.validationErrors.fiscalCode === 'function' ){
-            obj.errors = this.validationErrors.fiscalCode( string );
-        }
-        
-        return obj;
-    },
-    
-    landlineNumber: function( string ){
-        // LANDLINE PREFIX:
-        // +39 | 0039 | not-set ( ALSO WITH INTERNATIONAL PREFIXES WITH 2 DIGITS )
-        // LANDLINE NUMBER MUST START WITH 0 ( AS FOR ITALIAN ONES ):
-        // 1234567890 | 12 34567890 | 123456789 | 1234 56789 ( ALSO WITH . - / AS SEPARATOR )
-        let obj = {
-            result: /^((00|\+)\d{2}[\-\. ]??)??(((0[\d]{1,4}))([\/\-\. ]){0,1}([\d, ]{5,10}))$/.test( string )
-        };
-
-        if( !obj.result && typeof this.validationErrors.landlineNumber === 'function' ){
-            obj.errors = this.validationErrors.landlineNumber( string );
-        }
-
-        return obj; 
-    },
-    
-    mobileNumber: function( string ){
-        // +39 | 0039 | 39 | not-set ( ALSO WITH ALL INTERNATIONAL PREFIXES WITH 2 DIGITS )
-        // MOBILE NUMBER MUST START WITH 3
-        // 3234567890 | 323 4567890 | 323 45 67 890 ( ALSO WITH . OR - AS SEPARATOR )
-        let obj = {
-            result: /^((00|\+)??\d{2}[\-\. ]??)??3\d{2}[\-\. ]??(\d{6,7}|\d{2}[\-\. ]??\d{2}[\-\. ]??\d{3})$/.test( string )
-        };
-
-        if( !obj.result && typeof this.validationErrors.mobileNumber === 'function' ){
-            obj.errors = this.validationErrors.mobileNumber( string );
-        }
-
         return obj;
     },
     
@@ -127,10 +31,6 @@ export const validationRules = {
         let obj = {
             result: /[+-]?([0-9]*[.])?[0-9]+/.test( string )
         };
-
-        if( !obj.result && typeof this.validationErrors.number === 'function' ){
-            obj.errors = this.validationErrors.number( string );
-        }
 
         return obj;
     },
@@ -142,10 +42,6 @@ export const validationRules = {
             result: /[+-]?([0-9]*[.])[0-9]+/.test( string )
         };
 
-        if( !obj.result && typeof this.validationErrors.numberFloat === 'function' ){
-            obj.errors = this.validationErrors.numberFloat( string );
-        }
-
         return obj;
     },
     
@@ -154,81 +50,6 @@ export const validationRules = {
         let obj = {
             result: /^\d+$/.test( string )
         };
-
-        if( !obj.result && typeof this.validationErrors.numberInteger === 'function' ){
-            obj.errors = this.validationErrors.numberInteger( string );
-        }
-
-        return obj;
-    },
-    
-    password: function( string ){
-        // PASSWORD ( NO SPECIAL CHARACTERS ) WITH AT LEAST:
-        // ONE DIGIT + ONE LOWERCASE + ONE UPPERCASE + MIN LENGTH OF 8 CHARACTERS
-        let obj = {
-            result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
-        };
-
-        if( !obj.result && typeof this.validationErrors.password === 'function' ){
-            obj.errors = this.validationErrors.password( string );
-        }
-
-        return obj;
-    },
-
-    tel: function( string ){
-        // CHECK IF ONE OF landlineNumber OR mobileNumber IS VALID
-        let obj = {
-            result: this.validationRules.landlineNumber(string).result || this.validationRules.mobileNumber(string).result
-        };
-
-        if( !obj.result && typeof this.validationErrors.tel === 'function' ){
-            obj.errors = this.validationErrors.tel( string );
-        }
-
-        return obj;
-    },
-    
-    url: function( string ){
-        // MUST NOT CONTAIN PARAMETERS:
-        // www.mysite.com/index.html         --> VALID URL
-        // www.mysite.com/index.html?v=hello --> INVALID URL
-        let obj = {
-            result: /^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test( string )
-        };
-
-        if( !obj.result && typeof this.validationErrors.url === 'function' ){
-            obj.errors = this.validationErrors.url( string );
-        }
-
-        return obj;
-    },
-    
-    username: function( string ){
-        // USERNAME WITH LETTERS/NUMBERS/UNDERSCORE AND . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
-        //return /^[\w\.\-\@]{3,24}$/.test( string );
-        
-        // USERNAME MUST START WITH A LETTER/NUMBER/UNDERSCORE AND CAN ALSO CONTAIN . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
-        let obj = {
-            result: /^(?=\w)(?=[\-\.\@]?)[\w\-\.\@]{3,24}$/.test( string )
-        };
-
-        if( !obj.result && typeof this.validationErrors.username === 'function' ){
-            obj.errors = this.validationErrors.username( string );
-        }
-
-        return obj;
-    },
-    
-    vatNumber: function( string ){
-        // VAT NUMBER CAN CONTAIN OR NOT THE 'IT' STRING AND THEN 11 NUMBERS
-        let obj = {
-            result: /^(IT){0,1}[0-9]{11}$/i.test( string )
-        };
-
-        if( !obj.result && typeof this.validationErrors.vatNumber === 'function' ){
-            obj.errors = this.validationErrors.vatNumber( string );
-        }
 
         return obj;
     }

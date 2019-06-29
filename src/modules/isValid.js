@@ -62,10 +62,13 @@ export function isValid( fieldEl, fieldOptions = {} ){
         obj = mergeObjects( {}, obj, self.validationRules[fieldType].call(self, fieldValue, fieldEl) );
         obj.result = obj.result && attrValidationsResult;
         if( !obj.result ){
+            let errorFn = self.validationErrors[fieldType];
+            let fieldErrors = (typeof errorFn === 'function' ? errorFn.call(self, fieldValue) : {});
             if( typeof obj.errors === 'undefined' ){
                 obj.errors = {};
             }
             obj.errors.rule = true;
+            obj.errors = mergeObjects({}, obj.errors, fieldErrors);
         }
     }
 

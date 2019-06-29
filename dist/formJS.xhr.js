@@ -308,7 +308,6 @@
             self.formEl.formjs = self;
             self.options = (0, _helper.mergeObjects)({}, Form.prototype.options, optionsObj);
             self.listenerCallbacks = {
-                charCount: _listenerCallbacks.callbackFns.charCount,
                 dataTypeNumber: _listenerCallbacks.callbackFns.dataTypeNumber,
                 keypressMaxlength: _listenerCallbacks.callbackFns.keypressMaxlength,
                 pastePrevent: _listenerCallbacks.callbackFns.pastePrevent.bind(self),
@@ -327,9 +326,6 @@
         exports.destroy = destroy;
         function destroy() {
             var self = this, formEl = self.formEl, validationListenerNames = self.options.fieldOptions.validateOnEvents;
-            if (formEl.querySelectorAll("[data-char-count]").length > 0) {
-                formEl.removeEventListener("input", self.listenerCallbacks.charCount, false);
-            }
             if (self.options.fieldOptions.strictHtmlValidation) {
                 formEl.removeEventListener("keypress", self.listenerCallbacks.keypressMaxlength, false);
                 formEl.removeEventListener("input", self.listenerCallbacks.dataTypeNumber, false);
@@ -359,35 +355,6 @@
                 return null;
             }
             var fieldOptions = self.options.fieldOptions, formOptions = self.options.formOptions;
-            var charLengthElems = formEl.querySelectorAll("[data-char-length]");
-            if (charLengthElems.length > 0) {
-                Array.from(charLengthElems).forEach(function(element) {
-                    try {
-                        var containerEl = element.closest("[data-formjs-question]"), fieldEl = containerEl.querySelector("[data-char-count]");
-                        if (fieldEl !== null && fieldEl.matches("[maxlength]")) {
-                            var maxlength = fieldEl.getAttribute("maxlength");
-                            containerEl.querySelector("[data-char-maxlength]").textContent = maxlength;
-                        }
-                        self.listenerCallbacks.charCount.call(null, fieldEl);
-                    } catch (error) {}
-                });
-                if (formEl.querySelectorAll("[data-char-count]").length > 0) {
-                    formEl.addEventListener("input", self.listenerCallbacks.charCount, false);
-                }
-            }
-            if (fieldOptions.maxFileSize > 0) {
-                var maxFileSizeElems = formEl.querySelectorAll("[data-max-file-size]");
-                if (maxFileSizeElems.length > 0) {
-                    Array.from(maxFileSizeElems).forEach(function(element) {
-                        try {
-                            var fieldEl = element.closest("[data-formjs-question]").querySelector('[type="file"]');
-                            if (fieldEl !== null) {
-                                element.textContent = fieldOptions.maxFileSize;
-                            }
-                        } catch (error) {}
-                    });
-                }
-            }
             if (fieldOptions.handleValidation) {
                 if (fieldOptions.strictHtmlValidation) {
                     formEl.addEventListener("keypress", self.listenerCallbacks.keypressMaxlength, false);
@@ -614,10 +581,13 @@
                 obj = (0, _helper.mergeObjects)({}, obj, self.validationRules[fieldType].call(self, fieldValue, fieldEl));
                 obj.result = obj.result && attrValidationsResult;
                 if (!obj.result) {
+                    var errorFn = self.validationErrors[fieldType];
+                    var fieldErrors = typeof errorFn === "function" ? errorFn.call(self, fieldValue) : {};
                     if (typeof obj.errors === "undefined") {
                         obj.errors = {};
                     }
                     obj.errors.rule = true;
+                    obj.errors = (0, _helper.mergeObjects)({}, obj.errors, fieldErrors);
                 }
             }
             return obj;
@@ -690,18 +660,6 @@
         var _helper = __webpack_require__("./src/modules/helper.js");
         var _submit2 = __webpack_require__("./src/modules/submit.js");
         var callbackFns = exports.callbackFns = {
-            charCount: function charCount(eventOrField) {
-                var fieldEl = eventOrField.target || eventOrField;
-                if (fieldEl.matches("[data-char-count]")) {
-                    try {
-                        var charLengthEl = fieldEl.closest("[data-formjs-question]").querySelector("[data-char-length]");
-                        if (charLengthEl !== null) {
-                            var usedChars = fieldEl.value.length;
-                            charLengthEl.textContent = usedChars;
-                        }
-                    } catch (error) {}
-                }
-            },
             dataTypeNumber: function dataTypeNumber(event) {
                 var fieldEl = event.target;
                 if (fieldEl.matches('[data-type="number"]')) {
@@ -1006,20 +964,6 @@
             value: true
         });
         var validationErrors = exports.validationErrors = {
-            cap: function cap(string) {
-                var obj = {};
-                var strLength = string.length;
-                if (strLength > 5) {
-                    obj.maxlength = true;
-                }
-                if (strLength > 0 && strLength < 5) {
-                    obj.minlength = true;
-                }
-                if (/[^0-9]/.test(string)) {
-                    obj.invalidChars = true;
-                }
-                return obj;
-            },
             email: function email(string) {
                 var obj = {};
                 if (string.indexOf("@") === -1) {
@@ -1046,54 +990,6 @@
                     }
                 }
                 return obj;
-            },
-            password: function password(string) {
-                var obj = {};
-                if (string.length < 8) {
-                    obj.minlength = true;
-                }
-                if (!/\d/.test(string)) {
-                    obj.missingNumber = true;
-                }
-                if (!/[a-z]/.test(string)) {
-                    obj.missingLowercase = true;
-                }
-                if (!/[A-Z]/.test(string)) {
-                    obj.missingUppercase = true;
-                }
-                if (/[^0-9a-zA-Z]/.test(string)) {
-                    obj.invalidChars = true;
-                }
-                return obj;
-            },
-            username: function username(string) {
-                var obj = {};
-                var strLength = string.length;
-                if (strLength < 3) {
-                    obj.minlength = true;
-                }
-                if (strLength > 24) {
-                    obj.maxlength = true;
-                }
-                if (/[^\w\-\.\@]/.test(string)) {
-                    obj.invalidChars = true;
-                }
-                if (!/^[\w]/.test(string)) {
-                    obj.invalidStartChar = true;
-                }
-                return obj;
-            },
-            vatNumber: function vatNumber(string) {
-                var obj = {};
-                var strLength = string.length, indexOfIT = string.indexOf("IT"), checkLength = indexOfIT === 0 ? 13 : 11;
-                if (indexOfIT < 1) {
-                    if (strLength < checkLength) {
-                        obj.minlength = true;
-                    } else {
-                        obj.maxlength = true;
-                    }
-                }
-                return obj;
             }
         };
     },
@@ -1105,148 +1001,34 @@
         exports.validationRulesAttributes = exports.validationRules = undefined;
         var _helper = __webpack_require__("./src/modules/helper.js");
         var validationRules = exports.validationRules = {
-            cap: function cap(string) {
-                var regex = new RegExp(/^[0-9]{5}$/), obj = {
-                    result: regex.test(string)
-                };
-                if (!obj.result && typeof this.validationErrors.cap === "function") {
-                    obj.errors = this.validationErrors.cap(string);
-                }
-                return obj;
-            },
-            color: function color(string) {
-                var obj = {
-                    result: /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/.test(string)
-                };
-                if (!obj.result && typeof this.validationErrors.color === "function") {
-                    obj.errors = this.validationErrors.color(string);
-                }
-                return obj;
-            },
             date: function date(string) {
                 var date = /^(((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29)$/g.test(string), obj = {
                     result: date
                 };
-                if (!obj.result && typeof this.validationErrors.date === "function") {
-                    obj.errors = this.validationErrors.date(string);
-                }
-                return obj;
-            },
-            dateDDMMYYYY: function dateDDMMYYYY(string) {
-                var date = /^(((0[1-9]|[12]\d|3[01])[ \/\-.](0[13578]|1[02])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)[ \/\-.](0[13456789]|1[012])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])[ \/\-.]02[ \/\-.]((19|[2-9]\d)\d{2}))|(29[ \/\-.]02[ \/\-.]((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/g.test(string), obj = {
-                    result: date
-                };
-                if (!obj.result && typeof this.validationErrors.dateDDMMYYYY === "function") {
-                    obj.errors = this.validationErrors.dateDDMMYYYY(string);
-                }
                 return obj;
             },
             email: function email(string) {
                 var obj = {
                     result: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(string)
                 };
-                if (!obj.result && typeof this.validationErrors.email === "function") {
-                    obj.errors = this.validationErrors.email(string);
-                }
-                return obj;
-            },
-            fiscalCode: function fiscalCode(string) {
-                var obj = {
-                    result: /^(?:[B-DF-HJ-NP-TV-Z](?:[AEIOU]{2}|[AEIOU]X)|[AEIOU]{2}X|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[1256LMRS][\dLMNP-V])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[\dLMNP-V][1-9MNP-V]|[1-9MNP-V][0L]))[A-Z]$/i.test(string)
-                };
-                if (!obj.result && typeof this.validationErrors.fiscalCode === "function") {
-                    obj.errors = this.validationErrors.fiscalCode(string);
-                }
-                return obj;
-            },
-            landlineNumber: function landlineNumber(string) {
-                var obj = {
-                    result: /^((00|\+)\d{2}[\-\. ]??)??(((0[\d]{1,4}))([\/\-\. ]){0,1}([\d, ]{5,10}))$/.test(string)
-                };
-                if (!obj.result && typeof this.validationErrors.landlineNumber === "function") {
-                    obj.errors = this.validationErrors.landlineNumber(string);
-                }
-                return obj;
-            },
-            mobileNumber: function mobileNumber(string) {
-                var obj = {
-                    result: /^((00|\+)??\d{2}[\-\. ]??)??3\d{2}[\-\. ]??(\d{6,7}|\d{2}[\-\. ]??\d{2}[\-\. ]??\d{3})$/.test(string)
-                };
-                if (!obj.result && typeof this.validationErrors.mobileNumber === "function") {
-                    obj.errors = this.validationErrors.mobileNumber(string);
-                }
                 return obj;
             },
             number: function number(string) {
                 var obj = {
                     result: /[+-]?([0-9]*[.])?[0-9]+/.test(string)
                 };
-                if (!obj.result && typeof this.validationErrors.number === "function") {
-                    obj.errors = this.validationErrors.number(string);
-                }
                 return obj;
             },
             numberFloat: function numberFloat(string) {
                 var obj = {
                     result: /[+-]?([0-9]*[.])[0-9]+/.test(string)
                 };
-                if (!obj.result && typeof this.validationErrors.numberFloat === "function") {
-                    obj.errors = this.validationErrors.numberFloat(string);
-                }
                 return obj;
             },
             numberInteger: function numberInteger(string) {
                 var obj = {
                     result: /^\d+$/.test(string)
                 };
-                if (!obj.result && typeof this.validationErrors.numberInteger === "function") {
-                    obj.errors = this.validationErrors.numberInteger(string);
-                }
-                return obj;
-            },
-            password: function password(string) {
-                var obj = {
-                    result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
-                };
-                if (!obj.result && typeof this.validationErrors.password === "function") {
-                    obj.errors = this.validationErrors.password(string);
-                }
-                return obj;
-            },
-            tel: function tel(string) {
-                var obj = {
-                    result: this.validationRules.landlineNumber(string).result || this.validationRules.mobileNumber(string).result
-                };
-                if (!obj.result && typeof this.validationErrors.tel === "function") {
-                    obj.errors = this.validationErrors.tel(string);
-                }
-                return obj;
-            },
-            url: function url(string) {
-                var obj = {
-                    result: /^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(string)
-                };
-                if (!obj.result && typeof this.validationErrors.url === "function") {
-                    obj.errors = this.validationErrors.url(string);
-                }
-                return obj;
-            },
-            username: function username(string) {
-                var obj = {
-                    result: /^(?=\w)(?=[\-\.\@]?)[\w\-\.\@]{3,24}$/.test(string)
-                };
-                if (!obj.result && typeof this.validationErrors.username === "function") {
-                    obj.errors = this.validationErrors.username(string);
-                }
-                return obj;
-            },
-            vatNumber: function vatNumber(string) {
-                var obj = {
-                    result: /^(IT){0,1}[0-9]{11}$/i.test(string)
-                };
-                if (!obj.result && typeof this.validationErrors.vatNumber === "function") {
-                    obj.errors = this.validationErrors.vatNumber(string);
-                }
                 return obj;
             }
         };
