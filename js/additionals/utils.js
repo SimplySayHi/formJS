@@ -43,21 +43,20 @@ var initCharLengthFields = function ( formEl ) {
 
 var initMaxFileSizeFields = function ( formEl ) {
     var fieldOptions = formEl.formjs.options.fieldOptions;
+    var printMaxFileSizeElems = formEl.querySelectorAll('[data-print-max-file-size]');
 
-    if( fieldOptions.maxFileSize > 0 ){
-        var maxFileSizeElems = formEl.querySelectorAll('[data-max-file-size]');
-        if( maxFileSizeElems.length > 0 ){
-            Array.from( maxFileSizeElems ).forEach(function( element ){
-                try {
-                    var fieldEl = element.closest('[data-formjs-question]').querySelector('[type="file"]');
+    if( printMaxFileSizeElems.length > 0 ){
+        Array.from( printMaxFileSizeElems ).forEach(function( element ){
+            try {
+                var fieldEl = element.closest('[data-formjs-question]').querySelector('[type="file"]');
 
-                    if( fieldEl !== null ){
-                        // PRINT MAX FILE SIZE FOR INPUTS WITH type="file"
-                        element.textContent = fieldOptions.maxFileSize;
-                    }
-                } catch (error) {}
-            });
-        }
+                if( fieldEl !== null ){
+                    maxFileSize = fieldEl.getAttribute('data-max-file-size') || fieldOptions.maxFileSize;
+                    // PRINT MAX FILE SIZE FOR INPUTS WITH type="file"
+                    element.textContent = maxFileSize;
+                }
+            } catch (error) {}
+        });
     }
 };
 

@@ -1094,11 +1094,11 @@
                 return obj;
             },
             file: function file(data) {
-                var fieldEl = data.fieldEl, MIMEtype = fieldEl.accept ? new RegExp(fieldEl.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from(fieldEl.files), obj = {
+                var fieldEl = data.fieldEl, maxFileSize = (fieldEl.getAttribute("data-max-file-size") || data.fieldOptions.maxFileSize) * 1, MIMEtype = fieldEl.accept ? new RegExp(fieldEl.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from(fieldEl.files), obj = {
                     result: true
                 };
                 filesList.forEach(function(file) {
-                    var exceedMaxFileSize = data.fieldOptions.maxFileSize > 0 && file.size / 1024 / 1024 > data.fieldOptions.maxFileSize, isAcceptedFileType = MIMEtype !== null ? MIMEtype.test(file.type) : true;
+                    var exceedMaxFileSize = maxFileSize > 0 && file.size / 1024 / 1024 > maxFileSize, isAcceptedFileType = MIMEtype !== null ? MIMEtype.test(file.type) : true;
                     if (exceedMaxFileSize || !isAcceptedFileType) {
                         obj.result = false;
                         if (typeof obj.errors === "undefined") {
