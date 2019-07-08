@@ -31,7 +31,6 @@ export function submit( event ){
           formValidationPromise = (handleValidation ? self.validateForm() : Promise.resolve(validateFormObjDefault));
 
     formValidationPromise.then(formValidation => {
-        console.log(formValidation);
         if( !formValidation.result ){
             eventPreventDefault();
             return false;
