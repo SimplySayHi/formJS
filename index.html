@@ -210,7 +210,7 @@
             </p>
             <ul>
                 <li>
-                    Validation rules, errors and callback(s)
+                    Validation rules ( also async ), errors and callback(s)
                 </li>
                 <li>
                     Custom CSS class(es) for dirty/error/valid fields
@@ -260,10 +260,10 @@
             <br />
             <p>
                 If you are using the version with XMLHttpRequest ( formJS.xhr.js or formJS.xhr.min.js ) you can load these ( without support for Fetch API and related ):<br />
-                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code>
+                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Promise</code>
             </p>
             <pre>
-&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches"&gt;&lt;/script&gt;</pre>
+&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise"&gt;&lt;/script&gt;</pre>
         </div>
         
         <!-- Usage -->
@@ -993,7 +993,8 @@ formInstance.init();
         cache:          'no-store',
         credentials:    'same-origin',
         headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Accept':       'application/json'
         },
         method:         'POST',
         mode:           'same-origin',
@@ -1220,7 +1221,7 @@ formInstance.init();
                             </div>
                             <div class="col-3">
                                 <p>
-                                    Object like:
+                                    A Promise to which will be passed an object like:
                                 </p>
                                 <pre>
 {
@@ -1258,7 +1259,7 @@ formInstance.init();
                             </div>
                             <div class="col-3">
                                 <p>
-                                    Object like:
+                                    A Promise to which will be passed an object like:
                                 </p>
                                 <pre>
 {
@@ -1465,12 +1466,14 @@ formInstance.options.fieldOptions.maxFileSize = 50;
             <h3 class="sticky-title">Built-in Validations</h3>
             <p>
                 Below the rules used to validate the fields depending on html basic/data-* attributes ( you can add new ones - or override the ones having JS key specified - with addValidationRules method ).
+                <br />
+                Validations can also be async, see <a href="#validation-username">username validation</a> as example.
                 <br /><br />
                 Additionally, in each validation, the "this" keyword is bound to the Form instance.
                 <br /><br />
                 After validation, in case of invalid field, the validation method will return the "errors" object ( see <a href="#builtin-errors">Built-in Errors Section</a> for details ).
                 <hr />
-                <span class="text-red">[ add. ]</span> : Additional validation that is not part of the core plugin. Can be found in file <code>js/additionals/validationRules.js</code>.
+                <span class="text-red">[ add. ]</span> : Additional validation that is not part of the core plugin. Can be found in file <code>dist/additionals/validationRules.js</code>.
             </p>
             <div class="panel panel-default panel-transparent no-bg">
                 <div class="card-header bg-white text-dark clearfix">
@@ -1488,7 +1491,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                 </div>
                 <div class="card-body">
                     <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-cap" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 CAP <span class="text-yellow">*</span>
                                 <div>( cap )</div>
@@ -1507,7 +1510,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-checkbox" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Checkbox
                             </div>
@@ -1520,7 +1523,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-checks" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Checks
                             </div>
@@ -1534,7 +1537,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-color" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Color
                                 <div>( color )</div>
@@ -1568,7 +1571,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </ul>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-date" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Date
                                 <div>( date )</div>
@@ -1614,7 +1617,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-date-ddmmyyyy" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Date in format DDMMYYYY
                                 <div>( dateDDMMYYYY )</div>
@@ -1642,7 +1645,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-email" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Email
                                 <div>( email )</div>
@@ -1664,7 +1667,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-equal-to" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Equal To
                             </div>
@@ -1681,7 +1684,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-exact-length" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Exact Length
                             </div>
@@ -1698,7 +1701,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-file" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 File
                             </div>
@@ -1712,7 +1715,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-fiscal-code" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Fiscal Code
                                 <div>( fiscalCode )</div>
@@ -1731,7 +1734,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-landline-number" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Landline Number
                                 <div>( landlineNumber )</div>
@@ -1754,7 +1757,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-length" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Length
                             </div>
@@ -1767,7 +1770,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-max" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Max
                             </div>
@@ -1784,7 +1787,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-maxlength" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Maxlength
                             </div>
@@ -1798,7 +1801,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-min" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Min
                             </div>
@@ -1815,7 +1818,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-minlength" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Minlength
                             </div>
@@ -1829,7 +1832,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-mobile-number" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Mobile Number
                                 <div>( mobileNumber )</div>
@@ -1850,7 +1853,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-number" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Number <span class="text-yellow">*</span>
                                 <div>( number )</div>
@@ -1872,7 +1875,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-number-float" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Number Float <span class="text-yellow">*</span>
                                 <div>( numberFloat )</div>
@@ -1895,7 +1898,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-number-integer" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Number Integer <span class="text-yellow">*</span>
                                 <div>( numberInteger )</div>
@@ -1917,7 +1920,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-password" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Password
                                 <div>( password )</div>
@@ -1938,7 +1941,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-pattern" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Pattern
                             </div>
@@ -1952,7 +1955,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-radio" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Radio
                             </div>
@@ -1965,7 +1968,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-required-more-from" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Require More &amp; Required From
                             </div>
@@ -1983,7 +1986,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-tel" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Tel
                                 <div>( tel )</div>
@@ -2009,7 +2012,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </ul>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-url" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Url
                                 <div>( url )</div>
@@ -2030,10 +2033,11 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-username" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Username
                                 <div>( username )</div>
+                                <div class="text-yellow">Async Validation</div>
                                 <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
@@ -2047,9 +2051,14 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 <p class="small text-lowercase text-opacity">
                                     USERNAME MUST START WITH A LETTER / NUMBER / UNDERSCORE AND CAN ALSO CONTAIN . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
                                 </p>
+                                <br />
+                                <p>
+                                    You can find the remote validation in <code>remoteValidations/username.php</code><br />
+                                    It is just a demo. Please change it with your custom remote validation.
+                                </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-validate-if-filled" class="clearfix padding-tb-md row-list-separator d-flex">
                                 <div class="col-4 col-sm-3 text-green">
                                     Validate if Filled
                                 </div>
@@ -2063,7 +2072,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     </p>
                                 </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-vat-number" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 VAT Number
                                 <div>( vatNumber )</div>
@@ -2126,7 +2135,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
             </div>
             <hr />
             <p>
-                <span class="text-red">[ add. ]</span> : Additional error that is not part of the core plugin. Can be found in file <code>js/additionals/validationErrors.js</code>.
+                <span class="text-red">[ add. ]</span> : Additional error that is not part of the core plugin. Can be found in file <code>dist/additionals/validationErrors.js</code>.
             </p>
             <div class="panel panel-default panel-transparent no-bg">
                 <div class="card-header bg-white text-dark clearfix">
@@ -2498,6 +2507,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                         </p>
                         <ul>
                             <li>
+                                Added async validation with Promises.
+                            </li>
+                            <li>
                                 Added built-in errors: prototype method "addValidationErrors" and object "validationErrors".
                             </li>
                             <li>
@@ -2781,10 +2793,10 @@ formInstance.options.fieldOptions.maxFileSize = 50;
 
     <script src="js/include.js"></script>
     <script src="dist/formJS.min.js"></script>
-    <script src="js/additionals/validationRules.js"></script>
-    <script src="js/additionals/validationErrors.js"></script>
+    <script src="dist/additionals/validationRules.js"></script>
+    <script src="dist/additionals/validationErrors.js"></script>
     <script src="js/doc.js"></script>
-    <script src="js/additionals/utils.js"></script>
+    <script src="dist/additionals/utils.js"></script>
     
 </body>
 </html>

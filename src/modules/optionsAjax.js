@@ -3,7 +3,8 @@ export let ajaxOptions = {
     cache:              'no-store',
     credentials:        'same-origin',
     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Accept':       'application/json'
     },
     method:             'POST',
     mode:               'same-origin',

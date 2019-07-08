@@ -6,13 +6,20 @@ export function validateField( fieldElem, fieldOptionsObj = {} ){
 
     const self = this,
           fieldEl = (typeof fieldElem === 'string' ? self.formEl.querySelector(fieldElem) : fieldElem),
-          fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptionsObj),
-          obj = isValidField.call( self, fieldEl, fieldOptionsObj );
-    
-    if( obj.fieldEl ){
-        executeCallback.call( self, fieldOptions.onValidation, [obj], {fieldOptions} );
-    }
+          fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptionsObj);
 
-    return obj;
+    return new Promise(function(resolve){
+
+        const prom = isValidField.call( self, fieldEl, fieldOptionsObj );
+        resolve( prom );
+
+    }).then(obj => {
+
+        if( obj.fieldEl ){
+            executeCallback.call( self, fieldOptions.onValidation, [obj], {fieldOptions} );
+        }
+        return obj;
+        
+    });
     
 }

@@ -94,17 +94,42 @@ var validationRules = {
 
         return obj;
     },
-    
+
     username: function( string ){
         // USERNAME WITH LETTERS/NUMBERS/UNDERSCORE AND . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
-        //return /^[\w\.\-\@]{3,24}$/.test( string );
-        
-        // USERNAME MUST START WITH A LETTER/NUMBER/UNDERSCORE AND CAN ALSO CONTAIN . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
+        // /^[\w\.\-\@]{3,24}$/.test( string );
+
+        var self = this;
         var obj = {
+            // USERNAME MUST START WITH A LETTER/NUMBER/UNDERSCORE AND CAN ALSO CONTAIN . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
             result: /^(?=\w)(?=[\-\.\@]?)[\w\-\.\@]{3,24}$/.test( string )
         };
 
-        return obj;
+        if( !obj.result ){
+            return Promise.resolve(obj);
+        }
+        
+        return new Promise(function(resolve){
+
+            var fetchOptions = self.options.formOptions.ajaxOptions;
+            fetchOptions.body = JSON.stringify({username: string});
+            fetch('remoteValidations/username.php', fetchOptions)
+                .then(function(data){
+                    return data.json()
+                })
+                .then(function(obj){
+                    resolve(obj);
+                })
+                .catch(function(error){
+                    var errorObj = {
+                        result: false,
+                        errors: { ajaxCall: true },
+                        errorThrown: error
+                    };
+                    resolve(errorObj);
+                });
+
+        });
     },
     
     vatNumber: function( string ){

@@ -11,28 +11,35 @@ export function isValidForm( fieldOptionsObj = {} ){
 
     let currentFieldName = '',
         currentFieldType = '';
-    
-    Array.from( formEl.querySelectorAll(fieldsStringSelector) ).forEach(function( fieldEl ){
+
+    const fieldsList = Array.from( formEl.querySelectorAll(fieldsStringSelector) ).filter(fieldEl => {
         let name = fieldEl.name,
-            type = fieldEl.type,
-            fieldData = {};
-        
-        if( (name === currentFieldName && type === currentFieldType) ){ return true; }
-        
+            type = fieldEl.type;
+
+        if( name === currentFieldName && type === currentFieldType ){
+            return false;
+        }
+
         if( !fieldEl.matches('[data-required-from]') ){
             currentFieldName = name;
             currentFieldType = type;
         }
-        
-        fieldData = isValidField.call( self, fieldEl, fieldOptions );
 
-        if( !fieldData.result ){
-            obj.result = false;
-        }
-        
-        obj.fields.push( fieldData );
+        return true;
     });
     
-    return obj;
+    return Promise.all( fieldsList.map(function( fieldEl ){
+        
+        return isValidField.call( self, fieldEl, fieldOptions );
+
+    }) ).then(list => {
+
+        let areAllFieldsValid = list.filter(fieldObj => !fieldObj.result).length === 0;
+        obj.result = areAllFieldsValid;
+        obj.fields = list;
+
+        return obj;
+
+    });
 
 }

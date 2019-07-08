@@ -53,3 +53,9 @@ document.addEventListener('click', function(e){
         }
     }
 }, false);
+
+Array.from(document.querySelectorAll('form')).forEach(function(formEl){
+    formEl.addEventListener('submit', function(){
+        formEl.querySelector('[data-formjs-global-feedback]').classList.add( 'd-none' );
+    });
+});

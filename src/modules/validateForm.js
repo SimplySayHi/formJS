@@ -5,11 +5,18 @@ import { isValidForm } from './isValidForm.js';
 export function validateForm( fieldOptionsObj = {} ){
 
     const self = this,
-          fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptionsObj),
-          obj = isValidForm.call( self, fieldOptions );
+          fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptionsObj);
 
-    executeCallback.call( self, fieldOptions.onValidation, obj.fields, {fieldOptions} );
+    return new Promise(function(resolve){
 
-    return obj;
+        const prom = isValidForm.call( self, fieldOptions );
+        resolve(prom);
+
+    }).then(obj => {
+
+        executeCallback.call( self, fieldOptions.onValidation, obj.fields, {fieldOptions} );
+        return obj;
+
+    });
     
 }

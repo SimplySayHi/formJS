@@ -18,7 +18,7 @@ export function isValid( fieldEl, fieldOptions = {} ){
     if( !isValidValue ){
         obj.errors = { empty: true };
         obj.result = false;
-        return obj;
+        return Promise.resolve(obj);
     }
 
     // COLLECT SPECIFIC VALIDATIONS FOR validationRulesAttributes
@@ -57,9 +57,18 @@ export function isValid( fieldEl, fieldOptions = {} ){
         }
     });
 
-    // RUN VALIDATIONS FOR validationRules
-    if( typeof self.validationRules[fieldType] === 'function' ){
-        obj = mergeObjects( {}, obj, self.validationRules[fieldType].call(self, fieldValue, fieldEl) );
+    return new Promise(function(resolve){
+
+        let prom = {};
+        // RUN VALIDATIONS FOR validationRules
+        if( typeof self.validationRules[fieldType] === 'function' ){
+            prom = self.validationRules[fieldType].call(self, fieldValue, fieldEl);
+        }
+        resolve(prom);
+
+    }).then(data => {
+
+        obj = mergeObjects( {}, obj, data );
         obj.result = obj.result && attrValidationsResult;
         if( !obj.result ){
             let errorFn = self.validationErrors[fieldType];
@@ -70,8 +79,8 @@ export function isValid( fieldEl, fieldOptions = {} ){
             obj.errors.rule = true;
             obj.errors = mergeObjects({}, obj.errors, fieldErrors);
         }
-    }
+        return obj;
 
-    return obj;
+    });
 
 }

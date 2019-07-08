@@ -1,6 +1,5 @@
 
 import { addClass, removeClass }    from './helper.js';
-import { checkDirtyField }          from './checkDirtyField.js';
 
 export const defaultCallbacksInOptions = {
     fieldOptions: {
@@ -15,8 +14,6 @@ export const defaultCallbacksInOptions = {
                     containerEl = fieldEl.closest('[data-formjs-question]'),
                     isReqFrom = fieldEl.matches('[data-required-from]'),
                     reqMoreEl = self.formEl.querySelector( fieldEl.getAttribute('data-required-from') );
-
-                checkDirtyField.call( self, fieldEl );
                 
                 if( containerEl !== null && !options.skipUIfeedback ){
                     if( obj.result ){

@@ -7,12 +7,17 @@ export function submit( event ){
 
     const self = this,
           options = self.options,
+          isAjaxForm = options.formOptions.ajaxSubmit,
           formEl = self.formEl,
           btnEl = formEl.querySelector('[type="submit"]'),
           eventPreventDefault = ( enableBtn = true ) => {
               if( btnEl && enableBtn ){ btnEl.disabled = false; }
               if( event ){ event.preventDefault(); }
           };
+
+    if( isAjaxForm ){
+        eventPreventDefault(false);
+    }
 
     if( btnEl ){
         if( btnEl.disabled ){
@@ -22,31 +27,23 @@ export function submit( event ){
         btnEl.disabled = true;
     }
     
-    const isAjaxForm = options.formOptions.ajaxSubmit,
-          handleValidation = options.fieldOptions.handleValidation,
-          formValidation = (handleValidation ? self.validateForm( options.fieldOptions ) : validateFormObjDefault);
+    const handleValidation = options.fieldOptions.handleValidation,
+          formValidationPromise = (handleValidation ? self.validateForm() : Promise.resolve(validateFormObjDefault));
 
-    if( !formValidation.result ){
-        eventPreventDefault();
-        return false;
-    }
-    
-    let formDataObj = (isAjaxForm ? self.getFormData() : null),
-        callbacksBeforeSend = [],
-        beforeSendOpt = options.formOptions.beforeSend;
-
-    if( typeof beforeSendOpt === 'function' || Array.isArray(beforeSendOpt) ){
-        let beforeSendData = { stopExecution: false },
+    formValidationPromise.then(formValidation => {
+        console.log(formValidation);
+        if( !formValidation.result ){
+            eventPreventDefault();
+            return false;
+        }
+        
+        let formDataObj = (isAjaxForm ? self.getFormData() : null),
+            callbacksBeforeSend = options.formOptions.beforeSend,
+            beforeSendData = { stopExecution: false },
             stopCallbackLoop = false;
 
         if( formDataObj ){
             beforeSendData.formData = formDataObj;
-        }
-
-        if( typeof beforeSendOpt === 'function' ){
-            callbacksBeforeSend.push( beforeSendOpt );
-        } else if( Array.isArray(beforeSendOpt) ) {
-            callbacksBeforeSend = beforeSendOpt;
         }
 
         callbacksBeforeSend.forEach(function(cbFn){
@@ -66,11 +63,10 @@ export function submit( event ){
             eventPreventDefault();
             return false;
         }
-    }
-    
-    if( isAjaxForm ){
-        eventPreventDefault(false);
-        ajaxCall.call(self, formDataObj);
-    }
+        
+        if( isAjaxForm ){
+            ajaxCall.call(self, formDataObj);
+        }
+    });
     
 }
