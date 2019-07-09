@@ -9,12 +9,12 @@ export function validateForm( fieldOptionsObj = {} ){
 
     return new Promise(function(resolve){
 
-        const prom = isValidForm.call( self, fieldOptions );
+        const prom = isValidForm.call( self, fieldOptionsObj );
         resolve(prom);
 
     }).then(obj => {
 
-        executeCallback.call( self, fieldOptions.onValidation, obj.fields, {fieldOptions} );
+        executeCallback.call( self, fieldOptions.onValidation, obj.fields, {fieldOptions: fieldOptionsObj} );
         return obj;
 
     });

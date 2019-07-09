@@ -7,7 +7,7 @@ export function isValidForm( fieldOptionsObj = {} ){
     const self = this,
           formEl = self.formEl,
           obj = mergeObjects({}, validateFormObjDefault),
-          fieldOptions = mergeObjects( {}, self.options.fieldOptions, fieldOptionsObj, {focusOnRelated: false} );
+          fieldOptions = mergeObjects( {}, fieldOptionsObj, {focusOnRelated: false} );
 
     let currentFieldName = '',
         currentFieldType = '';

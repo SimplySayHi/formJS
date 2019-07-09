@@ -614,7 +614,7 @@
         function isValidForm() {
             var fieldOptionsObj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
             var self = this, formEl = self.formEl, obj = (0, _helper.mergeObjects)({}, _helper.validateFormObjDefault), fieldOptions = (0, 
-            _helper.mergeObjects)({}, self.options.fieldOptions, fieldOptionsObj, {
+            _helper.mergeObjects)({}, fieldOptionsObj, {
                 focusOnRelated: false
             });
             var currentFieldName = "", currentFieldType = "";
@@ -925,7 +925,7 @@
             }).then(function(obj) {
                 if (obj.fieldEl) {
                     _helper.executeCallback.call(self, fieldOptions.onValidation, [ obj ], {
-                        fieldOptions: fieldOptions
+                        fieldOptions: fieldOptionsObj
                     });
                 }
                 return obj;
@@ -944,11 +944,11 @@
             var fieldOptionsObj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
             var self = this, fieldOptions = (0, _helper.mergeObjects)({}, self.options.fieldOptions, fieldOptionsObj);
             return new Promise(function(resolve) {
-                var prom = _isValidForm.isValidForm.call(self, fieldOptions);
+                var prom = _isValidForm.isValidForm.call(self, fieldOptionsObj);
                 resolve(prom);
             }).then(function(obj) {
                 _helper.executeCallback.call(self, fieldOptions.onValidation, obj.fields, {
-                    fieldOptions: fieldOptions
+                    fieldOptions: fieldOptionsObj
                 });
                 return obj;
             });

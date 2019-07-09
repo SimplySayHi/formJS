@@ -16,7 +16,7 @@ export function validateField( fieldElem, fieldOptionsObj = {} ){
     }).then(obj => {
 
         if( obj.fieldEl ){
-            executeCallback.call( self, fieldOptions.onValidation, [obj], {fieldOptions} );
+            executeCallback.call( self, fieldOptions.onValidation, [obj], {fieldOptions: fieldOptionsObj} );
         }
         return obj;
         
