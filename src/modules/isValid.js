@@ -15,9 +15,8 @@ export function isValid( fieldEl, fieldOptions = {} ){
         attrValidationsResult = isValidValue,
         obj = { result: isValidValue };
 
-    if( !isValidValue ){
+    if( !obj.result ){
         obj.errors = { empty: true };
-        obj.result = false;
         return Promise.resolve(obj);
     }
 
@@ -26,19 +25,19 @@ export function isValid( fieldEl, fieldOptions = {} ){
         // FOR data-* ATTRIBUTES -> REMOVE "data-" AND TRANSFORM TO CAMELCASE
         let attrName = toCamelCase( attr.name.replace('data-', '') ),
             attrValue = attr.value,
-            isTypeValueWithFn = attrName === 'type' && typeof validationRulesAttributes[attrValue] === 'function',
+            isAttrValueWithFn = attrName === 'type' && typeof validationRulesAttributes[attrValue] === 'function',
             isAttrNameWithFn = typeof validationRulesAttributes[attrName] === 'function';
 
-        if( isTypeValueWithFn || isAttrNameWithFn ){
+        if( isAttrValueWithFn || isAttrNameWithFn ){
 
             let extraValObj = {
-                    attrName: (isTypeValueWithFn ? attrValue : attrName),
+                    attrName: (isAttrValueWithFn ? attrValue : attrName),
                     attrValue: attrValue,
                     fieldEl,
                     fieldOptions
                 };
 
-            if( isTypeValueWithFn || attrName === 'requiredFrom' ){
+            if( isAttrValueWithFn || attrName === 'requiredFrom' ){
                 // THESE VALIDATIONS MUST RUN BEFORE ALL OTHERS
                 attrValidations.unshift( extraValObj );
             } else {

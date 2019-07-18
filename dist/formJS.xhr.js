@@ -547,23 +547,22 @@
             var attrValidations = [], attrValidationsResult = isValidValue, obj = {
                 result: isValidValue
             };
-            if (!isValidValue) {
+            if (!obj.result) {
                 obj.errors = {
                     empty: true
                 };
-                obj.result = false;
                 return Promise.resolve(obj);
             }
             fieldAttributes.forEach(function(attr) {
-                var attrName = (0, _helper.toCamelCase)(attr.name.replace("data-", "")), attrValue = attr.value, isTypeValueWithFn = attrName === "type" && typeof _validationRules.validationRulesAttributes[attrValue] === "function", isAttrNameWithFn = typeof _validationRules.validationRulesAttributes[attrName] === "function";
-                if (isTypeValueWithFn || isAttrNameWithFn) {
+                var attrName = (0, _helper.toCamelCase)(attr.name.replace("data-", "")), attrValue = attr.value, isAttrValueWithFn = attrName === "type" && typeof _validationRules.validationRulesAttributes[attrValue] === "function", isAttrNameWithFn = typeof _validationRules.validationRulesAttributes[attrName] === "function";
+                if (isAttrValueWithFn || isAttrNameWithFn) {
                     var extraValObj = {
-                        attrName: isTypeValueWithFn ? attrValue : attrName,
+                        attrName: isAttrValueWithFn ? attrValue : attrName,
                         attrValue: attrValue,
                         fieldEl: fieldEl,
                         fieldOptions: fieldOptions
                     };
-                    if (isTypeValueWithFn || attrName === "requiredFrom") {
+                    if (isAttrValueWithFn || attrName === "requiredFrom") {
                         attrValidations.unshift(extraValObj);
                     } else {
                         attrValidations.push(extraValObj);
