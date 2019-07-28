@@ -1,15 +1,23 @@
-import { _executeCallback, _isPlainObject, _mergeObjects } from './helper.js';
 
-import { _xhrCall } from './xhrCall.js';
+import { isPlainObject, validateFormObjDefault } from './helper.js';
+import { ajaxCall }     from './ajaxCall.js';
+//import { ajaxCall }     from './ajaxCallXhr.js';
 
-export function submit( options = {}, event = null ){
+export function submit( event ){
+
     const self = this,
+          options = self.options,
+          isAjaxForm = options.formOptions.ajaxSubmit,
           formEl = self.formEl,
           btnEl = formEl.querySelector('[type="submit"]'),
           eventPreventDefault = ( enableBtn = true ) => {
               if( btnEl && enableBtn ){ btnEl.disabled = false; }
               if( event ){ event.preventDefault(); }
           };
+
+    if( isAjaxForm ){
+        eventPreventDefault(false);
+    }
 
     if( btnEl ){
         if( btnEl.disabled ){
@@ -19,48 +27,30 @@ export function submit( options = {}, event = null ){
         btnEl.disabled = true;
     }
     
-    options.fieldOptions = _mergeObjects( {}, self.options.fieldOptions, options.fieldOptions || {} );
-    options.formOptions = _mergeObjects( {}, self.options.formOptions, options.formOptions || {} );
-    
-    const isAjaxForm = options.formOptions.ajaxSubmit,
-          handleValidation = options.fieldOptions.handleValidation,
-          formValidation = (handleValidation ? self.isValidForm( options ) : { result: true });
+    const handleValidation = options.fieldOptions.handleValidation,
+          formValidationPromise = (handleValidation ? self.validateForm() : Promise.resolve(validateFormObjDefault));
 
-    if( handleValidation ){
-        _executeCallback.call( self, options.fieldOptions.onValidation, formValidation.fields );
-    }
-
-    if( !formValidation.result ){
-        eventPreventDefault();
-        return false;
-    }
-    
-    let formDataJSON = (isAjaxForm ? self.getFormJSON() : null),
-        callbacksBeforeSend = [],
-        beforeSendOpt = options.formOptions.beforeSend;
-
-    if( typeof beforeSendOpt === 'function' || Array.isArray(beforeSendOpt) ){
-        let beforeSendData = {
-                stopExecution: false
-            },
+    formValidationPromise.then(formValidation => {
+        if( !formValidation.result ){
+            eventPreventDefault();
+            return false;
+        }
+        
+        let formDataObj = (isAjaxForm ? self.getFormData() : null),
+            callbacksBeforeSend = options.formOptions.beforeSend,
+            beforeSendData = { stopExecution: false },
             stopCallbackLoop = false;
 
-        if( formDataJSON ){
-            beforeSendData.formData = formDataJSON;
-        }
-
-        if( typeof beforeSendOpt === 'function' ){
-            callbacksBeforeSend.push( beforeSendOpt );
-        } else if( Array.isArray(beforeSendOpt) ) {
-            callbacksBeforeSend = beforeSendOpt;
+        if( formDataObj ){
+            beforeSendData.formData = formDataObj;
         }
 
         callbacksBeforeSend.forEach(function(cbFn){
             if( !stopCallbackLoop ){
-                let beforeSendFn = cbFn.call( self, beforeSendData );
+                let beforeSendFn = cbFn.call( self, beforeSendData, options );
                 
-                if( _isPlainObject(beforeSendFn) ){
-                    formDataJSON = beforeSendFn.formData || formDataJSON;
+                if( isPlainObject(beforeSendFn) ){
+                    formDataObj = beforeSendFn.formData || formDataObj;
                     if( beforeSendFn.stopExecution ){
                         stopCallbackLoop = true;
                     }
@@ -72,19 +62,10 @@ export function submit( options = {}, event = null ){
             eventPreventDefault();
             return false;
         }
-    }
+        
+        if( isAjaxForm ){
+            ajaxCall.call(self, formDataObj);
+        }
+    });
     
-    if( isAjaxForm ){
-
-        // AJAX FORM SUBMIT
-        eventPreventDefault(false);
-        _xhrCall.call( self, formDataJSON );
-
-    } else if( !event ){
-
-        // TRIGGER SUBMIT EVENT
-        let submitEvent = new Event('submit', {'bubbles': true, 'cancelable': true});
-        formEl.dispatchEvent(submitEvent);
-
-    }
 }

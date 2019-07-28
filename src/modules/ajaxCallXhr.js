@@ -1,17 +1,21 @@
-import { _executeCallback, _mergeObjects, _serialize } from './helper.js';
 
-export function _xhrCall( formDataJSON ){
+import { executeCallback, mergeObjects, serializeObject } from './helper.js';
+
+// AJAX CALL USING XMLHttpRequest API
+export function ajaxCall( formDataObj ){
+
     let self = this,
         formEl = self.formEl,
         fieldOptions = self.options.fieldOptions,
         formOptions = self.options.formOptions,
         btnEl = formEl.querySelector('[type="submit"]'),
         timeoutTimer,
-        xhrOptions = _mergeObjects( {}, formOptions.ajaxOptions );
+        xhrOptions = mergeObjects( {}, formOptions.ajaxOptions ),
+        isMultipart = xhrOptions.contentType === 'multipart/form-data';
 
-    xhrOptions.data = formDataJSON;
+    xhrOptions.data = formDataObj;
     
-    if( xhrOptions.contentType === 'multipart/form-data' && fieldOptions.handleFileUpload ){
+    if( isMultipart && fieldOptions.handleFileUpload ){
         let formDataMultipart = new FormData();
         
         for(let key in xhrOptions.data){
@@ -27,8 +31,9 @@ export function _xhrCall( formDataJSON ){
         
         xhrOptions.data = formDataMultipart;
     }
-    
+
     let XHR = new XMLHttpRequest(),
+        ajaxResponse = {},
         parseResponse = function( xhr ){
             let data = xhr.responseText,
                 getJSON = function(){
@@ -51,51 +56,37 @@ export function _xhrCall( formDataJSON ){
             
             return (getJSON() || getXML_HTML() || data);
         },
-        loadendFn = function(e) {
-            let xhr = e.target,
-                responseData = parseResponse(xhr);
-
-            let readyStateOK = xhr.readyState === 4,
-                statusOK = xhr.status === 200,
-                ajaxData = {
-                    dataOrXHR:      ( readyStateOK && statusOK ? responseData   : xhr           ),
-                    status:         ( readyStateOK && statusOK ? 'success'      : 'error'       ),
-                    XHRorResponse:  ( readyStateOK && statusOK ? xhr            : responseData  )
-                };
-            
-            if( timeoutTimer ){
-                window.clearTimeout( timeoutTimer );
-            }
-
-            btnEl.disabled = false;
-
-            _executeCallback.call( self, formOptions.onSubmitComplete, ajaxData );
-        },
-        loadFn = function(e) {
+        successFn = function(e) {
             let xhr = e.target;
 
             if( xhr.status === 200 ){
-                let responseData = parseResponse(xhr),
-                    ajaxData = { data: responseData, status: 'success', response: xhr };
-
-                _executeCallback.call( self, formOptions.onSubmitSuccess, ajaxData );
+                let responseData = parseResponse(xhr);
+                ajaxResponse = { status: 'success', code: xhr.status, data: responseData };
+                executeCallback.call( self, formOptions.onSubmitSuccess, ajaxResponse );
             } else {
                 errorFn(e);
             }
         },
         errorFn = function(e) {
-            let xhr = e.target,
-                ajaxData = { errorThrown: xhr.statusText, status: 'error', response: xhr };
+            let xhr = e.target;
+            ajaxResponse = { status: 'error', code: xhr.status, message: xhr.statusText };
+            executeCallback.call( self, formOptions.onSubmitError, ajaxResponse );
+        },
+        completeFn = function(e) {
+            if( timeoutTimer ){
+                window.clearTimeout( timeoutTimer );
+            }
 
-            _executeCallback.call( self, formOptions.onSubmitError, ajaxData );
+            btnEl.disabled = false;
+            executeCallback.call( self, formOptions.onSubmitComplete, ajaxResponse );
         };
     
-    XHR.addEventListener('loadend', loadendFn,  false);
-    XHR.addEventListener('load',    loadFn,     false);
+    XHR.addEventListener('load',    successFn, false);
     XHR.addEventListener('error',   errorFn,    false);
+    XHR.addEventListener('loadend', completeFn,  false);
     
     if( xhrOptions.method === 'GET' ){
-        xhrOptions.url += ( /\?/.test(xhrOptions.url) ? '&' : '?' ) + _serialize( xhrOptions.data );
+        xhrOptions.url += ( /\?/.test(xhrOptions.url) ? '&' : '?' ) + serializeObject( xhrOptions.data );
         if( xhrOptions.cache === false ){
             xhrOptions.url +=  (/\&/.test(xhrOptions.url) ? '&' : '') + '_=' + (new Date().getTime());
         }
@@ -119,6 +110,10 @@ export function _xhrCall( formDataJSON ){
     
     for( let h in xhrOptions.headers ){
         XHR.setRequestHeader( h, xhrOptions.headers[h] );
+    }
+
+    if( !isMultipart ){
+        xhrOptions.data = JSON.stringify(xhrOptions.data);
     }
     
     XHR.send( (xhrOptions.method === 'GET' ? null : xhrOptions.data) );

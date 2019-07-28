@@ -1,9 +1,11 @@
-export function _formStartup(){
+
+export function formStartup(){
+
     const self = this,
           formEl = self.formEl;
 
-    if( !formEl || !formEl.matches('[novalidate]') ){ return false; }
-    
+    if( !formEl.matches('[novalidate]') ){ return null; }
+
     let fieldOptions = self.options.fieldOptions,
         formOptions = self.options.formOptions;
 
@@ -14,7 +16,7 @@ export function _formStartup(){
         if( fieldOptions.strictHtmlValidation ){
             
             // maxlength
-            // BUGGY IN ANDROID BROWSERS
+            // MAXLENGTH IS BUGGY IN ANDROID BROWSERS
             formEl.addEventListener('keypress', self.listenerCallbacks.keypressMaxlength, false);
 
             // data-type="number"
@@ -26,11 +28,6 @@ export function _formStartup(){
         if( fieldOptions.preventPasteFields && formEl.querySelectorAll( fieldOptions.preventPasteFields ).length ){
             // INIT EVENT LISTENER FOR "PASTE" EVENT TO PREVENT IT ON SPECIFIED FIELDS
             formEl.addEventListener('paste', self.listenerCallbacks.pastePrevent, false);
-        }
-
-        if( formEl.querySelectorAll('[data-char-count]').length > 0 ){
-            // INIT EVENT LISTENER FOR FIELDS WITH "data-char-count" ATTRIBUTE
-            formEl.addEventListener('input', self.listenerCallbacks.charCount, false);
         }
 
         // INIT EVENTS LISTENER ( AS IN fieldOptions )
@@ -48,7 +45,13 @@ export function _formStartup(){
 
         if( formOptions.ajaxSubmit ){
             if( formEl.getAttribute('enctype') ){
+
+                // FOR XMLHttpRequest API
                 formOptions.ajaxOptions.contentType = formEl.getAttribute('enctype');
+
+                // FOR fetch API
+                formOptions.ajaxOptions.headers['Content-Type'] = formEl.getAttribute('enctype');
+                
             }
 
             if( formEl.getAttribute('method') ){

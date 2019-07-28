@@ -1,47 +1,45 @@
-import { _fieldsStringSelector, _mergeObjects } from './helper.js';
 
-export function isValidForm( options = {} ){
+import { fieldsStringSelector, mergeObjects, validateFormObjDefault } from './helper.js';
+import { isValidField } from './isValidField.js';
+
+export function isValidForm( fieldOptionsObj = {} ){
+
     const self = this,
-          formEl = self.formEl;
+          formEl = self.formEl,
+          obj = mergeObjects({}, validateFormObjDefault),
+          fieldOptions = mergeObjects( {}, fieldOptionsObj, {focusOnRelated: false} );
 
-    if( formEl === null || !formEl.matches('[novalidate]') ){ return false; }
-    
-    var fieldOptions = _mergeObjects( {}, self.options.fieldOptions, options.fieldOptions || {} ),
-        obj = {
-            fields: [],
-            result: true
-        },
-        currentFieldName = '',
+    let currentFieldName = '',
         currentFieldType = '';
-    
-    if( typeof fieldOptions.focusOnRelated === 'undefined' ){
-        fieldOptions.focusOnRelated = false;
-    }
-    
-    Array.from( formEl.querySelectorAll(_fieldsStringSelector) ).forEach(function( fieldEl ){
+
+    const fieldsList = Array.from( formEl.querySelectorAll(fieldsStringSelector) ).filter(fieldEl => {
         let name = fieldEl.name,
-            type = fieldEl.type,
-            fieldData = {
-                field: fieldEl,
-                result: true
-            };
-        
-        if( (name === currentFieldName && type === currentFieldType) ){ return true; }
-        
+            type = fieldEl.type;
+
+        if( name === currentFieldName && type === currentFieldType ){
+            return false;
+        }
+
         if( !fieldEl.matches('[data-required-from]') ){
             currentFieldName = name;
             currentFieldType = type;
         }
-        
-        const fieldResult = self.isValidField( fieldEl, fieldOptions );
-        fieldData.result = fieldResult;
 
-        if( !fieldResult ){
-            obj.result = false;
-        }
-        
-        obj.fields.push( fieldData );
+        return true;
     });
     
-    return obj;
+    return Promise.all( fieldsList.map(function( fieldEl ){
+        
+        return isValidField.call( self, fieldEl, fieldOptions );
+
+    }) ).then(list => {
+
+        let areAllFieldsValid = list.filter(fieldObj => !fieldObj.result).length === 0;
+        obj.result = areAllFieldsValid;
+        obj.fields = list;
+
+        return obj;
+
+    });
+
 }

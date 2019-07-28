@@ -2,43 +2,57 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>formJS - Documentation</title>
-    <meta name="description" content="">
-    <meta name="author" content="">
-    
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Documentation | formJS - Javascript Form Validation. Made Easy</title>
+    <meta name="description" content="Javascript Form Validation. Made Easy">
+    <meta name="keywords" content="form, validation, javascript, plugin">
+    <meta name="author" content="Valerio Di Punzio">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great|Raleway:200" rel="stylesheet">
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/demo.css">
 </head>
 
 <body>
     
     <div id="top" class="container mb-5">
+
         <div id="menu" class="position-sticky text-right">
             <div class="dropdown d-inline-block mt-3">
                 <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2" data-toggle="dropdown" type="button">
                     menu
                 </button>
                 <span class="dropdown-menu">
-                    <a class="dropdown-item" href="formJS.zip">Download</a>
+                    <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS/archive/master.zip">Download Latest Version</a>
                     <a class="dropdown-item" href="demos.html">Demos</a>
                     <a class="dropdown-item" href="#browsers-support">Browsers Support</a>
-                    <a class="dropdown-item" href="#dependencies">Dependencies</a>
+                    <a class="dropdown-item" href="#usage">Usage</a>
                     <a class="dropdown-item" href="#html">HTML</a>
                     <a class="dropdown-item" href="#initialization">Initialization</a>
                     <a class="dropdown-item" href="#options-list">Options</a>
                     <a class="dropdown-item" href="#methods">Methods</a>
-                    <a class="dropdown-item" href="#builtin-validations">Validation Rules &amp; Utilities</a>
+                    <a class="dropdown-item" href="#builtin-validations">Validation Rules</a>
+                    <a class="dropdown-item" href="#builtin-errors">Validation Errors</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS" target="_blank">View on Github</a>
                     <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS/issues" target="_blank">Report a Bug</a>
                 </span>
             </div>
         </div>
+
+        <div id="message" class="text-center">
+            <div role="alert" class="alert alert-warning d-inline-block mt-5 py-4">
+                <b>&#9888; <u>IMPORTANT NOTE</u> &#9888;</b>
+                <br /><br />
+                At the time of publishing ( July 28th 2019 ) AbortController polyfill is missing from <a href="https://polyfill.io" target="_blank"> polyfill.io</a>.
+                <br />
+                Check <a href="https://github.com/Financial-Times/polyfill-library/pull/59" target="_blank">this pull request</a> for updates.
+                <br />
+                In the meanwhile you can safely use formJS XHR version.
+            </div>
+        </div>
+        
         <div id="hero" class="text-center mb-5">
             <div>
                 <p class="d-inline-block my-4">
@@ -51,33 +65,31 @@
                     </a>
                 </p>
             </div>
-            <h1>formJS</h1>            
+            <h1>formJS</h1>
             <p>
+                Javascript Form Validation. Made Easy
+            </p>
+            <div class="mt-5">
+                <p class="d-inline-block mb-1">
                 Version 
-                <span class="dropdown d-inline-block ml-1">
+                </p>
+                <div class="dropdown d-inline-block ml-1">
                     <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button">
-                        2.3.3
+                        3.0.0
                     </button>
                     <span class="dropdown-menu w-100 py-1">
-                        <a class="dropdown-item px-2" href="/plugins/formJS/2.3.2/">2.3.2</a>
-                        <a class="dropdown-item px-2" href="/plugins/formJS/2.3.1/">2.3.1</a>
-                        <a class="dropdown-item px-2" href="/plugins/formJS/2.3.0/">2.3.0</a>
-                        <a class="dropdown-item px-2" href="/plugins/formJS/2.2.1/">2.2.1</a>
-                        <a class="dropdown-item px-2" href="/plugins/formJS/2.2.0/">2.2.0</a>
-                        <a class="dropdown-item px-2" href="/plugins/formJS/2.1.0/">2.1.0</a>
-                        <a class="dropdown-item px-2" href="/plugins/formJS/2.0.0/">2.0.0</a>
-                        <a class="dropdown-item px-2" href="/plugins/formJS/1.2.0/">1.2.0</a>
-                        <a class="dropdown-item px-2" href="/plugins/formJS/1.1.2/">1.1.2</a>
+                        <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/2.3.3/">2.3.3</a>
+                        <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/1.2.0/">1.2.0</a>
                     </span>
-                </span>
+                </div>
                 <br />
                 Documentation
-            </p>
+            </div>
         </div>
 
         <!-- Demo -->
         <div id="demo" class="panel-collapsible row">
-            <div class="col-12 col-sm-6 col-md-4 mx-auto py-3">
+            <div class="col-12 col-md-7 col-lg-6 col-xl-5 mx-auto py-3">
                 <div class="panel no-bg">
                     <div class="card-header bg-white text-dark bg-white">
                         <div><p>Demo</p></div>
@@ -85,112 +97,49 @@
                     <div class="card-body">
                         <form action="json/data.json" name="my-form-4" novalidate>
                             <div>
-                                <div data-formjs-question="" class="form-group">
+                                <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
-                                        <input name="name" type="text" class="form-control" required="" />
+                                        <input name="name" type="text" class="form-control" required />
                                         <label>Name</label>
                                     </div>
                                     <div class="field-error-message small">Write your name!</div>
                                 </div>
-                                <div data-formjs-question="" class="form-group">
+                                <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
-                                        <input name="surname" type="text" class="form-control" required="" />
-                                        <label>Surname</label>
-                                    </div>
-                                    <div class="field-error-message small">Write your surname!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="fiscalCode" type="text" data-subtype="fiscal-code" class="form-control text-uppercase" required="" />
-                                        <label>Fiscal Code</label>
-                                    </div>
-                                    <div class="field-error-message small">Check your fiscal code, it is not valid!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="vatNumber" type="text" data-subtype="vat-number" class="form-control" required="" />
-                                        <label>VAT Number</label>
-                                    </div>
-                                    <div class="field-error-message small">Check your VAT number, it is not valid!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="username" type="text" data-subtype="username" class="form-control" required="" />
+                                        <input name="username" type="text" data-subtype="username" class="form-control" required />
                                         <label>Username</label>
                                     </div>
-                                    <div class="field-error-message small">Username must have at least 3 characters (no special chars allowed)!</div>
+                                    <div class="field-error-message small">Username must have at least 3 chars ( no special chars allowed )!</div>
                                 </div>
-                                <div data-formjs-question="" class="form-group">
+                                <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
-                                        <input name="email" type="email" class="form-control" required="" />
+                                        <input name="email" type="email" class="form-control" required />
                                         <label>Email</label>
                                     </div>
                                     <div class="field-error-message small">Check your email address, it is not valid!</div>
                                 </div>
-                                <div data-formjs-question="" class="form-group">
+                                <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
-                                        <input name="mobileNumber" type="text" data-subtype="mobile-number" class="form-control" required="" />
-                                        <label>Mobile number</label>
-                                    </div>
-                                    <div class="field-error-message small">Check your mobile number, it is not valid!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="landlineNumber" type="text" data-subtype="landline-number" class="form-control" data-validate-if-filled="" />
-                                        <label>Landline number</label>
-                                    </div>
-                                    <div class="field-error-message small">Check your landline number, it is not valid!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="zipCode" type="text" data-subtype="cap" class="form-control" data-validate-if-filled="" />
-                                        <label>ZIP</label>
-                                    </div>
-                                    <div class="field-error-message small">Check your ZIP code, it is not valid!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="websiteUrl" type="text" data-subtype="url" class="form-control" data-validate-if-filled="" />
+                                        <input name="websiteUrl" type="text" data-subtype="url" class="form-control" data-validate-if-filled />
                                         <label>Website</label>
                                     </div>
                                     <div class="field-error-message small">Check your website url, it is not valid!</div>
                                 </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="date" type="text" data-subtype="date" class="form-control" data-validate-if-filled="" />
-                                        <label>Date</label>
-                                    </div>
-                                    <div class="field-error-message small">Check the date, it is not valid!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="hexColor" type="text" data-subtype="hex-color" class="form-control" data-validate-if-filled="" />
-                                        <label>HEX color</label>
-                                    </div>
-                                    <div class="field-error-message small">Check your HEX color, it is not valid!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="test" type="number" min="10" max="50" data-exact-length="2" class="form-control" required="" />
-                                        <label>Number ( min 10 - max 50 )</label>
-                                    </div>
-                                    <div class="field-error-message small">Check your number, it is not valid (min 10, max 50, exact-length 2)!</div>
-                                </div>
-                                <div data-formjs-question="" class="form-group">
+                                <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
                                         <textarea name="message" class="form-control" rows="3" maxlength="100" data-char-count></textarea>
                                         <label>Message ( <span data-char-length></span>/<span data-char-maxlength></span> )</label>
                                     </div>
                                 </div>
-                                <div data-formjs-question="" class="form-group">
+                                <div data-formjs-question class="form-group">
                                     <div class="input-container form-check">
-                                        <input id="radio-5-20-6-1" name="radio-list-1" value="1" type="radio" class="form-check-input" required="" />
+                                        <input required id="radio-5-20-6-1" name="radio-list-1" value="1" type="radio" class="form-check-input" />
                                         <label for="radio-5-20-6-1" class="form-check-label">
                                             Answer One
                                         </label>
                                     </div>
                                     <div class="input-container form-check">
-                                        <input id="radio-5-20-6-2" name="radio-list-1" value="2" type="radio" class="form-check-input" required="" />
+                                        <input required id="radio-5-20-6-2" name="radio-list-1" value="2" type="radio" class="form-check-input" />
                                         <label for="radio-5-20-6-2" class="form-check-label">
                                             Answer Two
                                         </label>
@@ -198,7 +147,7 @@
                                     <div class="input-group">
                                         <span class="input-group-prepend">
                                             <div class="input-group-text">
-                                                <input id="radio-5-200-6-3" name="radio-list-1" value="3" data-require-more="" type="radio" required="" />
+                                                <input id="radio-5-200-6-3" name="radio-list-1" value="3" required data-require-more="" type="radio" />
                                                 <label for="radio-5-200-6-3">&nbsp;Other:</label>
                                             </div>
                                         </span>
@@ -206,26 +155,26 @@
                                     </div>
                                     <div class="field-error-message small">You must choose an answer ( and fill the text field if you selected "Other" )!</div>
                                 </div>
-                                <div data-formjs-question="" class="form-group">
+                                <div data-formjs-question class="form-group">
                                     <div class="answers-box">
                                         <div class="small">
                                             I agree with the <a href="">Privacy Policy</a>.
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input id="privacyCheck-01" class="form-check-input" name="privacyCheck" type="radio" value="accept" required="" />
+                                            <input id="privacyCheck-01" class="form-check-input" name="privacyCheck" type="radio" value="accept" required />
                                             <label for="privacyCheck-01" class="form-check-label">Yes</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input id="privacyCheck-02" class="form-check-input" name="privacyCheck" type="radio" value="" required="" />
+                                            <input id="privacyCheck-02" class="form-check-input" name="privacyCheck" type="radio" value="" required />
                                             <label for="privacyCheck-02" class="form-check-label">No</label>
                                         </div>
                                     </div>
                                     <div class="field-error-message small">You must agree!</div>
                                 </div>
-                                <div data-formjs-question="" class="form-group">
+                                <div data-formjs-question class="form-group">
                                     <div class="answers-box">
                                         <div class="form-check">
-                                            <input id="regulationCheck" class="form-check-input" name="regulationCheck" type="checkbox" value="read" required="" />
+                                            <input id="regulationCheck" class="form-check-input" name="regulationCheck" type="checkbox" value="read" required />
                                             <label for="regulationCheck" class="form-check-label">I have read the <a href="#">Regulation</a></label>
                                         </div>
                                     </div>
@@ -245,15 +194,22 @@
         <!-- Demo Links -->
         <div id="demo-links" class="text-center mt-5">
             <p>
-                <a href="demos.html">More Demos</a>
+                <a href="demos.html">More Demos</a> | 
+                <a href="test.html">Tests</a>
             </p>
         </div>
         
         <!-- Download -->
         <div id="download" class="text-center">
-            <h3>Download</h3>
+            <h3>Downloads</h3>
             <p>
-                <a href="formJS.zip"><i class="fa fa-download"></i> Download the zip package</a>
+                <a href="https://github.com/SimplySayHi/formJS/archive/master.zip"><i class="fa fa-download"></i> Download Latest Version</a>
+                <br class="d-block mt-2" />
+                <a href="https://github.com/SimplySayHi/formJS/releases" target="_blank">Go To Releases Page</a>
+            </p>
+            <h3>CDNs</h3>
+            <p>
+                <a href="https://www.jsdelivr.com/package/gh/simplysayhi/formJS" target="_blank">jsDelivr</a>
             </p>
         </div>
         
@@ -261,26 +217,29 @@
         <div id="intro">
             <h2>Intro</h2>
             <p>
-                This module lets you validate forms.<br />
-                You can specify form/field options to:
+                formJS lets you validate and manage forms.<br />
+                You can specify:
             </p>
             <ul>
-            <li>
-                skip feedback on UI
-            </li>
-            <li>
-                specify CSS class(es) for dirty/error/valid fields
-            </li>
-            <li>
-                specify which events will fire the validation
-            </li>
-            <li>
-                manage AJAX calls: handle JSON data, change settings and set callbacks
-            </li>
-            <li>
-                and more...
-            </li>
-        </ul>
+                <li>
+                    Validation rules ( also async ), errors and callback(s)
+                </li>
+                <li>
+                    Custom CSS class(es) for dirty/error/valid fields
+                </li>
+                <li>
+                    Events on which the validation will fire
+                </li>
+                <li>
+                    How to collect data to send
+                </li>
+                <li>
+                    AJAX call callbacks
+                </li>
+                <li>
+                    and more...
+                </li>
+            </ul>
         </div>
         
         <!-- Browsers Support -->
@@ -300,78 +259,64 @@
                     Internet Explorer 10+ / Edge <span class="text-yellow">*</span>
                 </li>
                 <li>
-                    Safari
+                    Safari 9+
                 </li>
             </ul>
             <hr />
             <p>
                 <span class="text-yellow">*</span> for compatibility with IE 10/11 and old versions of Edge you have to load some JS polyfills ( from <a href="https://polyfill.io" target="_blank">polyfill.io</a> or else ):<br />
-                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code> <code>WeakMap</code>
+                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>AbortController</code> <code>fetch</code>
             </p>
             <pre>
-&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"&gt;&lt;/script&gt;</pre>
+&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch"&gt;&lt;/script&gt;</pre>
+            <br />
+            <p>
+                If you are using the version with XMLHttpRequest ( formJS.xhr.js or formJS.xhr.min.js ) you can load these ( without support for Fetch API and related ):<br />
+                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Promise</code>
+            </p>
+            <pre>
+&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise"&gt;&lt;/script&gt;</pre>
         </div>
         
-        <!-- Dependencies -->
-        <div id="dependencies">
-            <h3 class="sticky-title">Dependencies</h3>
+        <!-- Usage -->
+        <div id="usage">
+            <h3 class="sticky-title">Usage</h3>
+            <p>
+                Include the plugin script in your page ( examples below from CDN ).<br />
+                You can inculde the standard version ( using fetch API for AJAX call ):
+            </p>
+            <div>
+            <pre>
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.0.0/dist/formJS.min.js"&gt;&lt;/script&gt;
+</pre>
+            <p>
+                or the XHR version ( using XMLHttpRequest API for AJAX call ):
+            </p>
+            <pre>
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.0.0/dist/formJS.xhr.min.js"&gt;&lt;/script&gt;
+</pre>
+            </div>
+            <p>
+                From local, you can find the JS file <code>dist/formJS.min.js</code> or <code>dist/formJS.xhr.min.js</code>
+            </p>
             <p>
                 No dependencies.<br />
                 <span class="small">This demo is developed with Bootstrap CSS but it is not a dependency.</span>
             </p>
-            <p>
-                Include the formJS script in your page:
-            </p>
-            <div>
-                    <pre>
-&lt;!-- FORM JS --&gt;
-&lt;script src="dist/formJS.min.js"&gt;&lt;/script&gt;</pre>
-            </div>
         </div>
         
         <!-- HTML -->
         <div id="html">
             <h3 class="sticky-title">HTML</h3>
             <p>
-                This is the basic HTML structure to make the validation works ( Bootstrap CSS classes are optional ).<br />
-                Some notations about form attributes:
-            </p>
-            <ul>
-                <li class="my-2">
-                    <code>novalidate</code> ( required  ) enables JS field validation
-                </li>
-            </ul>
-            <p>
-                And some notations about field attributes:
-            </p>
-            <ul>
-                <li class="my-2">
-                    <code>data-formjs-question</code> ( optional empty attribute ) used for visual feedback on valid/invalid/dirty fields and/or character count functionality ( to be used on a container element for the field )
-                </li>
-                <li class="my-2">
-                    <code>required</code> ( required  ) for fields that require an answer
-                </li>
-                <li class="my-2">
-                    <code>type</code> ( required )
-                </li>
-                <li class="my-2">
-                    <code>data-type</code> ( optional ) by now only "number" is supported. See "strictHtmlValidation" option in <a href="#field-options">Field Options</a> section for details. 
-                </li>
-                <li class="my-2">
-                    <code>data-subtype</code> ( optional ) for special field types ( eg: VAT number, fiscal code, etc - see the <a href="#builtin-validations">full list</a> )
-                </li>
-                <li class="my-2">
-                    <code>data-exclude-json</code> ( optional empty attribute ) used to avoid the plugin to take in consideration the field when building the JSON ( used inside getFormJSON method )
-                </li>
-            </ul>
-            <p>
-                Below, the HTML example:
+                This is the basic HTML structure to make the validation works.<br />
+                <span class="small">( Bootstrap CSS classes are optional )</span>
             </p>
             <pre>
 &lt;form action="/mypath/mypage.php" method="POST" name="my-form-example" novalidate&gt;
 
     &lt;!-- BASIC REQUIRED TEXT INPUT --&gt;
-    &lt;div data-formjs-question=""&gt;
+    &lt;div data-formjs-question&gt;
         &lt;div class="answers-box form-group"&gt;
             &lt;input name="myName" type="text" class="form-control" required /&gt;
             &lt;label&gt;Name&lt;/label&gt;
@@ -380,7 +325,7 @@
     &lt;/div&gt;
     
     &lt;!-- REQUIRED FIELD WITH HTML STANDARD TYPE ( EMAIL ) --&gt;
-    &lt;div data-formjs-question="" class="form-group"&gt;
+    &lt;div data-formjs-question class="form-group"&gt;
         &lt;div class="answers-box"&gt;
             &lt;input name="myEmail" type="email" class="form-control" required /&gt;
             &lt;label&gt;Email&lt;/label&gt;
@@ -391,7 +336,7 @@
     &lt;!-- REQUIRED FIELD WITH SPECIAL TYPE:
          BASIC TYPE IS text
          SPECIAL TYPE ( NAMED SUBTYPE ) IS INSIDE data-subtype ATTRIBUTE --&gt;
-    &lt;div data-formjs-question="" class="form-group"&gt;
+    &lt;div data-formjs-question class="form-group"&gt;
         &lt;div class="answers-box"&gt;
             &lt;input name="myMobileNumber" type="text" data-subtype="mobile-number" class="form-control" required /&gt;
             &lt;label&gt;Mobile number&lt;/label&gt;
@@ -403,16 +348,16 @@
          BASIC TYPE IS text
          SPECIAL TYPE ( NAMED SUBTYPE ) IS INSIDE data-subtype ATTRIBUTE
          FIELD VALUE IS EVALUATED ONLY IF FILLED ( SEE data-validate-if-filled ATTRIBUTE ) --&gt;
-    &lt;div data-formjs-question="" class="form-group"&gt;
+    &lt;div data-formjs-question class="form-group"&gt;
         &lt;div class="answers-box"&gt;
-            &lt;input name="websiteUrl" type="text" data-subtype="url" class="form-control" data-validate-if-filled="" /&gt;
+            &lt;input name="websiteUrl" type="text" data-subtype="url" class="form-control" data-validate-if-filled /&gt;
             &lt;label&gt;Website&lt;/label&gt;
         &lt;/div&gt;
         &lt;div class="field-error-message small"&gt;Check your website url, it is not valid!&lt;/div&gt;
     &lt;/div&gt;
     
     &lt;!-- BASIC TEXT INPUT NOT MANDATORY --&gt;
-    &lt;div data-formjs-question=""&gt;
+    &lt;div data-formjs-question&gt;
         &lt;div class="answers-box form-group"&gt;
             &lt;input name="myInfo" type="text" class="form-control" /&gt;
             &lt;label&gt;Info&lt;/label&gt;
@@ -422,6 +367,40 @@
     &lt;button type="submit" class="btn btn-default"&gt;SEND&lt;/button&gt;
     
 &lt;/form&gt;</pre>
+            <p>
+                Some notes about form / field attributes:
+            </p>
+            <ul>
+                <li class="my-2">
+                    <code>novalidate</code> ( required  ) enables JS field validation
+                </li>
+            </ul>
+            <p>
+                And some notes about field attributes:
+            </p>
+            <ul>
+                <li class="my-2">
+                    <code>data-formjs-question</code> ( optional | empty attribute ) used for visual feedback on valid / invalid / dirty fields ( to be used on a container element for the field )
+                </li>
+                <li class="my-2">
+                    <code>required</code> ( required ) for fields that require an answer.
+                </li>
+                <li class="my-2">
+                    <code>name</code> ( required ) used inside "getFormData" method to collect form data.
+                </li>
+                <li class="my-2">
+                    <code>type</code> ( required ) used for field validation.
+                </li>
+                <li class="my-2">
+                    <code>data-type</code> ( optional ) by now only "number" is supported. See "strictHtmlValidation" option in <a href="#field-options">Field Options</a> section for details. 
+                </li>
+                <li class="my-2">
+                    <code>data-subtype</code> ( optional ) for special field types ( eg: VAT number, fiscal code, etc - see the <a href="#builtin-validations">full list</a> ).
+                </li>
+                <li class="my-2">
+                    <code>data-exclude-data</code> ( optional | empty attribute ) used to avoid the plugin to take in consideration the field when collecting form data ( used inside "getFormData" method ).
+                </li>
+            </ul>
         </div>
         
         <!-- Initialization -->
@@ -431,23 +410,42 @@
                 Here an example of initialization:
             </p>
             <pre>var formEl = document.querySelector('form');
-// or with CSS string selector:
-// var formEl = '.my-container .my-form';
-
-var options = {};
-
-var formInstance = new Form( formEl, options ).init();</pre>
+var options = {...};
+var formInstance = new Form( formEl, options ).init();
+</pre>
             <ul>
                 <li>
-                    formEl: ( required ) must be a <u>single form node</u> ( not a nodelist! ) or a <u>CSS string selector</u>
+                    formEl: ( required ) must be a <u>single form node</u> ( not a nodelist! ) or a <u>CSS string selector</u> <code>var formEl = '.my-container .my-form';</code>
                 </li>
                 <li>
                     options: ( optional ) a JS object with fieldOptions and formOptions ( see <a href="#options-list">Options section</a> )
                 </li>
             </ul>
+            <hr />
+            <p>
+                In some cases you could need to initialize the form in this way to run the "init" method after some time:
+            </p>
+            <pre>var formEl = document.querySelector('form');
+var formInstance = new Form( formEl );
+// ... SOME OTHER CODE ...
+formInstance.init();
+</pre>
+            <hr />
             <p>
                 <b>IMPORTANT</b>: If <code>Form</code> namespace is not available, you can use <code>FormJS</code> namespace.
             </p>
+            <hr />
+            <p>
+                formJS has some more properties:
+            </p>
+            <ul>
+                <li>
+                    isInitialized: whether or not the init method was called on the Form instance.
+                </li>
+                <li>
+                    version: the version number.
+                </li>
+            </ul>
         </div>
         
         <!-- Options -->
@@ -467,7 +465,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
             <!-- Field Options -->
             <div id="field-options">
                 <h3 class="sticky-title mt-0 ml-4em"><span class="small">Field Options</span></h3>
-                <div class="panel panel-default panel-transparent" style="background-color: transparent;">
+                <div class="panel panel-default panel-transparent no-bg">
                     <div class="card-header bg-white text-dark clearfix">
                         <div class="d-flex">
                             <div class="col-4">
@@ -484,20 +482,6 @@ var formInstance = new Form( formEl, options ).init();</pre>
                     <div class="card-body">
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <p class="text-green">checkDirtyField</p>
-                            </div>
-                            <div class="col-3">
-                                boolean
-                            </div>
-                            <div class="col-5">
-                                <p>
-                                    Wether or not to check if the field is dirty ( has some value ) or not.<br />
-                                    If set to true, the "dirty CSS class" will be applied to the container element with data-formjs-question attribute - or the field itself, if not.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4">
                                 <p class="text-green">cssClasses</p>
                             </div>
                             <div class="col-3">
@@ -512,12 +496,21 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                         <span class="text-green">dirty</span>: ( string ) CSS class(es) to be applied if the field "dirty" ( has some value )
                                     </li>
                                     <li>
-                                        <span class="text-green">error</span>: ( string ) CSS class(es) to be applied if the field is not valid
+                                        <span class="text-green">error</span>: ( string ) CSS class(es) to be applied if the field is not valid ( in any error case )
+                                    </li>
+                                    <li>
+                                        <span class="text-green">errorEmpty</span>: ( string ) additional CSS class(es) to be applied if the field value is empty
+                                    </li>
+                                    <li>
+                                        <span class="text-green">errorRule</span>: ( string ) additional CSS class(es) to be applied if the field value does not comply the validation rule
                                     </li>
                                     <li>
                                         <span class="text-green">valid</span>: ( string ) CSS class(es) to be applied if the field is valid
                                     </li>
                                 </ul>
+                                <p>
+                                    These classes are useful to show different error messages based on the error type and / or change the UI.
+                                </p>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -529,7 +522,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    Wether or not to focus on the related (input/select) field when selecting its radio answer 
+                                    Whether or not to focus on the related ( input / select ) field when selecting its radio answer 
                                 </p>
                             </div>
                         </div>
@@ -542,7 +535,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    Wether or not the plugin must handle the file upload. It is a simple file upload via ajax.<br />
+                                    Whether or not the plugin must handle the file upload. It is a simple file upload via ajax.<br />
                                     You must also set the enctype="multipart/form-data" attribute to the form.
                                     <br />
                                     <span class="small">( NOT used if <code>ajaxSubmit: false</code> )</span>
@@ -558,7 +551,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    Wether or not the plugin must handle the fields validation ( as single check and on form submit ).
+                                    Whether or not the plugin must handle the fields validation ( as single check and on form submit ).
                                 </p>
                             </div>
                         </div>
@@ -573,7 +566,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                 <p>
                                     Size limit ( in MB ) for each file to upload.<br />
                                     Set to 0 ( zero ) if you want to disable the size check.<br />
-                                    Inside the field error message container you can put a span (or else) with data-max-file-size attribute to print the size limit
+                                    Can also be set on the specific field via attribute <code>data-max-file-size</code> to set a custom limit.
                                 </p>
                             </div>
                         </div>
@@ -586,6 +579,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             </div>
                             <div class="col-5">
                                 <p>
+                                    Each function:<br /><br />
                                     Fires when the paste event has been prevented on the field(s) ( see "preventPasteFields" option ).
                                     <br />
                                     <span class="small">( NOT fired if <code>handleValidation: false</code> )</span>
@@ -593,6 +587,19 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                 <p>
                                     Additionally, the "this" keyword is bound to the Form instance.
                                 </p>
+                                <div class="card-footer bg-transparent pb-0 px-0">
+                                    <p class="text-green">
+                                        Arguments
+                                    </p>
+                                    <ul>
+                                        <li>
+                                            fieldEl: JS node element
+                                        </li>
+                                        <li>
+                                            tempOptions: temporary options ( this object can be useful when manually validating a field with new options used only for that specific case )
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -604,11 +611,46 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             </div>
                             <div class="col-5">
                                 <p>
+                                    Each function:<br /><br />
                                     Fires just after a field has been validated.
                                 </p>
                                 <p>
                                     Additionally, the "this" keyword is bound to the Form instance.
                                 </p>
+                                <div class="card-footer bg-transparent pb-0 px-0">
+                                    <p class="text-green">
+                                        Arguments
+                                    </p>
+                                    <ul>
+                                        <li>
+                                            fieldsList: ( Array ) list of JS objects<span class="text-yellow">*</span>:
+<pre>
+[{
+    fieldEl: fieldEl,
+    result: true,
+    errors: {}
+}]
+</pre>
+                                            <ul>
+                                                <li>
+                                                    field: JS node element
+                                                </li>
+                                                <li>
+                                                    result: boolean
+                                                </li>
+                                                <li>
+                                                    errors: JS object ( only in case of invalid field )
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            tempOptions: temporary options ( this object can be useful when manually validating a field with new options used only for that specific case )
+                                        </li>
+                                    </ul>
+                                    <p class="small">
+                                        <span class="text-yellow">*</span> in case of single field validation, as per method <code>validateField</code>, the array will contain only one object. In case of full form validation, as per method <code>validateForm</code>, the array will contain one object for each form field.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -633,7 +675,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    If true, the "has-error/has-error-switch" class will not be added ( for UI feedback as said by the name ) 
+                                    If true, the css classes for error ( any type ) and valid fields will not be added ( for UI feedback as said by the name ) 
                                 </p>
                             </div>
                         </div>
@@ -684,7 +726,11 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             <div class="col-5">
                                 <p>
                                     Events on which the validation will fire ( only for required fields )
+                                    <br /><br />
+                                    <span class="text-green">Tip</span>: always add "change" to the events in order to properly validate checkbox, radio, file inputs and selects.
                                     <br />
+                                    For example: "change input" or "change blur".
+                                    <br /><br />
                                     <span class="small">( NOT used if <code>handleValidation: false</code> )</span>
                                 </p>
                             </div>
@@ -696,18 +742,19 @@ var formInstance = new Form( formEl, options ).init();</pre>
                         </p>
                         <pre>
 {
-    checkDirtyField:        false,
     cssClasses: {
         dirty:              'is-dirty',
         error:              'has-error',
+        errorEmpty:         'has-error-empty',
+        errorRule:          'has-error-rule',
         valid:              'is-valid'
     },
     focusOnRelated:         true,
     handleFileUpload:       true,
     handleValidation:       true,
     maxFileSize:            10,
-    onPastePrevented:       null,
-    onValidation:           null,
+    onPastePrevented:       [],
+    onValidation:           [onValidationDefault],
     preventPasteFields:     '[type="password"], [data-equal-to]',
     skipUIfeedback:         false,
     strictHtmlValidation:   true,
@@ -721,7 +768,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
             <!-- Form Options -->
             <div id="form-options">
                 <h3 class="sticky-title mt-0 ml-4em"><span class="small">Form Options</span></h3>
-                <div class="panel panel-default panel-transparent" style="background-color: transparent;">
+                <div class="panel panel-default panel-transparent no-bg">
                     <div class="card-header bg-white text-dark clearfix">
                         <div class="d-flex">
                             <div class="col-3">
@@ -745,7 +792,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             </div>
                             <div class="col-4">
                                 <p>
-                                    See below for default values.
+                                    See below for default values ( depending on AJAX API - "fetch" or "XMLHttpRequest" ).
                                     <br /><br />
                                     See <a href="#ajax-settings">AJAX Options</a> section for details.
                                 </p>
@@ -770,6 +817,9 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                 ( function / array of functions )
                             </div>
                             <div class="col-5">
+                                <p>
+                                    Each function:
+                                </p>
                                 <ul>
                                     <li>
                                         <span class="text-green">data</span>: ( JS object )
@@ -783,9 +833,12 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                                 <span class="text-green">formData</span>: ( JS object - ONLY for AJAX forms ) with the form data
                                             </li>
                                             <li>
-                                                <span class="text-green">stopExecution</span>: ( Boolean - default is false ) wether or not to prevent the form submit ( AJAX or default ).
+                                                <span class="text-green">stopExecution</span>: ( Boolean - default is false ) whether or not to prevent the form submit ( AJAX or default ).
                                             </li>
                                         </ul>
+                                    </li>
+                                    <li>
+                                        <span class="text-green">tempOptions</span>: ( JS object ) temporary options <span class="text-yellow">*</span>
                                     </li>
                                 </ul>
                                 <p>
@@ -794,6 +847,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             </div>
                             <div class="col-4">
                                 <p>
+                                    Each function:<br /><br />
                                     For AJAX forms:<br />
                                     Fires before the AJAX call starts. If used to modify the JSON or prevent the AJAX call to start, it must have a return statement. 
                                     <br /><br />
@@ -804,7 +858,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-3">
-                                <p class="text-green">getFormJSON</p>
+                                <p class="text-green">getFormData</p>
                                 ( function )
                             </div>
                             <div class="col-5">
@@ -820,7 +874,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                     <code>type="submit"</code>
                                     <code>type="button"</code>
                                     <code>type="file"</code>
-                                    <code>data-exclude-json</code>
+                                    <code>data-exclude-data</code>
                                     <br />
                                     If you want to select fields by yourself, you can access the form element through "this.formEl".
                                 </p>
@@ -830,8 +884,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             </div>
                             <div class="col-4">
                                 <p>
-                                    If set, it will be passed as function parameter for "getFormJSON" method.<br />
-                                    See <a href="#methods">Methods</a> section for details
+                                    If set, it will be will replace the default function for "getFormData" method.
                                 </p>
                             </div>
                         </div>
@@ -845,7 +898,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             </div>
                             <div class="col-4">
                                 <p>
-                                    Wether or not the plugin must handle form submit ( AJAX or default )<br />
+                                    Whether or not the plugin must handle form submit ( AJAX or default )<br />
                                     If set to false, you will have to handle form submit by yourself.
                                 </p>
                             </div>
@@ -856,9 +909,15 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                 ( function / array of functions )
                             </div>
                             <div class="col-5">
+                                <p>
+                                    Each function:
+                                </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( dataOrXHR, status, XHRorResponse ).
+                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( data/message, status, code - according to <a href="https://github.com/omniti-labs/jsend" target="_blank">JSend format</a> for success or error ).
+                                    </li>
+                                    <li>
+                                        <span class="text-green">tempOptions</span>: ( JS object ) temporary options <span class="text-yellow">*</span>
                                     </li>
                                 </ul>
                                 <p>
@@ -867,6 +926,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             </div>
                             <div class="col-4">
                                 <p>
+                                    Each function:<br />
                                     Fires at AJAX call equivalent. 
                                 </p>
                             </div>
@@ -877,9 +937,15 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                 ( function / array of functions )
                             </div>
                             <div class="col-5">
+                                <p>
+                                    Each function:
+                                </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( errorThrown, status, response ).
+                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( message, status, code - according to <a href="https://github.com/omniti-labs/jsend" target="_blank">JSend format</a> ).
+                                    </li>
+                                    <li>
+                                        <span class="text-green">tempOptions</span>: ( JS object ) temporary options <span class="text-yellow">*</span>
                                     </li>
                                 </ul>
                                 <p>
@@ -888,6 +954,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             </div>
                             <div class="col-4">
                                 <p>
+                                    Each function:<br />
                                     Fires at AJAX call equivalent. 
                                 </p>
                             </div>
@@ -898,9 +965,15 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                 ( function / array of functions )
                             </div>
                             <div class="col-5">
+                                <p>
+                                    Each function:
+                                </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( data, status, response ).
+                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( data, status, code - according to <a href="https://github.com/omniti-labs/jsend" target="_blank">JSend format</a> ).
+                                    </li>
+                                    <li>
+                                        <span class="text-green">tempOptions</span>: ( JS object ) temporary options <span class="text-yellow">*</span>
                                     </li>
                                 </ul>
                                 <p>
@@ -909,16 +982,52 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             </div>
                             <div class="col-4">
                                 <p>
+                                    Each function:<br />
                                     Fires at AJAX call equivalent. 
                                 </p>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer no-bg">
-                        <p>
-                            Default form options:
-                        </p>
-                        <pre>
+                        <div class="">
+                            <p class="small">
+                                * this object can be useful when manually submitting the form with new options used only for that specific case.
+                            </p>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-12 col-sm-6">
+                                <p>
+                                    Default form options for formJS with fetch API:
+                                </p>
+                                <pre>
+{
+    ajaxOptions: {
+        cache:          'no-store',
+        credentials:    'same-origin',
+        headers: {
+                        'Content-Type': 'application/json',
+                        'Accept':       'application/json'
+        },
+        method:         'POST',
+        mode:           'same-origin',
+        redirect:       'follow',
+        timeout:        0,
+        url:            location.href
+    },
+    ajaxSubmit:         true,
+    beforeSend:         [],
+    getFormData:        getFormDataDefault,
+    handleSubmit:       true,
+    onSubmitComplete:   [],
+    onSubmitError:      [],
+    onSubmitSuccess:    []
+}</pre>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <p>
+                                    Default form options for formJS with XMLHttpRequest API:
+                                </p>
+                                <pre>
 {
     ajaxOptions: {
         async:          true,
@@ -932,13 +1041,15 @@ var formInstance = new Form( formEl, options ).init();</pre>
         url:            location.href
     },
     ajaxSubmit:         true,
-    beforeSend:         null,
-    getFormJSON:        null,
+    beforeSend:         [],
+    getFormData:        getFormDataDefault,
     handleSubmit:       true,
-    onSubmitComplete:   null,
-    onSubmitError:      null,
-    onSubmitSuccess:    null
+    onSubmitComplete:   [],
+    onSubmitError:      [],
+    onSubmitSuccess:    []
 }</pre>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -953,6 +1064,21 @@ var formInstance = new Form( formEl, options ).init();</pre>
             <div class="row mt-3">
                 <div class="col-12">
                     <div class="">
+                        <p>
+                            for formJS with fetch API: 
+                        </p>
+                        <ul class="m-0">
+                            <li>
+                                See <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters" target="_blank">MDN documentation</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-12 mt-4">
+                    <div class="">
+                        <p>
+                            for formJS with XMLHttpRequest API: 
+                        </p>
                         <ul class="m-0">
                             <li>
                                 async: if true will make an async ajax call, if false will make a sync ajax call.
@@ -973,7 +1099,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                 mimeType: a mime type to override the XHR mime type.
                             </li>
                             <li>
-                                timeout: ( in milliseconds ) in greater than 0, after the specified time, the ajax call will be aborted if still pending.
+                                timeout: ( in milliseconds ) if greater than 0, after the specified time, the ajax call will be aborted if still pending.
                             </li>
                             <li>
                                 url: by default is the current page url but it can also take the "action" html form attribute if set
@@ -990,7 +1116,7 @@ var formInstance = new Form( formEl, options ).init();</pre>
         <!-- Methods -->
         <div id="methods">
             <h3 class="sticky-title">Methods</h3>
-            <div class="panel panel-default panel-transparent" style="background-color: transparent;">
+            <div class="panel panel-default panel-transparent no-bg">
                 <div class="card-header bg-white text-dark clearfix">
                     <div class="d-flex">
                         <div class="col-4">
@@ -1020,39 +1146,41 @@ var formInstance = new Form( formEl, options ).init();</pre>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <pre class="text-green">getFormJSON( customFn )</pre>
+                                <pre class="text-green">getFormData()</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    Get a JS object of the form with all the answers.
+                                    Get a JS object of the form data with all the answers.
                                     <br />
                                     Collected data depends on the field as follow:
                                 </p>
                                 <ul>
                                     <li>
-                                        checkbox/select ( single ): boolean
+                                        checkbox ( single ): boolean
                                     </li>
                                     <li>
-                                        checkbox/select ( multiple ): array of strings
+                                        checkbox / select ( multiple ): array of strings
                                     </li>
                                     <li>
                                         radio: value set or null
                                     </li>
                                     <li>
-                                        otherwise: set/given value
+                                        otherwise: set / given value
                                     </li>
                                 </ul>
-                                <ul class="card-footer no-bg pt-3 pl-3 pr-0 pb-0">
-                                    <li>
-                                        <span class="text-green">customFn</span>: custom function to collect data from the form answers ( MUST have a return statement ).<br />
-                                            Can also be set as "getFormJSON" in "formOptions".<br />
-                                            See <a href="#form-options">Form Options</a> section for details.
-                                    </li>
-                                </ul>
+                                <div class="card-footer no-bg pt-3">
+                                    <p>
+                                        The function set in options.formOptions.getFormData will be used to collect data.<br />
+                                        See <a href="#form-options">Form Options Section</a> for details.
+                                    </p>
+                                    <p class="m-0">
+                                        Additionally, the "this" keyword is bound to the Form instance.
+                                    </p>
+                                </div>
                             </div>
                             <div class="col-3">
                                 <p>
-                                    A JS object with pairs of field-name / field-value like:
+                                    Object like:
                                 </p>
                                 <pre>
 {
@@ -1068,21 +1196,22 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    Run a first validation for fields that already have a value set and run the setup for form utilities ( as described in <a href="#utilities-list">Utilities</a> section ).<br />
+                                    Run a first validation for fields that already have a value set.<br />
                                     Useful to call after constructor function but not mandatory.
                                 </p>
                             </div>
                             <div class="col-3">
-                                Returns the Form instance
+                                The Form instance
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <pre class="text-green">isValidField( field[, fieldOptions] )</pre>
+                                <pre class="text-green">validateField( field[, fieldOptions] )</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    Validate the field based on the field options of the instance or the ones passed as second argument.
+                                    Fires validation for the specified field.<br />
+                                    Then, this also fires feedback on UI ( basic feedback with css classes ) and callback function(s) ( "onValidation" in "fieldOptions" ).
                                 </p>
                                 <ul>
                                     <li>
@@ -1096,90 +1225,71 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                     <span class="text-yellow mr-2">*</span> 
                                     <span class="small">
                                             best to use a CSS string selector so that it looks for the field inside the instance form element.
-                                            <br />
-                                            Example:<br />
+                                            <br>
+                                            Example:<br>
                                     </span>
-                                    <pre>formInstance.isValidField('[name="myEmail"]');</pre>
                                 </p>
+                                <pre>formInstance.validateField('[name="myEmail"]');</pre>
                             </div>
                             <div class="col-3">
                                 <p>
-                                    Boolean
+                                    A Promise to which will be passed an object like:
                                 </p>
+                                <pre>
+{
+    fieldEl: element,
+    result:  false,
+    errors:  {...}
+}</pre>
+                                <ul>
+                                    <li>
+                                        <span class="text-green">fieldEl</span>: JS node element
+                                    </li>
+                                    <li>
+                                        <span class="text-green">result</span>: boolean
+                                    </li>
+                                    <li>
+                                        <span class="text-green">errors</span>: ( JS object ) only in case of invalid field
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <pre class="text-green">isValidForm( [options] )</pre>
+                                <pre class="text-green">validateForm( [fieldOptions] )</pre>
                             </div>
                             <div class="col-5">
                                 <p>
-                                    Validate the form based on the form options of the instance or the ones passed as argument.
+                                    Fires validation for the form.<br />
+                                    Then, this also fires feedback on UI for each field ( basic feedback with css classes ) and callback function(s) passing the full array of fields ( "onValidation" in "fieldOptions" ).
                                 </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">options</span>: ( Optional ) JS object with fieldOptions and/or formOptions. For default values see <a href="#options-list">Options section</a>
+                                        <span class="text-green">fieldOptions</span>: ( Optional ) JS object. For default values see <a href="#field-options">Field Options section</a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-3">
                                 <p>
-                                    Object like:
+                                    A Promise to which will be passed an object like:
                                 </p>
                                 <pre>
 {
     fields: [{
-        field:  element,
-        result: true
+        fieldEl:  element,
+        result:   false,
+        errors:   {...}
     }],
-    result:     true
+    result:       false
 }</pre>
                                 <ul>
                                     <li>
-                                        <span class="text-green">fields</span>: ( array of JS objects ) a list of the form fields with field ( JS node element ) and result ( boolean )
+                                        <span class="text-green">fields</span>: ( array of JS objects ) a list of the form fields as returned by "isValidField" method
                                     </li>
                                     <li>
                                         <span class="text-green">result</span>: ( boolean ) check for the form, if it is valid or not
                                     </li>
                                 </ul>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4">
-                                <pre class="text-green">submit( [options, [event]] )</pre>
-                            </div>
-                            <div class="col-5">
-                                <p>
-                                    To manually trigger the form submit.
-                                </p>
-                                <ul>
-                                    <li>
-                                        <span class="text-green">options</span>: ( Optional ) JS object. Can contain fieldOptions and formOptions. For default values see <a href="#options-list">Options section</a>
-                                    </li>
-                                    <li>
-                                        <span class="text-green">event</span>: ( Optional | Required if <code>handleSubmit: false</code> ) JS event object for submit event.
-                                    </li>
-                                </ul>
-                                <p>
-                                    It will:
-                                </p>
-                                <ul>
-                                    <li>
-                                        validate the form according to the fieldOptions and formOptions ( passed inside options param )
-                                    </li>
-                                    <li>
-                                        ( for AJAX forms ) create the JSON data to send via AJAX call as for getFormJSON method
-                                    </li>
-                                    <li>
-                                        ( for AJAX forms ) make the AJAX call to the url specified as action of the HTML form
-                                    </li>
-                                    <li>
-                                        ( for AJAX forms ) trigger callback functions as defined in options param
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-3">
-                                
                             </div>
                         </div>
                     </div>
@@ -1191,9 +1301,9 @@ var formInstance = new Form( formEl, options ).init();</pre>
         <div id="prototype-methods">
             <h3 class="sticky-title">Prototype Methods</h3>
             <p>
-                You can use these methods <b>ONLY</b> from the original Form object ( not from a new instance - examples below ):
+                You can use these methods <b>ONLY</b> from the original Form object ( not from a new instance - but you can always set each single property/method from the class prototype ):
             </p>
-            <div class="panel panel-default panel-transparent" style="background-color: transparent;">
+            <div class="panel panel-default panel-transparent no-bg">
                 <div class="card-header bg-white text-dark clearfix">
                     <div class="d-flex">
                         <div class="col-4">
@@ -1211,16 +1321,12 @@ var formInstance = new Form( formEl, options ).init();</pre>
                     <div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <pre class="text-green">addValidationRules( newRules )</pre>
+                                <pre class="text-green">addValidationErrors( newErrors )</pre>
                             </div>
                             <div class="col-5">
                                 <ul>
                                     <li>
-                                        <span class="text-green">newRules</span>: JS object containing the new validation rule(s) to add:<br />
-                                        <pre class="">
-{
-    zip: function( string, fieldEl ){ return /[5-9]{3}$/.test( string ); }
-}</pre>
+                                        <span class="text-green">newErrors</span>: JS object containing the new validation error(s) to add ( see example below ).
                                     </li>
                                 </ul>
                                 <p>
@@ -1232,15 +1338,55 @@ var formInstance = new Form( formEl, options ).init();</pre>
                                         Eg: to validate "mobile-number" ( as data-subtype ) the rule is "mobileNumber"
                                     </li>
                                     <li>
-                                        value: a function that must return a boolean and with these arguments:
+                                        value: a function with these arguments:
+                                        <ul>
+                                            <li>
+                                                string: the string the user put in the field
+                                            </li>
+                                        </ul>
+                                        It must return a JS object with all the specific errors.
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-3">
+                                This will affect both old and new instances.<br />
+                                Can also be used to override existing validation errors.
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4">
+                                <pre class="text-green">addValidationRules( newRules )</pre>
+                            </div>
+                            <div class="col-5">
+                                <ul>
+                                    <li>
+                                        <span class="text-green">newRules</span>: JS object containing the new validation rule(s) to add ( see example below ).
+                                    </li>
+                                </ul>
+                                <p>
+                                    The key / value pairs must be passed as:
+                                </p>
+                                <ul>
+                                    <li>
+                                        key: the same used as data-subtype ( or type ) attribute, without dash and with Capital letter instead.<br />
+                                        Eg: to validate "mobile-number" ( as data-subtype ) the rule is "mobileNumber"
+                                    </li>
+                                    <li>
+                                        value: a function with these arguments:
                                         <ul>
                                             <li>
                                                 string: the string the user put in the field
                                             </li>
                                             <li>
-                                                fiedlEl: the JS DOM element of the field
+                                                fiedlEl: the JS node element of the field
                                             </li>
                                         </ul>
+                                        It must return a JS object ( at least ) like:
+                                        <pre>
+{
+    result: true
+}</pre>
+                                        In case of invalid field you can add the "errors" key to return the specific errors.
                                     </li>
                                 </ul>
                             </div>
@@ -1271,13 +1417,59 @@ var formInstance = new Form( formEl, options ).init();</pre>
                             Examples of usage:
                         </p>
                         <pre>
+Form.addValidationErrors({
+    username: function ( string ) {
+        var obj = {};
+        var strLength = string.length;
+        if( strLength &lt; 3 ){ obj.minlength = true; }
+        if( strLength &gt; 24 ){ obj.maxlength = true; }
+        if( /[^\w\-\.\@]/.test(string) ){ obj.invalidChars = true; }
+        if( !/^[\w]/.test(string) ){ obj.invalidStartChar = true; }
+        return obj;
+    }
+});
+
 Form.addValidationRules({
-    zip: function( string, fieldEl ){ return /^[5-9]{3}$/.test( string ); }
+    myPassword: function( string, fieldEl ){
+        var obj = {
+            result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
+        };
+        // ERRORS CAN BE ATTACHED HERE BUT IT'S BETTER TO USE METHOD addValidationErrors
+        if( !obj.result ){
+            if( string.length &lt; 8 ){ obj.errors.minlength = true; }
+        }
+        return obj;
+    }
 });
 
 Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
 </pre>
-                    </div>
+                    <br />
+                    <p>
+                        Or directly put it in the prototype:
+                    </p>
+                    <pre>
+// ADD/OVERRIDE A VALIDATION ERROR METHOD
+Form.prototype.validationErrors.email = function( string ){ ... }
+
+// ADD/OVERRIDE A VALIDATION METHOD
+Form.prototype.validationRules.myPassword = function( string, fieldEl ){ ... }
+
+// OVERRIDE AN OPTION
+Form.prototype.options.fieldOptions.maxFileSize = 100;
+</pre>
+                    <br />
+                    <p>
+                        Or directly put it in the specific Form instance ( for example to update an option ):
+                    </p>
+                    <pre>
+// OVERRIDE AN OPTION
+formInstance.options.fieldOptions.maxFileSize = 50;
+</pre>
+                    <p class="small">
+                        You can also add / override validation rules/errors from the Form instance but it doesn't have much sense.
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -1286,8 +1478,16 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
             <h3 class="sticky-title">Built-in Validations</h3>
             <p>
                 Below the rules used to validate the fields depending on html basic/data-* attributes ( you can add new ones - or override the ones having JS key specified - with addValidationRules method ).
+                <br />
+                Validations can also be async, see <a href="#validation-username">username validation</a> as example.
+                <br /><br />
+                Additionally, in each validation, the "this" keyword is bound to the Form instance.
+                <br /><br />
+                After validation, in case of invalid field, the validation method will return the "errors" object ( see <a href="#builtin-errors">Built-in Errors Section</a> for details ).
+                <hr />
+                <span class="text-red">[ add. ]</span> : Additional validation that is not part of the core plugin. Can be found in file <code>dist/additionals/validationRules.js</code>.
             </p>
-            <div class="panel panel-default panel-transparent" style="background-color: transparent;">
+            <div class="panel panel-default panel-transparent no-bg">
                 <div class="card-header bg-white text-dark clearfix">
                     <div class="d-flex">
                         <div class="col-4 col-sm-3">
@@ -1303,10 +1503,11 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                 </div>
                 <div class="card-body">
                     <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-cap" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 CAP <span class="text-yellow">*</span>
                                 <div>( cap )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="cap"</code></div>
@@ -1321,7 +1522,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-checkbox" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Checkbox
                             </div>
@@ -1334,7 +1535,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-checks" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Checks
                             </div>
@@ -1348,7 +1549,41 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-color" class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Color
+                                <div>( color )</div>
+                                <div class="text-red">[ add. ]</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="color"</code></div>
+                                <div><code>data-subtype="color"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/ 
+                                </p>
+                                <br />
+                                <p class="small text-lowercase text-opacity">
+                                    HEX COLOR WITH/WITHOUT #. <br />
+                                    LOWERCASE AND/OR UPPERCASE <br />
+                                    CAN BE 3 OR 6 CHARACTERS ( 0fa | 00FFaa )
+                                </p>
+                                <p>
+                                    <b>Important Note</b>:<br />
+                                    <code>type="color"</code> is not supported by:
+                                </p>
+                                <ul>
+                                    <li>
+                                        IE 11
+                                    </li>
+                                    <li>
+                                        Safari 9.1 and earlier
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="validation-date" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Date
                                 <div>( date )</div>
@@ -1356,19 +1591,17 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>type="date"</code></div>
                                 <div><code>data-subtype="date"</code></div>
+                                <p class="small mt-3">
+                                    Used together or only data-subtype ( see note below ).
+                                </p>
                             </div>
                             <div class="col-4 col-sm-6">
                                 <p>
-                                    /^(((0[1-9]|[12]\d|3[01])[ \/\-.](0[13578]|1[02])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)[ \/\-.](0[13456789]|1[012])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])[ \/\-.]02[ \/\-.]((19|[2-9]\d)\d{2}))|(29[ \/\-.]02[ \/\-.]((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/
-                                    <br />or<br />
                                     /^(((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29)$/
                                 </p>
                                 <br />
                                 <p class="small text-lowercase text-opacity">
-                                    DATE AS ITALIAN SYNTAX<br />
-                                    DD MM YYYY | DD/MM/YYYY | DD.MM.YYYY | DD-MM-YYYY
-                                    <br /><br />
-                                    OR AS ISO 8601 DATE FORMAT<br />
+                                    DATE AS ISO 8601 DATE FORMAT<br />
                                     YYYY MM DD | YYYY/MM/DD | YYYY.MM.DD | YYYY-MM-DD
                                     <br /><br />
                                     WITH SPACE / . - AS SEPARATOR
@@ -1386,7 +1619,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                         Safari for OS X ( tested on version 12 )
                                     </li>
                                     <li>
-                                        Firefox &lt; 57
+                                        Firefox 56 and earlier
                                     </li>
                                 </ul>
                                 <p>
@@ -1396,7 +1629,35 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-date-ddmmyyyy" class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Date in format DDMMYYYY
+                                <div>( dateDDMMYYYY )</div>
+                                <div class="text-red">[ add. ]</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-subtype="dateDDMMYYYY"</code></div>
+                                <p class="small mt-3">
+                                    Cannot be used together with type="date" because it returns the date in format YYYY-MM-DD
+                                </p>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    /^(((0[1-9]|[12]\d|3[01])[ \/\-.](0[13578]|1[02])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)[ \/\-.](0[13456789]|1[012])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])[ \/\-.]02[ \/\-.]((19|[2-9]\d)\d{2}))|(29[ \/\-.]02[ \/\-.]((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/
+                                </p>
+                                <br />
+                                <p class="small text-lowercase text-opacity">
+                                    DATE AS ITALIAN SYNTAX<br />
+                                    DD MM YYYY | DD/MM/YYYY | DD.MM.YYYY | DD-MM-YYYY
+                                    <br /><br />
+                                    WITH SPACE / . - AS SEPARATOR
+                                </p>
+                                <p>
+                                    See notes for date validation.
+                                </p>
+                            </div>
+                        </div>
+                        <div id="validation-email" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Email
                                 <div>( email )</div>
@@ -1409,6 +1670,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 <p>
                                     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                                 </p>
+                                <br />
                                 <p class="small text-lowercase text-opacity m-0">
                                     EMAIL MUST BE AT LEAST ( FOR EXAMPLE ): a@a.aa
                                 </p>
@@ -1417,7 +1679,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-equal-to" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Equal To
                             </div>
@@ -1434,7 +1696,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-exact-length" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Exact Length
                             </div>
@@ -1451,7 +1713,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-file" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 File
                             </div>
@@ -1465,10 +1727,11 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-fiscal-code" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Fiscal Code
                                 <div>( fiscalCode )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="fiscal-code"</code></div>
@@ -1483,30 +1746,11 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4 col-sm-3 text-green">
-                                HEX Color
-                                <div>( hexColor )</div>
-                            </div>
-                            <div class="col-4 col-sm-3 text-green">
-                                <div><code>data-subtype="hex-color"</code></div>
-                            </div>
-                            <div class="col-4 col-sm-6">
-                                <p>
-                                    /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    HEX COLOR WITH/WITHOUT #. <br />
-                                    LOWERCASE AND/OR UPPERCASE <br />
-                                    CAN BE 3 OR 6 CHARACTERS ( 0fa | 00FFaa )
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-landline-number" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Landline Number
                                 <div>( landlineNumber )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="landline-number"</code></div>
@@ -1525,7 +1769,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-length" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Length
                             </div>
@@ -1538,12 +1782,15 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-max" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Max
                             </div>
                             <div class="col-4 col-sm-3 text-green">
+                                <p class="small mb-1">With Numbers</p>
                                 <div><code>max="13"</code></div>
+                                <p class="small mt-5 mb-1">With Dates</p>
+                                <div><code>max="2019-02-22"</code></div>
                             </div>
                             <div class="col-4 col-sm-6">
                                 <p>
@@ -1552,7 +1799,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-maxlength" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Maxlength
                             </div>
@@ -1566,12 +1813,15 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-min" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Min
                             </div>
                             <div class="col-4 col-sm-3 text-green">
-                                <div><code>min="7"</code></div>
+                                <p class="small mb-1">With Numbers</p>
+                                <div><code>max="7"</code></div>
+                                <p class="small mt-5 mb-1">With Dates</p>
+                                <div><code>max="1900-01-01"</code></div>
                             </div>
                             <div class="col-4 col-sm-6">
                                 <p>
@@ -1580,7 +1830,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-minlength" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Minlength
                             </div>
@@ -1594,10 +1844,11 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-mobile-number" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Mobile Number
                                 <div>( mobileNumber )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="mobile-number"</code></div>
@@ -1614,7 +1865,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-number" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Number <span class="text-yellow">*</span>
                                 <div>( number )</div>
@@ -1636,7 +1887,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-number-float" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Number Float <span class="text-yellow">*</span>
                                 <div>( numberFloat )</div>
@@ -1659,7 +1910,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-number-integer" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Number Integer <span class="text-yellow">*</span>
                                 <div>( numberInteger )</div>
@@ -1681,10 +1932,11 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-password" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Password
                                 <div>( password )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>type="password"</code></div>
@@ -1701,7 +1953,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-pattern" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Pattern
                             </div>
@@ -1715,7 +1967,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-radio" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Radio
                             </div>
@@ -1728,7 +1980,7 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-required-more-from" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Require More &amp; Required From
                             </div>
@@ -1746,10 +1998,37 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-tel" class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Tel
+                                <div>( tel )</div>
+                                <div class="text-red">[ add. ]</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="tel"</code></div>
+                                <div><code>data-subtype="tel"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    Validate a phone number.<br />
+                                    Check if "mobileNumber" or "landlineNumber" is valid.
+                                </p>
+                                <p>
+                                    <b>Important Note</b>:<br />
+                                    <code>type="tel"</code> is supported by:
+                                </p>
+                                <ul>
+                                    <li>
+                                        Safari 8 and newer
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="validation-url" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Url
                                 <div>( url )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="url"</code></div>
@@ -1766,10 +2045,12 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-username" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 Username
                                 <div>( username )</div>
+                                <div class="text-yellow">Async Validation</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="username"</code></div>
@@ -1780,16 +2061,21 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                 </p>
                                 <br />
                                 <p class="small text-lowercase text-opacity">
-                                    USERNAME MUST START WITH A LETTER/NUMBER/UNDERSCORE AND CAN ALSO CONTAIN . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
+                                    USERNAME MUST START WITH A LETTER / NUMBER / UNDERSCORE AND CAN ALSO CONTAIN . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
+                                </p>
+                                <br />
+                                <p>
+                                    You can find the remote validation in <code>remoteValidations/username.php</code><br />
+                                    It is just a demo. Please change it with your custom remote validation.
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-validate-if-filled" class="clearfix padding-tb-md row-list-separator d-flex">
                                 <div class="col-4 col-sm-3 text-green">
                                     Validate if Filled
                                 </div>
                                 <div class="col-4 col-sm-3 text-green">
-                                    <div><code>data-validate-if-filled=""</code></div>
+                                    <div><code>data-validate-if-filled</code></div>
                                 </div>
                                 <div class="col-4 col-sm-6">
                                     <p>
@@ -1798,10 +2084,11 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                                     </p>
                                 </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div id="validation-vat-number" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 VAT Number
                                 <div>( vatNumber )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>data-subtype="vat-number"</code></div>
@@ -1821,72 +2108,385 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                 <div class="card-footer">
                     <div>
                         <p>
-                            <span class="text-yellow">*</span> you can also set <code>type="number"</code> together with the specific data-subtype attribute related to numbers, to let the device show the numeric keyboard, because type="number" is not well implemented in all browsers ( some allow users to write non-numeric characters and/or not related to the number format ).<br />
+                            <span class="text-yellow">*</span> you can also set <code>type="number"</code> together with the specific data-subtype attribute related to numbers, to let the device show the numeric keyboard, because type="number" is not well implemented in all browsers ( some allow users to write non-numeric characters and / or not related to the number format ).<br />
                                 Better to use <code>type="text"</code> together with the specific data-subtype related to numbers attribute to validate a numeric field. You can also use <code>data-type="number"</code> to emulate <code>type="number"</code> inputs. See "strictHtmlValidation" option in <a href="#field-options">Field Options</a> section for details.
                         </p>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Utilities -->
-        <div id="utilities-list">
-            <h3 class="sticky-title">Utilities</h3>
+
+        <!-- Built-in Errors -->
+        <div id="builtin-errors">
+            <h3 class="sticky-title">Built-in Errors</h3>
             <p>
-                Fields utilities activated by setting a data-* attribute on the field:
+                After validation, in case of invalid field, the validation method will return the "errors" object.
+                <br /><br />
+                Additionally, in each error method, the "this" keyword is bound to the Form instance.
             </p>
-            <div class="panel panel-default panel-transparent" style="background-color: transparent;">
+            <div class="row">
+                <div class="col-12 col-sm-6">
+                    <p>
+                In case of empty field value, "errors" object will return only the "empty" error like:
+            </p>
+            <pre>
+{
+    empty: true
+}</pre>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <p>
+                In case of invalid field value ( not compliant with validation rule ), "errors" object will return "rule" error and more specific errors as described below:
+            </p>
+            <pre>
+{
+    rule: true,
+    ...
+}</pre>
+                </div>
+            </div>
+            <hr />
+            <p>
+                <span class="text-red">[ add. ]</span> : Additional error that is not part of the core plugin. Can be found in file <code>dist/additionals/validationErrors.js</code>.
+            </p>
+            <div class="panel panel-default panel-transparent no-bg">
                 <div class="card-header bg-white text-dark clearfix">
                     <div class="d-flex">
-                        <div class="col-4">
-                            HTML attribute
+                        <div class="col-4 col-sm-3">
+                            validation name ( JS key )
                         </div>
-                        <div class="col-8">
-                            description
+                        <div class="col-4 col-sm-3">
+                            validation API
+                        </div>
+                        <div class="col-4 col-sm-6">
+                            returned "errors" object
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="">
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4 text-green">
-                                <code>data-char-count</code>
-                                <div class="small">
-                                    ( use together with data-char-length ) <br />
-                                    ( optionally with maxlength and data-char-maxlength )
-                                </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                CAP
+                                <div>( cap )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
-                            <div class="col-8">
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-subtype="cap"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
-                                    Set a counter for the field ( for example for a message in a textarea ).<br />
-                                    Related HTML attributes:
+                                    "errors" object can contain these specific errors:
                                 </p>
-                                <ul>
-                                    <li class="my-2">
-                                        <code class="text-green">data-char-length</code> used on a tag where you want to print the number of characters typed inside the field.
-                                    </li>
-                                    <li class="my-2">
-                                        <code class="text-green">maxlength</code> used on the field to set the maxlength ( can be validated via JS by setting strictHtmlValidation to true ). the value will be printed as text inside the tag with data-char-maxlength attribute.
-                                    </li>
-                                    <li class="my-2">
-                                        <code class="text-green">data-char-maxlength</code> used on a tag where you want to print the value of maxlength of the field.
-                                    </li>
-                                </ul>
+                                <pre>
+{
+    maxlength: true,
+    minlength: true,
+    invalidChars: true
+}</pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4 text-green">
-                                <code>data-max-file-size</code>
-                                <div class="small">
-                                    related to fields with type="file"
-                                </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                Checks <span class="text-yellow">*</span>
                             </div>
-                            <div class="col-8">
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-checks="[1,3]"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
                                 <p>
-                                    Write the max file size ( as for "maxFileSize" option in "fieldOptions" ) inside an HTML element ( for example as part of the error message for an input <code>type="file"</code> ).
+                                    "errors" object can contain these specific errors:
                                 </p>
+                                <pre>
+{
+    checks: true,
+    maxChecks: true,
+    minChecks: true
+}</pre>
                             </div>
                         </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Email
+                                <div>( email )</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="email"</code></div>
+                                <div><code>data-subtype="email"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    missingAtChar: true,
+    missingUserName: true,
+    missingDomain: true,
+    missingExtensionDot: true,
+    missingExtension: true,
+    minlengthExtension: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Equal To <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-equal-to="password"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    equalTo: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Exact Length <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-exact-length="24"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    exactLength: true,
+    maxlength: true,
+    minlength: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                File <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="file"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    file: true,
+    maxFileSize: true,
+    acceptedFileType: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Length <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-length="[5,30]"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    stringLength: true,
+    maxlength: true,
+    minlength: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Max <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <p class="small mb-1">With Numbers</p>
+                                <div><code>max="13"</code></div>
+                                <p class="small mt-5 mb-1">With Dates</p>
+                                <div><code>max="2019-02-22"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    max: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Maxlength <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>maxlength="150"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    maxlength: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Min <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <p class="small mb-1">With Numbers</p>
+                                <div><code>max="7"</code></div>
+                                <p class="small mt-5 mb-1">With Dates</p>
+                                <div><code>max="1900-01-01"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    min: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Minlength <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>minlength="10"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    minlength: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Password
+                                <div>( password )</div>
+                                <div class="text-red">[ add. ]</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>type="password"</code></div>
+                                <div><code>data-subtype="password"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    minlength: true,
+    missingNumber: true,
+    missingLowercase: true,
+    missingUppercase: true,
+    invalidChars: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Pattern <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>pattern="[RegExp]"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    pattern: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Require More &amp; Required From <span class="text-yellow">*</span>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div>
+                                    <code>data-require-more="" id="element-that-requires-more"</code>
+                                    <code>data-required-from="#element-that-requires-more"</code>
+                                </div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    For Required From field, "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    requiredFrom: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                Username
+                                <div>( username )</div>
+                                <div class="text-red">[ add. ]</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-subtype="username"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+{
+    minlength: true,
+    maxlength: true,
+    invalidChars: true,
+    invalidStartChar: true
+}</pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4 col-sm-3 text-green">
+                                VAT Number
+                                <div>( vatNumber )</div>
+                                <div class="text-red">[ add. ]</div>
+                            </div>
+                            <div class="col-4 col-sm-3 text-green">
+                                <div><code>data-subtype="vat-number"</code></div>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                <p>
+                                    "errors" object can return these specific errors:
+                                </p>
+                                <pre>
+{
+    minlength: true,
+    maxlength: true
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div>
+                        <p>
+                            <span class="text-yellow">*</span> returned errors cannot be changed.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -1896,6 +2496,93 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
         <div id="changelog">
             <h3 class="sticky-title">Changelog</h3>
             <ul class="p-0">
+                <li class="media my-3">
+                    <div class="version-num text-red">3.0.0</div>
+                    <div class="media-body pl-2">
+                        <b>NEW MAJOR VERSION</b>
+                        <p class="mt-3 mb-0">
+                            formJS is now available on <a href="https://www.jsdelivr.com/package/gh/simplysayhi/formJS" target="_blank">jsDelivr CDN</a>.
+                        </p>
+                        <p class="mt-3 mb-0">
+                            formJS is now available in 2 versions ( the difference is only about the API used for AJAX calls ):
+                        </p>
+                        <ul>
+                            <li>
+                                fetch
+                            </li>
+                            <li>
+                                XMLHttpRequest
+                            </li>
+                        </ul>
+                        <p class="mt-3 mb-0">
+                            Many relevant changes from the previous version:
+                        </p>
+                        <ul>
+                            <li>
+                                Added async validation with Promises.
+                            </li>
+                            <li>
+                                Added built-in errors: prototype method "addValidationErrors" and object "validationErrors".
+                            </li>
+                            <li>
+                                Added "errorEmpty" and "errorRule" to "cssClasses" in "fieldOptions" to show different error messages ( see implementation in CSS file ).
+                            </li>
+                            <li>
+                                Added validation rules for:
+                                <ul>
+                                    <li>
+                                        "color" ( input type="color" - as replace of "hexColor" )
+                                    </li>
+                                    <li>
+                                        "dateDDMMYYYY"
+                                    </li>
+                                    <li>
+                                        "tel" ( input type="tel" )
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Added support for attributes "min" and "max" for date fields.
+                            </li>
+                            <li>
+                                Added "tempOptions" parameter to "onPastePrevented", "onValidation", "beforeSend", "onSubmitComplete", "onSubmitError", "onSubmitSuccess" callback functions.
+                            </li>
+                            <li>
+                                Renamed method "getFormJSON" with "getFormData" ( and related option in "formOptions" ).
+                            </li>
+                            <li>
+                                Renamed method "isValidField" with "validateField".
+                            </li>
+                            <li>
+                                Renamed method "isValidForm" with "validateForm".
+                            </li>
+                            <li>
+                                Renamed attribute "data-exclude-json" with "data-exclude-data" for consistency with related "getFormData" method.
+                            </li>
+                            <li>
+                                Changed "ajaxData" parameter in "onSubmitComplete", "onSubmitError", "onSubmitSuccess" to be compliant with JSend standard.
+                            </li>
+                            <li>
+                                Removed "Utilities" since it was going outside the plugin's scope.
+                            </li>
+                            <li>
+                                Removed "submit" method since it was not so useful.
+                            </li>
+                            <li>
+                                Removed the parameter from "getFormData" method. Now the function to collect data is taken in options.formOptions.getFotmData.
+                            </li>
+                            <li>
+                                Removed "checkDirtyField" option from "fieldOptions" ( the related callback is automatically executed ).
+                            </li>
+                            <li>
+                                Removed some polyfills thanks to code changes.
+                            </li>
+                            <li>
+                                Minor improvements.
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="media my-3">
                     <div class="version-num text-red">2.3.3</div>
                     <div class="media-body pl-2">
@@ -2113,107 +2800,15 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
         
     </div>
     
-    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 -->
-    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"></script>
+    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EGDE VERSIONS -->
+    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch"></script>
 
+    <script src="js/include.js"></script>
     <script src="dist/formJS.min.js"></script>
-    <script>
-        document.addEventListener('click', function(e){
-            var key = e.which || e.keyCode;
-
-            if( key === 1 ){
-                var elem = e.target,
-                    cardHeaderSelector = '.panel-collapsible .card-header',
-                    dropDownSelector = '[data-toggle="dropdown"]',
-                    checkElement = function( cssSelector ){
-                        return (elem.matches(cssSelector) ? elem : (elem.closest(cssSelector) || null));
-                    };
-                
-                if( checkElement(cardHeaderSelector) ){
-                    e.preventDefault();
-                    
-                    var cardHeader = checkElement(cardHeaderSelector),
-                        panelEl = elem.closest('.panel').querySelector('.card-body'),
-                        panelDisplay = panelEl.style.display;
-                    
-                    cardHeader.classList.toggle('active');
-                    panelEl.style.display = (panelDisplay === '' || panelDisplay === 'none' ? 'block' : 'none');
-                } else if( checkElement(dropDownSelector) ){
-                    e.preventDefault();
-
-                    var dropDown = checkElement(dropDownSelector),
-                        dropDownList = dropDown.nextElementSibling,
-                        dropDownAriaExpanded = dropDown.getAttribute('aria-expanded'),
-                        ariaExpValue = ( !dropDownAriaExpanded || dropDownAriaExpanded === 'false' ? 'true' : 'false' );
-
-                    dropDown.setAttribute('aria-expanded', ariaExpValue);
-                    dropDownList.classList.toggle('show');
-                }
-            }
-        }, false);
-        
-        var optionsPlugin = {
-                fieldOptions: {
-                    checkDirtyField: true,
-                    onPastePrevented: function( fieldEl ){
-                        console.log( 'Paste event prevented on field ', fieldEl );
-                    },
-                    onValidation: function( fieldsArray ){
-                        console.log('onValidation fieldsArray ', fieldsArray);
-                        for(var f=0; f<fieldsArray.length; f++){
-                            var field = fieldsArray[f];
-                            console.log( 'field "' + field.field.name + '" is valid? ', field.result );
-                        }
-                    },
-                    validateOnEvents: 'change blur'
-                },
-                formOptions: {
-                    beforeSend: function( data ){
-                        console.log('this', this);
-                        console.log( 'beforeSend data ', data );
-
-                        var feedbackEl = this.formEl.querySelector('[data-formjs-global-feedback]');
-                        feedbackEl.classList.add( 'd-none' );
-
-                        return data;
-                    },
-                    onSubmitSuccess: function( ajaxData ){
-                        console.log('this', this);
-                        console.log( 'onSubmitSuccess ajaxData ', ajaxData );
-
-                        let formEl = this.formEl;
-
-                        if( this.options.formOptions.ajaxSubmit ){
-                            var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
-                            feedbackEl.classList.remove( 'alert-danger' );
-                            feedbackEl.classList.add( 'alert-success' );
-                            feedbackEl.classList.remove( 'd-none' );
-                            feedbackEl.innerHTML = 'Great! Your infos have been sent :D';
-                        }
-                    },
-                    onSubmitError: function( ajaxData ){
-                        console.log('this', this);
-                        console.log( 'onSubmitError ajaxData ', ajaxData );
-
-                        let formEl = this.formEl;
-
-                        if( this.options.formOptions.ajaxSubmit ){
-                            var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
-                            feedbackEl.classList.remove( 'alert-success' );
-                            feedbackEl.classList.add( 'alert-danger' );
-                            feedbackEl.classList.remove( 'd-none' );
-                            feedbackEl.innerHTML = 'Oh no, something went wrong! :( Retry';
-                        }
-                    },
-                    onSubmitComplete: function( ajaxData ){
-                        console.log('this', this);
-                        console.log( 'onSubmitComplete ajaxData ', ajaxData );
-                    }
-                }
-            };
-
-        var formInstance = new Form( document.querySelector('form'), optionsPlugin ).init();
-        console.log('formInstance', formInstance);
-    </script>
+    <script src="dist/additionals/validationRules.js"></script>
+    <script src="dist/additionals/validationErrors.js"></script>
+    <script src="js/doc.js"></script>
+    <script src="dist/additionals/utils.js"></script>
+    
 </body>
 </html>

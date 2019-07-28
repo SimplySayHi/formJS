@@ -1,0 +1,1753 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Tests | formJS - Javascript Form Validation. Made Easy</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="Valerio Di Punzio">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great|Raleway:200" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/demo.css">
+</head>
+
+<body>
+    
+    <div class="container mb-5">
+        
+        <div id="top" class="text-center mb-5">
+            <div>
+                <p class="mt-5 mb-4">
+                    <a href="index.html">&leftarrow; back to documentation</a>
+                </p>
+            </div>
+            <h1>formJS</h1>
+            <p>Test</p>
+        </div>
+        
+        <!-- Demos -->
+        <div id="demos" class="panel-collapsible row">
+
+            <!-- CAP -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">CAP</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-cap" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="cap" type="text" data-type="number" data-subtype="cap" class="form-control" />
+                                        <label>CAP</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="cap-required" type="text" data-type="number" data-subtype="cap" class="form-control" required />
+                                        <label>CAP required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="cap-if-filled" type="text" data-type="number" data-subtype="cap" class="form-control" data-validate-if-filled />
+                                        <label>CAP if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Char Count -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Char Count</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-char-length" novalidate>
+                            <div>
+                                <div data-formjs-question="" class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <textarea name="char-count-message" class="form-control" rows="3" maxlength="100" data-char-count></textarea>
+                                        <label>Message ( <span data-char-length></span>/<span data-char-maxlength></span> )</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Checkbox -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Checkbox</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-checkbox" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="form-check">
+                                        <input name="check-01" type="checkbox" value="checkbox-01" class="form-check-input" id="checkbox-01" />
+                                        <label class="form-check-label" for="checkbox-01">Checkbox</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="form-check">
+                                        <input name="check-01-required" type="checkbox" value="checkbox-01-required" class="form-check-input" id="checkbox-01-required" required />
+                                        <label class="form-check-label" for="checkbox-01-required">Checkbox required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Checks -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Checks</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-checks" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    Select at least 2 answers:
+                                    <div class="form-check">
+                                        <input name="check-04" type="checkbox" value="checkbox-04-a" class="form-check-input" id="checkbox-04-a" required data-checks="[2,999]" />
+                                        <label class="form-check-label" for="checkbox-04-a">Checkbox a</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="check-04" type="checkbox" value="checkbox-04-b" class="form-check-input" id="checkbox-04-b" required />
+                                        <label class="form-check-label" for="checkbox-04-b">Checkbox b</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="check-04" type="checkbox" value="checkbox-04-c" class="form-check-input" id="checkbox-04-c" required />
+                                        <label class="form-check-label" for="checkbox-04-c">Checkbox c</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="check-04" type="checkbox" value="checkbox-04-d" class="form-check-input" id="checkbox-04-d" required />
+                                        <label class="form-check-label" for="checkbox-04-d">Checkbox d</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="check-04" type="checkbox" value="checkbox-04-e" class="form-check-input" id="checkbox-04-e" required />
+                                        <label class="form-check-label" for="checkbox-04-e">Checkbox e</label>
+                                    </div>
+                                    <div class="field-error-message small">
+                                        You must select at least 2 answers!
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    Select at most 2 answers:
+                                    <div class="form-check">
+                                        <input name="check-03" type="checkbox" value="checkbox-03-a" class="form-check-input" id="checkbox-03-a" required data-checks="[0,2]" />
+                                        <label class="form-check-label" for="checkbox-03-a">Checkbox a</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="check-03" type="checkbox" value="checkbox-03-b" class="form-check-input" id="checkbox-03-b" required />
+                                        <label class="form-check-label" for="checkbox-03-b">Checkbox b</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="check-03" type="checkbox" value="checkbox-03-c" class="form-check-input" id="checkbox-03-c" required />
+                                        <label class="form-check-label" for="checkbox-03-c">Checkbox c</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="check-03" type="checkbox" value="checkbox-03-d" class="form-check-input" id="checkbox-03-d" required />
+                                        <label class="form-check-label" for="checkbox-03-d">Checkbox d</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="check-03" type="checkbox" value="checkbox-03-e" class="form-check-input" id="checkbox-03-e" required />
+                                        <label class="form-check-label" for="checkbox-03-e">Checkbox e</label>
+                                    </div>
+                                    <div class="field-error-message small">
+                                        You must select at most 2 answers!
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    Select from 2 to 4 answers:
+                                    <div class="form-check">
+                                        <input name="check-02" type="checkbox" value="checkbox-02-a" class="form-check-input" id="checkbox-02-a" required data-checks="[2,4]" />
+                                        <label class="form-check-label" for="checkbox-02-a">Checkbox a</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="check-02" type="checkbox" value="checkbox-02-b" class="form-check-input" id="checkbox-02-b" required />
+                                        <label class="form-check-label" for="checkbox-02-b">Checkbox b</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="check-02" type="checkbox" value="checkbox-02-c" class="form-check-input" id="checkbox-02-c" required />
+                                        <label class="form-check-label" for="checkbox-02-c">Checkbox c</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="check-02" type="checkbox" value="checkbox-02-d" class="form-check-input" id="checkbox-02-d" required />
+                                        <label class="form-check-label" for="checkbox-02-d">Checkbox d</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="check-02" type="checkbox" value="checkbox-02-e" class="form-check-input" id="checkbox-02-e" required />
+                                        <label class="form-check-label" for="checkbox-02-e">Checkbox e</label>
+                                    </div>
+                                    <div class="field-error-message small">
+                                        You must select at least 2 and at most 4 answers!
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Color -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Color</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-color" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="color" type="color" data-subtype="color" class="form-control" />
+                                        <label>Color</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="color-required" type="color" data-subtype="color" class="form-control" required />
+                                        <label>Color required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="color-if-filled" type="color" data-subtype="color" class="form-control" data-validate-if-filled />
+                                        <label>Color if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Color ( with type text ) -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Color ( with type text )</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-color-text" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="color-text" type="text" data-subtype="color" class="form-control" />
+                                        <label>Color</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="color-text-required" type="text" data-subtype="color" class="form-control" required />
+                                        <label>Color required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="color-text-if-filled" type="text" data-subtype="color" class="form-control" data-validate-if-filled />
+                                        <label>Color if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Date</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-date" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="date" type="text" data-subtype="date" class="form-control" />
+                                        <label>Date</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="date-required" type="text" data-subtype="date" class="form-control" required />
+                                        <label>Date required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="date-if-filled" type="text" data-subtype="date" class="form-control" data-validate-if-filled />
+                                        <label>Date if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="type-date" type="date" data-subtype="date" class="form-control" />
+                                        <label>Date type="date"</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="type-date-required" type="date" data-subtype="date" class="form-control" required />
+                                        <label>Date type="date" required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="type-date-if-filled" type="date" data-subtype="date" class="form-control" data-validate-if-filled />
+                                        <label>Date type="date" if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date DDMMYYYY -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Date DDMMYYYY</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-dateDDMMYYYY" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="dateDDMMYYYY" type="text" data-subtype="dateDDMMYYYY" class="form-control" />
+                                        <label>Date DDMMYYYY</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="dateDDMMYYYY-required" type="text" data-subtype="dateDDMMYYYY" class="form-control" required />
+                                        <label>Date DDMMYYYY required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="dateDDMMYYYY-if-filled" type="text" data-subtype="dateDDMMYYYY" class="form-control" data-validate-if-filled />
+                                        <label>Date DDMMYYYY if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Email</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-email" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="email" type="email" class="form-control" />
+                                        <label>Email</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="email-required" type="email" class="form-control" required />
+                                        <label>Email required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="email-if-filled" type="email" class="form-control" data-validate-if-filled />
+                                        <label>Email if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Equal To -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Equal To</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-email" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="test-equal-to-1" type="text" class="form-control" />
+                                        <label>Test Field</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="equal-to" type="text" data-equal-to="test-equal-to-1" class="form-control" />
+                                        <label>Equal To TF</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="test-equal-to-2" type="text" class="form-control" required />
+                                        <label>Test Field required</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="equal-to-required" type="text" data-equal-to="test-equal-to-2" class="form-control" required />
+                                        <label>Equal To TF required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="test-equal-to-3" type="text" class="form-control" data-validate-if-filled />
+                                        <label>Test Field if filled</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="equal-to-if-filled" type="text" data-equal-to="test-equal-to-3" class="form-control" data-validate-if-filled />
+                                        <label>Equal To TF if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exact Length -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Exact Length</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-exact-length" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="exact-length" type="text" class="form-control" data-exact-length="5" />
+                                        <label>Exact Length</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="exact-length-required" type="text" class="form-control" data-exact-length="5" required />
+                                        <label>Exact Length required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="exact-length-if-filled" type="text" class="form-control" data-exact-length="5" data-validate-if-filled />
+                                        <label>Exact Length if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">File</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" enctype="multipart/form-data" name="form-file" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="file" type="file" class="form-control" />
+                                        <label>File</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="file-required" type="file" class="form-control" data-max-file-size="2" required />
+                                        <label>File required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid! ( max file size is: <span data-print-max-file-size></span>MB )</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="file-if-filled" type="file" class="form-control" data-validate-if-filled />
+                                        <label>File if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong! ( max file size is: <span data-print-max-file-size></span>MB )</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fiscal Code -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Fiscal Code</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-fiscal-code" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="fiscal-code" type="text" data-subtype="fiscal-code" class="form-control text-uppercase" />
+                                        <label>Fiscal Code</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="fiscal-code-required" type="text" data-subtype="fiscal-code" class="form-control text-uppercase" required />
+                                        <label>Fiscal Code required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="fiscal-code-if-filled" type="text" data-subtype="fiscal-code" class="form-control text-uppercase" data-validate-if-filled />
+                                        <label>Fiscal Code if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Landline Number -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Landline Number</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-landline-number" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="landline-number-color" type="number" data-subtype="landline-number" class="form-control" />
+                                        <label>Landline Number</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="landline-number-required" type="number" data-subtype="landline-number" class="form-control" required />
+                                        <label>Landline Number required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="landline-number-if-filled" type="number" data-subtype="landline-number" class="form-control" data-validate-if-filled />
+                                        <label>Landline Number if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Length -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Length</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-length" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="length" type="text" data-length="[5,10]" class="form-control" />
+                                        <label>Length</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="length-required" type="text" data-length="[5,10]" class="form-control" required />
+                                        <label>Length required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="length-if-filled" type="text" data-length="[5,10]" class="form-control" data-validate-if-filled />
+                                        <label>Length if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Max -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Max</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-max" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="max" type="number" max="10" class="form-control" />
+                                        <label>Max</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="max-required" type="number" max="10" class="form-control" required />
+                                        <label>Max required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="max-if-filled" type="number" max="10" class="form-control" data-validate-if-filled />
+                                        <label>Max if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Max Date -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Max Date</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-maxdate" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="maxdate" type="text" data-subtype="date" max="2010-01-10" class="form-control" />
+                                        <label>Max Date</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="maxdate-required" type="text" data-subtype="date" max="2010-01-10" class="form-control" required />
+                                        <label>Max Date required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="maxdate-if-filled" type="text" data-subtype="date" max="2010-01-10" class="form-control" data-validate-if-filled />
+                                        <label>Max Date if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Max Date DDMMYYYY -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Max Date DDMMYYYY</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-maxdateDDMMYYYY" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="maxdateDDMMYYYY" type="text" data-subtype="dateDDMMYYYY" max="2010-01-10" class="form-control" />
+                                        <label>Max Date DDMMYYYY</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="maxdateDDMMYYYY-required" type="text" data-subtype="dateDDMMYYYY" max="2010-01-10" class="form-control" required />
+                                        <label>Max Date DDMMYYYY required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="maxdateDDMMYYYY-if-filled" type="text" data-subtype="dateDDMMYYYY" max="2010-01-10" class="form-control" data-validate-if-filled />
+                                        <label>Max Date DDMMYYYY if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Maxlength -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Maxlength</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-maxlength" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="maxlength" type="text" maxlength="10" class="form-control" />
+                                        <label>Maxlength</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="maxlength-required" type="text" maxlength="10" class="form-control" required />
+                                        <label>Maxlength required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="maxlength-if-filled" type="text" maxlength="10" class="form-control" data-validate-if-filled />
+                                        <label>Maxlength if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Min -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Min</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-min" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="min" type="number" min="10" class="form-control" />
+                                        <label>Min</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="min-required" type="number" min="10" class="form-control" required />
+                                        <label>Min required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="min-if-filled" type="number" min="10" class="form-control" data-validate-if-filled />
+                                        <label>Min if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Min Date -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Min Date</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-mindate" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="mindate" type="text" data-subtype="date" min="2010-01-10" class="form-control" />
+                                        <label>Min Date</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="mindate-required" type="text" data-subtype="date" min="2010-01-10" class="form-control" required />
+                                        <label>Min Date required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="mindate-if-filled" type="text" data-subtype="date" min="2010-01-10" class="form-control" data-validate-if-filled />
+                                        <label>Min Date if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Min Date DDMMYYYY -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Min Date DDMMYYYY</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-mindateDDMMYYYY" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="mindateDDMMYYYY" type="text" data-subtype="dateDDMMYYYY" min="2010-01-10" class="form-control" />
+                                        <label>Min Date DDMMYYYY</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="mindateDDMMYYYY-required" type="text" data-subtype="dateDDMMYYYY" min="2010-01-10" class="form-control" required />
+                                        <label>Min Date DDMMYYYY required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="mindateDDMMYYYY-if-filled" type="text" data-subtype="dateDDMMYYYY" min="2010-01-10" class="form-control" data-validate-if-filled />
+                                        <label>Min Date DDMMYYYY if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Minlength -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Minlength</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-minlength" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="minlength" type="text" minlength="10" class="form-control" />
+                                        <label>Minlength</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="minlength-required" type="text" minlength="10" class="form-control" required />
+                                        <label>Minlength required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="minlength-if-filled" type="text" minlength="10" class="form-control" data-validate-if-filled />
+                                        <label>Minlength if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Number -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Mobile Number</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-mobile-number" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="mobile-number-color" type="number" data-subtype="mobile-number" class="form-control" />
+                                        <label>Mobile Number</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="mobile-number-required" type="number" data-subtype="mobile-number" class="form-control" required />
+                                        <label>Mobile Number required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="mobile-number-if-filled" type="number" data-subtype="mobile-number" class="form-control" data-validate-if-filled />
+                                        <label>Mobile Number if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Number -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Number</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-number" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="number" type="number" class="form-control" />
+                                        <label>Number</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="number-required" type="number" class="form-control" required />
+                                        <label>Number required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="number-if-filled" type="number" class="form-control" data-validate-if-filled />
+                                        <label>Number if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Number Float -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Number Float</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-number-float" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="number-float" type="number" data-subtype="number-float" class="form-control" />
+                                        <label>Number Float</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="number-float-required" type="number" data-subtype="number-float" class="form-control" required />
+                                        <label>Number Float required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="number-float-if-filled" type="number" data-subtype="number-float" class="form-control" data-validate-if-filled />
+                                        <label>Number Float if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Number Integer -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Number Integer</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-number-integer" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="number-integer" type="number" data-subtype="number-integer" class="form-control" />
+                                        <label>Number Integer</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="number-integer-required" type="number" data-subtype="number-integer" class="form-control" required />
+                                        <label>Number Integer required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="number-integer-if-filled" type="number" data-subtype="number-integer" class="form-control" data-validate-if-filled />
+                                        <label>Number Integer if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Password</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-password" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="password" type="password" class="form-control" />
+                                        <label>Password</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="password-required" type="password" class="form-control" required />
+                                        <label>Password required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="password-if-filled" type="password" class="form-control" data-validate-if-filled />
+                                        <label>Password if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pattern -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Pattern</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-pattern" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="pattern" type="text" pattern="^(IT){0,1}[0-9]{11}$" class="form-control" />
+                                        <label>Pattern</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="pattern-required" type="text" pattern="^(IT){0,1}[0-9]{11}$" class="form-control" required />
+                                        <label>Pattern required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="pattern-if-filled" type="text" pattern="^(IT){0,1}[0-9]{11}$" class="form-control" data-validate-if-filled />
+                                        <label>Pattern if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Radio -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Radio</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-radio" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box">
+                                        <div class="small">
+                                            I spontaneously agree with the <a href="#" target="_blank">Privacy Policy</a>.
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="privacyCheck-00" id="privacyCheck-1-e" value="accepted" />
+                                            <label class="form-check-label" for="privacyCheck-1-e">Yes</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="privacyCheck-00" id="privacyCheck-2-e" value="" />
+                                            <label class="form-check-label" for="privacyCheck-2-e">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box">
+                                        <div class="small">
+                                            I'm obliged to agree with the <a href="#" target="_blank">Privacy Policy</a>.
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="privacyCheck" id="privacyCheck-01-e" value="accepted" required />
+                                            <label class="form-check-label" for="privacyCheck-01-e">Yes</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="privacyCheck" id="privacyCheck-02-e" value="" required />
+                                            <label class="form-check-label" for="privacyCheck-02-e">No</label>
+                                        </div>
+                                    </div>
+                                    <div class="field-error-message small">You must agree!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Require More & Required From  -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Req. More &amp; Req. From</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-req-more-from" novalidate>
+                            <div>
+                                <div data-formjs-question="" class="form-group">
+                                    You can select one of these:
+                                    <div class="input-container form-check">
+                                        <input id="radio-5-20-6-1" name="radio-list-1" value="1" type="radio" class="form-check-input" />
+                                        <label for="radio-5-20-6-1" class="form-check-label">
+                                            Answer One
+                                        </label>
+                                    </div>
+                                    <div class="input-container form-check">
+                                        <input id="radio-5-20-6-2" name="radio-list-1" value="2" type="radio" class="form-check-input" />
+                                        <label for="radio-5-20-6-2" class="form-check-label">
+                                            Answer Two
+                                        </label>
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <input id="radio-5-200-6-3" name="radio-list-1" value="3" data-require-more="" type="radio" />
+                                                <label for="radio-5-200-6-3">&nbsp;Other:</label>
+                                            </div>
+                                        </span>
+                                        <input class="form-control" name="radio-list-1-more" data-required-from="#radio-5-200-6-3" type="text" />
+                                    </div>
+                                </div>
+                                <div data-formjs-question="" class="form-group">
+                                    You must select one of these:
+                                    <div class="input-container form-check">
+                                        <input required="" id="radio-5-20-6-01" name="radio-list-01" value="1" type="radio" class="form-check-input" />
+                                        <label for="radio-5-20-6-01" class="form-check-label">
+                                            Answer One
+                                        </label>
+                                    </div>
+                                    <div class="input-container form-check">
+                                        <input required="" id="radio-5-20-6-02" name="radio-list-01" value="2" type="radio" class="form-check-input" />
+                                        <label for="radio-5-20-6-02" class="form-check-label">
+                                            Answer Two
+                                        </label>
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <input id="radio-5-200-6-03" name="radio-list-01" value="3" required="" data-require-more="" type="radio" />
+                                                <label for="radio-5-200-6-03">&nbsp;Other:</label>
+                                            </div>
+                                        </span>
+                                        <input class="form-control" name="radio-list-01-more" data-required-from="#radio-5-200-6-03" type="text" />
+                                    </div>
+                                    <div class="field-error-message small">You must choose an answer ( and fill the text field if you selected "Other" )!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Select -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Select</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-select" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <select name="select" class="form-control">
+                                            <option value="">Select</option>
+                                            <option value="01">Option 01</option>
+                                            <option value="02">Option 02</option>
+                                            <option value="03">Option 03</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <select name="select-required" class="form-control" required>
+                                            <option value="">Select</option>
+                                            <option value="01">Option 01</option>
+                                            <option value="02">Option 02</option>
+                                            <option value="03">Option 03</option>
+                                        </select>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <select name="select-if-filled" class="form-control" data-validate-if-filled>
+                                            <option value="">Select</option>
+                                            <option value="01">Option 01</option>
+                                            <option value="02">Option 02</option>
+                                            <option value="03">Option 03</option>
+                                        </select>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Select ( multiple ) -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Select ( multiple )</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-select-multiple" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <select name="select-multiple" multiple class="form-control">
+                                            <option value="">Select</option>
+                                            <option value="01">Option 01</option>
+                                            <option value="02">Option 02</option>
+                                            <option value="03">Option 03</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <select name="select-multiple-required" multiple class="form-control" required>
+                                            <option value="">Select</option>
+                                            <option value="01">Option 01</option>
+                                            <option value="02">Option 02</option>
+                                            <option value="03">Option 03</option>
+                                        </select>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <select name="select-multiple-if-filled" multiple class="form-control" data-validate-if-filled>
+                                            <option value="">Select</option>
+                                            <option value="01">Option 01</option>
+                                            <option value="02">Option 02</option>
+                                            <option value="03">Option 03</option>
+                                        </select>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tel -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Tel</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-tel" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="tel" type="tel" class="form-control" />
+                                        <label>Tel</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="tel-required" type="tel" data-subtype="mobile-number" class="form-control" required />
+                                        <label>Tel required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="tel-if-filled" type="tel" class="form-control" data-validate-if-filled />
+                                        <label>Tel if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Text -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Text</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-text" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="text" type="text" class="form-control" />
+                                        <label>Text</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="text-required" type="text" class="form-control" required />
+                                        <label>Text required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="text-if-filled" type="text" class="form-control" data-validate-if-filled />
+                                        <label>Text if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- URL -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">URL</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-url" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="url" type="text" data-subtype="url" class="form-control" />
+                                        <label>URL</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="url-required" type="text" data-subtype="url" class="form-control" required />
+                                        <label>URL required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="url-if-filled" type="text" data-subtype="url" class="form-control" data-validate-if-filled />
+                                        <label>URL if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Username -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Username</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-username" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="username" type="text" data-subtype="username" class="form-control" />
+                                        <label>Username</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="username-required" type="text" data-subtype="username" class="form-control" required />
+                                        <label>Username required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="username-if-filled" type="text" data-subtype="username" class="form-control" data-validate-if-filled />
+                                        <label>Username if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VAT Number -->
+            <div class="col-md-6 col-lg-4 col-xl-3 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">VAT Number</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="json/data.json" name="form-vat-number" novalidate>
+                            <div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="vat-number" type="text" data-subtype="vat-number" class="form-control" />
+                                        <label>VAT Number</label>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="vat-number-required" type="text" data-subtype="vat-number" class="form-control" required />
+                                        <label>VAT Number required</label>
+                                    </div>
+                                    <div class="field-error-message small">This is mandatory and not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="vat-number-if-filled" type="text" data-subtype="vat-number" class="form-control" data-validate-if-filled />
+                                        <label>VAT Number if filled</label>
+                                    </div>
+                                    <div class="field-error-message small">This is wrong!</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+
+    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EGDE VERSIONS -->
+    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch"></script>
+
+    <script src="js/include.js"></script>
+    
+    <!-- <script type="module" src="src/index.js"></script>
+    <script type="module" src="dist/additionals/validationRules.js"></script>
+    <script type="module" src="dist/additionals/validationErrors.js"></script>
+    <script type="module" src="js/test.js"></script>
+    <script type="module" src="dist/additionals/utils.js"></script> -->
+
+    <script src="dist/formJS.min.js"></script>
+    <script src="dist/additionals/validationRules.js"></script>
+    <script src="dist/additionals/validationErrors.js"></script>
+    <script src="js/test.js"></script>
+    <script src="dist/additionals/utils.js"></script>
+    
+</body>
+</html>

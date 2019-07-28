@@ -2,26 +2,26 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>formJS - Demos</title>
+    <title>Demos | formJS  - Javascript Form Validation. Made Easy</title>
     <meta name="description" content="">
-    <meta name="author" content="">
-    
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="keywords" content="">
+    <meta name="author" content="Valerio Di Punzio">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great|Raleway:200" rel="stylesheet">
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/demo.css">
 </head>
 
 <body>
     
     <div class="container mb-5">
+        
         <div id="top" class="text-center mb-5">
             <div>
                 <p class="mt-5 mb-4">
-                    <a href="./index.html">&leftarrow; back to documentation</a>
+                    <a href="index.html">&leftarrow; back to documentation</a>
                 </p>
             </div>
             <h1>formJS</h1>
@@ -32,7 +32,7 @@
         <div id="demos" class="panel-collapsible row">
 
             <!-- Demo Ajax Form ( POST ) -->
-            <div id="demo-01" class="col-sm-6 col-md-3 py-3">
+            <div id="demo-01" class="col-md-6 py-3">
                 <div class="panel no-bg">
                     <div class="card-header bg-white text-dark">
                         <div>
@@ -40,13 +40,13 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form method="POST" enctype="multipart/form-data" action="" name="ajax-form-post-01" novalidate>
+                        <form method="POST" enctype="multipart/form-data" action="json/data.json" name="ajax-form-post-01" novalidate>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
                                     <input name="document" type="file" class="form-control" accept="image/png" required />
                                     <label>File</label>
                                 </div>
-                                <div class="field-error-message small">You must select a PNG file and size limit is 10MB!</div>
+                                <div class="field-error-message small">You must select a PNG file and size limit is <span data-print-max-file-size></span>MB!</div>
                             </div>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
@@ -143,7 +143,7 @@
             </div>
             
             <!-- Demo Ajax Form ( GET ) -->
-            <div id="demo-02" class="col-sm-6 col-md-3 py-3">
+            <div id="demo-02" class="col-md-6 py-3">
                 <div class="panel no-bg">
                     <div class="card-header bg-white text-dark">
                         <div>
@@ -151,7 +151,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="" method="GET" name="ajax-form-get-01" novalidate>
+                        <form action="json/data.json" method="GET" name="ajax-form-get-01" novalidate>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
                                     <input name="name" type="text" class="form-control" required />
@@ -239,9 +239,12 @@
                     </div>
                 </div>
             </div>
+
+            <!-- separator -->
+            <div class="w-100"></div>
             
             <!-- Demo Basic Form ( POST ) -->
-            <div id="demo-03" class="col-sm-6 col-md-3 py-3">
+            <div id="demo-03" class="col-md-6 py-3">
                 <div class="panel no-bg">
                     <div class="card-header bg-white text-dark">
                         <div>
@@ -249,7 +252,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="" method="POST" name="basic-form-post-01" novalidate>
+                        <form action="json/data.json" method="POST" name="basic-form-post-01" novalidate>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
                                     <input name="name" type="text" class="form-control" required />
@@ -338,7 +341,7 @@
             </div>
             
             <!-- Demo Basic Form ( GET ) -->
-            <div id="demo-04" class="col-sm-6 col-md-3 py-3">
+            <div id="demo-04" class="col-md-6 py-3">
                 <div class="panel no-bg">
                     <div class="card-header bg-white text-dark">
                         <div>
@@ -346,7 +349,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="" method="GET" name="basic-form-get-01" novalidate>
+                        <form action="json/data.json" method="GET" name="basic-form-get-01" novalidate>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
                                     <input name="name" type="text" class="form-control" required />
@@ -434,98 +437,161 @@
                 </div>
             </div>
 
-            <!-- Demo Form No-submit -->
-            <div id="demo-05" class="col-sm-6 col-md-3 py-3">
+            <!-- separator -->
+            <div class="w-100"></div>
+
+            <!-- Demo Ajax Form ( POST ) CSS Error Messages -->
+            <div id="demo-06" class="col-md-6 py-3">
                 <div class="panel no-bg">
                     <div class="card-header bg-white text-dark">
                         <div>
-                            <p class="m-0">Form No-submit</p>
+                            <p class="m-0">Form with CSS Error Messages</p>
                         </div>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="" name="basic-form-post-02" novalidate>
+                        <p class="text-white small">
+                            In this demo the error messages will be shown thanks to CSS classes.<bt />
+                            All error messages are already insdie the HTML.
+                        </p>
+                        <form method="POST" action="json/data.json" name="ajax-form-post-css-errors" novalidate>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
-                                    <input name="name" type="text" class="form-control" required />
+                                    <input name="name" type="text" data-length="[3,20]" class="form-control" required />
                                     <label>Name</label>
                                 </div>
                                 <div class="field-error-message small">Write your name!</div>
                             </div>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
-                                    <input name="surname" type="text" class="form-control" />
-                                    <label>Surname</label>
-                                </div>
-                                <div class="field-error-message small">Write your surname!</div>
-                            </div>
-                            <div data-formjs-question class="form-group">
-                                <div class="answers-box label-move-up">
                                     <input name="email" type="email" class="form-control" required />
                                     <label>Email</label>
                                 </div>
-                                <div class="field-error-message small">Check your email address, it is not valid!</div>
-                            </div>
-                            <div data-formjs-question class="form-group">
-                                <div class="answers-box label-move-up">
-                                    <input name="mobileNumber" type="text" data-subtype="mobile-number" class="form-control" data-validate-if-filled />
-                                    <label>Mobile number</label>
+                                <div class="field-error-message small">
+                                    <div data-error-type="empty">
+                                        Email address cannot be empty!
+                                    </div>
+                                    <div data-error-type="rule">
+                                        Check your email address, it is not valid:
+                                        <ul>
+                                            <li data-error-type="missingAtChar">@ char is missing</li>
+                                            <li data-error-type="missingUserName">Username is missing</li>
+                                            <li data-error-type="missingDomain">Domain is missing</li>
+                                            <li data-error-type="missingExtensionDot">Extension dot is missing</li>
+                                            <li data-error-type="missingExtension">Extension is missing</li>
+                                            <li data-error-type="minlengthExtension">Extension isn't long enough</li>
+                                        </ul>
+                                    </div>
                                 </div>
-                                <div class="field-error-message small">Check your mobile number, it is not valid!</div>
                             </div>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
                                     <input name="username" type="text" data-subtype="username" class="form-control" required />
                                     <label>Username</label>
                                 </div>
-                                <div class="field-error-message small">Username must have at least 3 characters (no special chars allowed)!</div>
+                                <div class="field-error-message small">
+                                    <div data-error-type="empty">
+                                        Username cannot be empty!
+                                    </div>
+                                    <div data-error-type="rule">
+                                        Username is not valid:
+                                        <ul>
+                                            <li data-error-type="minlength">Must be al least 3 chars long</li>
+                                            <li data-error-type="maxlength">Must be at most 24 chars long</li>
+                                            <li data-error-type="invalidChars">Contains not allowed chars. It must be with letters, numbers, underscores and/or . - @</li>
+                                            <li data-error-type="invalidStartChar">Must start with a letter, number or underscore</li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
                                     <input name="password" type="password" class="form-control" required />
                                     <label>Password</label>
                                 </div>
-                                <div class="field-error-message small">Password must have minimum 8 characters with one digit, one lowercase, one uppercase</div>
-                            </div>
-                            <div data-formjs-question class="form-group">
-                                <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
-                                <div class="answers-box">
-                                    <div class="form-check">
-                                        <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-e" data-checks="[1,2]" required="" />
-                                        <label class="form-check-label" for="checkbox-1-e">SMS</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input name="contactPrefCheck" type="checkbox" value="email" class="form-check-input" id="checkbox-2-e" required="" />
-                                        <label class="form-check-label" for="checkbox-2-e">Email</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input name="contactPrefCheck" type="checkbox" value="app-notiifcation" class="form-check-input" id="checkbox-3-e" required="" />
-                                        <label class="form-check-label" for="checkbox-3-e">App Notification</label>
-                                    </div>
-                                </div>
                                 <div class="field-error-message small">
-                                    <span>Select al least one of the options!</span>
-                                    <span>You can select 2 answers max!</span>
+                                    <div data-error-type="empty">
+                                        Password cannot be empty!
+                                    </div>
+                                    <div data-error-type="rule">
+                                        Check your password, it is not valid:
+                                        <ul>
+                                            <li data-error-type="minlength">Must have least 8 chars</li>
+                                            <li data-error-type="missingNumber">Must contain a number</li>
+                                            <li data-error-type="missingLowercase">Must contain a lowercase char</li>
+                                            <li data-error-type="missingUppercase">Must contain an uppercase char</li>
+                                            <li data-error-type="invalidChars">Can contain only letters and numbers</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                             <div data-formjs-question class="form-group">
-                                <div class="answers-box">
-                                    <div class="small">
-                                        I agree with the <a href="#" target="_blank">Privacy Policy</a>.
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="privacyCheck" id="privacyCheck-1-e" value="accepted" required />
-                                        <label class="form-check-label" for="privacyCheck-1-e">Yes</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="privacyCheck" id="privacyCheck-2-e" value="" required />
-                                        <label class="form-check-label" for="privacyCheck-2-e">No</label>
-                                    </div>
+                                <div class="answers-box label-move-up">
+                                    <input name="passwordConfirm" type="password" data-equal-to="password" class="form-control" required />
+                                    <label>Confirm Password</label>
                                 </div>
-                                <div class="field-error-message small">You must agree!</div>
+                                <div class="field-error-message small">Password and Confirm Password are not equal!</div>
                             </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-light">SEND</button>
                             </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo Ajax Form ( POST ) JS Error Messages -->
+            <div id="demo-07" class="col-md-6 py-3">
+                <div class="panel no-bg">
+                    <div class="card-header bg-white text-dark">
+                        <div>
+                            <p class="m-0">Form with JS Error Messages</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-white small">
+                            In this demo the error messages will be shown thanks to a JS function that dynamically prints them.
+                        </p>
+                        <form method="POST" action="json/data.json" name="ajax-form-post-js-errors" novalidate>
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="name" type="text" data-length="[3,20]" class="form-control" required />
+                                    <label>Name</label>
+                                </div>
+                                <div class="field-error-message small"></div>
+                            </div>
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="email" type="email" class="form-control" required />
+                                    <label>Email</label>
+                                </div>
+                                <div class="field-error-message small"></div>
+                            </div>
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="username" type="text" data-subtype="username" class="form-control" required />
+                                    <label>Username</label>
+                                </div>
+                                <div class="field-error-message small"></div>
+                            </div>
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="password" type="password" class="form-control" required />
+                                    <label>Password</label>
+                                </div>
+                                <div class="field-error-message small"></div>
+                            </div>
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="passwordConfirm" type="password" data-equal-to="password" class="form-control" required />
+                                    <label>Confirm Password</label>
+                                </div>
+                                <div class="field-error-message small"></div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-light">SEND</button>
+                            </div>
+                            <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
                         </form>
                     </div>
                 </div>
@@ -535,13 +601,22 @@
         
     </div>
 
-    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 -->
-    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"></script>
+    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EGDE VERSIONS -->
+    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch"></script>
     
+    <script src="js/include.js"></script>
+
     <!-- <script type="module" src="src/index.js"></script>
-    <script type="module" src="js/demo.js"></script> -->
+    <script type="module" src="dist/additionals/validationRules.js"></script>
+    <script type="module" src="dist/additionals/validationErrors.js"></script>
+    <script type="module" src="js/demo.js"></script>
+    <script type="module" src="dist/additionals/utils.js"></script> -->
 
     <script src="dist/formJS.min.js"></script>
+    <script src="dist/additionals/validationRules.js"></script>
+    <script src="dist/additionals/validationErrors.js"></script>
     <script src="js/demo.js"></script>
+    <script src="dist/additionals/utils.js"></script>
+    
 </body>
 </html>

@@ -1,15 +1,29 @@
+
 export const
 
-_fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type=button]):not([type=hidden]), select, textarea',
+fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type=button]):not([type=hidden]), select, textarea',
 
-_addClass = function( element, cssClasses ){
+addClass = function( element, cssClasses ){
     cssClasses.split(' ').forEach(function(className){
         element.classList.add( className );
     });
 },
 
-_executeCallback = function( callbackOption, callbackData ){
+checkFormEl = function( formEl ){
+    let isString = typeof formEl,
+        isValidNodeSelector = isString === 'string' && isDOMNode(document.querySelector(formEl)),
+        isFormSelector = isValidNodeSelector && document.querySelector(formEl).tagName.toLowerCase() === 'form',
+        obj = {
+            result: isDOMNode(formEl) || isFormSelector,
+            element: (isString === 'string' ? document.querySelector(formEl) : formEl)
+        };
+
+    return obj;
+},
+
+executeCallback = function( callbackOption, callbackData, tempOptions = {} ){
     let self = this,
+        options = mergeObjects({}, self.options, tempOptions),
         callbackFnList = [];
 
     if( typeof callbackOption === 'function' ){
@@ -19,39 +33,41 @@ _executeCallback = function( callbackOption, callbackData ){
     }
 
     callbackFnList.forEach(function(cbFn){
-        cbFn.call(self, callbackData );
+        cbFn.call( self, callbackData, options );
     });
 },
 
-_isDOMNode = function( node ){
+getSplitChar = function( string ){
+    let splitChar = '.';
+
+    if( string.indexOf(splitChar) === -1 ){
+        if( string.indexOf('-') >= 0 ){
+            splitChar = '-';
+        } else if( string.indexOf('/') >= 0 ){
+            splitChar = '/';
+        }
+    }
+
+    return splitChar;
+},
+
+isDOMNode = function( node ){
     return Element.prototype.isPrototypeOf( node );
 },
 
-_isFieldForChangeEvent = function ( fieldEl ) {
+isFieldForChangeEvent = function ( fieldEl ) {
     return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
 },
 
-_isNodeList = function( nodeList ){
+isNodeList = function( nodeList ){
     return NodeList.prototype.isPrototypeOf( nodeList );
 },
 
-_isPlainObject = function( object ){
+isPlainObject = function( object ){
     return Object.prototype.toString.call( object ) === '[object Object]';
 },
 
-_checkFormEl = function( formEl ){
-    let isString = typeof formEl,
-        isValidNodeSelector = isString === 'string' && _isDOMNode(document.querySelector(formEl)),
-        isFormSelector = isValidNodeSelector && document.querySelector(formEl).tagName.toLowerCase() === 'form',
-        obj = {
-            result: _isDOMNode(formEl) || isFormSelector,
-            element: (isString === 'string' ? document.querySelector(formEl) : formEl)
-        };
-
-    return obj;
-},
-
-_mergeObjects = function( out = {} ){
+mergeObjects = function( out = {} ){
     for(let i=1; i<arguments.length; i++){
         let obj = arguments[i];
 
@@ -65,19 +81,20 @@ _mergeObjects = function( out = {} ){
             if( obj.hasOwnProperty(key) ){
                 if( isArray ){
 
-                    if( typeof out[key] === 'undefined' || out[key] === null ){
+                    if( typeof out[key] === 'undefined' ){
                         out[key] = [];
                     }
                     out[key] = out[key].concat( obj[key].slice(0) );
 
                 } else if( isObject ){
 
-                    out[key] = _mergeObjects(out[key], obj[key]);
+                    out[key] = mergeObjects(out[key], obj[key]);
 
                 } else {
 
-                    // STRING | NUMBER | BOOLEAN | FUNCTION
+                    // * STRING | NUMBER | BOOLEAN | FUNCTION
                     if( Array.isArray(out[key]) ){
+                        // IF THIS IS ONE OF ABOVE (*) AND THE DESTINATION OBJECT IS AN ARRAY
                         out[key].push(obj[key]);
                     } else {
                         out[key] = obj[key];
@@ -91,21 +108,29 @@ _mergeObjects = function( out = {} ){
     return out;
 },
 
-_removeClass = function( element, cssClasses ){
+removeClass = function( element, cssClasses ){
     cssClasses.split(' ').forEach(function(className){
         element.classList.remove( className );
     });
 },
 
-_serialize = function( obj ){
+serializeObject = function( obj ){
     var objToString = (
             (obj && typeof obj === 'object' && obj.constructor === Object) ? 
-            Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&') : 
+            Object.keys(obj)
+                .reduce(function(a,k){
+                    a.push(k+'='+encodeURIComponent(obj[k]));
+                    return a
+                },[]).join('&') : 
             obj
     );
     return objToString;
 },
 
-_toCamelCase = function( string ){
+toCamelCase = function( string ){
     return string.replace(/-([a-z])/ig, function(all, letter){ return letter.toUpperCase(); });
-};
+},
+
+validateFieldObjDefault = { result: false, fieldEl: null },
+
+validateFormObjDefault = { result: true, fields: [] }

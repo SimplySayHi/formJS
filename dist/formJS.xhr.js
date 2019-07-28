@@ -157,7 +157,7 @@
             window.FormJS = Form;
         }
     },
-    "./src/modules/ajaxCall.js": function(module, exports, __webpack_require__) {
+    "./src/modules/ajaxCallXhr.js": function(module, exports, __webpack_require__) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -165,13 +165,13 @@
         exports.ajaxCall = ajaxCall;
         var _helper = __webpack_require__("./src/modules/helper.js");
         function ajaxCall(formDataObj) {
-            var self = this, formEl = self.formEl, fieldOptions = self.options.fieldOptions, formOptions = self.options.formOptions, btnEl = formEl.querySelector('[type="submit"]'), timeoutTimer = void 0, ajaxOptions = (0, 
-            _helper.mergeObjects)({}, formOptions.ajaxOptions), isMultipart = ajaxOptions.headers["Content-Type"] === "multipart/form-data";
-            ajaxOptions.body = formDataObj;
+            var self = this, formEl = self.formEl, fieldOptions = self.options.fieldOptions, formOptions = self.options.formOptions, btnEl = formEl.querySelector('[type="submit"]'), timeoutTimer = void 0, xhrOptions = (0, 
+            _helper.mergeObjects)({}, formOptions.ajaxOptions), isMultipart = xhrOptions.contentType === "multipart/form-data";
+            xhrOptions.data = formDataObj;
             if (isMultipart && fieldOptions.handleFileUpload) {
                 var formDataMultipart = new FormData();
-                for (var key in ajaxOptions.body) {
-                    formDataMultipart.append(key, ajaxOptions.body[key]);
+                for (var key in xhrOptions.data) {
+                    formDataMultipart.append(key, xhrOptions.data[key]);
                 }
                 Array.from(formEl.querySelectorAll('[type="file"]')).forEach(function(field) {
                     Array.from(field.files).forEach(function(file, idx) {
@@ -179,59 +179,86 @@
                         formDataMultipart.append(name, file, file.name);
                     });
                 });
-                ajaxOptions.body = formDataMultipart;
+                xhrOptions.data = formDataMultipart;
             }
-            if (ajaxOptions.method === "GET") {
-                ajaxOptions.url += (/\?/.test(ajaxOptions.url) ? "&" : "?") + (0, _helper.serializeObject)(ajaxOptions.body);
-                delete ajaxOptions.body;
-            } else {
-                if (ajaxOptions.headers["Content-Type"].indexOf("application/x-www-form-urlencoded") > -1) {
-                    ajaxOptions.body = (0, _helper.serializeObject)(ajaxOptions.body);
-                } else if (!isMultipart) {
-                    ajaxOptions.body = JSON.stringify(ajaxOptions.body);
-                }
-            }
-            ajaxOptions.headers = new Headers(ajaxOptions.headers);
-            if (ajaxOptions.timeout > 0) {
-                var controller = new AbortController();
-                var signal = controller.signal;
-                ajaxOptions.signal = signal;
-                timeoutTimer = window.setTimeout(function() {
-                    controller.abort();
-                }, ajaxOptions.timeout);
-            }
-            var ajaxResponse = {};
-            fetch(ajaxOptions.url, ajaxOptions).then(function(response) {
-                ajaxResponse.code = response.status;
-                if (!response.ok) {
-                    return Promise.reject(response);
-                }
-                var getFetchMethod = function getFetchMethod(response) {
-                    var contentType = response.headers.get("Content-Type"), methodName = "blob";
-                    if (contentType.indexOf("application/json") > -1) {
-                        methodName = "json";
-                    } else if (contentType.indexOf("text/") > -1) {
-                        methodName = "text";
+            var XHR = new XMLHttpRequest(), ajaxResponse = {}, parseResponse = function parseResponse(xhr) {
+                var data = xhr.responseText, getJSON = function getJSON() {
+                    try {
+                        var obj = JSON.parse(data);
+                        return obj;
+                    } catch (e) {
+                        return false;
                     }
-                    return methodName;
+                }, getXML_HTML = function getXML_HTML() {
+                    try {
+                        var isXML = xhr.responseXML !== null, obj = isXML ? new DOMParser().parseFromString(data, "text/xml") : data;
+                        return obj;
+                    } catch (e) {
+                        return false;
+                    }
                 };
-                var fetchMethod = getFetchMethod(response);
-                return response[fetchMethod]();
-            }).then(function(data) {
-                ajaxResponse.status = "success";
-                ajaxResponse.data = data;
-                _helper.executeCallback.call(self, formOptions.onSubmitSuccess, ajaxResponse);
-            }).catch(function(error) {
-                ajaxResponse.status = "error";
-                ajaxResponse.message = error.statusText;
+                return getJSON() || getXML_HTML() || data;
+            }, successFn = function successFn(e) {
+                var xhr = e.target;
+                if (xhr.status === 200) {
+                    var responseData = parseResponse(xhr);
+                    ajaxResponse = {
+                        status: "success",
+                        code: xhr.status,
+                        data: responseData
+                    };
+                    _helper.executeCallback.call(self, formOptions.onSubmitSuccess, ajaxResponse);
+                } else {
+                    errorFn(e);
+                }
+            }, errorFn = function errorFn(e) {
+                var xhr = e.target;
+                ajaxResponse = {
+                    status: "error",
+                    code: xhr.status,
+                    message: xhr.statusText
+                };
                 _helper.executeCallback.call(self, formOptions.onSubmitError, ajaxResponse);
-            }).finally(function() {
+            }, completeFn = function completeFn(e) {
                 if (timeoutTimer) {
                     window.clearTimeout(timeoutTimer);
                 }
                 btnEl.disabled = false;
                 _helper.executeCallback.call(self, formOptions.onSubmitComplete, ajaxResponse);
-            });
+            };
+            XHR.addEventListener("load", successFn, false);
+            XHR.addEventListener("error", errorFn, false);
+            XHR.addEventListener("loadend", completeFn, false);
+            if (xhrOptions.method === "GET") {
+                xhrOptions.url += (/\?/.test(xhrOptions.url) ? "&" : "?") + (0, _helper.serializeObject)(xhrOptions.data);
+                if (xhrOptions.cache === false) {
+                    xhrOptions.url += (/\&/.test(xhrOptions.url) ? "&" : "") + "_=" + new Date().getTime();
+                }
+            }
+            XHR.open(xhrOptions.method, xhrOptions.url, xhrOptions.async);
+            if (xhrOptions.xhrFields) {
+                for (var i in xhrOptions.xhrFields) {
+                    XHR[i] = xhrOptions.xhrFields[i];
+                }
+            }
+            if (xhrOptions.mimeType && XHR.overrideMimeType) {
+                XHR.overrideMimeType(xhrOptions.mimeType);
+            }
+            if (xhrOptions.data && xhrOptions.contentType !== "multipart/form-data") {
+                XHR.setRequestHeader("Content-Type", xhrOptions.contentType);
+            }
+            for (var h in xhrOptions.headers) {
+                XHR.setRequestHeader(h, xhrOptions.headers[h]);
+            }
+            if (!isMultipart) {
+                xhrOptions.data = JSON.stringify(xhrOptions.data);
+            }
+            XHR.send(xhrOptions.method === "GET" ? null : xhrOptions.data);
+            if (xhrOptions.async && xhrOptions.timeout > 0) {
+                timeoutTimer = window.setTimeout(function() {
+                    XHR.abort();
+                }, xhrOptions.timeout);
+            }
         }
     },
     "./src/modules/checkDirtyField.js": function(module, exports, __webpack_require__) {
@@ -721,7 +748,7 @@
         });
         exports.options = undefined;
         var _optionsUtils = __webpack_require__("./src/modules/optionsUtils.js");
-        var _optionsAjax = __webpack_require__("./src/modules/optionsAjax.js");
+        var _optionsAjaxXhr = __webpack_require__("./src/modules/optionsAjaxXhr.js");
         var options = exports.options = {
             fieldOptions: {
                 cssClasses: {
@@ -743,7 +770,7 @@
                 validateOnEvents: "input change"
             },
             formOptions: {
-                ajaxOptions: _optionsAjax.ajaxOptions,
+                ajaxOptions: _optionsAjaxXhr.ajaxOptions,
                 ajaxSubmit: true,
                 beforeSend: [],
                 getFormData: _optionsUtils.defaultCallbacksInOptions.formOptions.getFormData,
@@ -754,21 +781,19 @@
             }
         };
     },
-    "./src/modules/optionsAjax.js": function(module, exports, __webpack_require__) {
+    "./src/modules/optionsAjaxXhr.js": function(module, exports, __webpack_require__) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
         });
         var ajaxOptions = exports.ajaxOptions = {
-            cache: "no-store",
-            credentials: "same-origin",
+            async: true,
+            cache: false,
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
             headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json"
+                "X-Requested-With": "XMLHttpRequest"
             },
             method: "POST",
-            mode: "same-origin",
-            redirect: "follow",
             timeout: 0,
             url: location.href
         };
@@ -845,33 +870,6 @@
             }
         };
     },
-    "./src/modules/optionsUtils.js": function(module, exports, __webpack_require__) {
-        "use strict";
-        Object.defineProperty(exports, "__esModule", {
-            value: true
-        });
-        var _setCallbackFunctionsInOptions = exports._setCallbackFunctionsInOptions = function _setCallbackFunctionsInOptions() {
-            var self = this, callbacks = {
-                fieldOptions: [ "onPastePrevented", "onValidation" ],
-                formOptions: [ "beforeSend", "onSubmitComplete", "onSubmitError", "onSubmitSuccess" ]
-            };
-            var _loop = function _loop(opt) {
-                var fjsOpt = callbacks[opt];
-                fjsOpt.forEach(function(fnName) {
-                    var fnInOptions = self.options[opt][fnName], fnList = [];
-                    if (Array.isArray(fnInOptions)) {
-                        fnList.concat(fnInOptions);
-                    } else if (fnInOptions) {
-                        fnList.push(fnInOptions);
-                    }
-                    self.options[opt][fnName] = fnList;
-                });
-            };
-            for (var opt in callbacks) {
-                _loop(opt);
-            }
-        };
-    },
     "./src/modules/submit.js": function(module, exports, __webpack_require__) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
@@ -879,7 +877,7 @@
         });
         exports.submit = submit;
         var _helper = __webpack_require__("./src/modules/helper.js");
-        var _ajaxCall = __webpack_require__("./src/modules/ajaxCall.js");
+        var _ajaxCallXhr = __webpack_require__("./src/modules/ajaxCallXhr.js");
         function submit(event) {
             var self = this, options = self.options, isAjaxForm = options.formOptions.ajaxSubmit, formEl = self.formEl, btnEl = formEl.querySelector('[type="submit"]'), eventPreventDefault = function eventPreventDefault() {
                 var enableBtn = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
@@ -928,7 +926,7 @@
                     return false;
                 }
                 if (isAjaxForm) {
-                    _ajaxCall.ajaxCall.call(self, formDataObj);
+                    _ajaxCallXhr.ajaxCall.call(self, formDataObj);
                 }
             });
         }

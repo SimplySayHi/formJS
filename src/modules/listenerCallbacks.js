@@ -1,21 +1,11 @@
-import { _executeCallback, _fieldsStringSelector } from './helper.js';
 
-export const _callbackFns = {
+import { executeCallback, fieldsStringSelector, isFieldForChangeEvent } from './helper.js';
+import { submit } from './submit.js';
 
-    charCount: function( eventOrField ){
-        const fieldEl = eventOrField.target || eventOrField;
-
-        if( fieldEl.matches( '[data-char-count]' ) ){
-            let containerEL = fieldEl.closest('[data-formjs-question]');
-
-            if( containerEL && containerEL.querySelector('[data-char-length]') ){
-                let usedChars = fieldEl.value.length;
-                containerEL.querySelector('[data-char-length]').textContent = usedChars;
-            }
-        }
-    },
+export const callbackFns = {
 
     dataTypeNumber: function( event ){
+
         const fieldEl = event.target;
         
         if( fieldEl.matches('[data-type="number"]') ){
@@ -28,9 +18,11 @@ export const _callbackFns = {
                 fieldEl.value = valueReplaced;
             }
         }
+
     },
 
     keypressMaxlength: function( event ){
+
         const fieldEl = event.target;
         
         if( fieldEl.matches( '[maxlength]' ) ){
@@ -42,23 +34,24 @@ export const _callbackFns = {
                 return false;
             }
         }
+
     },
 
     pastePrevent: function( event ){
+
         const self = this,
               fieldEl = event.target;
         let fieldOptions = self.options.fieldOptions;
 
-        if( fieldEl.matches( fieldOptions.preventPasteFields ) ){
-            
+        if( fieldEl.matches( fieldOptions.preventPasteFields ) ){     
             event.preventDefault();
-            _executeCallback.call( self, fieldOptions.onPastePrevented, fieldEl );
-
+            executeCallback.call( self, fieldOptions.onPastePrevented, fieldEl );
         }
+
     },
 
     submit: function( event ){
-        this.submit( {}, event );
+        submit.call( this, event );
     },
 
     validation: function( event ){
@@ -67,8 +60,8 @@ export const _callbackFns = {
             eventName = event.type,
             fieldEl = event.target;
 
-        if( fieldEl.matches( _fieldsStringSelector ) ){
-            const isFieldForChangeEvent = fieldEl.matches( 'select, [type="radio"], [type="checkbox"], [type="file"]' ),
+        if( fieldEl.matches( fieldsStringSelector ) ){
+            const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl),
                 isRadio = fieldEl.type === 'radio',
                 isReqFrom = fieldEl.matches('[data-required-from]'),
                 isReqMore = fieldEl.matches('[data-require-more]'),
@@ -109,18 +102,15 @@ export const _callbackFns = {
             }
             
             if(
-                (isFieldForChangeEvent && eventName === 'change') ||
-                (!isFieldForChangeEvent && eventName !== 'change')
+                (isFieldForChangeEventBoolean && eventName === 'change') ||
+                (!isFieldForChangeEventBoolean && eventName !== 'change')
             ){
                 
-                const validationResult = self.isValidField( fieldEl ),
-                    callbackData = [ { field: fieldEl, result: validationResult} ];
-
-                _executeCallback.call( self, self.options.fieldOptions.onValidation, callbackData );
+                self.validateField( fieldEl );
 
             }
         }
         
     }
 
-};
+}

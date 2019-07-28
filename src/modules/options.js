@@ -1,40 +1,39 @@
+
+import { defaultCallbacksInOptions } from './optionsUtils.js';
+import { ajaxOptions } from './optionsAjax.js';
+//import { ajaxOptions } from './optionsAjaxXhr.js';
+
 export const options = {
+
     fieldOptions: {
-        checkDirtyField:        false,
         cssClasses: {
             dirty:              'is-dirty',
             error:              'has-error',
+            errorEmpty:         'has-error-empty',
+            errorRule:          'has-error-rule',
             valid:              'is-valid'
         },
         focusOnRelated:         true,
         handleFileUpload:       true,
         handleValidation:       true,
         maxFileSize:            10,
-        onPastePrevented:       null,
-        onValidation:           null,
+        onPastePrevented:       [],
+        onValidation:           [defaultCallbacksInOptions.fieldOptions.onValidation],
         preventPasteFields:     '[type="password"], [data-equal-to]',
         skipUIfeedback:         false,
         strictHtmlValidation:   true,
         validateOnEvents:       'input change'
     },
+
     formOptions: {
-        ajaxOptions:            {
-            async:              true,
-            cache:              false,
-            contentType:        'application/x-www-form-urlencoded; charset=UTF-8',
-            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-            },
-            method:             'POST',
-            timeout:            0,
-            url:                location.href
-        },
+        ajaxOptions:            ajaxOptions,
         ajaxSubmit:             true,
-        beforeSend:             null,
-        getFormJSON:            null,
+        beforeSend:             [],
+        getFormData:            defaultCallbacksInOptions.formOptions.getFormData,
         handleSubmit:           true,
-        onSubmitComplete:       null,
-        onSubmitError:          null,
-        onSubmitSuccess:        null
+        onSubmitComplete:       [],
+        onSubmitError:          [],
+        onSubmitSuccess:        []
     }
+    
 }

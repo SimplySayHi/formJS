@@ -1,12 +1,14 @@
+[![](https://data.jsdelivr.com/v1/package/gh/simplysayhi/formJS/badge)](https://www.jsdelivr.com/package/gh/simplysayhi/formJS)
+
 # formJS
 
-Visit the [Plugin Documentation Page](http://valeriodipunzio.com/plugins/formJS/) for more info.
+Visit the [Plugin Documentation Page](https://www.valeriodipunzio.com/plugins/formJS/) for more info.
 
 
 
 ## Changelog
 
-See the [Changelog Page](http://valeriodipunzio.com/plugins/formJS/#changelog) for details.
+See the [Changelog Page](https://www.valeriodipunzio.com/plugins/formJS/#changelog) for details.
 
 
 

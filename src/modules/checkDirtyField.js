@@ -1,7 +1,9 @@
-import { _addClass, _isNodeList, _removeClass } from './helper.js';
 
-export function _checkDirtyField( fields, cssClasses = '' ){ 
-    var fields = (_isNodeList(fields) ? Array.from( fields ) : [fields]);
+import { addClass, isNodeList, removeClass } from './helper.js';
+
+export function checkDirtyField( fields, cssClasses = this.options.fieldOptions.cssClasses.dirty ){
+
+    var fields = (isNodeList(fields) ? Array.from( fields ) : [fields]);
     
     fields.forEach(function(fieldEl){
         if( fieldEl.type !== 'checkbox' && fieldEl.type !== 'radio' ){
@@ -9,13 +11,14 @@ export function _checkDirtyField( fields, cssClasses = '' ){
 
             if( fieldEl.value ){
                 
-                _addClass( containerEl, cssClasses );
+                addClass( containerEl, cssClasses );
                 
             } else {
                 
-                _removeClass( containerEl, cssClasses );
+                removeClass( containerEl, cssClasses );
                 
             }
         }
     });
+    
 }
