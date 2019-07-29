@@ -845,33 +845,6 @@
             }
         };
     },
-    "./src/modules/optionsUtils.js": function(module, exports, __webpack_require__) {
-        "use strict";
-        Object.defineProperty(exports, "__esModule", {
-            value: true
-        });
-        var _setCallbackFunctionsInOptions = exports._setCallbackFunctionsInOptions = function _setCallbackFunctionsInOptions() {
-            var self = this, callbacks = {
-                fieldOptions: [ "onPastePrevented", "onValidation" ],
-                formOptions: [ "beforeSend", "onSubmitComplete", "onSubmitError", "onSubmitSuccess" ]
-            };
-            var _loop = function _loop(opt) {
-                var fjsOpt = callbacks[opt];
-                fjsOpt.forEach(function(fnName) {
-                    var fnInOptions = self.options[opt][fnName], fnList = [];
-                    if (Array.isArray(fnInOptions)) {
-                        fnList.concat(fnInOptions);
-                    } else if (fnInOptions) {
-                        fnList.push(fnInOptions);
-                    }
-                    self.options[opt][fnName] = fnList;
-                });
-            };
-            for (var opt in callbacks) {
-                _loop(opt);
-            }
-        };
-    },
     "./src/modules/submit.js": function(module, exports, __webpack_require__) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {

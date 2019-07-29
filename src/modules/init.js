@@ -10,9 +10,6 @@ export const init = function(){
     let currentFieldName = '',
         currentFieldType = '';
 
-    let currentFieldName = '',
-        currentFieldType = '';
-
     Array.from( formFields ).forEach(function( fieldEl ){
         const   name = fieldEl.name,
                 type = fieldEl.type;
