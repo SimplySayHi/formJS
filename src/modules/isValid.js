@@ -61,7 +61,7 @@ export function isValid( fieldEl, fieldOptions = {} ){
         let prom = {};
         // RUN VALIDATIONS FOR validationRules
         if( typeof self.validationRules[fieldType] === 'function' ){
-            prom = self.validationRules[fieldType].call(self, fieldValue, fieldEl);
+            prom = self.validationRules[fieldType](fieldValue, fieldEl);
         }
         resolve(prom);
 
@@ -70,8 +70,7 @@ export function isValid( fieldEl, fieldOptions = {} ){
         obj = mergeObjects( {}, obj, data );
         obj.result = obj.result && attrValidationsResult;
         if( !obj.result ){
-            let errorFn = self.validationErrors[fieldType];
-            let fieldErrors = (typeof errorFn === 'function' ? errorFn.call(self, fieldValue) : {});
+            let fieldErrors = (typeof self.validationErrors[fieldType] === 'function' ? self.validationErrors[fieldType](fieldValue, fieldEl) : {});
             if( typeof obj.errors === 'undefined' ){
                 obj.errors = {};
             }

@@ -1465,11 +1465,10 @@ formInstance.options.fieldOptions.maxFileSize = 50;
         <div id="builtin-validations">
             <h3 class="sticky-title">Built-in Validations</h3>
             <p>
-                Below the rules used to validate the fields depending on html basic/data-* attributes ( you can add new ones - or override the ones having JS key specified - with addValidationRules method ).
+                Below the rules used to validate the fields depending on html basic/data-* attributes.<br />
+                You can add new validations or override existing ones - having "JS key" specified below - with <a href="#prototype-methods">addValidationRules</a> method.
                 <br />
                 Validations can also be async, see <a href="#validation-username">username validation</a> as example.
-                <br /><br />
-                Additionally, in each validation, the "this" keyword is bound to the Form instance.
                 <br /><br />
                 After validation, in case of invalid field, the validation method will return the "errors" object ( see <a href="#builtin-errors">Built-in Errors Section</a> for details ).
                 <hr />
@@ -2109,8 +2108,6 @@ formInstance.options.fieldOptions.maxFileSize = 50;
             <h3 class="sticky-title">Built-in Errors</h3>
             <p>
                 After validation, in case of invalid field, the validation method will return the "errors" object.
-                <br /><br />
-                Additionally, in each error method, the "this" keyword is bound to the Form instance.
             </p>
             <div class="row">
                 <div class="col-12 col-sm-6">

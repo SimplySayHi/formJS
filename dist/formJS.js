@@ -552,15 +552,14 @@
             return new Promise(function(resolve) {
                 var prom = {};
                 if (typeof self.validationRules[fieldType] === "function") {
-                    prom = self.validationRules[fieldType].call(self, fieldValue, fieldEl);
+                    prom = self.validationRules[fieldType](fieldValue, fieldEl);
                 }
                 resolve(prom);
             }).then(function(data) {
                 obj = (0, _helper.mergeObjects)({}, obj, data);
                 obj.result = obj.result && attrValidationsResult;
                 if (!obj.result) {
-                    var errorFn = self.validationErrors[fieldType];
-                    var fieldErrors = typeof errorFn === "function" ? errorFn.call(self, fieldValue) : {};
+                    var fieldErrors = typeof self.validationErrors[fieldType] === "function" ? self.validationErrors[fieldType](fieldValue, fieldEl) : {};
                     if (typeof obj.errors === "undefined") {
                         obj.errors = {};
                     }

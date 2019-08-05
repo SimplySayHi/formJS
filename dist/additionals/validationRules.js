@@ -78,7 +78,7 @@ var validationRules = {
     tel: function( string ){
         // CHECK IF ONE OF landlineNumber OR mobileNumber IS VALID
         var obj = {
-            result: this.validationRules.landlineNumber(string).result || this.validationRules.mobileNumber(string).result
+            result: this.landlineNumber(string).result || this.mobileNumber(string).result
         };
 
         return obj;
@@ -95,11 +95,11 @@ var validationRules = {
         return obj;
     },
 
-    username: function( string ){
+    username: function( string, fieldEl ){
         // USERNAME WITH LETTERS/NUMBERS/UNDERSCORE AND . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
         // /^[\w\.\-\@]{3,24}$/.test( string );
 
-        var self = this;
+        var instance = fieldEl.closest('form').formjs;
         var obj = {
             // USERNAME MUST START WITH A LETTER/NUMBER/UNDERSCORE AND CAN ALSO CONTAIN . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
             result: /^(?=\w)(?=[\-\.\@]?)[\w\-\.\@]{3,24}$/.test( string )
@@ -111,7 +111,7 @@ var validationRules = {
         
         return new Promise(function(resolve){
 
-            var fetchOptions = self.options.formOptions.ajaxOptions;
+            var fetchOptions = instance.options.formOptions.ajaxOptions;
             fetchOptions.body = JSON.stringify({username: string});
             fetch('remoteValidations/username.php', fetchOptions)
                 .then(function(data){
