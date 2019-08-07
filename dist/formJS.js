@@ -781,8 +781,9 @@
         var _helper = __webpack_require__("./src/modules/helper.js");
         var defaultCallbacksInOptions = exports.defaultCallbacksInOptions = {
             fieldOptions: {
-                onValidation: function onValidationDefault(fieldsArray, tempOptions) {
-                    var self = this, options = tempOptions.fieldOptions;
+                onValidation: function onValidationDefault(fieldsArray) {
+                    var tempOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+                    var self = this, options = (0, _helper.mergeObjects)({}, self.options.fieldOptions, tempOptions.fieldOptions);
                     fieldsArray.forEach(function(obj) {
                         var fieldEl = obj.fieldEl, containerEl = fieldEl.closest("[data-formjs-question]"), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = self.formEl.querySelector(fieldEl.getAttribute("data-required-from"));
                         if (containerEl !== null && !options.skipUIfeedback) {

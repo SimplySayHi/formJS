@@ -1,13 +1,13 @@
 
-import { addClass, removeClass }    from './helper.js';
+import { addClass, mergeObjects, removeClass } from './helper.js';
 
 export const defaultCallbacksInOptions = {
     fieldOptions: {
 
-        onValidation: function onValidationDefault ( fieldsArray, tempOptions ) {
+        onValidation: function onValidationDefault ( fieldsArray, tempOptions = {} ) {
 
             let self = this,
-                options = tempOptions.fieldOptions;
+                options = mergeObjects( {}, self.options.fieldOptions, tempOptions.fieldOptions );
 
             fieldsArray.forEach(function( obj ){
                 let fieldEl = obj.fieldEl,
