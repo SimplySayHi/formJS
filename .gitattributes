@@ -6,4 +6,5 @@ test.html linguist-documentation
 css/* linguist-documentation
 js/* linguist-documentation
 json/* linguist-documentation
+remoteValidations/* linguist-documentation
 dist/* linguist-generated=true
