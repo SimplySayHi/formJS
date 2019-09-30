@@ -68,6 +68,8 @@ module.exports = [{
 			}
 		]
 	},
+    // for test:    eval-source-map
+    // for deploy:  hidden-source-map or source-map
 	devtool: 'source-map',
 	plugins: [
 		new UglifyJSPlugin({

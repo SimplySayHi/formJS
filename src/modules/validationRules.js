@@ -18,7 +18,7 @@ export const validationRules = {
         // FROM https://emailregex.com
         // AS FOR RFC 5322 Official Standard EMAIL MUST BE AT LEAST:
         // a@a.aa
-        const obj = {
+        let obj = {
             result: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test( string )
         };
 
@@ -30,25 +30,6 @@ export const validationRules = {
         // VALID NUMBERS: 123 | 123.456 | .123
         let obj = {
             result: /[+-]?([0-9]*[.])?[0-9]+/.test( string )
-        };
-
-        return obj;
-    },
-    
-    numberFloat: function( string ){
-        // ONLY FLOATING NUMBERS
-        // VALID NUMBERS: 123.456 | .123
-        let obj = {
-            result: /[+-]?([0-9]*[.])[0-9]+/.test( string )
-        };
-
-        return obj;
-    },
-    
-    numberInteger: function( string ){
-        // ONLY INTEGER NUMBERS
-        let obj = {
-            result: /^\d+$/.test( string )
         };
 
         return obj;

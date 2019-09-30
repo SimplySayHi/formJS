@@ -28,14 +28,13 @@ export function isValidField( fieldElem, fieldOptionsObj = {} ){
         ){
 
             obj.result = true;
+            resolve( obj );
         
         } else {
-            
-            obj = isValid.call( self, fieldEl, options );
+
+            resolve( isValid.call(self, fieldEl, options) );
             
         }
-        
-        resolve( obj );
 
     }).then(obj => {
 

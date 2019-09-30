@@ -27,7 +27,7 @@ export function isValidForm( fieldOptionsObj = {} ){
 
         return true;
     });
-    
+
     return Promise.all( fieldsList.map(function( fieldEl ){
         
         return isValidField.call( self, fieldEl, fieldOptions );

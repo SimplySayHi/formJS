@@ -27,6 +27,10 @@ export const init = function(){
             currentFieldName = name;
             currentFieldType = type;
         }
+
+        if( fieldChecked ){
+            fieldEl = fieldChecked;
+        }
         
         // VALIDATE FIELD ( BY TRIGGERING THE validation CALLBACK ) IF IT ALREADY HAS A VALUE
         if(

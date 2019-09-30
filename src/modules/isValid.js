@@ -58,12 +58,12 @@ export function isValid( fieldEl, fieldOptions = {} ){
 
     return new Promise(function(resolve){
 
-        let prom = {};
         // RUN VALIDATIONS FOR validationRules
         if( typeof self.validationRules[fieldType] === 'function' ){
-            prom = self.validationRules[fieldType](fieldValue, fieldEl);
+            resolve( self.validationRules[fieldType](fieldValue, fieldEl) );
+        } else {
+            resolve( obj );
         }
-        resolve(prom);
 
     }).then(data => {
 

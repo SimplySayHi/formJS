@@ -1,5 +1,5 @@
 
-import { isPlainObject, validateFormObjDefault } from './helper.js';
+import { mergeObjects, validateFormObjDefault } from './helper.js';
 import { ajaxCall }     from './ajaxCall.js';
 //import { ajaxCall }     from './ajaxCallXhr.js';
 
@@ -31,41 +31,47 @@ export function submit( event ){
           formValidationPromise = (handleValidation ? self.validateForm() : Promise.resolve(validateFormObjDefault));
 
     formValidationPromise.then(formValidation => {
+
+        let beforeSendData = { stopExecution: false, formData: {} };
+
         if( !formValidation.result ){
             eventPreventDefault();
-            return false;
+            beforeSendData.stopExecution = true;
+            return [beforeSendData];
         }
         
         let formDataObj = (isAjaxForm ? self.getFormData() : null),
-            callbacksBeforeSend = options.formOptions.beforeSend,
-            beforeSendData = { stopExecution: false },
-            stopCallbackLoop = false;
+            callbacksBeforeSend = options.formOptions.beforeSend;
 
         if( formDataObj ){
             beforeSendData.formData = formDataObj;
         }
 
-        callbacksBeforeSend.forEach(function(cbFn){
-            if( !stopCallbackLoop ){
-                let beforeSendFn = cbFn.call( self, beforeSendData, options );
-                
-                if( isPlainObject(beforeSendFn) ){
-                    formDataObj = beforeSendFn.formData || formDataObj;
-                    if( beforeSendFn.stopExecution ){
-                        stopCallbackLoop = true;
-                    }
+        return callbacksBeforeSend.reduce(function(acc, cbFn){
+            return acc.then(function (res) {
+                let beforeSendDataNew = mergeObjects({}, res[res.length - 1]);
+                if( beforeSendDataNew.stopExecution ){
+                    return Promise.resolve(res);
                 }
-            }
-        });
+                return cbFn.call(self, beforeSendDataNew, options).then(function (result) {
+                    res.push(result);
+                    return res;
+                });
+            });
+        }, Promise.resolve([beforeSendData]));
 
-        if( stopCallbackLoop ){
+    }).then(dataList => {
+
+        if( dataList.filter(data => data.stopExecution).length > 0 ){
             eventPreventDefault();
             return false;
         }
         
         if( isAjaxForm ){
-            ajaxCall.call(self, formDataObj);
+            const formData = dataList[dataList.length - 1].formData;
+            ajaxCall.call(self, formData);
         }
+
     });
     
 }

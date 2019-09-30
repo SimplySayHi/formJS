@@ -19,23 +19,43 @@ var options = {
         },
         formOptions: {
             ajaxOptions: {
-                url: (function(){
-                    var protocol = location.protocol,
-                        url = (protocol.indexOf('http') > -1 ? 'json/json.php' : 'json/data.json');
-                    return url;
-                })()
+                url: (isLocalEnv ? 'json/data.json' : 'json/json.php')
             },
-            beforeSend: function beforeSendTest ( data, tempOptions ){
-                console.log('beforeSend data', data);
-                console.log('beforeSend tempOptions', tempOptions);
+            beforeSend: [
+                function beforeSendTest ( data, tempOptions ){
+                    console.log('beforeSend data', data);
+                    console.log('beforeSend tempOptions', tempOptions);
 
-                var feedbackEl = this.formEl.querySelector('[data-formjs-global-feedback]');
-                if( feedbackEl ){
-                    feedbackEl.classList.add( 'd-none' );
+                    var feedbackEl = this.formEl.querySelector('[data-formjs-global-feedback]');
+                    if( feedbackEl ){
+                        feedbackEl.classList.add( 'd-none' );
+                    }
+
+                    return Promise.resolve(data);
+                },
+                function beforeSendTest_2 (data){
+                    console.log('beforeSend additional');
+                    data.formData.prova = 'ciao';
+                    //data.stopExecution = true;
+                    return Promise.resolve(data);
+                },
+                function beforeSendTest_3 (data){
+                    console.log('beforeSend additional 2');
+                    return Promise.all( [1, 2, 3].map(function( fieldEl ){
+                        return new Promise(resolve => {
+                            setTimeout(function(){
+                                fieldEl = fieldEl + 1;
+                                resolve({fieldEl: fieldEl});
+                            }, 3000);
+                        });
+                    }) ).then(list => {
+
+                        console.log('beforeSendTest_3 list', list);
+                        return data;
+
+                    });
                 }
-
-                return data;
-            },
+            ],
             onSubmitSuccess: function onSubmitSuccessTest ( ajaxData, tempOptions ){
                 console.log('onSubmitSuccess ajaxData', ajaxData);
                 console.log('onSubmitSuccess tempOptions', tempOptions);
@@ -79,6 +99,8 @@ var formsList = document.querySelectorAll('form');
 
 Array.from(formsList).forEach(function(formEl, idx){
     var fNum = 'f'+(idx+1);
+
+    if( isLocalEnv ){ formEl.method = 'GET'; }
 
     window[fNum] = new Form( formEl, options );
     console.groupCollapsed('Form Instance '+ fNum);

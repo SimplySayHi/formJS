@@ -81,7 +81,7 @@
                 return Constructor;
             };
         }();
-        /**! formJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
+        /**! formJS v3.1.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
         var _options = __webpack_require__("./src/modules/options.js");
         var _validationRules = __webpack_require__("./src/modules/validationRules.js");
         var _validationErrors = __webpack_require__("./src/modules/validationErrors.js");
@@ -96,7 +96,7 @@
                 throw new TypeError("Cannot call a class as a function");
             }
         }
-        var version = "3.0.0";
+        var version = "3.1.0";
         var Form = function() {
             function Form(formEl, optionsObj) {
                 _classCallCheck(this, Form);
@@ -200,9 +200,7 @@
                     controller.abort();
                 }, ajaxOptions.timeout);
             }
-            var ajaxResponse = {};
             fetch(ajaxOptions.url, ajaxOptions).then(function(response) {
-                ajaxResponse.code = response.status;
                 if (!response.ok) {
                     return Promise.reject(response);
                 }
@@ -218,19 +216,15 @@
                 var fetchMethod = getFetchMethod(response);
                 return response[fetchMethod]();
             }).then(function(data) {
-                ajaxResponse.status = "success";
-                ajaxResponse.data = data;
-                _helper.executeCallback.call(self, formOptions.onSubmitSuccess, ajaxResponse);
+                _helper.executeCallback.call(self, formOptions.onSubmitSuccess, data);
             }).catch(function(error) {
-                ajaxResponse.status = "error";
-                ajaxResponse.message = error.statusText;
-                _helper.executeCallback.call(self, formOptions.onSubmitError, ajaxResponse);
+                _helper.executeCallback.call(self, formOptions.onSubmitError, error);
             }).finally(function() {
                 if (timeoutTimer) {
                     window.clearTimeout(timeoutTimer);
                 }
                 btnEl.disabled = false;
-                _helper.executeCallback.call(self, formOptions.onSubmitComplete, ajaxResponse);
+                _helper.executeCallback.call(self, formOptions.onSubmitComplete);
             });
         }
     },
@@ -391,7 +385,8 @@
                 element: isString === "string" ? document.querySelector(formEl) : formEl
             };
             return obj;
-        }, executeCallback = exports.executeCallback = function executeCallback(callbackOption, callbackData) {
+        }, executeCallback = exports.executeCallback = function executeCallback(callbackOption) {
+            var callbackData = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
             var tempOptions = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
             var self = this, options = mergeObjects({}, self.options, tempOptions), callbackFnList = [];
             if (typeof callbackOption === "function") {
@@ -492,6 +487,9 @@
                     currentFieldName = name;
                     currentFieldType = type;
                 }
+                if (fieldChecked) {
+                    fieldEl = fieldChecked;
+                }
                 if (!isCheckboxOrRadio && fieldEl.value || isCheckboxOrRadio && fieldChecked !== null || isReqFrom && reqMoreEl.checked) {
                     var fakeEventObj = {
                         target: fieldEl,
@@ -550,11 +548,11 @@
                 }
             });
             return new Promise(function(resolve) {
-                var prom = {};
                 if (typeof self.validationRules[fieldType] === "function") {
-                    prom = self.validationRules[fieldType](fieldValue, fieldEl);
+                    resolve(self.validationRules[fieldType](fieldValue, fieldEl));
+                } else {
+                    resolve(obj);
                 }
-                resolve(prom);
             }).then(function(data) {
                 obj = (0, _helper.mergeObjects)({}, obj, data);
                 obj.result = obj.result && attrValidationsResult;
@@ -591,10 +589,10 @@
             return new Promise(function(resolve) {
                 if (!isRequired && !isValidateIfFilled && !isReqFrom || isValidateIfFilled && !isValidValue || isReqFrom && !isRequired) {
                     obj.result = true;
+                    resolve(obj);
                 } else {
-                    obj = _isValid.isValid.call(self, fieldEl, options);
+                    resolve(_isValid.isValid.call(self, fieldEl, options));
                 }
-                resolve(obj);
             }).then(function(obj) {
                 obj.fieldEl = fieldEl;
                 return obj;
@@ -707,7 +705,12 @@
                         }
                     }
                     if (isFieldForChangeEventBoolean && eventName === "change" || !isFieldForChangeEventBoolean && eventName !== "change") {
-                        self.validateField(fieldEl);
+                        self.validateField(fieldEl).then(function(obj) {
+                            var type = obj.fieldEl.type, realtedFieldEqualTo = obj.fieldEl.closest("form").querySelector('[data-equal-to="' + obj.fieldEl.name + '"]');
+                            if ((obj.fieldEl.required || obj.fieldEl.matches("[data-validate-if-filled]")) && !(type === "checkbox" || type === "radio") && realtedFieldEqualTo && realtedFieldEqualTo.value.trim() !== "") {
+                                self.validateField(realtedFieldEqualTo);
+                            }
+                        });
                     }
                 }
             }
@@ -875,33 +878,41 @@
             }
             var handleValidation = options.fieldOptions.handleValidation, formValidationPromise = handleValidation ? self.validateForm() : Promise.resolve(_helper.validateFormObjDefault);
             formValidationPromise.then(function(formValidation) {
+                var beforeSendData = {
+                    stopExecution: false,
+                    formData: {}
+                };
                 if (!formValidation.result) {
                     eventPreventDefault();
-                    return false;
+                    beforeSendData.stopExecution = true;
+                    return [ beforeSendData ];
                 }
-                var formDataObj = isAjaxForm ? self.getFormData() : null, callbacksBeforeSend = options.formOptions.beforeSend, beforeSendData = {
-                    stopExecution: false
-                }, stopCallbackLoop = false;
+                var formDataObj = isAjaxForm ? self.getFormData() : null, callbacksBeforeSend = options.formOptions.beforeSend;
                 if (formDataObj) {
                     beforeSendData.formData = formDataObj;
                 }
-                callbacksBeforeSend.forEach(function(cbFn) {
-                    if (!stopCallbackLoop) {
-                        var beforeSendFn = cbFn.call(self, beforeSendData, options);
-                        if ((0, _helper.isPlainObject)(beforeSendFn)) {
-                            formDataObj = beforeSendFn.formData || formDataObj;
-                            if (beforeSendFn.stopExecution) {
-                                stopCallbackLoop = true;
-                            }
+                return callbacksBeforeSend.reduce(function(acc, cbFn) {
+                    return acc.then(function(res) {
+                        var beforeSendDataNew = (0, _helper.mergeObjects)({}, res[res.length - 1]);
+                        if (beforeSendDataNew.stopExecution) {
+                            return Promise.resolve(res);
                         }
-                    }
-                });
-                if (stopCallbackLoop) {
+                        return cbFn.call(self, beforeSendDataNew, options).then(function(result) {
+                            res.push(result);
+                            return res;
+                        });
+                    });
+                }, Promise.resolve([ beforeSendData ]));
+            }).then(function(dataList) {
+                if (dataList.filter(function(data) {
+                    return data.stopExecution;
+                }).length > 0) {
                     eventPreventDefault();
                     return false;
                 }
                 if (isAjaxForm) {
-                    _ajaxCall.ajaxCall.call(self, formDataObj);
+                    var formData = dataList[dataList.length - 1].formData;
+                    _ajaxCall.ajaxCall.call(self, formData);
                 }
             });
         }
@@ -1011,18 +1022,6 @@
             number: function number(string) {
                 var obj = {
                     result: /[+-]?([0-9]*[.])?[0-9]+/.test(string)
-                };
-                return obj;
-            },
-            numberFloat: function numberFloat(string) {
-                var obj = {
-                    result: /[+-]?([0-9]*[.])[0-9]+/.test(string)
-                };
-                return obj;
-            },
-            numberInteger: function numberInteger(string) {
-                var obj = {
-                    result: /^\d+$/.test(string)
                 };
                 return obj;
             }

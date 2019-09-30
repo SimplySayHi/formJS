@@ -1,5 +1,5 @@
 
-/**! formJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/**! formJS v3.1.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 
 import { mergeObjects }         from './modules/helper.js';
 import { options }              from './modules/options.js';
@@ -14,7 +14,7 @@ import { init }                 from './modules/init.js';
 import { validateField }        from './modules/validateField.js';
 import { validateForm }         from './modules/validateForm.js';
 
-const version = '3.0.0';
+const version = '3.1.0';
 
 class Form {
 

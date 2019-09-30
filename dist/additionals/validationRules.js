@@ -65,6 +65,25 @@ var validationRules = {
         return obj;
     },
 
+    numberFloat: function( string ){
+        // ONLY FLOATING NUMBERS
+        // VALID NUMBERS: 123.456 | .123
+        var obj = {
+            result: /[+-]?([0-9]*[.])[0-9]+/.test( string )
+        };
+
+        return obj;
+    },
+    
+    numberInteger: function( string ){
+        // ONLY INTEGER NUMBERS
+        var obj = {
+            result: /^\d+$/.test( string )
+        };
+
+        return obj;
+    },
+
     password: function( string ){
         // PASSWORD ( NO SPECIAL CHARACTERS ) WITH AT LEAST:
         // ONE DIGIT + ONE LOWERCASE + ONE UPPERCASE + MIN LENGTH OF 8 CHARACTERS
@@ -106,30 +125,22 @@ var validationRules = {
         };
 
         if( !obj.result ){
-            return Promise.resolve(obj);
+            return obj;
         }
-        
-        return new Promise(function(resolve){
 
-            var fetchOptions = instance.options.formOptions.ajaxOptions;
-            fetchOptions.body = JSON.stringify({username: string});
-            fetch('remoteValidations/username.php', fetchOptions)
-                .then(function(data){
-                    return data.json()
-                })
-                .then(function(obj){
-                    resolve(obj);
-                })
-                .catch(function(error){
-                    var errorObj = {
-                        result: false,
-                        errors: { ajaxCall: true },
-                        errorThrown: error
-                    };
-                    resolve(errorObj);
-                });
-
-        });
+        var fetchOptions = instance.options.formOptions.ajaxOptions;
+        fetchOptions.body = JSON.stringify({username: string});
+        return fetch('remoteValidations/username.php', fetchOptions)
+            .then(function(data){
+                return data.json();
+            })
+            .catch(function(error){
+                return {
+                    result: false,
+                    errors: { ajaxCall: true },
+                    errorThrown: error
+                };
+            });
     },
     
     vatNumber: function( string ){

@@ -106,7 +106,19 @@ export const callbackFns = {
                 (!isFieldForChangeEventBoolean && eventName !== 'change')
             ){
                 
-                self.validateField( fieldEl );
+                self.validateField( fieldEl ).then(obj => {
+                    const type = obj.fieldEl.type,
+                          realtedFieldEqualTo = obj.fieldEl.closest('form').querySelector('[data-equal-to="'+ obj.fieldEl.name +'"]');
+
+                    if(
+                        // FIELD IS required OR data-validate-if-filled AND ITS data-equal-to FIELD HAS A VALUE
+                        (obj.fieldEl.required || obj.fieldEl.matches('[data-validate-if-filled]')) && 
+                        !(type === 'checkbox' || type === 'radio') && 
+                        realtedFieldEqualTo && realtedFieldEqualTo.value.trim() !== ''
+                    ){
+                        self.validateField( realtedFieldEqualTo );
+                    }
+                });
 
             }
         }

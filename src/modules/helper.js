@@ -21,7 +21,7 @@ checkFormEl = function( formEl ){
     return obj;
 },
 
-executeCallback = function( callbackOption, callbackData, tempOptions = {} ){
+executeCallback = function( callbackOption, callbackData = {}, tempOptions = {} ){
     let self = this,
         options = mergeObjects({}, self.options, tempOptions),
         callbackFnList = [];

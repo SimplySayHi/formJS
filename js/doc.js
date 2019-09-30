@@ -19,9 +19,9 @@ var optionsPlugin = {
                 console.log( 'beforeSend data ', data );
 
                 var feedbackEl = this.formEl.querySelector('[data-formjs-global-feedback]');
-                feedbackEl.classList.add( 'd-none' );
+                feedbackEl.classList.add('d-none');
 
-                return data;
+                return Promise.resolve(data);
             },
             onSubmitSuccess: function( ajaxData ){
                 console.log( 'onSubmitSuccess ajaxData ', ajaxData );

@@ -63,7 +63,7 @@
                 </p>
                 <div class="dropdown d-inline-block ml-1">
                     <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button">
-                        3.0.0
+                        3.1.0
                     </button>
                     <span class="dropdown-menu w-100 py-1">
                         <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/2.3.3/">2.3.3</a>
@@ -275,13 +275,13 @@
             </p>
             <div>
             <pre>
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.0.0/dist/formJS.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.0.1/dist/formJS.min.js"&gt;&lt;/script&gt;
 </pre>
             <p>
-                or the XHR version ( using XMLHttpRequest API for AJAX call ):
+                or the XHR version ( using XMLHttpRequest API for AJAX call - <u>this version will be removed soon</u> ):
             </p>
             <pre>
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.0.0/dist/formJS.xhr.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.0.1/dist/formJS.xhr.min.js"&gt;&lt;/script&gt;
 </pre>
             </div>
             <p>
@@ -399,7 +399,8 @@
             </p>
             <pre>var formEl = document.querySelector('form');
 var options = {...};
-var formInstance = new Form( formEl, options ).init();
+var formInstance = new Form( formEl, options );
+formInstance.init();
 </pre>
             <ul>
                 <li>
@@ -409,15 +410,6 @@ var formInstance = new Form( formEl, options ).init();
                     options: ( optional ) a JS object with fieldOptions and formOptions ( see <a href="#options-list">Options section</a> )
                 </li>
             </ul>
-            <hr />
-            <p>
-                In some cases you could need to initialize the form in this way to run the "init" method after some time:
-            </p>
-            <pre>var formEl = document.querySelector('form');
-var formInstance = new Form( formEl );
-// ... SOME OTHER CODE ...
-formInstance.init();
-</pre>
             <hr />
             <p>
                 <b>IMPORTANT</b>: If <code>Form</code> namespace is not available, you can use <code>FormJS</code> namespace.
@@ -837,10 +829,10 @@ formInstance.init();
                                 <p>
                                     Each function:<br /><br />
                                     For AJAX forms:<br />
-                                    Fires before the AJAX call starts. If used to modify the JSON or prevent the AJAX call to start, it must have a return statement. 
+                                    Fires before the AJAX call starts. If used to modify the form data or prevent the AJAX call to start, <u>it must return a Promise</u> with <code>data</code> passed to it.
                                     <br /><br />
                                     For HTML forms:<br />
-                                    Fire before form submit. Can be used to execute some custom code ( example: populate a hidden field ) or to prevent the form submit ( in this case, it must have a return statement ).
+                                    Fire before form submit. Can be used to execute some custom code ( example: populate a hidden field ) or to prevent the form submit ( in this case, it must have a return statement as above ).
                                 </p>
                             </div>
                         </div>
@@ -902,7 +894,7 @@ formInstance.init();
                                 </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( data/message, status, code - according to <a href="https://github.com/omniti-labs/jsend" target="_blank">JSend format</a> for success or error ).
+                                        <span class="text-green">ajaxData</span>: ( JS object ) an empty object.
                                     </li>
                                     <li>
                                         <span class="text-green">tempOptions</span>: ( JS object ) temporary options <span class="text-yellow">*</span>
@@ -930,7 +922,7 @@ formInstance.init();
                                 </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( message, status, code - according to <a href="https://github.com/omniti-labs/jsend" target="_blank">JSend format</a> ).
+                                        <span class="text-green">errorData</span>: ( JS object ) containing the ajax call response.
                                     </li>
                                     <li>
                                         <span class="text-green">tempOptions</span>: ( JS object ) temporary options <span class="text-yellow">*</span>
@@ -958,7 +950,7 @@ formInstance.init();
                                 </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call data ( data, status, code - according to <a href="https://github.com/omniti-labs/jsend" target="_blank">JSend format</a> ).
+                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call response.
                                     </li>
                                     <li>
                                         <span class="text-green">tempOptions</span>: ( JS object ) temporary options <span class="text-yellow">*</span>
@@ -1878,6 +1870,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             <div class="col-4 col-sm-3 text-green">
                                 Number Float <span class="text-yellow">*</span>
                                 <div>( numberFloat )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>type="number"</code></div>
@@ -1901,6 +1894,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             <div class="col-4 col-sm-3 text-green">
                                 Number Integer <span class="text-yellow">*</span>
                                 <div>( numberInteger )</div>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="col-4 col-sm-3 text-green">
                                 <div><code>type="number"</code></div>
@@ -2482,6 +2476,28 @@ formInstance.options.fieldOptions.maxFileSize = 50;
             <h3 class="sticky-title">Changelog</h3>
             <ul class="p-0">
                 <li class="media my-3">
+                    <div class="version-num text-red">3.1.0</div>
+                    <div class="media-body pl-2">
+                        <ul>
+                            <li>
+                                beforeSend callbacks are now promise-based
+                            </li>
+                            <li>
+                                Added 2-ways validation for fields with attribute data-equal-to
+                            </li>
+                            <li>
+                                Simplified data returned in ajax response, now returning only the data coming from the call.
+                            </li>
+                            <li>
+                                Moved validations for "numberFloat" and "numberInteger" to the external file /dist/additionals/validationRules.js
+                            </li>
+                            <li>
+                                Minor bugfix and improvements
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="media my-3">
                     <div class="version-num text-red">3.0.0</div>
                     <div class="media-body pl-2">
                         <b>NEW MAJOR VERSION</b>
@@ -2787,7 +2803,6 @@ formInstance.options.fieldOptions.maxFileSize = 50;
     
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch"></script>
-
     <script src="js/include.js"></script>
     <script src="dist/formJS.min.js"></script>
     <script src="dist/additionals/validationRules.js"></script>

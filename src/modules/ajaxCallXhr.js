@@ -33,7 +33,6 @@ export function ajaxCall( formDataObj ){
     }
 
     let XHR = new XMLHttpRequest(),
-        ajaxResponse = {},
         parseResponse = function( xhr ){
             let data = xhr.responseText,
                 getJSON = function(){
@@ -61,16 +60,14 @@ export function ajaxCall( formDataObj ){
 
             if( xhr.status === 200 ){
                 let responseData = parseResponse(xhr);
-                ajaxResponse = { status: 'success', code: xhr.status, data: responseData };
-                executeCallback.call( self, formOptions.onSubmitSuccess, ajaxResponse );
+                executeCallback.call( self, formOptions.onSubmitSuccess, responseData );
             } else {
                 errorFn(e);
             }
         },
         errorFn = function(e) {
             let xhr = e.target;
-            ajaxResponse = { status: 'error', code: xhr.status, message: xhr.statusText };
-            executeCallback.call( self, formOptions.onSubmitError, ajaxResponse );
+            executeCallback.call( self, formOptions.onSubmitError, xhr );
         },
         completeFn = function(e) {
             if( timeoutTimer ){
@@ -78,7 +75,7 @@ export function ajaxCall( formDataObj ){
             }
 
             btnEl.disabled = false;
-            executeCallback.call( self, formOptions.onSubmitComplete, ajaxResponse );
+            executeCallback.call( self, formOptions.onSubmitComplete );
         };
     
     XHR.addEventListener('load',    successFn, false);

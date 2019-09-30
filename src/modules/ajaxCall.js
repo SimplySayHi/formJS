@@ -64,12 +64,8 @@ export function ajaxCall( formDataObj ){
         }, ajaxOptions.timeout);
     }
 
-    let ajaxResponse = {};
-
     fetch(ajaxOptions.url, ajaxOptions)
         .then(function( response ){
-
-            ajaxResponse.code = response.status;
 
             if( !response.ok ){
                 return Promise.reject(response);
@@ -93,18 +89,10 @@ export function ajaxCall( formDataObj ){
 
         })
         .then(function( data ){
-
-            ajaxResponse.status = 'success';
-            ajaxResponse.data = data;
-            executeCallback.call( self, formOptions.onSubmitSuccess, ajaxResponse );
-
+            executeCallback.call( self, formOptions.onSubmitSuccess, data );
         })
         .catch(function( error ){
-
-            ajaxResponse.status = 'error';
-            ajaxResponse.message = error.statusText;
-            executeCallback.call( self, formOptions.onSubmitError, ajaxResponse );
-
+            executeCallback.call( self, formOptions.onSubmitError, error );
         })
         .finally(function(){
 
@@ -112,7 +100,7 @@ export function ajaxCall( formDataObj ){
                 window.clearTimeout( timeoutTimer );
             }
             btnEl.disabled = false;
-            executeCallback.call( self, formOptions.onSubmitComplete, ajaxResponse );
+            executeCallback.call( self, formOptions.onSubmitComplete );
 
         });
     

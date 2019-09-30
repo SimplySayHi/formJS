@@ -85,7 +85,7 @@ var formsList = document.querySelectorAll('form'),
                         feedbackEl.classList.add( 'd-none' );
                     }
 
-                    return data;
+                    return Promise.resolve(data);
                 },
                 onSubmitSuccess: function onSubmitSuccessDemo01 ( ajaxData ){
                     console.log( 'onSubmitSuccess ajaxData ', ajaxData );
