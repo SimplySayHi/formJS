@@ -3,7 +3,7 @@
   "title": "formJS",
   "description": "Javascript Form Validation. Made Easy",
   "version": "3.1.0",
-  "main": "dist/formJS.js",
+  "main": "webpack.config.js",
   "homepage": "https://www.valeriodipunzio.com/plugins/formJS/",
   "author": {
     "name": "Valerio Di Punzio <sayhi@valeriodipunzio.com>",

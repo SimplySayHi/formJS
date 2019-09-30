@@ -15,7 +15,7 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 module.exports = [{
 	entry: './src/index',
 	output: {
-		filename: 'formJS.js',
+		filename: 'formjs.js',
 		path: path.resolve(__dirname, 'dist')
 	},
 	module: {
@@ -52,7 +52,7 @@ module.exports = [{
 {
 	entry: './src/index',
 	output: {
-		filename: 'formJS.min.js',
+		filename: 'formjs.min.js',
 		path: path.resolve(__dirname, 'dist')
 	},
 	module: {
