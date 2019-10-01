@@ -1,6 +1,6 @@
 
-import { mergeObjects, toCamelCase } from './helper.js';
-import { validationRulesAttributes } from './validationRules.js';
+import { mergeObjects, toCamelCase } from './helper';
+import { validationRulesAttributes } from './validationRules';
 
 export function isValid( fieldEl, fieldOptions = {} ){
 

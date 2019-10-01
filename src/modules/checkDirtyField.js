@@ -1,5 +1,5 @@
 
-import { addClass, isNodeList, removeClass } from './helper.js';
+import { addClass, isNodeList, removeClass } from './helper';
 
 export function checkDirtyField( fields, cssClasses = this.options.fieldOptions.cssClasses.dirty ){
 

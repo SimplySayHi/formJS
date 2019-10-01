@@ -1,6 +1,6 @@
 
-import { executeCallback, fieldsStringSelector, isFieldForChangeEvent } from './helper.js';
-import { submit } from './submit.js';
+import { executeCallback, fieldsStringSelector, isFieldForChangeEvent } from './helper';
+import { submit } from './submit';
 
 export const callbackFns = {
 

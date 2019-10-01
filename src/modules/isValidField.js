@@ -1,7 +1,7 @@
 
-import { isDOMNode, mergeObjects, validateFieldObjDefault } from './helper.js';
-import { checkDirtyField } from './checkDirtyField.js';
-import { isValid } from './isValid.js';
+import { isDOMNode, mergeObjects, validateFieldObjDefault } from './helper';
+import { checkDirtyField } from './checkDirtyField';
+import { isValid } from './isValid';
 
 export function isValidField( fieldElem, fieldOptionsObj = {} ){
 

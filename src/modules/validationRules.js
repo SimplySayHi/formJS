@@ -1,5 +1,5 @@
 
-import { getSplitChar } from './helper.js';
+import { getSplitChar } from './helper';
 
 export const validationRules = {
             

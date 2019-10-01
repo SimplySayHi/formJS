@@ -1,7 +1,7 @@
 
-import { mergeObjects, validateFormObjDefault } from './helper.js';
-import { ajaxCall }     from './ajaxCall.js';
-//import { ajaxCall }     from './ajaxCallXhr.js';
+import { mergeObjects, validateFormObjDefault } from './helper';
+import { ajaxCall } from './ajaxCall';
+//import { ajaxCall } from './ajaxCallXhr';
 
 export function submit( event ){
 

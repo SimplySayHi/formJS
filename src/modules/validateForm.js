@@ -1,6 +1,6 @@
 
-import { executeCallback, mergeObjects } from './helper.js';
-import { isValidForm } from './isValidForm.js';
+import { executeCallback, mergeObjects } from './helper';
+import { isValidForm } from './isValidForm';
 
 export function validateForm( fieldOptionsObj = {} ){
 

@@ -1,18 +1,18 @@
 
 /**! formJS v3.1.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 
-import { mergeObjects }         from './modules/helper.js';
-import { options }              from './modules/options.js';
-import { validationRules }      from './modules/validationRules.js';
-import { validationErrors }     from './modules/validationErrors.js';
+import { mergeObjects }         from './modules/helper';
+import { options }              from './modules/options';
+import { validationRules }      from './modules/validationRules';
+import { validationErrors }     from './modules/validationErrors';
 
 // CONSTRUCTOR FUNCTION & PUBLIC METHODS
-import { constructorFn }        from './modules/constructor.js';
-import { destroy }              from './modules/destroy.js';
-import { getFormData }          from './modules/getFormData.js';
-import { init }                 from './modules/init.js';
-import { validateField }        from './modules/validateField.js';
-import { validateForm }         from './modules/validateForm.js';
+import { constructorFn }        from './modules/constructor';
+import { destroy }              from './modules/destroy';
+import { getFormData }          from './modules/getFormData';
+import { init }                 from './modules/init';
+import { validateField }        from './modules/validateField';
+import { validateForm }         from './modules/validateForm';
 
 const version = '3.1.0';
 

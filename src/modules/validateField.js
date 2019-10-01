@@ -1,6 +1,6 @@
 
-import { executeCallback, mergeObjects } from './helper.js';
-import { isValidField } from './isValidField.js';
+import { executeCallback, mergeObjects } from './helper';
+import { isValidField } from './isValidField';
 
 export function validateField( fieldElem, fieldOptionsObj = {} ){
 

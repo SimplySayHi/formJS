@@ -1,6 +1,6 @@
 
-import { fieldsStringSelector, mergeObjects, validateFormObjDefault } from './helper.js';
-import { isValidField } from './isValidField.js';
+import { fieldsStringSelector, mergeObjects, validateFormObjDefault } from './helper';
+import { isValidField } from './isValidField';
 
 export function isValidForm( fieldOptionsObj = {} ){
 

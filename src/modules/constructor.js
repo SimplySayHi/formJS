@@ -1,7 +1,7 @@
 
-import { checkFormEl, isNodeList, mergeObjects }   from './helper.js';
-import { callbackFns }                             from './listenerCallbacks.js';
-import { formStartup }                             from './formStartup.js';
+import { checkFormEl, isNodeList, mergeObjects }   from './helper';
+import { callbackFns }                             from './listenerCallbacks';
+import { formStartup }                             from './formStartup';
 
 export function constructorFn( formEl, optionsObj = {} ){
 

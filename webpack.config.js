@@ -1,24 +1,19 @@
 
-const webpack = require('webpack');
 const path = require('path');
 
-/*
- * We've enabled UglifyJSPlugin for you! This minifies your app
- * in order to load faster and run less javascript.
- *
- * https://github.com/webpack-contrib/uglifyjs-webpack-plugin
- *
- */
-
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-
 module.exports = [{
-	entry: './src/index',
+	entry: './src/index.js',
 	output: {
 		filename: 'formjs.js',
 		path: path.resolve(__dirname, 'dist')
 	},
-	module: {
+    mode: 'none',
+    //watch: true,
+	optimization: {
+		//minimize: false,
+		namedModules: true
+	},
+    module: {
 		rules: [
 			{
 				test: /\.js$/,
@@ -26,36 +21,24 @@ module.exports = [{
 				loader: 'babel-loader',
 
 				options: {
-					presets: ['env']
+					presets: ['@babel/env']
 				}
 			}
 		]
-	},
-	optimization: {
-		minimize: false,
-		namedModules: true,
-		namedChunks: true
-	},
-	plugins: [
-		new UglifyJSPlugin({
-			uglifyOptions: {
-				compress: false,
-				mangle: false,
-				output: {
-					beautify: '-b',
-					comments: /^\**!|@preserve|@license|@cc_on/i
-				}
-			}
-		})
-	]
+	}
 },
 {
-	entry: './src/index',
+	entry: './src/index.js',
 	output: {
 		filename: 'formjs.min.js',
 		path: path.resolve(__dirname, 'dist')
 	},
-	module: {
+    mode: 'production',
+    //watch: true,
+    // for test:    eval-source-map
+    // for deploy:  hidden-source-map or source-map
+	devtool: 'source-map',
+    module: {
 		rules: [
 			{
 				test: /\.js$/,
@@ -63,22 +46,9 @@ module.exports = [{
 				loader: 'babel-loader',
 
 				options: {
-					presets: ['env']
+					presets: ['@babel/env']
 				}
 			}
 		]
-	},
-    // for test:    eval-source-map
-    // for deploy:  hidden-source-map or source-map
-	devtool: 'source-map',
-	plugins: [
-		new UglifyJSPlugin({
-			sourceMap: true,
-			uglifyOptions: {
-				output: {
-					comments: /^\**!|@preserve|@license|@cc_on/i
-				}
-			}
-		})
-	]
+	}
 }];

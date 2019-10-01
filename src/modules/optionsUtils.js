@@ -1,5 +1,5 @@
 
-import { addClass, mergeObjects, removeClass } from './helper.js';
+import { addClass, mergeObjects, removeClass } from './helper';
 
 export const defaultCallbacksInOptions = {
     fieldOptions: {

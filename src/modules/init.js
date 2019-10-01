@@ -1,5 +1,5 @@
 
-import { fieldsStringSelector, isFieldForChangeEvent } from './helper.js';
+import { fieldsStringSelector, isFieldForChangeEvent } from './helper';
 
 export const init = function(){
 

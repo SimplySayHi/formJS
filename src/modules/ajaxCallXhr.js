@@ -1,5 +1,5 @@
 
-import { executeCallback, mergeObjects, serializeObject } from './helper.js';
+import { executeCallback, mergeObjects, serializeObject } from './helper';
 
 // AJAX CALL USING XMLHttpRequest API
 export function ajaxCall( formDataObj ){
