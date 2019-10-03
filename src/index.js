@@ -1,6 +1,4 @@
 
-/**! formJS v3.1.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
-
 import { mergeObjects }         from './modules/helper';
 import { options }              from './modules/options';
 import { validationRules }      from './modules/validationRules';
