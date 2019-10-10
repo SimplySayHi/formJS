@@ -10,7 +10,7 @@ module.exports = [
     {
         entry: './src/index.js',
         output: {
-            filename: package.name + '.js',
+            filename: 'formjs.js',
             path: path.resolve(__dirname, 'dist'),
             libraryTarget: 'umd',
             libraryExport: 'default',
@@ -51,7 +51,7 @@ module.exports = [
     {
         entry: './src/index.js',
         output: {
-            filename: package.name + '.min.js',
+            filename: 'formjs.min.js',
             path: path.resolve(__dirname, 'dist'),
             libraryTarget: 'umd',
             libraryExport: 'default',
