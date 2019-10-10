@@ -63,7 +63,7 @@
                 </p>
                 <div class="dropdown d-inline-block ml-1">
                     <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button">
-                        3.1.0
+                        3.2.0
                     </button>
                     <span class="dropdown-menu w-100 py-1">
                         <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/2.3.3/">2.3.3</a>
@@ -257,36 +257,29 @@
             </p>
             <pre>
 &lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch"&gt;&lt;/script&gt;</pre>
-            <br />
-            <p>
-                If you are using the version with XMLHttpRequest ( <u>this version will be removed soon</u> ) you can load these JS polyfills:<br />
-                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Promise</code>
-            </p>
-            <pre>
-&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise"&gt;&lt;/script&gt;</pre>
         </div>
         
         <!-- Usage -->
         <div id="usage">
             <h3 class="sticky-title">Usage</h3>
             <p>
-                Include the plugin script in your page ( examples below from CDN ).<br />
-                You can inculde the standard version ( using fetch API for AJAX call ):
-            </p>
-            <div>
-            <pre>
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.1.0/dist/formjs.min.js"&gt;&lt;/script&gt;
-</pre>
-            <p>
-                or the XHR version ( using XMLHttpRequest API for AJAX call - <u>this version will be removed soon</u> ):
+                Include the plugin script in your page ( examples below from CDN ):
             </p>
             <pre>
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.1.0/dist/formjs.xhr.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.2.0/dist/formjs.min.js"&gt;&lt;/script&gt;
 </pre>
-            </div>
             <p>
-                From local, you can find the JS file <code>dist/formjs.min.js</code> or <code>dist/formjs.xhr.min.js</code>
+                or as ES6 module:
             </p>
+            <pre>
+import Form from 'formjs';
+</pre>
+            <p>
+                or as CommonJS module:
+            </p>
+            <pre>
+var Form = require('formjs');
+</pre>
             <p>
                 No dependencies.<br />
                 <span class="small">This demo is developed with Bootstrap CSS but it is not a dependency.</span>
@@ -410,10 +403,6 @@ formInstance.init();
                     options: ( optional ) a JS object with fieldOptions and formOptions ( see <a href="#options-list">Options section</a> )
                 </li>
             </ul>
-            <hr />
-            <p>
-                <b>IMPORTANT</b>: If <code>Form</code> namespace is not available, you can use <code>FormJS</code> namespace.
-            </p>
             <hr />
             <p>
                 formJS has some more properties:
@@ -772,9 +761,7 @@ formInstance.init();
                             </div>
                             <div class="col-4">
                                 <p>
-                                    See below for default values ( depending on AJAX API - "fetch" or "XMLHttpRequest" ).
-                                    <br /><br />
-                                    See <a href="#ajax-settings">AJAX Options</a> section for details.
+                                    See <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters" target="_blank">MDN documentation</a> for details.
                                 </p>
                             </div>
                         </div>
@@ -975,9 +962,9 @@ formInstance.init();
                             </p>
                         </div>
                         <div class="row mt-3">
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12">
                                 <p>
-                                    Default form options for formJS with fetch API:
+                                    Default form options:
                                 </p>
                                 <pre>
 {
@@ -1003,91 +990,7 @@ formInstance.init();
     onSubmitSuccess:    []
 }</pre>
                             </div>
-                            <div class="col-12 col-sm-6">
-                                <p>
-                                    Default form options for formJS with XMLHttpRequest API:
-                                </p>
-                                <pre>
-{
-    ajaxOptions: {
-        async:          true,
-        cache:          false,
-        contentType:    'application/x-www-form-urlencoded; charset=UTF-8',
-        headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-        },
-        method:         'POST',
-        timeout:        0,
-        url:            location.href
-    },
-    ajaxSubmit:         true,
-    beforeSend:         [],
-    getFormData:        getFormDataDefault,
-    handleSubmit:       true,
-    onSubmitComplete:   [],
-    onSubmitError:      [],
-    onSubmitSuccess:    []
-}</pre>
-                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- AJAX Options -->
-        <div id="ajax-settings">
-            <h3 class="sticky-title">AJAX Options</h3>
-            <p>
-                Below an explanation of AJAX options ( set these via HTML attributes, where possible, will override the ones from JS options ):
-            </p>
-            <div class="row mt-3">
-                <div class="col-12">
-                    <div class="">
-                        <p>
-                            for formJS with fetch API: 
-                        </p>
-                        <ul class="m-0">
-                            <li>
-                                See <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters" target="_blank">MDN documentation</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-12 mt-4">
-                    <div class="">
-                        <p>
-                            for formJS with XMLHttpRequest API ( <u>this version will be removed soon</u> ): 
-                        </p>
-                        <ul class="m-0">
-                            <li>
-                                async: if true will make an async ajax call, if false will make a sync ajax call.
-                            </li>
-                            <li>
-                                cache: ( only for GET ajax calls ) if true will add a timestamp parameter to the url query string.
-                            </li>
-                            <li>
-                                contentType: content type of the ajax request ( or as "enctype" html form attribute if set ).
-                            </li>
-                            <li>
-                                headers: object of key/value pairs to set the request headers.
-                            </li>
-                            <li>
-                                method: it can also take the "method" html form attribute if set
-                            </li>
-                            <li>
-                                mimeType: a mime type to override the XHR mime type.
-                            </li>
-                            <li>
-                                timeout: ( in milliseconds ) if greater than 0, after the specified time, the ajax call will be aborted if still pending.
-                            </li>
-                            <li>
-                                url: by default is the current page url but it can also take the "action" html form attribute if set
-                            </li>
-                            <li>
-                                xhrFields: object of fieldName-fieldValue pairs to set on the native XHR object.
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -2520,6 +2423,25 @@ formInstance.options.fieldOptions.maxFileSize = 50;
         <div id="changelog">
             <h3 class="sticky-title">Changelog</h3>
             <ul class="p-0">
+                <li class="media my-3">
+                    <div class="version-num text-red">3.2.0</div>
+                    <div class="media-body pl-2">
+                        <ul>
+                            <li>
+                                Project published on NPM.
+                            </li>
+                            <li>
+                                Updated webpack config to export library as UMD Module.
+                            </li>
+                            <li>
+                                Removed "FormJS" as alternative namespace.
+                            </li>
+                            <li>
+                                Removed formJS version using XHR for form-data submit.
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="media my-3">
                     <div class="version-num text-red">3.1.0</div>
                     <div class="media-body pl-2">
