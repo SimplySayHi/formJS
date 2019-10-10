@@ -197,7 +197,8 @@
             </p>
             <h3>CDNs</h3>
             <p>
-                <a href="https://www.jsdelivr.com/package/gh/simplysayhi/formJS" target="_blank">jsDelivr</a>
+                <a href="https://www.jsdelivr.com/package/gh/simplysayhi/formJS" target="_blank">jsDelivr</a> | 
+                <a href="https://unpkg.com/formjs-plugin@3.2.0/dist/formjs.min.js" target="_blank">UNPKG</a>
             </p>
         </div>
         
@@ -268,18 +269,29 @@
             <pre>
 &lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.2.0/dist/formjs.min.js"&gt;&lt;/script&gt;
 </pre>
+            <pre>
+&lt;script src="https://unpkg.com/formjs-plugin@3.2.0/dist/formjs.min.js"&gt;&lt;/script&gt;
+</pre>
+            <hr />
             <p>
-                or as ES6 module:
+                or install via NPM:
             </p>
             <pre>
-import Form from 'formjs';
+npm install formjs-plugin
 </pre>
             <p>
-                or as CommonJS module:
+                and use as ES6 module:
             </p>
             <pre>
-var Form = require('formjs');
+import Form from 'formjs-plugin';
 </pre>
+            <p>
+                or use as CommonJS module:
+            </p>
+            <pre>
+var Form = require('formjs-plugin');
+</pre>
+            <hr />
             <p>
                 No dependencies.<br />
                 <span class="small">This demo is developed with Bootstrap CSS but it is not a dependency.</span>

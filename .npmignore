@@ -1,0 +1,15 @@
+node_modules
+*.lock
+*.zip
+.DS_Store
+**/.DS_Store
+Thumbs.db
+**/Thumbs.db
+*.html
+*.config.js
+css
+js
+json
+remoteValidations
+dist/additionals
+dist/polyfills-formJS.min.js
