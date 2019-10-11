@@ -1,36 +1,10 @@
 
 var validationRules = {
 
-    alphabetic: function( string ){
-        var regex = new RegExp(/^[a-z]+$/i),
-            obj = {
-                result: regex.test( string )
-            };
-
-        return obj;
-    },
-
-    alphabeticExtended: function( string ){
-        var regex = new RegExp(/^[-'A-ZÀ-ÖØ-öø-ÿ]+$/i),
-            obj = {
-                result: regex.test( string )
-            };
-
-        return obj;
-    },
-    
-    alphanumeric: function( string ){
-        var regex = new RegExp(/^[\w]+$/i), // OR [a-z0-9_]
-            obj = {
-                result: regex.test( string )
-            };
-
-        return obj;
-    },
-
     cap: function( string ){
         // VALID ITALIAN CAP WITH 5 DIGITS
-        var regex = new RegExp(/^[0-9]{5}$/),
+        var
+            regex = new RegExp(/^[0-9]{5}$/),
             obj = {
                 result: regex.test( string )
             };

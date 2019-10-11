@@ -1397,51 +1397,6 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                 </div>
                 <div class="card-body">
                     <div class="">
-                        <div id="validation-alphabetic" class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4 col-sm-3 text-green">
-                                Alphabetic <span class="text-yellow">*</span>
-                                <div>( alphabetic )</div>
-                                <div class="text-red">[ add. ]</div>
-                            </div>
-                            <div class="col-4 col-sm-3 text-green">
-                                <div><code>data-subtype="alphabetic"</code></div>
-                            </div>
-                            <div class="col-4 col-sm-6">
-                                <p>
-                                    /^[a-z]+$/i
-                                </p>
-                            </div>
-                        </div>
-                        <div id="validation-alphabeticExtended" class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4 col-sm-3 text-green">
-                                Alphabetic Extended <span class="text-yellow">*</span>
-                                <div>( alphabeticExtended )</div>
-                                <div class="text-red">[ add. ]</div>
-                            </div>
-                            <div class="col-4 col-sm-3 text-green">
-                                <div><code>data-subtype="alphabeticExtended"</code></div>
-                            </div>
-                            <div class="col-4 col-sm-6">
-                                <p>
-                                    /^[-'A-ZÀ-ÖØ-öø-ÿ]+$/i
-                                </p>
-                            </div>
-                        </div>
-                        <div id="validation-alphanumeric" class="clearfix padding-tb-md row-list-separator d-flex">
-                            <div class="col-4 col-sm-3 text-green">
-                                Alphanumeric <span class="text-yellow">*</span>
-                                <div>( alphanumeric )</div>
-                                <div class="text-red">[ add. ]</div>
-                            </div>
-                            <div class="col-4 col-sm-3 text-green">
-                                <div><code>data-subtype="alphanumeric"</code></div>
-                            </div>
-                            <div class="col-4 col-sm-6">
-                                <p>
-                                    /^[\w]+$/i
-                                </p>
-                            </div>
-                        </div>
                         <div id="validation-cap" class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4 col-sm-3 text-green">
                                 CAP <span class="text-yellow">*</span>
@@ -2463,9 +2418,6 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </li>
                             <li>
                                 Added 2-ways validation for fields with attribute data-equal-to
-                            </li>
-                            <li>
-                                Added validations for "alphabetic", "alphabeticExtended" and "Alphanumeric" to the external file /dist/additionals/validationRules.js
                             </li>
                             <li>
                                 Simplified data returned in ajax response, now returning only the data coming from the call.
