@@ -1,6 +1,7 @@
 
 import { mergeObjects, validateFormObjDefault } from './helper';
 import { ajaxCall } from './ajaxCall';
+//import { ajaxCall } from './ajaxCallXhr';
 
 export function submit( event ){
 
