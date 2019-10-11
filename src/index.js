@@ -12,7 +12,7 @@ import { init }                 from './modules/init';
 import { validateField }        from './modules/validateField';
 import { validateForm }         from './modules/validateForm';
 
-const version = '3.1.0';
+const version = '3.2.0';
 
 class Form {
 
@@ -60,5 +60,4 @@ Form.prototype.validationErrors = validationErrors;
 Form.prototype.validationRules = validationRules;
 Form.prototype.version = version;
 
-if( !window.Form ){ window.Form = Form; }
-if( !window.FormJS ) { window.FormJS = Form; }
+export default Form;

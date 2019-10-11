@@ -1,7 +1,6 @@
 
 import { defaultCallbacksInOptions } from './optionsUtils';
 import { ajaxOptions } from './optionsAjax';
-//import { ajaxOptions } from './optionsAjaxXhr';
 
 export const options = {
 
