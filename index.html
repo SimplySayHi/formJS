@@ -63,7 +63,7 @@
                 </p>
                 <div class="dropdown d-inline-block ml-1">
                     <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button">
-                        3.1.0
+                        3.1.1
                     </button>
                     <span class="dropdown-menu w-100 py-1">
                         <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/2.3.3/">2.3.3</a>
@@ -197,7 +197,8 @@
             </p>
             <h3>CDNs</h3>
             <p>
-                <a href="https://www.jsdelivr.com/package/gh/simplysayhi/formJS" target="_blank">jsDelivr</a>
+                <a href="https://www.jsdelivr.com/package/gh/simplysayhi/formJS" target="_blank">jsDelivr</a> | 
+                <a href="https://unpkg.com/formjs-plugin@3.1.1/dist/formjs.min.js" target="_blank">UNPKG</a>
             </p>
         </div>
         
@@ -270,23 +271,40 @@
         <div id="usage">
             <h3 class="sticky-title">Usage</h3>
             <p>
-                Include the plugin script in your page ( examples below from CDN ).<br />
-                You can inculde the standard version ( using fetch API for AJAX call ):
-            </p>
-            <div>
-            <pre>
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.1.0/dist/formjs.min.js"&gt;&lt;/script&gt;
-</pre>
-            <p>
-                or the XHR version ( using XMLHttpRequest API for AJAX call - <u>this version will be removed soon</u> ):
+                Include the plugin script in your page ( examples below from CDN ):
             </p>
             <pre>
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.1.0/dist/formjs.xhr.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS/dist/formjs.min.js"&gt;&lt;/script&gt;
 </pre>
-            </div>
+            <pre>
+&lt;script src="https://unpkg.com/formjs-plugin/dist/formjs.min.js"&gt;&lt;/script&gt;
+</pre>
+            <hr />
             <p>
-                From local, you can find the JS file <code>dist/formjs.min.js</code> or <code>dist/formjs.xhr.min.js</code>
+                or install via NPM:
             </p>
+            <pre>
+npm install formjs-plugin
+</pre>
+            <p>
+                and use as ES6 module:
+            </p>
+            <pre>
+import Form from 'formjs-plugin';
+</pre>
+            <p>
+                or use as CommonJS module:
+            </p>
+            <pre>
+var Form = require('formjs-plugin');
+</pre>
+            <hr />
+            <p>
+                If you find buggy the Fetch version you can always use the XHR version ( using XMLHttpRequest API for AJAX call - <u>this version will be removed soon</u> ):
+            </p>
+            <pre>
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS/dist/formjs.xhr.min.js"&gt;&lt;/script&gt;
+</pre>
             <p>
                 No dependencies.<br />
                 <span class="small">This demo is developed with Bootstrap CSS but it is not a dependency.</span>
@@ -410,10 +428,6 @@ formInstance.init();
                     options: ( optional ) a JS object with fieldOptions and formOptions ( see <a href="#options-list">Options section</a> )
                 </li>
             </ul>
-            <hr />
-            <p>
-                <b>IMPORTANT</b>: If <code>Form</code> namespace is not available, you can use <code>FormJS</code> namespace.
-            </p>
             <hr />
             <p>
                 formJS has some more properties:
@@ -2520,6 +2534,22 @@ formInstance.options.fieldOptions.maxFileSize = 50;
         <div id="changelog">
             <h3 class="sticky-title">Changelog</h3>
             <ul class="p-0">
+                <li class="media my-3">
+                    <div class="version-num text-red">3.1.1</div>
+                    <div class="media-body pl-2">
+                        <ul>
+                            <li>
+                                Project published on NPM.
+                            </li>
+                            <li>
+                                Updated webpack config to export library as UMD Module.
+                            </li>
+                            <li>
+                                Removed "FormJS" as alternative namespace.
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="media my-3">
                     <div class="version-num text-red">3.1.0</div>
                     <div class="media-body pl-2">

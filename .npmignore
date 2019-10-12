@@ -1,0 +1,13 @@
+css
+dist/additionals
+dist/formjs.xhr.js
+dist/formjs.xhr.min.js
+dist/formjs.xhr.min.js.map
+dist/polyfills-formJS.min.js
+dist/polyfills-formJS.xhr.min.js
+js
+json
+remoteValidations
+src
+*.html
+*.config.js

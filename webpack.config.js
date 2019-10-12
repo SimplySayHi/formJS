@@ -2,6 +2,8 @@
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const package = require('./package.json');
+
+const libraryName = 'Form';
 const initialComment = '/**! '+ package.title +' v'+ package.version +' | '+ package.author.name +' (@SimplySayHi) | '+ package.homepage +' | https://github.com/SimplySayHi/'+ package.title +' | '+ package.license +' license */';
 
 module.exports = [
@@ -9,10 +11,13 @@ module.exports = [
         entry: './src/index.js',
         output: {
             filename: 'formjs.js',
-            path: path.resolve(__dirname, 'dist')
+            path: path.resolve(__dirname, 'dist'),
+            libraryTarget: 'umd',
+            libraryExport: 'default',
+            globalObject: 'this',
+            library: libraryName
         },
         mode: 'none',
-        //watch: true,
         optimization: {
             namedModules: true,
             minimize: true,
@@ -47,10 +52,13 @@ module.exports = [
         entry: './src/index.js',
         output: {
             filename: 'formjs.min.js',
-            path: path.resolve(__dirname, 'dist')
+            path: path.resolve(__dirname, 'dist'),
+            libraryTarget: 'umd',
+            libraryExport: 'default',
+            globalObject: 'this',
+            library: libraryName
         },
         mode: 'production',
-        //watch: true,
         optimization: {
             minimize: true,
             minimizer: [

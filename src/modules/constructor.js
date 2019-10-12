@@ -21,7 +21,7 @@ export function constructorFn( formEl, optionsObj = {} ){
 
     self.formEl = checkFormElem.element;
     self.formEl.formjs = self;
-    self.options = mergeObjects({}, Form.prototype.options, optionsObj);
+    self.options = mergeObjects({}, self.constructor.prototype.options, optionsObj);
     self.listenerCallbacks = {
         dataTypeNumber:     callbackFns.dataTypeNumber,
         keypressMaxlength:  callbackFns.keypressMaxlength,
