@@ -305,6 +305,7 @@ var Form = require('formjs-plugin');
             <pre>
 &lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS/dist/formjs.xhr.min.js"&gt;&lt;/script&gt;
 </pre>
+            <hr />
             <p>
                 No dependencies.<br />
                 <span class="small">This demo is developed with Bootstrap CSS but it is not a dependency.</span>
@@ -2546,6 +2547,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </li>
                             <li>
                                 Removed "FormJS" as alternative namespace.
+                            </li>
+                            <li>
+                                Fixed bug in constructor function that caused an error when using the library as ES module.
                             </li>
                         </ul>
                     </div>
