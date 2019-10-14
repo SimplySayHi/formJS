@@ -2554,323 +2554,336 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                         </ul>
                     </div>
                 </li>
-                <li class="media my-3">
-                    <div class="version-num text-red">3.1.0</div>
-                    <div class="media-body pl-2">
-                        <ul>
-                            <li>
-                                beforeSend callbacks are now promise-based
-                            </li>
-                            <li>
-                                Added 2-ways validation for fields with attribute data-equal-to
-                            </li>
-                            <li>
-                                Added validations for "alphabetic", "alphabeticExtended" and "Alphanumeric" to the external file /dist/additionals/validationRules.js
-                            </li>
-                            <li>
-                                Simplified data returned in ajax response, now returning only the data coming from the call.
-                            </li>
-                            <li>
-                                Moved validations for "numberFloat" and "numberInteger" to the external file /dist/additionals/validationRules.js
-                            </li>
-                            <li>
-                                Minor bugfix and improvements
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="media my-3">
-                    <div class="version-num text-red">3.0.0</div>
-                    <div class="media-body pl-2">
-                        <b>NEW MAJOR VERSION</b>
-                        <p class="mt-3 mb-0">
-                            formJS is now available on <a href="https://www.jsdelivr.com/package/gh/simplysayhi/formJS" target="_blank">jsDelivr CDN</a>.
-                        </p>
-                        <p class="mt-3 mb-0">
-                            formJS is now available in 2 versions ( the difference is only about the API used for AJAX calls ):
-                        </p>
-                        <ul>
-                            <li>
-                                fetch
-                            </li>
-                            <li>
-                                XMLHttpRequest
-                            </li>
-                        </ul>
-                        <p class="mt-3 mb-0">
-                            Many relevant changes from the previous version:
-                        </p>
-                        <ul>
-                            <li>
-                                Added async validation with Promises.
-                            </li>
-                            <li>
-                                Added built-in errors: prototype method "addValidationErrors" and object "validationErrors".
-                            </li>
-                            <li>
-                                Added "errorEmpty" and "errorRule" to "cssClasses" in "fieldOptions" to show different error messages ( see implementation in CSS file ).
-                            </li>
-                            <li>
-                                Added validation rules for:
+            </ul>
+            <div class="toggable-content-outer">
+                <input type="checkbox" class="fake-checkbox btn-toggable-content" id="changelog-show-more" />
+                <label class="toggable-label text-red" for="changelog-show-more">
+                    <span>Show more</span>
+                    <span>Close</span>
+                </label>
+                <div class="toggable-content">
+                    <ul class="p-0">
+
+                        <li class="media my-3">
+                            <div class="version-num text-red">3.1.0</div>
+                            <div class="media-body pl-2">
                                 <ul>
                                     <li>
-                                        "color" ( input type="color" - as replace of "hexColor" )
+                                        beforeSend callbacks are now promise-based
                                     </li>
                                     <li>
-                                        "dateDDMMYYYY"
+                                        Added 2-ways validation for fields with attribute data-equal-to
                                     </li>
                                     <li>
-                                        "tel" ( input type="tel" )
+                                        Added validations for "alphabetic", "alphabeticExtended" and "Alphanumeric" to the external file /dist/additionals/validationRules.js
+                                    </li>
+                                    <li>
+                                        Simplified data returned in ajax response, now returning only the data coming from the call.
+                                    </li>
+                                    <li>
+                                        Moved validations for "numberFloat" and "numberInteger" to the external file /dist/additionals/validationRules.js
+                                    </li>
+                                    <li>
+                                        Minor bugfix and improvements
                                     </li>
                                 </ul>
-                            </li>
-                            <li>
-                                Added support for attributes "min" and "max" for date fields.
-                            </li>
-                            <li>
-                                Added "tempOptions" parameter to "onPastePrevented", "onValidation", "beforeSend", "onSubmitComplete", "onSubmitError", "onSubmitSuccess" callback functions.
-                            </li>
-                            <li>
-                                Renamed method "getFormJSON" with "getFormData" ( and related option in "formOptions" ).
-                            </li>
-                            <li>
-                                Renamed method "isValidField" with "validateField".
-                            </li>
-                            <li>
-                                Renamed method "isValidForm" with "validateForm".
-                            </li>
-                            <li>
-                                Renamed attribute "data-exclude-json" with "data-exclude-data" for consistency with related "getFormData" method.
-                            </li>
-                            <li>
-                                Changed "ajaxData" parameter in "onSubmitComplete", "onSubmitError", "onSubmitSuccess" to be compliant with JSend standard.
-                            </li>
-                            <li>
-                                Removed "Utilities" since it was going outside the plugin's scope.
-                            </li>
-                            <li>
-                                Removed "submit" method since it was not so useful.
-                            </li>
-                            <li>
-                                Removed the parameter from "getFormData" method. Now the function to collect data is taken in options.formOptions.getFotmData.
-                            </li>
-                            <li>
-                                Removed "checkDirtyField" option from "fieldOptions" ( the related callback is automatically executed ).
-                            </li>
-                            <li>
-                                Removed some polyfills thanks to code changes.
-                            </li>
-                            <li>
-                                Minor improvements.
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="media my-3">
-                    <div class="version-num text-red">2.3.3</div>
-                    <div class="media-body pl-2">
-                        <ul>
-                            <li>
-                                Fixed a bug on fields "data-require-more"/"data-required-from".
-                            </li>
-                            <li>
-                                Little improvement on submit method.
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="media my-3">
-                    <div class="version-num text-red">2.3.2</div>
-                    <div class="media-body pl-2">
-                        <ul>
-                            <li>
-                                Fixed a bug that caused field "data-required-from" to be validated even if not mandatory.
-                            </li>
-                            <li>
-                                Fixed a bug that caused options functions ( in case on array of functions, like onValidation ) to be incorrectly merged.
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="media my-3">
-                    <div class="version-num text-red">2.3.1</div>
-                    <div class="media-body pl-2">
-                        <ul>
-                            <li>
-                                Fixed a bug that caused checkboxes and radios to be validated twice ( on Chrome ) if "validateOnEvents" option in "fieldOptions" was set to "change blur".
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="media my-3">
-                    <div class="version-num text-red">2.3.0</div>
-                    <div class="media-body pl-2">
-                        <ul>
-                            <li>
-                                Added "init" method.
-                            </li>
-                            <li>
-                                Added validation for <code>data-type="number"</code> to emulate <code>type="number"</code> inputs ( see "strictHtmlValidation" option in <a href="#field-options">Field Options</a> section for details ).
-                            </li>
-                            <li>
-                                Modified the JSON data returned from "getFormJSON" method in order to get a boolean in case of single checkbox field and an array of the strings in case of multi-checkbox ( in this case every checkbox MUST have a value set ). Same logic for select and multi-select fields.
-                            </li>
-                            <li>
-                                Fixed a bug that caused a field with "maxlength" and "required" attributes to be evaluated as valid if the field value was empty.
-                            </li>
-                            <li>
-                                If "checkDirtyField" option is set to true, the "dirty CSS class" will now be applied to the container element with "data-formjs-question" attribute - or the field itself ( as in previous versions ), if not.
-                            </li>
-                            <li>
-                                Changed default option value for "fieldOptions.cssClasses.dirty" from "dirty-field" to "is-dirty".
-                            </li>
-                            <li>
-                                Now the JS field element is passed to each validation rule as second argument.
-                            </li>
-                            <li>
-                                Updated polyfill url to point to thw new v3.
-                            </li>
-                            <li>
-                                Minor code improvements.
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="media my-3">
-                    <div class="version-num text-red">2.2.1</div>
-                    <div class="media-body pl-2">
-                        <ul>
-                            <li>
-                                Fixed a bug in "beforeSend" callback that prevented the script to be stopped even with "stopExecution" set ot true.
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="media my-3">
-                    <div class="version-num text-red">2.2.0</div>
-                    <div class="media-body pl-2">
-                        <ul>
-                            <li>
-                                Added "handleValidation" in "fieldOptions"
-                            </li>
-                            <li>
-                                Added "ajaxOptions" in "formOptions"
-                            </li>
-                            <li>
-                                Added "getFormJSON" in "formOptions"
-                            </li>
-                            <li>
-                                Added "customFn" parameter to "getFormJSON" method
-                            </li>
-                            <li>
-                                Moved "handleFileUpload" from "formOptions" to "fieldOptions" for options consistency
-                            </li>
-                            <li>
-                                Removed support for attributes "data-ajax-settings" and "data-formjs-init". Use instead, respectively, "ajaxOptions" in "formOptions" and "handleValidation" in "fieldOptions" &amp; "handleSubmit" in "formOptions"
-                            </li>
-                            <li>
-                                "onPastePrevented" and "onValidation" in "fieldOptions" but also "beforeSend", "onSubmitComplete", "onSubmitError" and "onSubmitSuccess" in "formOptions" can now be a function or array of functions
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="media my-3">
-                    <div class="version-num text-red">2.1.0</div>
-                    <div class="media-body pl-2">
-                        <ul>
-                            <li>
-                                Added "destroy" method.
-                            </li>
-                            <li>
-                                Added "handleSubmit" option in "formOptions".
-                            </li>
-                            <li>
-                                Added "Checks" and "Length" in "Built-in Validations".
-                            </li>
-                            <li>
-                                Removed "errorMultiChoice" in "fieldOptions.cssClasses".
-                            </li>
-                            <li>
-                                Removed support for "data-ajax-submit" attribute and added "ajaxSubmit" option in "formOptions" instead.
-                            </li>
-                            <li>
-                                Removed "Max check" from "Built-in Validations". Use the new "Checks" validation.
-                            </li>
-                            <li>
-                                Now "formEl" in constructor function can also be a CSS string selector.
-                            </li>
-                            <li>
-                                Better check for "formEl" argument inside the constructor function.
-                            </li>
-                            <li>
-                                Renamed "manageFileUpload" option in "handleFileUpload" inside "formOptions".
-                            </li>
-                            <li>
-                                Changed RegExp for "Date" in "Built-in Validations".
-                            </li>
-                            <li>
-                                Some internal improvements.
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="media my-3">
-                    <div class="version-num text-red">2.0.0</div>
-                    <div class="media-body pl-2">
-                        Rewritten with ES6:
-                        <ul>
-                            <li>
-                                Completely different usage of the plugin with introduction of plugin instance instead of one-instance-management.
-                            </li>
-                            <li>
-                                Changed "submitAjaxForm" method with "submit" method ( manages both AJAX and HTML forms ).
-                            </li>
-                            <li>
-                                Moved "addValidationRules" from instance methods to Class-prototype methods.
-                            </li>
-                            <li>
-                                Changed regex for email validation.
-                            </li>
-                            <li>
-                                Added "setOptions" method ( as Class-prototype method ).
-                            </li>
-                            <li>
-                                Some changes in methods arguments and callbacks arguments.
-                            </li>
-                            <li>
-                                Now HTML forms are better managed and beforeSend function is available.
-                            </li>
-                            <li>
-                                Added support for JS validation of "minlength" attribute.
-                            </li>
-                            <li>
-                                Addes support for JS validation of "accept" attribute for file inputs.
-                            </li>
-                            <li>
-                                Added support for JS validation via "pattern" attribute.
-                            </li>
-                            <li>
-                                "strictHtmlValidation" option in "fieldOptions" is now set to true by default.
-                            </li>
-                            <li>
-                                General bugfix.
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="media my-3">
-                    <div class="version-num text-red">1.2.0</div>
-                    <div class="media-body pl-2">
-                        Now written with plain Javascript ( ES5 ) and jQuery, Minor bugfix.
-                    </div>
-                </li>
-                <li class="media my-3">
-                    <div class="version-num text-red">1.1.2</div>
-                    <div class="media-body pl-2">
-                        First stable version.
-                    </div>
-                </li>
-            </ul>
+                            </div>
+                        </li>
+                        <li class="media my-3">
+                            <div class="version-num text-red">3.0.0</div>
+                            <div class="media-body pl-2">
+                                <b>NEW MAJOR VERSION</b>
+                                <p class="mt-3 mb-0">
+                                    formJS is now available on <a href="https://www.jsdelivr.com/package/gh/simplysayhi/formJS" target="_blank">jsDelivr CDN</a>.
+                                </p>
+                                <p class="mt-3 mb-0">
+                                    formJS is now available in 2 versions ( the difference is only about the API used for AJAX calls ):
+                                </p>
+                                <ul>
+                                    <li>
+                                        fetch
+                                    </li>
+                                    <li>
+                                        XMLHttpRequest
+                                    </li>
+                                </ul>
+                                <p class="mt-3 mb-0">
+                                    Many relevant changes from the previous version:
+                                </p>
+                                <ul>
+                                    <li>
+                                        Added async validation with Promises.
+                                    </li>
+                                    <li>
+                                        Added built-in errors: prototype method "addValidationErrors" and object "validationErrors".
+                                    </li>
+                                    <li>
+                                        Added "errorEmpty" and "errorRule" to "cssClasses" in "fieldOptions" to show different error messages ( see implementation in CSS file ).
+                                    </li>
+                                    <li>
+                                        Added validation rules for:
+                                        <ul>
+                                            <li>
+                                                "color" ( input type="color" - as replace of "hexColor" )
+                                            </li>
+                                            <li>
+                                                "dateDDMMYYYY"
+                                            </li>
+                                            <li>
+                                                "tel" ( input type="tel" )
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        Added support for attributes "min" and "max" for date fields.
+                                    </li>
+                                    <li>
+                                        Added "tempOptions" parameter to "onPastePrevented", "onValidation", "beforeSend", "onSubmitComplete", "onSubmitError", "onSubmitSuccess" callback functions.
+                                    </li>
+                                    <li>
+                                        Renamed method "getFormJSON" with "getFormData" ( and related option in "formOptions" ).
+                                    </li>
+                                    <li>
+                                        Renamed method "isValidField" with "validateField".
+                                    </li>
+                                    <li>
+                                        Renamed method "isValidForm" with "validateForm".
+                                    </li>
+                                    <li>
+                                        Renamed attribute "data-exclude-json" with "data-exclude-data" for consistency with related "getFormData" method.
+                                    </li>
+                                    <li>
+                                        Changed "ajaxData" parameter in "onSubmitComplete", "onSubmitError", "onSubmitSuccess" to be compliant with JSend standard.
+                                    </li>
+                                    <li>
+                                        Removed "Utilities" since it was going outside the plugin's scope.
+                                    </li>
+                                    <li>
+                                        Removed "submit" method since it was not so useful.
+                                    </li>
+                                    <li>
+                                        Removed the parameter from "getFormData" method. Now the function to collect data is taken in options.formOptions.getFotmData.
+                                    </li>
+                                    <li>
+                                        Removed "checkDirtyField" option from "fieldOptions" ( the related callback is automatically executed ).
+                                    </li>
+                                    <li>
+                                        Removed some polyfills thanks to code changes.
+                                    </li>
+                                    <li>
+                                        Minor improvements.
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="media my-3">
+                            <div class="version-num text-red">2.3.3</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Fixed a bug on fields "data-require-more"/"data-required-from".
+                                    </li>
+                                    <li>
+                                        Little improvement on submit method.
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="media my-3">
+                            <div class="version-num text-red">2.3.2</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Fixed a bug that caused field "data-required-from" to be validated even if not mandatory.
+                                    </li>
+                                    <li>
+                                        Fixed a bug that caused options functions ( in case on array of functions, like onValidation ) to be incorrectly merged.
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="media my-3">
+                            <div class="version-num text-red">2.3.1</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Fixed a bug that caused checkboxes and radios to be validated twice ( on Chrome ) if "validateOnEvents" option in "fieldOptions" was set to "change blur".
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="media my-3">
+                            <div class="version-num text-red">2.3.0</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Added "init" method.
+                                    </li>
+                                    <li>
+                                        Added validation for <code>data-type="number"</code> to emulate <code>type="number"</code> inputs ( see "strictHtmlValidation" option in <a href="#field-options">Field Options</a> section for details ).
+                                    </li>
+                                    <li>
+                                        Modified the JSON data returned from "getFormJSON" method in order to get a boolean in case of single checkbox field and an array of the strings in case of multi-checkbox ( in this case every checkbox MUST have a value set ). Same logic for select and multi-select fields.
+                                    </li>
+                                    <li>
+                                        Fixed a bug that caused a field with "maxlength" and "required" attributes to be evaluated as valid if the field value was empty.
+                                    </li>
+                                    <li>
+                                        If "checkDirtyField" option is set to true, the "dirty CSS class" will now be applied to the container element with "data-formjs-question" attribute - or the field itself ( as in previous versions ), if not.
+                                    </li>
+                                    <li>
+                                        Changed default option value for "fieldOptions.cssClasses.dirty" from "dirty-field" to "is-dirty".
+                                    </li>
+                                    <li>
+                                        Now the JS field element is passed to each validation rule as second argument.
+                                    </li>
+                                    <li>
+                                        Updated polyfill url to point to thw new v3.
+                                    </li>
+                                    <li>
+                                        Minor code improvements.
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="media my-3">
+                            <div class="version-num text-red">2.2.1</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Fixed a bug in "beforeSend" callback that prevented the script to be stopped even with "stopExecution" set ot true.
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="media my-3">
+                            <div class="version-num text-red">2.2.0</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Added "handleValidation" in "fieldOptions"
+                                    </li>
+                                    <li>
+                                        Added "ajaxOptions" in "formOptions"
+                                    </li>
+                                    <li>
+                                        Added "getFormJSON" in "formOptions"
+                                    </li>
+                                    <li>
+                                        Added "customFn" parameter to "getFormJSON" method
+                                    </li>
+                                    <li>
+                                        Moved "handleFileUpload" from "formOptions" to "fieldOptions" for options consistency
+                                    </li>
+                                    <li>
+                                        Removed support for attributes "data-ajax-settings" and "data-formjs-init". Use instead, respectively, "ajaxOptions" in "formOptions" and "handleValidation" in "fieldOptions" &amp; "handleSubmit" in "formOptions"
+                                    </li>
+                                    <li>
+                                        "onPastePrevented" and "onValidation" in "fieldOptions" but also "beforeSend", "onSubmitComplete", "onSubmitError" and "onSubmitSuccess" in "formOptions" can now be a function or array of functions
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="media my-3">
+                            <div class="version-num text-red">2.1.0</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Added "destroy" method.
+                                    </li>
+                                    <li>
+                                        Added "handleSubmit" option in "formOptions".
+                                    </li>
+                                    <li>
+                                        Added "Checks" and "Length" in "Built-in Validations".
+                                    </li>
+                                    <li>
+                                        Removed "errorMultiChoice" in "fieldOptions.cssClasses".
+                                    </li>
+                                    <li>
+                                        Removed support for "data-ajax-submit" attribute and added "ajaxSubmit" option in "formOptions" instead.
+                                    </li>
+                                    <li>
+                                        Removed "Max check" from "Built-in Validations". Use the new "Checks" validation.
+                                    </li>
+                                    <li>
+                                        Now "formEl" in constructor function can also be a CSS string selector.
+                                    </li>
+                                    <li>
+                                        Better check for "formEl" argument inside the constructor function.
+                                    </li>
+                                    <li>
+                                        Renamed "manageFileUpload" option in "handleFileUpload" inside "formOptions".
+                                    </li>
+                                    <li>
+                                        Changed RegExp for "Date" in "Built-in Validations".
+                                    </li>
+                                    <li>
+                                        Some internal improvements.
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="media my-3">
+                            <div class="version-num text-red">2.0.0</div>
+                            <div class="media-body pl-2">
+                                Rewritten with ES6:
+                                <ul>
+                                    <li>
+                                        Completely different usage of the plugin with introduction of plugin instance instead of one-instance-management.
+                                    </li>
+                                    <li>
+                                        Changed "submitAjaxForm" method with "submit" method ( manages both AJAX and HTML forms ).
+                                    </li>
+                                    <li>
+                                        Moved "addValidationRules" from instance methods to Class-prototype methods.
+                                    </li>
+                                    <li>
+                                        Changed regex for email validation.
+                                    </li>
+                                    <li>
+                                        Added "setOptions" method ( as Class-prototype method ).
+                                    </li>
+                                    <li>
+                                        Some changes in methods arguments and callbacks arguments.
+                                    </li>
+                                    <li>
+                                        Now HTML forms are better managed and beforeSend function is available.
+                                    </li>
+                                    <li>
+                                        Added support for JS validation of "minlength" attribute.
+                                    </li>
+                                    <li>
+                                        Addes support for JS validation of "accept" attribute for file inputs.
+                                    </li>
+                                    <li>
+                                        Added support for JS validation via "pattern" attribute.
+                                    </li>
+                                    <li>
+                                        "strictHtmlValidation" option in "fieldOptions" is now set to true by default.
+                                    </li>
+                                    <li>
+                                        General bugfix.
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="media my-3">
+                            <div class="version-num text-red">1.2.0</div>
+                            <div class="media-body pl-2">
+                                Now written with plain Javascript ( ES5 ) and jQuery, Minor bugfix.
+                            </div>
+                        </li>
+                        <li class="media my-3">
+                            <div class="version-num text-red">1.1.2</div>
+                            <div class="media-body pl-2">
+                                First stable version.
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <!-- Bugs -->
