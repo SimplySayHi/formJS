@@ -1,5 +1,4 @@
 node_modules
-*.lock
 *.zip
 .DS_Store
 **/.DS_Store
