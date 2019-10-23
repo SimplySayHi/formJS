@@ -1,5 +1,5 @@
 
-import { executeCallback, mergeObjects, serializeObject } from './helper';
+import { executeCallback, mergeObjects, serializeObject } from './helpers';
 
 // AJAX CALL USING XMLHttpRequest API
 export function ajaxCall( formDataObj ){
@@ -60,14 +60,14 @@ export function ajaxCall( formDataObj ){
 
             if( xhr.status === 200 ){
                 let responseData = parseResponse(xhr);
-                executeCallback.call( self, formOptions.onSubmitSuccess, responseData );
+                executeCallback.call( self, {fn: formOptions.onSubmitSuccess, data: responseData} );
             } else {
                 errorFn(e);
             }
         },
         errorFn = function(e) {
             let xhr = e.target;
-            executeCallback.call( self, formOptions.onSubmitError, xhr );
+            executeCallback.call( self, {fn: formOptions.onSubmitError, data: xhr} );
         },
         completeFn = function(e) {
             if( timeoutTimer ){
@@ -75,7 +75,7 @@ export function ajaxCall( formDataObj ){
             }
 
             btnEl.disabled = false;
-            executeCallback.call( self, formOptions.onSubmitComplete );
+            executeCallback.call( self, {fn: formOptions.onSubmitComplete} );
         };
     
     XHR.addEventListener('load',    successFn, false);

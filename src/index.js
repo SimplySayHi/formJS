@@ -1,5 +1,5 @@
 
-import { mergeObjects }         from './modules/helper';
+import { mergeObjects }         from './modules/helpers';
 import { options }              from './modules/options';
 import { validationRules }      from './modules/validationRules';
 import { validationErrors }     from './modules/validationErrors';
@@ -12,7 +12,7 @@ import { init }                 from './modules/init';
 import { validateField }        from './modules/validateField';
 import { validateForm }         from './modules/validateForm';
 
-const version = '3.1.2';
+const version = '3.2.0';
 
 class Form {
 

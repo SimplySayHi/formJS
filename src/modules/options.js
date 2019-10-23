@@ -6,11 +6,13 @@ import { ajaxOptions } from './optionsAjax';
 export const options = {
 
     fieldOptions: {
+        beforeValidation:       [defaultCallbacksInOptions.fieldOptions.beforeValidation],
         cssClasses: {
             dirty:              'is-dirty',
             error:              'has-error',
             errorEmpty:         'has-error-empty',
             errorRule:          'has-error-rule',
+            pending:            'is-pending',
             valid:              'is-valid'
         },
         focusOnRelated:         true,

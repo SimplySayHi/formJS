@@ -1,5 +1,5 @@
 
-import { executeCallback, fieldsStringSelector, isFieldForChangeEvent } from './helper';
+import { executeCallback, fieldsStringSelector, isFieldForChangeEvent } from './helpers';
 import { submit } from './submit';
 
 export const callbackFns = {
@@ -45,7 +45,7 @@ export const callbackFns = {
 
         if( fieldEl.matches( fieldOptions.preventPasteFields ) ){     
             event.preventDefault();
-            executeCallback.call( self, fieldOptions.onPastePrevented, fieldEl );
+            executeCallback.call( self, {fn: fieldOptions.onPastePrevented, data: fieldEl} );
         }
 
     },
@@ -54,11 +54,11 @@ export const callbackFns = {
         submit.call( this, event );
     },
 
-    validation: function( event ){
+    validation: function( event, callFormValidation = true ){
 
         const self = this,
-            eventName = event.type,
-            fieldEl = event.target;
+              eventName = event.type,
+              fieldEl = event.target;
 
         if( fieldEl.matches( fieldsStringSelector ) ){
             const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl),
@@ -106,7 +106,7 @@ export const callbackFns = {
                 (!isFieldForChangeEventBoolean && eventName !== 'change')
             ){
                 
-                self.validateField( fieldEl ).then(obj => {
+                self.validateField( fieldEl, {callFormValidation} ).then(obj => {
                     const type = obj.fieldEl.type,
                           realtedFieldEqualTo = obj.fieldEl.closest('form').querySelector('[data-equal-to="'+ obj.fieldEl.name +'"]');
 
@@ -116,7 +116,7 @@ export const callbackFns = {
                         !(type === 'checkbox' || type === 'radio') && 
                         realtedFieldEqualTo && realtedFieldEqualTo.value.trim() !== ''
                     ){
-                        self.validateField( realtedFieldEqualTo );
+                        self.validateField( realtedFieldEqualTo, {callFormValidation} );
                     }
                 });
 

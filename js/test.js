@@ -1,6 +1,24 @@
 
 var options = {
         fieldOptions: {
+            beforeValidation: [
+                function beforeValidation_Test1( fieldObj ){
+                    console.log('--- beforeValidation_Test 1 fieldObj', fieldObj);
+                },
+                function beforeValidation_Test2( fieldObj ){
+                    console.log('--- beforeValidation_Test 2 fieldObj', fieldObj);
+                    /* return new Promise(function(resolve){
+                        setTimeout(function(){
+                            resolve( fieldObj );
+                        }, 3000);
+                    }); */
+                },
+                function beforeValidation_Test3( fieldObj ){
+                    console.log('--- beforeValidation_Test 3 fieldObj', fieldObj);
+                    fieldObj.aaa = 'ciao';
+                    return fieldObj;
+                }
+            ],
             onPastePrevented: function onPastePreventedTest ( fieldEl, tempOptions ){
                 console.log('onPastePrevented field', fieldEl);
                 console.log('onPastePrevented tempOptions', tempOptions);

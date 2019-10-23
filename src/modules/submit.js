@@ -1,5 +1,5 @@
 
-import { mergeObjects, validateFormObjDefault } from './helper';
+import { runFunctionsSequence, validateFormObjDefault } from './helpers';
 import { ajaxCall } from './ajaxCall';
 //import { ajaxCall } from './ajaxCallXhr';
 
@@ -47,18 +47,12 @@ export function submit( event ){
             beforeSendData.formData = formDataObj;
         }
 
-        return callbacksBeforeSend.reduce(function(acc, cbFn){
-            return acc.then(function (res) {
-                let beforeSendDataNew = mergeObjects({}, res[res.length - 1]);
-                if( beforeSendDataNew.stopExecution ){
-                    return Promise.resolve(res);
-                }
-                return cbFn.call(self, beforeSendDataNew, options).then(function (result) {
-                    res.push(result);
-                    return res;
-                });
-            });
-        }, Promise.resolve([beforeSendData]));
+        const rfsObject = {
+            functionsList: callbacksBeforeSend,
+            data: beforeSendData,
+            stopConditionFn: function(data){ return data.stopExecution; }
+        };
+        return runFunctionsSequence.call(self, rfsObject);
 
     }).then(dataList => {
 

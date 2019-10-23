@@ -1,5 +1,5 @@
 
-import { mergeObjects, toCamelCase } from './helper';
+import { mergeObjects, toCamelCase } from './helpers';
 import { validationRulesAttributes } from './validationRules';
 
 export function isValid( fieldEl, fieldOptions = {} ){
@@ -13,7 +13,7 @@ export function isValid( fieldEl, fieldOptions = {} ){
 
     let attrValidations = [],
         attrValidationsResult = isValidValue,
-        obj = { result: isValidValue };
+        obj = { result: isValidValue, fieldEl };
 
     if( !obj.result ){
         obj.errors = { empty: true };
@@ -67,8 +67,9 @@ export function isValid( fieldEl, fieldOptions = {} ){
 
     }).then(data => {
 
-        obj = mergeObjects( {}, obj, data );
+        obj = mergeObjects( {}, obj, data, {fieldEl} );
         obj.result = obj.result && attrValidationsResult;
+
         if( !obj.result ){
             let fieldErrors = (typeof self.validationErrors[fieldType] === 'function' ? self.validationErrors[fieldType](fieldValue, fieldEl) : {});
             if( typeof obj.errors === 'undefined' ){
@@ -77,6 +78,7 @@ export function isValid( fieldEl, fieldOptions = {} ){
             obj.errors.rule = true;
             obj.errors = mergeObjects({}, obj.errors, fieldErrors);
         }
+        
         return obj;
 
     });

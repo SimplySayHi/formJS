@@ -1,8 +1,18 @@
 
-import { addClass, mergeObjects, removeClass } from './helper';
+import { addClass, checkDirtyField, mergeObjects, removeClass } from './helpers';
 
 export const defaultCallbacksInOptions = {
     fieldOptions: {
+
+        beforeValidation: function beforeValidationDefault ( fieldObj, tempOptions = {} ) {
+
+            let self = this,
+                options = mergeObjects( {}, self.options.fieldOptions, tempOptions.fieldOptions );
+
+            checkDirtyField.call( self, fieldObj.fieldEl );
+            addClass( fieldObj.fieldEl.closest('[data-formjs-question]'), options.cssClasses.pending );
+
+        },
 
         onValidation: function onValidationDefault ( fieldsArray, tempOptions = {} ) {
 
@@ -16,6 +26,8 @@ export const defaultCallbacksInOptions = {
                     reqMoreEl = self.formEl.querySelector( fieldEl.getAttribute('data-required-from') );
                 
                 if( containerEl !== null && !options.skipUIfeedback ){
+                    removeClass( containerEl, options.cssClasses.pending );
+
                     if( obj.result ){
 
                         if( !isReqFrom || (isReqFrom && reqMoreEl.checked) ){

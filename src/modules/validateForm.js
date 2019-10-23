@@ -1,5 +1,5 @@
 
-import { executeCallback, mergeObjects } from './helper';
+import { executeCallback, mergeObjects } from './helpers';
 import { isValidForm } from './isValidForm';
 
 export function validateForm( fieldOptionsObj = {} ){
@@ -14,7 +14,7 @@ export function validateForm( fieldOptionsObj = {} ){
 
     }).then(obj => {
 
-        executeCallback.call( self, fieldOptions.onValidation, obj.fields, {fieldOptions: fieldOptionsObj} );
+        executeCallback.call( self, {fn: fieldOptions.onValidation, data: obj.fields, options: {fieldOptions: fieldOptionsObj}} );
         return obj;
 
     });

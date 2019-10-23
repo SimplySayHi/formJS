@@ -9,6 +9,28 @@ addClass = function( element, cssClasses ){
     });
 },
 
+checkDirtyField = function( fields, cssClasses = this.options.fieldOptions.cssClasses.dirty ){
+
+    var fields = (isNodeList(fields) ? Array.from( fields ) : [fields]);
+    
+    fields.forEach(function(fieldEl){
+        if( fieldEl.type !== 'checkbox' && fieldEl.type !== 'radio' ){
+            let containerEl = fieldEl.closest('[data-formjs-question]') || fieldEl;
+
+            if( fieldEl.value ){
+                
+                addClass( containerEl, cssClasses );
+                
+            } else {
+                
+                removeClass( containerEl, cssClasses );
+                
+            }
+        }
+    });
+    
+},
+
 checkFormEl = function( formEl ){
     let isString = typeof formEl,
         isValidNodeSelector = isString === 'string' && isDOMNode(document.querySelector(formEl)),
@@ -21,19 +43,19 @@ checkFormEl = function( formEl ){
     return obj;
 },
 
-executeCallback = function( callbackOption, callbackData = {}, tempOptions = {} ){
+executeCallback = function( {fn = null, data = {}, options = {}} = {} ){
     let self = this,
-        options = mergeObjects({}, self.options, tempOptions),
+        optionsNew = mergeObjects({}, self.options, options),
         callbackFnList = [];
 
-    if( typeof callbackOption === 'function' ){
-        callbackFnList.push( callbackOption );
-    } else if( Array.isArray(callbackOption) ) {
-        callbackFnList = callbackOption;
+    if( typeof fn === 'function' ){
+        callbackFnList.push( fn );
+    } else if( Array.isArray(fn) ) {
+        callbackFnList = fn;
     }
 
-    callbackFnList.forEach(function(cbFn){
-        cbFn.call( self, callbackData, options );
+    callbackFnList.forEach(function(promiseFn){
+        promiseFn.call( self, data, optionsNew );
     });
 },
 
@@ -49,6 +71,28 @@ getSplitChar = function( string ){
     }
 
     return splitChar;
+},
+
+getUniqueFields = function( nodeList ){
+
+    let currentFieldName = '',
+        currentFieldType = '';
+
+    return Array.from( nodeList ).filter(fieldEl => {
+        const name = fieldEl.name,
+              type = fieldEl.type;
+
+        if( name === currentFieldName && type === currentFieldType ){
+            return false;
+        }
+        
+        if( !fieldEl.matches('[data-required-from]') ){
+            currentFieldName = name;
+            currentFieldType = type;
+        }
+        return true;
+    });
+    
 },
 
 isDOMNode = function( node ){
@@ -111,6 +155,26 @@ mergeObjects = function( out = {} ){
 removeClass = function( element, cssClasses ){
     cssClasses.split(' ').forEach(function(className){
         element.classList.remove( className );
+    });
+},
+
+runFunctionsSequence = function( { functionsList = [], data = {}, stopConditionFn = function(){return false} } = {} ){
+    const self = this;
+
+    return functionsList.reduce(function(acc, promiseFn){
+        return acc.then(function (res) {
+            let dataNew = mergeObjects({}, res[res.length - 1]);
+            if( stopConditionFn(dataNew) ){
+                return Promise.resolve(res);
+            }
+            return new Promise(resolve => { resolve(promiseFn.call(self, dataNew)) }).then(function (result = dataNew) {
+                res.push(result);
+                return res;
+            });
+        });
+    }, Promise.resolve([data])).then(dataList => {
+        if( dataList.length > 1 ){ dataList.shift(); }
+        return dataList;
     });
 },
 

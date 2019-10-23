@@ -62,9 +62,7 @@
                 Version 
                 </p>
                 <div class="dropdown d-inline-block ml-1">
-                    <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button">
-                        3.1.2
-                    </button>
+                    <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button" data-print-current-version></button>
                     <span class="dropdown-menu w-100 py-1">
                         <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/2.3.3/">2.3.3</a>
                         <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/1.2.0/">1.2.0</a>
@@ -477,6 +475,43 @@ formInstance.init();
                     <div class="card-body">
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
+                                <p class="text-green">beforeValidation</p>
+                            </div>
+                            <div class="col-3">
+                                function / array of functions
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    Each function:<br /><br />
+                                    Fires just before a field is being validated and it is executed as Promise ( or chain/sequence of Promises if as array ).
+                                </p>
+                                <p>
+                                    Additionally, the "this" keyword is bound to the Form instance.
+                                </p>
+                                <div class="card-footer bg-transparent pb-0 px-0">
+                                    <p class="text-green">
+                                        Arguments
+                                    </p>
+                                    <ul>
+                                        <li>
+                                            fieldObj: ( Object )
+<pre>
+{
+    fieldEl: fieldEl
+}
+</pre>
+                                            <ul>
+                                                <li>
+                                                    field: JS node element ( the field that will be validated )
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4">
                                 <p class="text-green">cssClasses</p>
                             </div>
                             <div class="col-3">
@@ -607,7 +642,8 @@ formInstance.init();
                             <div class="col-5">
                                 <p>
                                     Each function:<br /><br />
-                                    Fires just after a field has been validated.
+                                    Fires just after a field has been validated.<br />
+                                    If the field was evaluated as valid the entire form check is fired. So, this callback will run passing "fieldsList" as an array with one object for each form field.
                                 </p>
                                 <p>
                                     Additionally, the "this" keyword is bound to the Form instance.
@@ -737,11 +773,13 @@ formInstance.init();
                         </p>
                         <pre>
 {
+    beforeValidation:       [beforeValidationDefault],
     cssClasses: {
         dirty:              'is-dirty',
         error:              'has-error',
         errorEmpty:         'has-error-empty',
         errorRule:          'has-error-rule',
+        pending:            'is-pending',
         valid:              'is-valid'
     },
     focusOnRelated:         true,
@@ -843,8 +881,9 @@ formInstance.init();
                             <div class="col-4">
                                 <p>
                                     Each function:<br /><br />
+                                    It is executed as Promise ( or chain/sequence of Promises if as array ).<br /><br />
                                     For AJAX forms:<br />
-                                    Fires before the AJAX call starts. If used to modify the form data or prevent the AJAX call to start, <u>it must return a Promise</u> with <code>data</code> passed to it.
+                                    Fires before the AJAX call starts. If used to modify the form data or prevent the AJAX call to start, it must return the object <code>data</code> ( optionally as Promise ) passed to it.
                                     <br /><br />
                                     For HTML forms:<br />
                                     Fire before form submit. Can be used to execute some custom code ( example: populate a hidden field ) or to prevent the form submit ( in this case, it must have a return statement as above ).
@@ -2536,11 +2575,20 @@ formInstance.options.fieldOptions.maxFileSize = 50;
             <h3 class="sticky-title">Changelog</h3>
             <ul class="p-0">
                 <li class="media my-3">
-                    <div class="version-num text-red">3.1.2</div>
+                    <div class="version-num text-red" data-print-current-version></div>
                     <div class="media-body pl-2">
                         <ul>
                             <li>
-                                Updated file .npmignore
+                                Added "beforeValidation" in "fieldOptions"
+                            </li>
+                            <li>
+                                Added "pending" to "cssClasses" in "fieldOptions"
+                            </li>
+                            <li>
+                                Now "beforeSend" in "formOptions" can also return an object instead of only a Promise
+                            </li>
+                            <li>
+                                Now "onValidation" in "fieldOptions" is triggered every time a field is evaluated as valid ( to check the entire form validity )
                             </li>
                         </ul>
                     </div>
@@ -2555,6 +2603,16 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                 <div class="toggable-content">
                     <ul class="p-0">
 
+                        <li class="media my-3">
+                            <div class="version-num text-red">3.1.2</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Updated file .npmignore
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="media my-3">
                             <div class="version-num text-red">3.1.1</div>
                             <div class="media-body pl-2">

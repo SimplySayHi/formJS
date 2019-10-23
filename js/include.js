@@ -61,3 +61,10 @@ Array.from(document.querySelectorAll('form')).forEach(function(formEl){
         formEl.querySelector('[data-formjs-global-feedback]').classList.add( 'd-none' );
     });
 });
+
+document.addEventListener('DOMContentLoaded', function(){
+    var version = Form.prototype.version;
+    Array.from( document.querySelectorAll('[data-print-current-version]') ).forEach(function( elem ){
+        elem.innerHTML = version;
+    });
+});

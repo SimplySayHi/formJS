@@ -1,6 +1,5 @@
 
-import { isDOMNode, mergeObjects, validateFieldObjDefault } from './helper';
-import { checkDirtyField } from './checkDirtyField';
+import { isDOMNode, mergeObjects, runFunctionsSequence, validateFieldObjDefault } from './helpers';
 import { isValid } from './isValid';
 
 export function isValidField( fieldElem, fieldOptionsObj = {} ){
@@ -8,7 +7,7 @@ export function isValidField( fieldElem, fieldOptionsObj = {} ){
     const self = this,
           fieldEl = (typeof fieldElem === 'string' ? self.formEl.querySelector(fieldElem) : fieldElem);
 
-    let obj = mergeObjects({}, validateFieldObjDefault);
+    let obj = mergeObjects({}, validateFieldObjDefault, {fieldEl});
 
     if( !isDOMNode(fieldEl) ){ return Promise.resolve(obj); }
 
@@ -18,29 +17,33 @@ export function isValidField( fieldElem, fieldOptionsObj = {} ){
         isReqFrom =         fieldEl.matches('[data-required-from]'),
         isValidateIfFilled =fieldEl.matches('[data-validate-if-filled]');
 
-    checkDirtyField.call( self, fieldEl );
+    const rfsObject = {
+        functionsList: self.options.fieldOptions.beforeValidation,
+        data: {fieldEl}
+    };
 
-    return new Promise(function(resolve){
-        if(
-            (!isRequired && !isValidateIfFilled && !isReqFrom) ||   // IT IS A NORMAL FORM FIELD
-            (isValidateIfFilled && !isValidValue) ||                // IT IS data-validate-if-filled AND EMPTY
-            (isReqFrom && !isRequired )                             // IT IS data-required-from AND NOT required
-        ){
+    return runFunctionsSequence.call(self, rfsObject)
+        .then(data => {
 
-            obj.result = true;
-            resolve( obj );
-        
-        } else {
+            let dataObj = data.pop();
+            return new Promise(function(resolve){
+                if(
+                    (!isRequired && !isValidateIfFilled && !isReqFrom) ||   // IT IS A NORMAL FORM FIELD
+                    (isValidateIfFilled && !isValidValue) ||                // IT IS data-validate-if-filled AND EMPTY
+                    (isReqFrom && !isRequired )                             // IT IS data-required-from AND NOT required
+                ){
 
-            resolve( isValid.call(self, fieldEl, options) );
-            
-        }
+                    dataObj.result = true;
+                    resolve( dataObj );
+                
+                } else {
 
-    }).then(obj => {
+                    resolve( isValid.call(self, fieldEl, options) );
+                    
+                }
 
-        obj.fieldEl = fieldEl;
-        return obj;
+            });
 
-    });
+        });
 
 }

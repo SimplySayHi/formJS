@@ -1,5 +1,5 @@
 
-import { executeCallback, mergeObjects, serializeObject } from './helper';
+import { executeCallback, mergeObjects, serializeObject } from './helpers';
 
 // AJAX CALL USING fetch API
 export function ajaxCall( formDataObj ){
@@ -89,10 +89,10 @@ export function ajaxCall( formDataObj ){
 
         })
         .then(function( data ){
-            executeCallback.call( self, formOptions.onSubmitSuccess, data );
+            executeCallback.call( self, {fn: formOptions.onSubmitSuccess, data} );
         })
         .catch(function( error ){
-            executeCallback.call( self, formOptions.onSubmitError, error );
+            executeCallback.call( self, {fn: formOptions.onSubmitError, data: error} );
         })
         .finally(function(){
 
@@ -100,7 +100,7 @@ export function ajaxCall( formDataObj ){
                 window.clearTimeout( timeoutTimer );
             }
             btnEl.disabled = false;
-            executeCallback.call( self, formOptions.onSubmitComplete );
+            executeCallback.call( self, {fn: formOptions.onSubmitComplete} );
 
         });
     
