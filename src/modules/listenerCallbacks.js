@@ -111,7 +111,7 @@ export const callbackFns = {
                           realtedFieldEqualTo = obj.fieldEl.closest('form').querySelector('[data-equal-to="'+ obj.fieldEl.name +'"]');
 
                     if(
-                        // FIELD IS required OR data-validate-if-filled AND ITS data-equal-to FIELD HAS A VALUE
+                        // FIELD IS ( required OR data-validate-if-filled ) AND RELATED FIELD data-equal-to HAS A VALUE
                         (obj.fieldEl.required || obj.fieldEl.matches('[data-validate-if-filled]')) && 
                         !(type === 'checkbox' || type === 'radio') && 
                         realtedFieldEqualTo && realtedFieldEqualTo.value.trim() !== ''

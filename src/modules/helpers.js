@@ -59,6 +59,24 @@ executeCallback = function( {fn = null, data = {}, options = {}} = {} ){
     });
 },
 
+getFilledFields = function( formEl ){
+    return getUniqueFields( formEl.querySelectorAll(fieldsStringSelector) ).filter(fieldEl => {
+        const name = fieldEl.name,
+              type = fieldEl.type;
+
+        const isCheckboxOrRadio = (type === 'checkbox' || type === 'radio'),
+            fieldChecked = formEl.querySelector('[name="' + name + '"]:checked'),
+            isReqFrom = fieldEl.matches('[data-required-from]'),
+            reqMoreEl = (isReqFrom ? formEl.querySelector(fieldEl.getAttribute('data-required-from')) : null);
+
+        fieldEl = fieldChecked || fieldEl;
+        
+        return  (!isCheckboxOrRadio && fieldEl.value) || 
+                (isCheckboxOrRadio && fieldChecked !== null) ||
+                (isReqFrom && reqMoreEl.checked)
+    });
+},
+
 getSplitChar = function( string ){
     let splitChar = '.';
 

@@ -301,9 +301,7 @@
             }));
             function formStartup() {
                 var self = this, formEl = self.formEl;
-                if (!formEl.matches("[novalidate]")) {
-                    return null;
-                }
+                formEl.noValidate = true;
                 var fieldOptions = self.options.fieldOptions, formOptions = self.options.formOptions;
                 if (fieldOptions.handleValidation) {
                     if (fieldOptions.strictHtmlValidation) {
@@ -365,6 +363,9 @@
             }));
             __webpack_require__.d(__webpack_exports__, "executeCallback", (function() {
                 return executeCallback;
+            }));
+            __webpack_require__.d(__webpack_exports__, "getFilledFields", (function() {
+                return getFilledFields;
             }));
             __webpack_require__.d(__webpack_exports__, "getSplitChar", (function() {
                 return getSplitChar;
@@ -450,6 +451,13 @@
                 }
                 callbackFnList.forEach((function(promiseFn) {
                     promiseFn.call(self, data, optionsNew);
+                }));
+            }, getFilledFields = function getFilledFields(formEl) {
+                return getUniqueFields(formEl.querySelectorAll(fieldsStringSelector)).filter((function(fieldEl) {
+                    var name = fieldEl.name, type = fieldEl.type;
+                    var isCheckboxOrRadio = type === "checkbox" || type === "radio", fieldChecked = formEl.querySelector('[name="' + name + '"]:checked'), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isReqFrom ? formEl.querySelector(fieldEl.getAttribute("data-required-from")) : null;
+                    fieldEl = fieldChecked || fieldEl;
+                    return !isCheckboxOrRadio && fieldEl.value || isCheckboxOrRadio && fieldChecked !== null || isReqFrom && reqMoreEl.checked;
                 }));
             }, getSplitChar = function getSplitChar(string) {
                 var splitChar = ".";
@@ -566,21 +574,15 @@
             }));
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var init = function init() {
-                var self = this, formEl = self.formEl, formFields = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["getUniqueFields"])(formEl.querySelectorAll(_helpers__WEBPACK_IMPORTED_MODULE_0__["fieldsStringSelector"])), fieldsLength = formFields.length;
+                var self = this, formEl = self.formEl, formFields = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["getFilledFields"])(formEl), fieldsLength = formFields.length;
                 formFields.forEach((function(fieldEl, index) {
-                    var name = fieldEl.name, type = fieldEl.type;
-                    var isCheckboxOrRadio = type === "checkbox" || type === "radio", isFieldForChangeEventBoolean = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isFieldForChangeEvent"])(fieldEl), fieldChecked = formEl.querySelector('[name="' + name + '"]:checked'), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isReqFrom ? formEl.querySelector(fieldEl.getAttribute("data-required-from")) : null;
-                    if (fieldChecked) {
-                        fieldEl = fieldChecked;
-                    }
-                    if (!isCheckboxOrRadio && fieldEl.value || isCheckboxOrRadio && fieldChecked !== null || isReqFrom && reqMoreEl.checked) {
-                        var fakeEventObj = {
-                            target: fieldEl,
-                            type: isFieldForChangeEventBoolean ? "change" : ""
-                        };
-                        var callFormValidation = fieldsLength === index + 1;
-                        self.listenerCallbacks.validation.call(self, fakeEventObj, callFormValidation);
-                    }
+                    var isFieldForChangeEventBoolean = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isFieldForChangeEvent"])(fieldEl);
+                    var fakeEventObj = {
+                        target: fieldEl,
+                        type: isFieldForChangeEventBoolean ? "change" : ""
+                    };
+                    var callFormValidation = fieldsLength === index + 1;
+                    self.listenerCallbacks.validation.call(self, fakeEventObj, callFormValidation);
                 }));
                 self.isInitialized = true;
                 return self;
@@ -1031,19 +1033,25 @@
                     resolve(prom);
                 })).then((function(obj) {
                     if (obj.fieldEl) {
-                        var runCallbacks = function runCallbacks(data) {
+                        var runCallback = function runCallback(data) {
+                            var fieldOptionsNew = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+                            var options = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, {
+                                fieldOptions: fieldOptions
+                            }, {
+                                fieldOptions: fieldOptionsNew
+                            });
                             _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
                                 fn: fieldOptions.onValidation,
                                 data: data,
-                                options: {
-                                    fieldOptions: fieldOptionsObj
-                                }
+                                options: options
                             });
                         };
-                        runCallbacks([ obj ]);
+                        runCallback([ obj ]);
                         if (callFormValidation && obj.result) {
                             _isValidForm__WEBPACK_IMPORTED_MODULE_2__["isValidForm"].call(self).then((function(dataForm) {
-                                runCallbacks(dataForm.fields);
+                                runCallback(dataForm.fields, {
+                                    skipUIfeedback: true
+                                });
                             }));
                         }
                     }

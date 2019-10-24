@@ -377,7 +377,7 @@ var Form = require('formjs-plugin');
             </p>
             <ul>
                 <li class="my-2">
-                    <code>novalidate</code> ( required  ) enables JS field validation
+                    <code>novalidate</code> ( required ) enables JS field validation. It is set automatically if not present.
                 </li>
             </ul>
             <p>
@@ -2589,6 +2589,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </li>
                             <li>
                                 Now "onValidation" in "fieldOptions" is triggered every time a field is evaluated as valid ( to check the entire form validity )
+                            </li>
+                            <li>
+                                Attribute "novalidate" is now forced to true
                             </li>
                         </ul>
                     </div>

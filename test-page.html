@@ -43,7 +43,7 @@
                         <p class="text-white small">
                             In this demo the error messages will be shown thanks to a JS function that dynamically prints them.
                         </p>
-                        <form method="POST" action="json/data.json" name="ajax-form-post-js-errors" novalidate>
+                        <form method="POST" action="json/data.json" name="ajax-form-post-js-errors">
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
                                     <input name="name" type="text" data-length="[3,20]" class="form-control" required />
@@ -167,6 +167,8 @@
                         console.log('--- onValidation_testPage field', field);
                     } else {
                         console.log('--- onValidation_testPage fields list', fields);
+                        const formValidity = fields.filter(function(field){ return !field.result; }).length === 0 ? 'VALID' : 'NOT VALID';
+                        console.log('--- FORM IS ' + formValidity);
                     }
                 }
             },

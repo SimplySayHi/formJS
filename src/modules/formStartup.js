@@ -4,7 +4,7 @@ export function formStartup(){
     const self = this,
           formEl = self.formEl;
 
-    if( !formEl.matches('[novalidate]') ){ return null; }
+    formEl.noValidate = true;
 
     let fieldOptions = self.options.fieldOptions,
         formOptions = self.options.formOptions;

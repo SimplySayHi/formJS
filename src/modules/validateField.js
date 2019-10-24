@@ -21,15 +21,16 @@ export function validateField( fieldElem, fieldOptionsObj = {callFormValidation:
 
         if( obj.fieldEl ){
             
-            const runCallbacks = function( data ){
-                executeCallback.call( self, {fn: fieldOptions.onValidation, data, options: {fieldOptions: fieldOptionsObj}} );
+            const runCallback = function( data, fieldOptionsNew = {} ){
+                let options = mergeObjects({}, {fieldOptions}, {fieldOptions:fieldOptionsNew});
+                executeCallback.call( self, {fn: fieldOptions.onValidation, data, options} );
             };
 
-            runCallbacks( [obj] );
+            runCallback( [obj] );
 
             if( callFormValidation && obj.result ){
                 isValidForm.call( self ).then(dataForm => {
-                    runCallbacks( dataForm.fields );
+                    runCallback( dataForm.fields, {skipUIfeedback: true} );
                 });
             }
         }
