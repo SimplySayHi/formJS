@@ -33,6 +33,12 @@ var options = {
                         console.log('field errors:', obj.errors);
                     }
                 });
+
+                if( fieldsArray.length > 1 ){
+                    console.log('--- onValidationTest fields list', fieldsArray);
+                    const formValidity = fieldsArray.filter(function(field){ return !field.result; }).length === 0 ? 'VALID' : 'NOT VALID';
+                    console.log('--- FORM IS ' + formValidity , this.formEl);
+                }
             }
         },
         formOptions: {

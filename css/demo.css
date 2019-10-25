@@ -516,6 +516,7 @@ ul { padding-left: 1em; }
 a { color: #ef476f; }
 a:hover, a:focus { color: inherit; }
 pre { max-height: 355px; }
+u { text-decoration: none; border-bottom: 1px solid #06d6a0; }
 .panel { background-color: transparent; border-width: 2px; border-radius: 8px; /*color: #ccc;*/ }
 .card-header { border: 0 none; border-top-right-radius: 6px; border-top-left-radius: 6px; }
 .panel-transparent { color: #ccc; }
