@@ -7,7 +7,6 @@ import { validationErrors }     from './modules/validationErrors';
 // CONSTRUCTOR FUNCTION & PUBLIC METHODS
 import { constructorFn }        from './modules/constructor';
 import { destroy }              from './modules/destroy';
-import { getFormData }          from './modules/getFormData';
 import { getFormFields }          from './modules/getFormFields';
 import { init }                 from './modules/init';
 import { validateField }        from './modules/validateField';
