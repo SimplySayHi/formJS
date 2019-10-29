@@ -183,25 +183,27 @@ removeClass = function( element, cssClasses ){
     });
 },
 
-runFunctionsSequence = function( { functionsList = [], data = {}, stopConditionFn = function(){return false} } = {} ){
-    const self = this;
+runFunctionsSequence = ( { functionsList = [], data = {}, stopConditionFn = alwaysFalse } = {} ) => {
+    const results = [];
 
-    return functionsList.reduce(function(acc, promiseFn){
+    //Execute all the functions, break if stop condition is matched
+    for( let i = 0; i < functionsList.length; i++ ) {
+        const currentFunction = functionsList[i];
 
-        return acc.then(function (res) {
-            let dataNew = mergeObjects({}, res[res.length - 1]);
-            if( stopConditionFn(dataNew) ){
-                return Promise.resolve(res);
-            }
-            return new Promise(resolve => { resolve(promiseFn.call(self, dataNew)) }).then(function (result = dataNew) {
-                res.push(result);
-                return res;
-            });
-        });
-    }, Promise.resolve([data])).then(dataList => {
-        if( dataList.length > 1 ){ dataList.shift(); }
-        return dataList;
-    });
+        const currentResult = currentFunction( data );
+
+        if( stopConditionFn( currentResult ) ) {
+            results.splice( 0, results.length, currentResult );
+            break;
+        }
+
+        results.push( currentResult );
+    }
+
+    //Return a promise that will be resolved only when all the executed functions will be resolved
+    return Promise.all( results ).then( resolve => {
+        return results;
+    } );
 },
 
 serializeObject = function( obj ){

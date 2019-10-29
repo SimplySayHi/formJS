@@ -1,4 +1,4 @@
-import { runFunctionsSequence } from "./helpers";
+import { runFunctionsSequence } from "./helpers-new";
 
 const syncFuncOne = () => {
     let i = 0;
