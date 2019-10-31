@@ -1,4 +1,5 @@
 import { mergeObjects } from '../helpers';
+import { alwaysFalse } from './alwaysFalse';
 
 /**
  * @function runFunctionsSequence
