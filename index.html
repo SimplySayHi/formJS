@@ -417,7 +417,10 @@ var Form = require('formjs-plugin');
             <pre>var formEl = document.querySelector('form');
 var options = {...};
 var formInstance = new Form( formEl, options );
-formInstance.init();
+formInstance.init().then(function( obj ){
+    console.log('Form: instance', obj.instance);
+    console.log('Form: fields', obj.fields);
+});
 </pre>
             <ul>
                 <li>
