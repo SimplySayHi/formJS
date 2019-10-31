@@ -18,7 +18,7 @@ export function isValidField( fieldElem, fieldOptionsObj = {} ){
         isValidateIfFilled =fieldEl.matches('[data-validate-if-filled]');
 
     const rfsObject = {
-        functionsList: self.options.fieldOptions.beforeValidation,
+        functionsList: self.options.fieldOptions.beforeValidation.map( func => func.bind( this ) ),
         data: {fieldEl}
     };
 
