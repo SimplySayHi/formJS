@@ -214,8 +214,10 @@
         var formJsInstance = new Form( formEl, options );
 
         populatePasswords();
-        formJsInstance.init();
-        console.log( 'Form Instance', formJsInstance );
+        formJsInstance.init().then(function( obj ){
+            console.log( '+++ Form Initialized: instance', obj.instance );
+            console.log( '+++ Form Initialized: fields', obj.fields );
+        });
 
         function populatePasswords(){
             var pswFields = document.querySelectorAll('form [type="password"]');
