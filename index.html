@@ -1238,7 +1238,22 @@ formInstance.init();
                                 </p>
                             </div>
                             <div class="col-3">
-                                The Form instance
+                                <p>
+                                    A Promise to which will be passed an object like:
+                                </p>
+                                <pre>
+{
+    instance: {...},
+    fields:  [{...}]
+}</pre>
+                                <ul>
+                                    <li>
+                                        <span class="text-green">instance</span>: ( Object ) the Form instance
+                                    </li>
+                                    <li>
+                                        <span class="text-green">fields</span>: ( Array of Objects ) same as "fields" returned by method "validateForm"
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1283,10 +1298,10 @@ formInstance.init();
                                         <span class="text-green">fieldEl</span>: JS node element
                                     </li>
                                     <li>
-                                        <span class="text-green">result</span>: boolean
+                                        <span class="text-green">result</span>: ( Boolean ) if the field is valid or not
                                     </li>
                                     <li>
-                                        <span class="text-green">errors</span>: ( JS object ) only in case of invalid field
+                                        <span class="text-green">errors</span>: ( Object ) only in case of invalid field
                                     </li>
                                 </ul>
                             </div>
@@ -1312,19 +1327,15 @@ formInstance.init();
                                 </p>
                                 <pre>
 {
-    fields: [{
-        fieldEl:  element,
-        result:   false,
-        errors:   {...}
-    }],
-    result:       false
+    fields: [{...}],
+    result: false
 }</pre>
                                 <ul>
                                     <li>
-                                        <span class="text-green">fields</span>: ( array of JS objects ) a list of the form fields as returned by "validateField" method
+                                        <span class="text-green">fields</span>: ( Array of Objects ) a list of the form fields as returned by "validateField" method
                                     </li>
                                     <li>
-                                        <span class="text-green">result</span>: ( boolean ) check for the form, if it is valid or not
+                                        <span class="text-green">result</span>: ( Boolean ) check for the form, if it is valid or not
                                     </li>
                                 </ul>
                             </div>
@@ -2586,6 +2597,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </li>
                             <li>
                                 Added "pending" to "cssClasses" in "fieldOptions"
+                            </li>
+                            <li>
+                                Now method "init" returns a Promise
                             </li>
                             <li>
                                 Now "beforeSend" in "formOptions" can also return an object instead of only a Promise
