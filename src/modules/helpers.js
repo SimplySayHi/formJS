@@ -180,25 +180,25 @@ removeClass = function( element, cssClasses ){
     });
 },
 
-runFunctionsSequence = function( { functionsList = [], data = {}, stopConditionFn = function(){return false} } = {} ){
-    const self = this;
+runFunctionsSequence = function ({ functionsList = [], data = {}, stopConditionFn = function () { return false } } = {}) {
 
-    return functionsList.reduce(function(acc, promiseFn){
+    return functionsList.reduce(function (acc, promiseFn) {
         return acc.then(function (res) {
             let dataNew = mergeObjects({}, res[res.length - 1]);
-            if( stopConditionFn(dataNew) ){
+            
+            if (stopConditionFn(dataNew)) {
                 return Promise.resolve(res);
             }
-            return new Promise(resolve => { resolve(promiseFn.call(self, dataNew)) }).then(function (result = dataNew) {
-                res.push(result);
-                return res;
-            });
+
+            return Promise.resolve(promiseFn(dataNew))
+                .then(function (result = dataNew) {
+                    res.push(result);
+                    return res;
+                });
         });
-    }, Promise.resolve([data])).then(dataList => {
-        if( dataList.length > 1 ){ dataList.shift(); }
-        return dataList;
-    });
-},
+    }, Promise.resolve([data]))
+        .then(dataList => dataList.length > 1 ? dataList.slice(1) : dataList);
+};
 
 serializeObject = function( obj ){
     var objToString = (
