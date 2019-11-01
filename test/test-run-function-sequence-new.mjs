@@ -1,27 +1,34 @@
 import { runFunctionsSequence } from "./helpers-new";
 
-const syncFuncOne = () => {
-    let i = 0;
+const beforeValidationOne = fieldObj => {
+    fieldObj.first = true;
 
-    for(; i < 1000; i++ ) {  }
-
-    return `Func one ended with result ${i}`;
+    return fieldObj;
 };
 
-const syncFuncTwo = () => {
-    let i = 0;
+const beforeValidationTwo = fieldObj => {
+    return new Promise(function (resolve) {
+        setTimeout(function () {
+            fieldObj.two = true;
+            resolve(fieldObj);
+        }, 1000);
+    });
+};
 
-    for(; i < 3000; i++ ) {  }
-
-    return `Func two ended with result ${i}`;
+const beforeValidationThree = fieldObj => {
+    fieldObj.three = true;
+    return fieldObj;
 };
 
 const functionsList = [
-    syncFuncOne,
-    syncFuncTwo,
+    beforeValidationOne,
+    beforeValidationTwo,
+    beforeValidationThree,
 ];
 
+let i = 2;
+
 //It blocks itself after first execution. Expected output -> [ 'Func one ended with result 1000', 'Func one ended with result 3000' ]
-runFunctionsSequence( { functionsList, data: {},  } ).then( data => console.log( data ) ).catch( error => console.log( error ) );
+runFunctionsSequence( { functionsList, data: {},  } ).then( data => console.log( 'Test NO stopCondition', data ) ).catch( error => console.log( error ) );
 //It blocks itself after first execution. Expected output -> [ 'Func one ended with result 1000' ]
-runFunctionsSequence( { functionsList, data: {}, stopConditionFn: () => true } ).then( data => console.log( data ) ).catch( error => console.log( error ) );
+runFunctionsSequence( { functionsList, data: {}, stopConditionFn: () => i++ == 3 } ).then( data => console.log( 'Test stopCondition', data ) ).catch( error => console.log( error ) );
