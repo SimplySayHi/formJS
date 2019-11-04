@@ -60,20 +60,24 @@ executeCallback = function( {fn = null, data = {}, options = {}} = {} ){
 },
 
 getFilledFields = function( formEl ){
-    return getUniqueFields( formEl.querySelectorAll(fieldsStringSelector) ).filter(fieldEl => {
+    return getUniqueFields( formEl.querySelectorAll(fieldsStringSelector) )
+    .map(fieldEl => {
+
         const name = fieldEl.name,
-              type = fieldEl.type;
+              type = fieldEl.type,
+              isCheckboxOrRadio = (type === 'checkbox' || type === 'radio'),
+              fieldChecked = formEl.querySelector('[name="' + name + '"]:checked'),
+              isReqFrom = fieldEl.matches('[data-required-from]'),
+              reqMoreEl = (isReqFrom ? formEl.querySelector(fieldEl.getAttribute('data-required-from')) : null);
 
-        const isCheckboxOrRadio = (type === 'checkbox' || type === 'radio'),
-            fieldChecked = formEl.querySelector('[name="' + name + '"]:checked'),
-            isReqFrom = fieldEl.matches('[data-required-from]'),
-            reqMoreEl = (isReqFrom ? formEl.querySelector(fieldEl.getAttribute('data-required-from')) : null);
+        return (
+            isCheckboxOrRadio ? (fieldChecked || null) :
+            (isReqFrom && reqMoreEl.checked) || (!isReqFrom && fieldEl.value) ? fieldEl : null
+        );
 
-        fieldEl = fieldChecked || fieldEl;
-        
-        return  (!isCheckboxOrRadio && fieldEl.value) || 
-                (isCheckboxOrRadio && fieldChecked !== null) ||
-                (isReqFrom && reqMoreEl.checked)
+    })
+    .filter(fieldEl => {
+        return  fieldEl !== null;
     });
 },
 

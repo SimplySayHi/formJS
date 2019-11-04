@@ -5,3 +5,4 @@ node_modules
 Thumbs.db
 **/Thumbs.db
 .idea
+coverage

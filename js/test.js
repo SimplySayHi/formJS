@@ -127,18 +127,14 @@ Array.from(formsList).forEach(function(formEl, idx){
     if( isLocalEnv ){ formEl.method = 'GET'; }
 
     window[fNum] = new Form( formEl, options );
-    console.groupCollapsed('Form Instance '+ fNum);
-        console.log( 'Form Instance', window[fNum] );
-        console.log( 'fieldOptions', window[fNum].options.fieldOptions );
-        console.log( 'formOptions', window[fNum].options.formOptions );
-    console.groupEnd();
-    window[fNum].init();
+    window[fNum].init().then(function( obj ){
+        console.groupCollapsed('Form Instance '+ fNum);
+            console.log( '+++ instance', obj.instance );
+            if( obj.fields.length > 0 ){
+                console.log('+++ fields', obj.fields);
+            }
+            console.log( '+++ fieldOptions', obj.instance.options.fieldOptions );
+            console.log( '+++ formOptions', obj.instance.options.formOptions );
+        console.groupEnd();
+    });
 });
-
-// MANUALLY TRIGGER VALIDATION CALLBACKS ON A SPECIFIED FIELD SPECIFYING THE VALIDITY
-/*
-var field = document.querySelector('[name="cap-required"]');
-f1.options.fieldOptions.onValidation.forEach(function(fnName){
-    fnName.call(f1, [{ fieldEl: field, result: false }]);
-});
-*/

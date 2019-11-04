@@ -9,17 +9,18 @@ export const init = function(){
           fieldsLength = formFields.length;
 
     // VALIDATE ALL FILLED FIELDS
-    formFields.forEach(function( fieldEl, index ){
+    return Promise.all( formFields.map(function( fieldEl, index ){
 
         const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl);
         const fakeEventObj = { target: fieldEl, type: (isFieldForChangeEventBoolean ? 'change': '') };
         const callFormValidation = fieldsLength === index + 1;
-        self.listenerCallbacks.validation.call( self, fakeEventObj, callFormValidation );
+        return self.listenerCallbacks.validation.call( self, fakeEventObj, callFormValidation );
+
+    }) ).then(fields => {
+
+        self.isInitialized = true;
+        return {instance: self, fields};
 
     });
-
-    self.isInitialized = true;
-
-    return self;
 
 }

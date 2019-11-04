@@ -234,14 +234,17 @@ Array.from(formsList).forEach(function(formEl, idx){
 
     formEl.setAttribute('data-formjs-instance-name', fNum);
     window[fNum] = new Form( formEl, options );
+    window[fNum].init().then(function( obj ){
+        console.groupCollapsed('Form Instance '+ fNum);
+            console.log( '+++ instance', obj.instance );
+            if( obj.fields.length > 0 ){
+                console.log('+++ fields', obj.fields);
+            }
+            console.log( '+++ fieldOptions', obj.instance.options.fieldOptions );
+            console.log( '+++ formOptions', obj.instance.options.formOptions );
+        console.groupEnd();
+    });
 
-    console.groupCollapsed('Form Instance '+ fNum);
-        console.log( 'Form Instance', window[fNum] );
-        console.log( 'fieldOptions', window[fNum].options.fieldOptions );
-        console.log( 'formOptions', window[fNum].options.formOptions );
-    console.groupEnd();
-    
-    window[fNum].init();
 });
 
 // WORKS FOR BOTH OLD AND NEW INSTANCES

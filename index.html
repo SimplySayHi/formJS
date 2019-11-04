@@ -417,7 +417,10 @@ var Form = require('formjs-plugin');
             <pre>var formEl = document.querySelector('form');
 var options = {...};
 var formInstance = new Form( formEl, options );
-formInstance.init();
+formInstance.init().then(function( obj ){
+    console.log('Form: instance', obj.instance);
+    console.log('Form: fields', obj.fields);
+});
 </pre>
             <ul>
                 <li>
@@ -502,7 +505,7 @@ formInstance.init();
 </pre>
                                             <ul>
                                                 <li>
-                                                    field: JS node element ( the field that will be validated )
+                                                    fieldEl: JS node element ( the field that will be validated )
                                                 </li>
                                             </ul>
                                         </li>
@@ -533,6 +536,9 @@ formInstance.init();
                                     </li>
                                     <li>
                                         <span class="text-green">errorRule</span>: ( string ) additional CSS class(es) to be applied if the field value does not comply the validation rule
+                                    </li>
+                                    <li>
+                                        <span class="text-green">pending</span>: ( string ) CSS class(es) to be applied when the field validation starts and removed when it finishes ( useful for async validations )
                                     </li>
                                     <li>
                                         <span class="text-green">valid</span>: ( string ) CSS class(es) to be applied if the field is valid
@@ -626,7 +632,7 @@ formInstance.init();
                                             fieldEl: JS node element
                                         </li>
                                         <li>
-                                            tempOptions: temporary options ( this object can be useful when manually validating a field with new options used only for that specific case )
+                                            tempOptions: ( Object ) temporary options ( this object can be useful when manually validating a field with new options used only for that specific case )
                                         </li>
                                     </ul>
                                 </div>
@@ -664,18 +670,18 @@ formInstance.init();
 </pre>
                                             <ul>
                                                 <li>
-                                                    field: JS node element
+                                                    fieldEl: JS node element
                                                 </li>
                                                 <li>
-                                                    result: boolean
+                                                    result: Boolean
                                                 </li>
                                                 <li>
-                                                    errors: JS object ( only in case of invalid field )
+                                                    errors: ( Object - only in case of invalid field )
                                                 </li>
                                             </ul>
                                         </li>
                                         <li>
-                                            tempOptions: temporary options ( this object can be useful when manually validating a field with new options used only for that specific case )
+                                            tempOptions: ( Object ) temporary options ( this object can be useful when manually validating a field with new options used only for that specific case )
                                         </li>
                                     </ul>
                                     <p class="small">
@@ -855,7 +861,7 @@ formInstance.init();
                                 </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">data</span>: ( JS object )
+                                        <span class="text-green">data</span>: ( Object )
                                         <pre>
 {
     formData:       {},
@@ -863,7 +869,7 @@ formInstance.init();
 }</pre>
                                         <ul>
                                             <li>
-                                                <span class="text-green">formData</span>: ( JS object - ONLY for AJAX forms ) with the form data
+                                                <span class="text-green">formData</span>: ( Object - ONLY for AJAX forms ) with the form data
                                             </li>
                                             <li>
                                                 <span class="text-green">stopExecution</span>: ( Boolean - default is false ) whether or not to prevent the form submit ( AJAX or default ).
@@ -871,7 +877,7 @@ formInstance.init();
                                         </ul>
                                     </li>
                                     <li>
-                                        <span class="text-green">tempOptions</span>: ( JS object ) temporary options <span class="text-yellow">*</span>
+                                        <span class="text-green">tempOptions</span>: ( Object ) temporary options <span class="text-yellow">*</span>
                                     </li>
                                 </ul>
                                 <p>
@@ -948,10 +954,10 @@ formInstance.init();
                                 </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">ajaxData</span>: ( JS object ) an empty object.
+                                        <span class="text-green">ajaxData</span>: ( Object ) an empty object.
                                     </li>
                                     <li>
-                                        <span class="text-green">tempOptions</span>: ( JS object ) temporary options <span class="text-yellow">*</span>
+                                        <span class="text-green">tempOptions</span>: ( Object ) temporary options <span class="text-yellow">*</span>
                                     </li>
                                 </ul>
                                 <p>
@@ -976,10 +982,10 @@ formInstance.init();
                                 </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">errorData</span>: ( JS object ) containing the ajax call response.
+                                        <span class="text-green">errorData</span>: ( Object ) containing the ajax call response.
                                     </li>
                                     <li>
-                                        <span class="text-green">tempOptions</span>: ( JS object ) temporary options <span class="text-yellow">*</span>
+                                        <span class="text-green">tempOptions</span>: ( Object ) temporary options <span class="text-yellow">*</span>
                                     </li>
                                 </ul>
                                 <p>
@@ -1004,10 +1010,10 @@ formInstance.init();
                                 </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">ajaxData</span>: ( JS object ) containing the ajax call response.
+                                        <span class="text-green">ajaxData</span>: ( Object ) containing the ajax call response.
                                     </li>
                                     <li>
-                                        <span class="text-green">tempOptions</span>: ( JS object ) temporary options <span class="text-yellow">*</span>
+                                        <span class="text-green">tempOptions</span>: ( Object ) temporary options <span class="text-yellow">*</span>
                                     </li>
                                 </ul>
                                 <p>
@@ -1235,7 +1241,22 @@ formInstance.init();
                                 </p>
                             </div>
                             <div class="col-3">
-                                The Form instance
+                                <p>
+                                    A Promise to which will be passed an object like:
+                                </p>
+                                <pre>
+{
+    instance: {...},
+    fields:  [{...}]
+}</pre>
+                                <ul>
+                                    <li>
+                                        <span class="text-green">instance</span>: ( Object ) the Form instance
+                                    </li>
+                                    <li>
+                                        <span class="text-green">fields</span>: ( Array of Objects ) same as "fields" returned by method "validateForm"
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -1280,10 +1301,10 @@ formInstance.init();
                                         <span class="text-green">fieldEl</span>: JS node element
                                     </li>
                                     <li>
-                                        <span class="text-green">result</span>: boolean
+                                        <span class="text-green">result</span>: ( Boolean ) if the field is valid or not
                                     </li>
                                     <li>
-                                        <span class="text-green">errors</span>: ( JS object ) only in case of invalid field
+                                        <span class="text-green">errors</span>: ( Object ) only in case of invalid field
                                     </li>
                                 </ul>
                             </div>
@@ -1309,19 +1330,15 @@ formInstance.init();
                                 </p>
                                 <pre>
 {
-    fields: [{
-        fieldEl:  element,
-        result:   false,
-        errors:   {...}
-    }],
-    result:       false
+    fields: [{...}],
+    result: false
 }</pre>
                                 <ul>
                                     <li>
-                                        <span class="text-green">fields</span>: ( array of JS objects ) a list of the form fields as returned by "isValidField" method
+                                        <span class="text-green">fields</span>: ( Array of Objects ) a list of the form fields as returned by "validateField" method
                                     </li>
                                     <li>
-                                        <span class="text-green">result</span>: ( boolean ) check for the form, if it is valid or not
+                                        <span class="text-green">result</span>: ( Boolean ) check for the form, if it is valid or not
                                     </li>
                                 </ul>
                             </div>
@@ -2583,6 +2600,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </li>
                             <li>
                                 Added "pending" to "cssClasses" in "fieldOptions"
+                            </li>
+                            <li>
+                                Now method "init" returns a Promise
                             </li>
                             <li>
                                 Now "beforeSend" in "formOptions" can also return an object instead of only a Promise

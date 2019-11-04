@@ -26,12 +26,14 @@
     },
     "license": "MIT",
     "scripts": {
-        "build": "webpack"
+        "build": "webpack",
+        "test": "jest --passWithNoTests"
     },
     "devDependencies": {
         "@babel/core": "^7.6.0",
         "@babel/preset-env": "^7.6.0",
         "babel-loader": "^8.0.6",
+        "jest": "^24.9.0",
         "webpack": "^4.40.2",
         "webpack-cli": "^3.3.8"
     }
