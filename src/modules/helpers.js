@@ -1,3 +1,10 @@
+/**
+ * @function returnFalse
+ * @description function that always return false
+ *
+ * @returns {boolean} false
+ */
+export const returnFalse = () => false;
 
 export const
 
@@ -180,7 +187,7 @@ removeClass = function( element, cssClasses ){
     });
 },
 
-runFunctionsSequence = function ({ functionsList = [], data = {}, stopConditionFn = function () { return false } } = {}) {
+runFunctionsSequence = function ({ functionsList = [], data = {}, stopConditionFn = returnFalse } = {}) {
 
     return functionsList.reduce(function (acc, promiseFn) {
         return acc.then(function (res) {
@@ -191,10 +198,7 @@ runFunctionsSequence = function ({ functionsList = [], data = {}, stopConditionF
             }
 
             return Promise.resolve(promiseFn(dataNew))
-                .then(function (result = dataNew) {
-                    res.push(result);
-                    return res;
-                });
+                .then( (result = dataNew) => [ ...res, result ] );
         });
     }, Promise.resolve([data]))
         .then(dataList => dataList.length > 1 ? dataList.slice(1) : dataList);
