@@ -198,7 +198,10 @@ runFunctionsSequence = function ({ functionsList = [], data = {}, stopConditionF
             }
 
             return Promise.resolve(promiseFn(dataNew))
-                .then( (result = dataNew) => [ ...res, result ] );
+                .then( (result = dataNew) => {
+                    res.push(result);
+                    return res;
+                });
         });
     }, Promise.resolve([data]))
         .then(dataList => dataList.length > 1 ? dataList.slice(1) : dataList);
