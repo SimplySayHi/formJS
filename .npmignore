@@ -9,3 +9,4 @@ remoteValidations
 *.config.js
 *.zip
 .gitattributes
+coverage
