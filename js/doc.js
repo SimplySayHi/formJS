@@ -55,7 +55,9 @@ var optionsPlugin = {
         }
     };
 
-var formInstance = new Form( document.querySelector('form'), optionsPlugin ).init().then(function( obj ){
+let formInstance = new Form( document.querySelector('form'), optionsPlugin );
+
+formInstance.init().then(function( obj ){
     console.log('+++ Form init: formInstance', obj.instance);
     if( obj.fields.length > 0 ){
         console.log('+++ Form init: fields', obj.fields);

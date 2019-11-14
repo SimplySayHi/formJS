@@ -126,8 +126,8 @@ Array.from(formsList).forEach(function(formEl, idx){
 
     if( isLocalEnv ){ formEl.method = 'GET'; }
 
-    window[fNum] = new Form( formEl, options );
-    window[fNum].init().then(function( obj ){
+    new Form( formEl, options ).init().then(function( obj ){
+        window[fNum] = obj.instance;
         console.groupCollapsed('Form Instance '+ fNum);
             console.log( '+++ instance', obj.instance );
             if( obj.fields.length > 0 ){
