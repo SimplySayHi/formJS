@@ -233,17 +233,15 @@ Array.from(formsList).forEach(function(formEl, idx){
     }
 
     formEl.setAttribute('data-formjs-instance-name', fNum);
-    new Form( formEl, options ).init().then(function( obj ){
-        window[fNum] = obj.instance;
-        console.groupCollapsed('Form Instance '+ fNum);
-            console.log( '+++ instance', obj.instance );
-            if( obj.fields.length > 0 ){
-                console.log('+++ fields', obj.fields);
-            }
-            console.log( '+++ fieldOptions', obj.instance.options.fieldOptions );
-            console.log( '+++ formOptions', obj.instance.options.formOptions );
-        console.groupEnd();
-    });
+    window[fNum] = new Form( formEl, options );
+    
+    console.groupCollapsed('Form Instance '+ fNum);
+        console.log( 'Form Instance', window[fNum] );
+        console.log( 'fieldOptions', window[fNum].options.fieldOptions );
+        console.log( 'formOptions', window[fNum].options.formOptions );
+    console.groupEnd();
+    
+    window[fNum].init();
 
 });
 

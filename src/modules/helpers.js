@@ -1,7 +1,7 @@
 
 export const
 
-fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type=button]):not([type=hidden]), select, textarea',
+fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea',
 
 addClass = function( element, cssClasses ){
     cssClasses.split(' ').forEach(function(className){

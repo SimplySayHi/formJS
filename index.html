@@ -272,10 +272,10 @@
                 Include the plugin script in your page ( examples below from CDN ):
             </p>
             <pre>
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS/dist/formjs.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://unpkg.com/formjs-plugin/dist/formjs.min.js"&gt;&lt;/script&gt;
 </pre>
             <pre>
-&lt;script src="https://unpkg.com/formjs-plugin/dist/formjs.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS/dist/formjs.min.js"&gt;&lt;/script&gt;
 </pre>
             <hr />
             <p>
@@ -301,7 +301,7 @@ var Form = require('formjs-plugin');
                 If you find buggy the Fetch version you can always use the XHR version ( using XMLHttpRequest API for AJAX call - <u>will be removed in v4</u> ):
             </p>
             <pre>
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS/dist/formjs.xhr.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://unpkg.com/formjs-plugin/dist/formjs.xhr.min.js"&gt;&lt;/script&gt;
 </pre>
             <hr />
             <p>
@@ -417,10 +417,7 @@ var Form = require('formjs-plugin');
             <pre>var formEl = document.querySelector('form');
 var options = {...};
 var formInstance = new Form( formEl, options );
-formInstance.init().then(function( obj ){
-    console.log('Form: instance', obj.instance);
-    console.log('Form: fields', obj.fields);
-});
+formInstance.init();
 </pre>
             <ul>
                 <li>
@@ -876,9 +873,6 @@ formInstance.init().then(function( obj ){
                                             </li>
                                         </ul>
                                     </li>
-                                    <li>
-                                        <span class="text-green">tempOptions</span>: ( Object ) temporary options <span class="text-yellow">*</span>
-                                    </li>
                                 </ul>
                                 <p>
                                     Additionally, the "this" keyword is bound to the Form instance.
@@ -1242,21 +1236,8 @@ formInstance.init().then(function( obj ){
                             </div>
                             <div class="col-3">
                                 <p>
-                                    A Promise to which will be passed an object like:
+                                    The Form instance.
                                 </p>
-                                <pre>
-{
-    instance: {...},
-    fields:  [{...}]
-}</pre>
-                                <ul>
-                                    <li>
-                                        <span class="text-green">instance</span>: ( Object ) the Form instance
-                                    </li>
-                                    <li>
-                                        <span class="text-green">fields</span>: ( Array of Objects ) same as "fields" returned by method "validateForm"
-                                    </li>
-                                </ul>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -2602,9 +2583,6 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 Added "pending" to "cssClasses" in "fieldOptions"
                             </li>
                             <li>
-                                Now method "init" returns a Promise
-                            </li>
-                            <li>
                                 Now "beforeSend" in "formOptions" can also return an object instead of only a Promise
                             </li>
                             <li>
@@ -2612,6 +2590,12 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </li>
                             <li>
                                 Attribute "novalidate" is now forced to true
+                            </li>
+                            <li>
+                                Updated dev dependencies
+                            </li>
+                            <li>
+                                Minor updates and fixes
                             </li>
                         </ul>
                     </div>

@@ -5,7 +5,7 @@
     "version": "3.2.0",
     "main": "dist/formjs.min.js",
     "module": "src/index.js",
-    "homepage": "https://www.valeriodipunzio.com/plugins/formJS/",
+    "homepage": "https://valeriodipunzio.com/plugins/formJS/",
     "author": {
         "email": "sayhi@valeriodipunzio.com",
         "name": "Valerio Di Punzio",
@@ -26,15 +26,13 @@
     },
     "license": "MIT",
     "scripts": {
-        "build": "webpack",
-        "test": "jest --passWithNoTests"
+        "build": "webpack"
     },
     "devDependencies": {
-        "@babel/core": "^7.6.0",
-        "@babel/preset-env": "^7.6.0",
+        "@babel/core": "^7.7.5",
+        "@babel/preset-env": "^7.7.6",
         "babel-loader": "^8.0.6",
-        "jest": "^24.9.0",
-        "webpack": "^4.40.2",
-        "webpack-cli": "^3.3.8"
+        "webpack": "^4.41.3",
+        "webpack-cli": "^3.3.10"
     }
 }

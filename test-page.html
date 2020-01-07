@@ -174,9 +174,8 @@
             },
             formOptions: {
                 beforeSend: [
-                    function beforeSendTest ( data, tempOptions ){
+                    function beforeSendTest ( data ){
                         console.log('beforeSendTest data', data);
-                        console.log('beforeSendTest tempOptions', tempOptions);
 
                         var feedbackEl = this.formEl.querySelector('[data-formjs-global-feedback]');
                         if( feedbackEl ){
@@ -214,10 +213,10 @@
         var formJsInstance = new Form( formEl, options );
 
         populatePasswords();
-        formJsInstance.init().then(function( obj ){
+        formJsInstance.init()/* .then(function( obj ){
             console.log( '+++ Form init: instance', obj.instance );
             console.log( '+++ Form init: fields', obj.fields );
-        });
+        }); */
 
         function populatePasswords(){
             var pswFields = document.querySelectorAll('form [type="password"]');

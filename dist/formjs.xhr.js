@@ -441,7 +441,7 @@
                 }
                 return _typeof(obj);
             }
-            var fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type=button]):not([type=hidden]), select, textarea', addClass = function addClass(element, cssClasses) {
+            var fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', addClass = function addClass(element, cssClasses) {
                 cssClasses.split(" ").forEach((function(className) {
                     element.classList.add(className);
                 }));
@@ -598,21 +598,17 @@
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var init = function init() {
                 var self = this, formEl = self.formEl, formFields = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["getFilledFields"])(formEl), fieldsLength = formFields.length;
-                return Promise.all(formFields.map((function(fieldEl, index) {
+                formFields.forEach((function(fieldEl, index) {
                     var isFieldForChangeEventBoolean = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isFieldForChangeEvent"])(fieldEl);
                     var fakeEventObj = {
                         target: fieldEl,
                         type: isFieldForChangeEventBoolean ? "change" : ""
                     };
                     var callFormValidation = fieldsLength === index + 1;
-                    return self.listenerCallbacks.validation.call(self, fakeEventObj, callFormValidation);
-                }))).then((function(fields) {
-                    self.isInitialized = true;
-                    return {
-                        instance: self,
-                        fields: fields
-                    };
+                    self.listenerCallbacks.validation.call(self, fakeEventObj, callFormValidation);
                 }));
+                self.isInitialized = true;
+                return self;
             };
         },
         "./src/modules/isValid.js": function(module, __webpack_exports__, __webpack_require__) {

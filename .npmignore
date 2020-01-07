@@ -1,7 +1,5 @@
 css
 dist/additionals
-dist/polyfills-formJS.min.js
-dist/polyfills-formJS.xhr.min.js
 js
 json
 remoteValidations
