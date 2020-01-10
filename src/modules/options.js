@@ -21,6 +21,7 @@ export const options = {
         maxFileSize:            10,
         onPastePrevented:       [],
         onValidation:           [defaultCallbacksInOptions.fieldOptions.onValidation],
+        onValidationCheckAll:   true,
         preventPasteFields:     '[type="password"], [data-equal-to]',
         skipUIfeedback:         false,
         strictHtmlValidation:   true,

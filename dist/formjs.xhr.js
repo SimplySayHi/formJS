@@ -1,4 +1,4 @@
-/**! formJS v3.2.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/**! formJS v3.2.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 (function webpackUniversalModuleDefinition(root, factory) {
     if (typeof exports === "object" && typeof module === "object") module.exports = factory(); else if (typeof define === "function" && define.amd) define([], factory); else if (typeof exports === "object") exports["Form"] = factory(); else root["Form"] = factory();
 })(this, (function() {
@@ -597,15 +597,14 @@
             }));
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var init = function init() {
-                var self = this, formEl = self.formEl, formFields = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["getFilledFields"])(formEl), fieldsLength = formFields.length;
-                formFields.forEach((function(fieldEl, index) {
+                var self = this, formEl = self.formEl, formFields = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["getFilledFields"])(formEl);
+                formFields.forEach((function(fieldEl) {
                     var isFieldForChangeEventBoolean = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isFieldForChangeEvent"])(fieldEl);
                     var fakeEventObj = {
                         target: fieldEl,
                         type: isFieldForChangeEventBoolean ? "change" : ""
                     };
-                    var callFormValidation = fieldsLength === index + 1;
-                    self.listenerCallbacks.validation.call(self, fakeEventObj, callFormValidation);
+                    self.listenerCallbacks.validation.call(self, fakeEventObj);
                 }));
                 self.isInitialized = true;
                 return self;
@@ -786,7 +785,6 @@
                     _submit__WEBPACK_IMPORTED_MODULE_1__["submit"].call(this, event);
                 },
                 validation: function validation(event) {
-                    var callFormValidation = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
                     var self = this, eventName = event.type, fieldEl = event.target;
                     if (fieldEl.matches(_helpers__WEBPACK_IMPORTED_MODULE_0__["fieldsStringSelector"])) {
                         var isFieldForChangeEventBoolean = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isFieldForChangeEvent"])(fieldEl), isRadio = fieldEl.type === "radio", isReqFrom = fieldEl.matches("[data-required-from]"), isReqMore = fieldEl.matches("[data-require-more]"), isValidValue = fieldEl.value.trim().length > 0;
@@ -814,14 +812,10 @@
                             }
                         }
                         if (isFieldForChangeEventBoolean && eventName === "change" || !isFieldForChangeEventBoolean && eventName !== "change") {
-                            return self.validateField(fieldEl, {
-                                callFormValidation: callFormValidation
-                            }).then((function(obj) {
+                            return self.validateField(fieldEl).then((function(obj) {
                                 var type = obj.fieldEl.type, realtedFieldEqualTo = obj.fieldEl.closest("form").querySelector('[data-equal-to="' + obj.fieldEl.name + '"]');
                                 if ((obj.fieldEl.required || obj.fieldEl.matches("[data-validate-if-filled]")) && !(type === "checkbox" || type === "radio") && realtedFieldEqualTo && realtedFieldEqualTo.value.trim() !== "") {
-                                    return self.validateField(realtedFieldEqualTo, {
-                                        callFormValidation: callFormValidation
-                                    });
+                                    return self.validateField(realtedFieldEqualTo);
                                 } else {
                                     return obj;
                                 }
@@ -856,6 +850,7 @@
                     maxFileSize: 10,
                     onPastePrevented: [],
                     onValidation: [ _optionsUtils__WEBPACK_IMPORTED_MODULE_0__["defaultCallbacksInOptions"].fieldOptions.onValidation ],
+                    onValidationCheckAll: true,
                     preventPasteFields: '[type="password"], [data-equal-to]',
                     skipUIfeedback: false,
                     strictHtmlValidation: true,
@@ -901,10 +896,8 @@
             var defaultCallbacksInOptions = {
                 fieldOptions: {
                     beforeValidation: function beforeValidationDefault(fieldObj) {
-                        var tempOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-                        var self = this, options = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options.fieldOptions, tempOptions.fieldOptions);
-                        _helpers__WEBPACK_IMPORTED_MODULE_0__["checkDirtyField"].call(self, fieldObj.fieldEl);
-                        Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(fieldObj.fieldEl.closest("[data-formjs-question]"), options.cssClasses.pending);
+                        _helpers__WEBPACK_IMPORTED_MODULE_0__["checkDirtyField"].call(this, fieldObj.fieldEl);
+                        Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(fieldObj.fieldEl.closest("[data-formjs-question]"), this.options.fieldOptions.cssClasses.pending);
                     },
                     onValidation: function onValidationDefault(fieldsArray) {
                         var tempOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -1045,14 +1038,10 @@
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _isValidField__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/isValidField.js");
             var _isValidForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/isValidForm.js");
-            function validateField(fieldElem) {
-                var fieldOptionsObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
-                    callFormValidation: true
-                };
-                var self = this, callFormValidation = !!fieldOptionsObj.callFormValidation, fieldEl = typeof fieldElem === "string" ? self.formEl.querySelector(fieldElem) : fieldElem, fieldOptions = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options.fieldOptions, fieldOptionsObj);
-                delete fieldOptions.callFormValidation;
+            function validateField(fieldElem, fieldOptionsObj) {
+                var self = this, fieldEl = typeof fieldElem === "string" ? self.formEl.querySelector(fieldElem) : fieldElem, fieldOptions = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options.fieldOptions, fieldOptionsObj);
                 return new Promise((function(resolve) {
-                    var prom = _isValidField__WEBPACK_IMPORTED_MODULE_1__["isValidField"].call(self, fieldEl, fieldOptionsObj);
+                    var prom = _isValidField__WEBPACK_IMPORTED_MODULE_1__["isValidField"].call(self, fieldEl, fieldOptions);
                     resolve(prom);
                 })).then((function(obj) {
                     return new Promise((function(resolve) {
@@ -1071,7 +1060,7 @@
                                 });
                             };
                             runCallback([ obj ]);
-                            if (callFormValidation && obj.result) {
+                            if (fieldOptions.onValidationCheckAll && obj.result) {
                                 resolve(_isValidForm__WEBPACK_IMPORTED_MODULE_2__["isValidForm"].call(self).then((function(dataForm) {
                                     runCallback(dataForm.fields, {
                                         skipUIfeedback: true
@@ -1097,14 +1086,14 @@
                 var fieldOptionsObj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
                 var self = this, fieldOptions = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options.fieldOptions, fieldOptionsObj);
                 return new Promise((function(resolve) {
-                    var prom = _isValidForm__WEBPACK_IMPORTED_MODULE_1__["isValidForm"].call(self, fieldOptionsObj);
+                    var prom = _isValidForm__WEBPACK_IMPORTED_MODULE_1__["isValidForm"].call(self, fieldOptions);
                     resolve(prom);
                 })).then((function(obj) {
                     _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
                         fn: fieldOptions.onValidation,
                         data: obj.fields,
                         options: {
-                            fieldOptions: fieldOptionsObj
+                            fieldOptions: fieldOptions
                         }
                     });
                     return obj;

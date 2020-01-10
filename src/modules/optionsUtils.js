@@ -4,13 +4,10 @@ import { addClass, checkDirtyField, mergeObjects, removeClass } from './helpers'
 export const defaultCallbacksInOptions = {
     fieldOptions: {
 
-        beforeValidation: function beforeValidationDefault ( fieldObj, tempOptions = {} ) {
+        beforeValidation: function beforeValidationDefault ( fieldObj ) {
 
-            let self = this,
-                options = mergeObjects( {}, self.options.fieldOptions, tempOptions.fieldOptions );
-
-            checkDirtyField.call( self, fieldObj.fieldEl );
-            addClass( fieldObj.fieldEl.closest('[data-formjs-question]'), options.cssClasses.pending );
+            checkDirtyField.call( this, fieldObj.fieldEl );
+            addClass( fieldObj.fieldEl.closest('[data-formjs-question]'), this.options.fieldOptions.cssClasses.pending );
 
         },
 

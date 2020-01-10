@@ -5,15 +5,13 @@ export const init = function(){
 
     const self = this,
           formEl = self.formEl,
-          formFields = getFilledFields( formEl ),
-          fieldsLength = formFields.length;
+          formFields = getFilledFields( formEl );
 
     // VALIDATE ALL FILLED FIELDS
-    formFields.forEach((fieldEl, index) => {
+    formFields.forEach(fieldEl => {
         const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl);
         const fakeEventObj = { target: fieldEl, type: (isFieldForChangeEventBoolean ? 'change': '') };
-        const callFormValidation = fieldsLength === index + 1;
-        self.listenerCallbacks.validation.call( self, fakeEventObj, callFormValidation );
+        self.listenerCallbacks.validation.call( self, fakeEventObj );
     });
 
     self.isInitialized = true;

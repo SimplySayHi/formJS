@@ -54,7 +54,7 @@ export const callbackFns = {
         submit.call( this, event );
     },
 
-    validation: function( event, callFormValidation = true ){
+    validation: function( event ){
 
         const self = this,
               eventName = event.type,
@@ -106,7 +106,7 @@ export const callbackFns = {
                 (!isFieldForChangeEventBoolean && eventName !== 'change')
             ){
                 
-                return self.validateField( fieldEl, {callFormValidation} ).then(obj => {
+                return self.validateField( fieldEl ).then(obj => {
                     const type = obj.fieldEl.type,
                           realtedFieldEqualTo = obj.fieldEl.closest('form').querySelector('[data-equal-to="'+ obj.fieldEl.name +'"]');
 
@@ -116,7 +116,7 @@ export const callbackFns = {
                         !(type === 'checkbox' || type === 'radio') && 
                         realtedFieldEqualTo && realtedFieldEqualTo.value.trim() !== ''
                     ){
-                        return self.validateField( realtedFieldEqualTo, {callFormValidation} );
+                        return self.validateField( realtedFieldEqualTo );
                     } else {
                         return obj;
                     }

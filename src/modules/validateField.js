@@ -3,18 +3,15 @@ import { executeCallback, mergeObjects } from './helpers';
 import { isValidField } from './isValidField';
 import { isValidForm } from './isValidForm';
 
-export function validateField( fieldElem, fieldOptionsObj = {callFormValidation: true} ){
+export function validateField( fieldElem, fieldOptionsObj ){
 
     const self = this,
-          callFormValidation = !!fieldOptionsObj.callFormValidation,
           fieldEl = (typeof fieldElem === 'string' ? self.formEl.querySelector(fieldElem) : fieldElem),
           fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptionsObj);
-
-    delete fieldOptions.callFormValidation;
     
     return new Promise(function(resolve){
 
-        const prom = isValidField.call( self, fieldEl, fieldOptionsObj );
+        const prom = isValidField.call( self, fieldEl, fieldOptions );
         resolve( prom );
 
     }).then(obj => {
@@ -29,7 +26,7 @@ export function validateField( fieldElem, fieldOptionsObj = {callFormValidation:
 
                 runCallback( [obj] );
 
-                if( callFormValidation && obj.result ){
+                if( fieldOptions.onValidationCheckAll && obj.result ){
                     resolve( isValidForm.call( self ).then(dataForm => {
                         runCallback( dataForm.fields, {skipUIfeedback: true} );
                         return obj;
