@@ -706,6 +706,21 @@ formInstance.init();
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
+                                <pre class="text-green">onValidationCheckAll</pre>
+                            </div>
+                            <div class="w-100 d-xl-none"></div>
+                            <div class="col-lg-4 col-xl-3">
+                                boolean
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-8 col-xl-5">
+                                <p>
+                                    If set to <code>true</code>, when a field is valid, this will fire the whole form validation without feedback on the UI. Also, the callback <code>onValidation</code> is fired passing all the validated form fields.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                            <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">preventPasteFields</pre>
                             </div>
                             <div class="w-100 d-xl-none"></div>
@@ -816,6 +831,7 @@ formInstance.init();
     maxFileSize:            10,
     onPastePrevented:       [],
     onValidation:           [onValidationDefault],
+    onValidationCheckAll:   true,
     preventPasteFields:     '[type="password"], [data-equal-to]',
     skipUIfeedback:         false,
     strictHtmlValidation:   true,
