@@ -7,6 +7,7 @@ export function validateField( fieldElem, fieldOptionsObj ){
 
     const self = this,
           fieldEl = (typeof fieldElem === 'string' ? self.formEl.querySelector(fieldElem) : fieldElem),
+          skipUIfeedback = self.options.fieldOptions.skipUIfeedback,
           fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptionsObj);
     
     return new Promise(function(resolve){
@@ -27,8 +28,12 @@ export function validateField( fieldElem, fieldOptionsObj ){
                 runCallback( [obj] );
 
                 if( fieldOptions.onValidationCheckAll && obj.result ){
+                    // FORCE skipUIfeedback TO true
+                    self.options.fieldOptions.skipUIfeedback = true;
                     resolve( isValidForm.call( self ).then(dataForm => {
                         runCallback( dataForm.fields, {skipUIfeedback: true} );
+                        // RESTORE skipUIfeedback TO THE ORIGINAL VALUE
+                        self.options.fieldOptions.skipUIfeedback = skipUIfeedback;
                         return obj;
                     }) );
                 }

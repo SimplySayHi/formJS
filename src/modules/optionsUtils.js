@@ -7,7 +7,9 @@ export const defaultCallbacksInOptions = {
         beforeValidation: function beforeValidationDefault ( fieldObj ) {
 
             checkDirtyField.call( this, fieldObj.fieldEl );
-            addClass( fieldObj.fieldEl.closest('[data-formjs-question]'), this.options.fieldOptions.cssClasses.pending );
+            if( !this.options.fieldOptions.skipUIfeedback ){
+                addClass( fieldObj.fieldEl.closest('[data-formjs-question]'), this.options.fieldOptions.cssClasses.pending );
+            }
 
         },
 
@@ -21,9 +23,12 @@ export const defaultCallbacksInOptions = {
                     containerEl = fieldEl.closest('[data-formjs-question]'),
                     isReqFrom = fieldEl.matches('[data-required-from]'),
                     reqMoreEl = self.formEl.querySelector( fieldEl.getAttribute('data-required-from') );
-                
-                if( containerEl !== null && !options.skipUIfeedback ){
+
+                if( containerEl !== null ){
                     removeClass( containerEl, options.cssClasses.pending );
+                }
+
+                if( containerEl !== null && !options.skipUIfeedback ){
 
                     if( obj.result ){
 
