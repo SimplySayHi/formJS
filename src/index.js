@@ -12,7 +12,7 @@ import { init }                 from './modules/init';
 import { validateField }        from './modules/validateField';
 import { validateForm }         from './modules/validateForm';
 
-const version = '3.2.0';
+const version = '3.2.1';
 
 class Form {
 
