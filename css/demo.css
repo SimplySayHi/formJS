@@ -533,3 +533,11 @@ u { text-decoration: none; border-bottom: 1px solid #06d6a0; }
 .dropdown-toggle.dropdown-red-outline[aria-expanded="true"] { background-color: #ef476f !important; color: #fff; }
 .dropdown-toggle.dropdown-red-outline[aria-expanded="true"]:after { border-top-color: #fff; }
 .version-num { min-width: 32px; }
+
+@media (max-width: 767px){
+    h3 { font-size: 1.75em; }
+}
+
+@media (max-width: 374px){
+    h3 { font-size: 1.375em; }
+}
