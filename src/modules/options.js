@@ -32,6 +32,13 @@ export const options = {
         ajaxOptions:            ajaxOptions,
         ajaxSubmit:             true,
         beforeSend:             [],
+        cssClasses: {
+            ajaxComplete:       'ajax-complete',
+            ajaxError:          'ajax-error',
+            ajaxPending:        'ajax-pending',
+            ajaxSuccess:        'ajax-success',
+            valid:              'is-valid'
+        },
         getFormData:            defaultCallbacksInOptions.formOptions.getFormData,
         handleSubmit:           true,
         onSubmitComplete:       [],

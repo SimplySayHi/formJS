@@ -31,11 +31,22 @@ export function validateField( fieldElem, fieldOptionsObj ){
                     // FORCE skipUIfeedback TO true
                     self.options.fieldOptions.skipUIfeedback = true;
                     resolve( isValidForm.call( self ).then(dataForm => {
+
                         runCallback( dataForm.fields, {skipUIfeedback: true} );
+                        
+                        if( !skipUIfeedback ){
+                            const isFormValid = dataForm.fields.filter(function(field){ return !field.result; }).length === 0;
+                            const clMethodName = isFormValid ? 'add' : 'remove';
+                            self.formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
+                        }
+                        
                         // RESTORE skipUIfeedback TO THE ORIGINAL VALUE
                         self.options.fieldOptions.skipUIfeedback = skipUIfeedback;
+
                         return obj;
                     }) );
+                } else if( !skipUIfeedback && !obj.result ){
+                    self.formEl.classList.remove( self.options.formOptions.cssClasses.valid );
                 }
             }
             resolve( obj );

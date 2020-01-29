@@ -1,5 +1,5 @@
 
-import { runFunctionsSequence, validateFormObjDefault } from './helpers';
+import { removeClass, runFunctionsSequence, validateFormObjDefault } from './helpers';
 import { ajaxCall } from './ajaxCall';
 //import { ajaxCall } from './ajaxCallXhr';
 
@@ -62,8 +62,14 @@ export function submit( event ){
         }
         
         if( isAjaxForm ){
+
             const formData = dataList[dataList.length - 1].formData;
+            const cssClasses = self.options.formOptions.cssClasses;
+            removeClass( formEl, (cssClasses.ajaxComplete + ' ' + cssClasses.ajaxError + ' ' + cssClasses.ajaxSuccess) );
+            formEl.classList.add( cssClasses.ajaxPending );
+
             ajaxCall.call(self, formData);
+            
         }
 
     });
