@@ -199,7 +199,7 @@
                     var xhr = e.target;
                     if (xhr.status === 200) {
                         var responseData = parseResponse(xhr);
-                        formEl.classList.add(self.options.formOptions.cssClasses.ajaxSuccess);
+                        Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formOptions.cssClasses.ajaxSuccess);
                         _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
                             fn: formOptions.onSubmitSuccess,
                             data: responseData
@@ -209,7 +209,7 @@
                     }
                 }, errorFn = function errorFn(e) {
                     var xhr = e.target;
-                    formEl.classList.add(self.options.formOptions.cssClasses.ajaxError);
+                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formOptions.cssClasses.ajaxError);
                     _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
                         fn: formOptions.onSubmitError,
                         data: xhr
@@ -218,8 +218,8 @@
                     if (timeoutTimer) {
                         window.clearTimeout(timeoutTimer);
                     }
-                    formEl.classList.remove(self.options.formOptions.cssClasses.ajaxPending);
-                    formEl.classList.add(self.options.formOptions.cssClasses.ajaxComplete);
+                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(formEl, formOptions.cssClasses.ajaxPending);
+                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formOptions.cssClasses.ajaxComplete);
                     btnEl.disabled = false;
                     _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
                         fn: formOptions.onSubmitComplete
@@ -869,6 +869,7 @@
                         ajaxError: "ajax-error",
                         ajaxPending: "ajax-pending",
                         ajaxSuccess: "ajax-success",
+                        submit: "is-submitting",
                         valid: "is-valid"
                     },
                     getFormData: _optionsUtils__WEBPACK_IMPORTED_MODULE_0__["defaultCallbacksInOptions"].formOptions.getFormData,
@@ -988,7 +989,7 @@
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _ajaxCallXhr__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/ajaxCallXhr.js");
             function submit(event) {
-                var self = this, options = self.options, isAjaxForm = options.formOptions.ajaxSubmit, formEl = self.formEl, btnEl = formEl.querySelector('[type="submit"]'), eventPreventDefault = function eventPreventDefault() {
+                var self = this, options = self.options, formCssClasses = options.formOptions.cssClasses, isAjaxForm = options.formOptions.ajaxSubmit, formEl = self.formEl, btnEl = formEl.querySelector('[type="submit"]'), eventPreventDefault = function eventPreventDefault() {
                     var enableBtn = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
                     if (btnEl && enableBtn) {
                         btnEl.disabled = false;
@@ -1007,6 +1008,8 @@
                     }
                     btnEl.disabled = true;
                 }
+                Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(formEl, formCssClasses.ajaxComplete + " " + formCssClasses.ajaxError + " " + formCssClasses.ajaxSuccess);
+                Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formCssClasses.submit);
                 var handleValidation = options.fieldOptions.handleValidation, formValidationPromise = handleValidation ? self.validateForm() : Promise.resolve(_helpers__WEBPACK_IMPORTED_MODULE_0__["validateFormObjDefault"]);
                 formValidationPromise.then((function(formValidation) {
                     var beforeSendData = {
@@ -1015,6 +1018,7 @@
                     };
                     if (!formValidation.result) {
                         eventPreventDefault();
+                        Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(formEl, formCssClasses.submit);
                         beforeSendData.stopExecution = true;
                         return [ beforeSendData ];
                     }
@@ -1039,9 +1043,7 @@
                     }
                     if (isAjaxForm) {
                         var formData = dataList[dataList.length - 1].formData;
-                        var cssClasses = self.options.formOptions.cssClasses;
-                        Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(formEl, cssClasses.ajaxComplete + " " + cssClasses.ajaxError + " " + cssClasses.ajaxSuccess);
-                        formEl.classList.add(cssClasses.ajaxPending);
+                        Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formCssClasses.ajaxPending);
                         _ajaxCallXhr__WEBPACK_IMPORTED_MODULE_1__["ajaxCall"].call(self, formData);
                     }
                 }));
@@ -1081,21 +1083,16 @@
                             if (fieldOptions.onValidationCheckAll && obj.result) {
                                 self.options.fieldOptions.skipUIfeedback = true;
                                 resolve(_isValidForm__WEBPACK_IMPORTED_MODULE_2__["isValidForm"].call(self).then((function(dataForm) {
+                                    var clMethodName = dataForm.result ? "add" : "remove";
+                                    self.formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid);
                                     runCallback(dataForm.fields, {
                                         skipUIfeedback: true
                                     });
-                                    if (!skipUIfeedback) {
-                                        var isFormValid = dataForm.fields.filter((function(field) {
-                                            return !field.result;
-                                        })).length === 0;
-                                        var clMethodName = isFormValid ? "add" : "remove";
-                                        self.formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid);
-                                    }
                                     self.options.fieldOptions.skipUIfeedback = skipUIfeedback;
                                     return obj;
                                 })));
-                            } else if (!skipUIfeedback && !obj.result) {
-                                self.formEl.classList.remove(self.options.formOptions.cssClasses.valid);
+                            } else if (!obj.result) {
+                                Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(formEl, self.options.formOptions.cssClasses.valid);
                             }
                         }
                         resolve(obj);
@@ -1118,13 +1115,8 @@
                     var prom = _isValidForm__WEBPACK_IMPORTED_MODULE_1__["isValidForm"].call(self, fieldOptions);
                     resolve(prom);
                 })).then((function(obj) {
-                    if (!fieldOptions.skipUIfeedback) {
-                        var isFormValid = obj.fields.filter((function(field) {
-                            return !field.result;
-                        })).length === 0;
-                        var clMethodName = isFormValid ? "add" : "remove";
-                        self.formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid);
-                    }
+                    var clMethodName = obj.result ? "add" : "remove";
+                    self.formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid);
                     _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
                         fn: fieldOptions.onValidation,
                         data: obj.fields,

@@ -14,13 +14,11 @@ export function validateForm( fieldOptionsObj = {} ){
 
     }).then(obj => {
 
-        if( !fieldOptions.skipUIfeedback ){
-            const isFormValid = obj.fields.filter(function(field){ return !field.result; }).length === 0;
-            const clMethodName = isFormValid ? 'add' : 'remove';
-            self.formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
-        }
+        const clMethodName = obj.result ? 'add' : 'remove';
 
+        self.formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
         executeCallback.call( self, {fn: fieldOptions.onValidation, data: obj.fields, options: {fieldOptions}} );
+
         return obj;
 
     });

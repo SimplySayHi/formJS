@@ -37,6 +37,7 @@ export const options = {
             ajaxError:          'ajax-error',
             ajaxPending:        'ajax-pending',
             ajaxSuccess:        'ajax-success',
+            submit:             'is-submitting',
             valid:              'is-valid'
         },
         getFormData:            defaultCallbacksInOptions.formOptions.getFormData,

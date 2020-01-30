@@ -1,5 +1,5 @@
 
-import { executeCallback, mergeObjects } from './helpers';
+import { executeCallback, mergeObjects, removeClass } from './helpers';
 import { isValidField } from './isValidField';
 import { isValidForm } from './isValidForm';
 
@@ -30,23 +30,21 @@ export function validateField( fieldElem, fieldOptionsObj ){
                 if( fieldOptions.onValidationCheckAll && obj.result ){
                     // FORCE skipUIfeedback TO true
                     self.options.fieldOptions.skipUIfeedback = true;
-                    resolve( isValidForm.call( self ).then(dataForm => {
-
-                        runCallback( dataForm.fields, {skipUIfeedback: true} );
-                        
-                        if( !skipUIfeedback ){
-                            const isFormValid = dataForm.fields.filter(function(field){ return !field.result; }).length === 0;
-                            const clMethodName = isFormValid ? 'add' : 'remove';
+                    resolve(
+                        isValidForm.call( self ).then(dataForm => {
+                            const clMethodName = dataForm.result ? 'add' : 'remove';
                             self.formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
-                        }
-                        
-                        // RESTORE skipUIfeedback TO THE ORIGINAL VALUE
-                        self.options.fieldOptions.skipUIfeedback = skipUIfeedback;
 
-                        return obj;
-                    }) );
-                } else if( !skipUIfeedback && !obj.result ){
-                    self.formEl.classList.remove( self.options.formOptions.cssClasses.valid );
+                            runCallback( dataForm.fields, {skipUIfeedback: true} );
+                            
+                            // RESTORE skipUIfeedback TO THE ORIGINAL VALUE
+                            self.options.fieldOptions.skipUIfeedback = skipUIfeedback;
+
+                            return obj;
+                        })
+                    );
+                } else if( !obj.result ){
+                    removeClass( formEl, self.options.formOptions.cssClasses.valid );
                 }
             }
             resolve( obj );

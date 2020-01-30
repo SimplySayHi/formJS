@@ -1,5 +1,5 @@
 
-import { removeClass, runFunctionsSequence, validateFormObjDefault } from './helpers';
+import { addClass, removeClass, runFunctionsSequence, validateFormObjDefault } from './helpers';
 import { ajaxCall } from './ajaxCall';
 //import { ajaxCall } from './ajaxCallXhr';
 
@@ -7,6 +7,7 @@ export function submit( event ){
 
     const self = this,
           options = self.options,
+          formCssClasses = options.formOptions.cssClasses,
           isAjaxForm = options.formOptions.ajaxSubmit,
           formEl = self.formEl,
           btnEl = formEl.querySelector('[type="submit"]'),
@@ -26,6 +27,9 @@ export function submit( event ){
         }
         btnEl.disabled = true;
     }
+
+    removeClass( formEl, (formCssClasses.ajaxComplete + ' ' + formCssClasses.ajaxError + ' ' + formCssClasses.ajaxSuccess) );
+    addClass( formEl, formCssClasses.submit );
     
     const handleValidation = options.fieldOptions.handleValidation,
           formValidationPromise = (handleValidation ? self.validateForm() : Promise.resolve(validateFormObjDefault));
@@ -36,6 +40,7 @@ export function submit( event ){
 
         if( !formValidation.result ){
             eventPreventDefault();
+            removeClass( formEl, formCssClasses.submit );
             beforeSendData.stopExecution = true;
             return [beforeSendData];
         }
@@ -64,10 +69,7 @@ export function submit( event ){
         if( isAjaxForm ){
 
             const formData = dataList[dataList.length - 1].formData;
-            const cssClasses = self.options.formOptions.cssClasses;
-            removeClass( formEl, (cssClasses.ajaxComplete + ' ' + cssClasses.ajaxError + ' ' + cssClasses.ajaxSuccess) );
-            formEl.classList.add( cssClasses.ajaxPending );
-
+            addClass( formEl, formCssClasses.ajaxPending );
             ajaxCall.call(self, formData);
             
         }

@@ -1,5 +1,5 @@
 
-import { executeCallback, mergeObjects, serializeObject } from './helpers';
+import { addClass, executeCallback, mergeObjects, removeClass, serializeObject } from './helpers';
 
 // AJAX CALL USING XMLHttpRequest API
 export function ajaxCall( formDataObj ){
@@ -60,7 +60,7 @@ export function ajaxCall( formDataObj ){
 
             if( xhr.status === 200 ){
                 let responseData = parseResponse(xhr);
-                formEl.classList.add( self.options.formOptions.cssClasses.ajaxSuccess );
+                addClass( formEl, formOptions.cssClasses.ajaxSuccess );
                 executeCallback.call( self, {fn: formOptions.onSubmitSuccess, data: responseData} );
             } else {
                 errorFn(e);
@@ -68,7 +68,7 @@ export function ajaxCall( formDataObj ){
         },
         errorFn = function(e) {
             let xhr = e.target;
-            formEl.classList.add( self.options.formOptions.cssClasses.ajaxError );
+            addClass( formEl, formOptions.cssClasses.ajaxError );
             executeCallback.call( self, {fn: formOptions.onSubmitError, data: xhr} );
         },
         completeFn = function(e) {
@@ -76,8 +76,8 @@ export function ajaxCall( formDataObj ){
                 window.clearTimeout( timeoutTimer );
             }
 
-            formEl.classList.remove( self.options.formOptions.cssClasses.ajaxPending );
-            formEl.classList.add( self.options.formOptions.cssClasses.ajaxComplete );
+            removeClass( formEl, formOptions.cssClasses.ajaxPending );
+            addClass( formEl, formOptions.cssClasses.ajaxComplete );
             btnEl.disabled = false;
             executeCallback.call( self, {fn: formOptions.onSubmitComplete} );
         };
