@@ -55,5 +55,9 @@ var optionsPlugin = {
         }
     };
 
-let formInstance = new Form( document.querySelector('form'), optionsPlugin ).init();
-console.log('formInstance', formInstance);
+let formInstance = new Form( document.querySelector('form'), optionsPlugin );
+formInstance.init().then(function( obj ){
+    console.log('formJsInstance obj.instance', obj.instance);
+    console.log('formJsInstance obj.fields', obj.fields);
+});
+

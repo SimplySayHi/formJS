@@ -1,7 +1,5 @@
 
 import { defaultCallbacksInOptions } from './optionsUtils';
-import { ajaxOptions } from './optionsAjax';
-//import { ajaxOptions } from './optionsAjaxXhr';
 
 export const options = {
 
@@ -29,7 +27,19 @@ export const options = {
     },
 
     formOptions: {
-        ajaxOptions:            ajaxOptions,
+        ajaxOptions:            {
+            cache:              'no-store',
+            credentials:        'same-origin',
+            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept':       'application/json'
+            },
+            method:             'POST',
+            mode:               'same-origin',
+            redirect:           'follow',
+            timeout:            0,
+            url:                location.href
+        },
         ajaxSubmit:             true,
         beforeSend:             [],
         cssClasses: {

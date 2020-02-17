@@ -126,12 +126,8 @@ Array.from(formsList).forEach(function(formEl, idx){
     if( isLocalEnv ){ formEl.method = 'GET'; }
 
     window[fNum] = new Form( formEl, options );
-
-    console.groupCollapsed('Form Instance '+ fNum);
-        console.log( 'Form Instance', window[fNum] );
-        console.log( 'fieldOptions', window[fNum].options.fieldOptions );
-        console.log( 'formOptions', window[fNum].options.formOptions );
-    console.groupEnd();
-    
-    window[fNum].init();
+    window[fNum].init().then(function( obj ){
+        console.log('formJsInstance '+ fNum +' obj.instance', obj.instance);
+        console.log('formJsInstance '+ fNum +' obj.fields', obj.fields);
+    });
 });

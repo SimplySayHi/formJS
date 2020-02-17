@@ -1,7 +1,6 @@
 
 import { addClass, removeClass, runFunctionsSequence, validateFormObjDefault } from './helpers';
 import { ajaxCall } from './ajaxCall';
-//import { ajaxCall } from './ajaxCallXhr';
 
 export function submit( event ){
 

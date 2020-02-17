@@ -1,4 +1,4 @@
-/**! formJS v3.3.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/**! formJS v4.0.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 (function webpackUniversalModuleDefinition(root, factory) {
     if (typeof exports === "object" && typeof module === "object") module.exports = factory(); else if (typeof define === "function" && define.amd) define([], factory); else if (typeof exports === "object") exports["Form"] = factory(); else root["Form"] = factory();
 })(this, (function() {
@@ -99,7 +99,7 @@
                 if (staticProps) _defineProperties(Constructor, staticProps);
                 return Constructor;
             }
-            var version = "3.3.0";
+            var version = "4.0.0";
             var Form = function() {
                 function Form(formEl, optionsObj) {
                     _classCallCheck(this, Form);
@@ -578,17 +578,21 @@
             }));
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var init = function init() {
-                var self = this, formEl = self.formEl, formFields = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["getFilledFields"])(formEl);
-                formFields.forEach((function(fieldEl) {
+                var instance = this, formFields = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["getFilledFields"])(instance.formEl);
+                return Promise.all(formFields.map((function(fieldEl) {
                     var isFieldForChangeEventBoolean = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isFieldForChangeEvent"])(fieldEl);
                     var fakeEventObj = {
                         target: fieldEl,
                         type: isFieldForChangeEventBoolean ? "change" : ""
                     };
-                    self.listenerCallbacks.validation.call(self, fakeEventObj);
+                    return instance.listenerCallbacks.validation.call(instance, fakeEventObj);
+                }))).then((function(fields) {
+                    instance.isInitialized = true;
+                    return {
+                        instance: instance,
+                        fields: fields
+                    };
                 }));
-                self.isInitialized = true;
-                return self;
             };
         },
         "./src/modules/isValid.js": function(module, __webpack_exports__, __webpack_require__) {
@@ -813,7 +817,6 @@
                 return options;
             }));
             var _optionsUtils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/optionsUtils.js");
-            var _optionsAjax__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/optionsAjax.js");
             var options = {
                 fieldOptions: {
                     beforeValidation: [ _optionsUtils__WEBPACK_IMPORTED_MODULE_0__["defaultCallbacksInOptions"].fieldOptions.beforeValidation ],
@@ -838,7 +841,19 @@
                     validateOnEvents: "input change"
                 },
                 formOptions: {
-                    ajaxOptions: _optionsAjax__WEBPACK_IMPORTED_MODULE_1__["ajaxOptions"],
+                    ajaxOptions: {
+                        cache: "no-store",
+                        credentials: "same-origin",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Accept: "application/json"
+                        },
+                        method: "POST",
+                        mode: "same-origin",
+                        redirect: "follow",
+                        timeout: 0,
+                        url: location.href
+                    },
                     ajaxSubmit: true,
                     beforeSend: [],
                     cssClasses: {
@@ -855,26 +870,6 @@
                     onSubmitError: [],
                     onSubmitSuccess: []
                 }
-            };
-        },
-        "./src/modules/optionsAjax.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "ajaxOptions", (function() {
-                return ajaxOptions;
-            }));
-            var ajaxOptions = {
-                cache: "no-store",
-                credentials: "same-origin",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json"
-                },
-                method: "POST",
-                mode: "same-origin",
-                redirect: "follow",
-                timeout: 0,
-                url: location.href
             };
         },
         "./src/modules/optionsUtils.js": function(module, __webpack_exports__, __webpack_require__) {

@@ -29,14 +29,6 @@ function getErrorRuleClassesFromErrorsObj ( errorsObj ) {
     return errorClasses.trim();
 }
 
-function getFormInstance ( fieldEl ) {
-    var instName = fieldEl.closest('form').getAttribute('data-formjs-instance-name');
-    if( instName ){
-        return window[instName];
-    }
-    return null;
-}
-
 function removeClass ( element, cssClasses ){
     if( cssClasses ){
         cssClasses.trim().split(' ').forEach(function(className){
@@ -232,16 +224,11 @@ Array.from(formsList).forEach(function(formEl, idx){
 
     }
 
-    formEl.setAttribute('data-formjs-instance-name', fNum);
     window[fNum] = new Form( formEl, options );
-    
-    console.groupCollapsed('Form Instance '+ fNum);
-        console.log( 'Form Instance', window[fNum] );
-        console.log( 'fieldOptions', window[fNum].options.fieldOptions );
-        console.log( 'formOptions', window[fNum].options.formOptions );
-    console.groupEnd();
-    
-    window[fNum].init();
+    window[fNum].init().then(function( obj ){
+        console.log('formJsInstance '+ fNum +' obj.instance', obj.instance);
+        console.log('formJsInstance '+ fNum +' obj.fields', obj.fields);
+    });
 
 });
 
@@ -253,7 +240,7 @@ Form.addValidationRules({
 // POPULATE PASSWORD FIELDS
 var pswFields = document.querySelectorAll('form [type="password"]');
 Array.from(pswFields).forEach(function(field){
-    var formInst = getFormInstance(field),
+    var formInst = field.closest('form').formjs,
         eventName = (formInst ? formInst.options.fieldOptions.validateOnEvents.split(' ')[0] : 'input');
 
     field.value = 'asdAsd123';
