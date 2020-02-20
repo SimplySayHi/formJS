@@ -44,7 +44,7 @@ export function validateField( fieldElem, fieldOptionsObj ){
                         })
                     );
                 } else if( !obj.result ){
-                    removeClass( formEl, self.options.formOptions.cssClasses.valid );
+                    removeClass( self.formEl, self.options.formOptions.cssClasses.valid );
                 }
             }
             resolve( obj );
