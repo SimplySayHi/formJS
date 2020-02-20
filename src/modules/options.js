@@ -17,8 +17,6 @@ export const options = {
         handleFileUpload:       true,
         handleValidation:       true,
         maxFileSize:            10,
-        onPastePrevented:       [],
-        onValidation:           [defaultCallbacksInOptions.fieldOptions.onValidation],
         onValidationCheckAll:   true,
         preventPasteFields:     '[type="password"], [data-equal-to]',
         skipUIfeedback:         false,
@@ -51,10 +49,7 @@ export const options = {
             valid:              'is-valid'
         },
         getFormData:            defaultCallbacksInOptions.formOptions.getFormData,
-        handleSubmit:           true,
-        onSubmitComplete:       [],
-        onSubmitError:          [],
-        onSubmitSuccess:        []
+        handleSubmit:           true
     }
     
 }

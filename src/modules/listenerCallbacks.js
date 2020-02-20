@@ -1,5 +1,5 @@
 
-import { addClass, fieldsStringSelector, isFieldForChangeEvent, /* mergeObjects, */ removeClass } from './helpers';
+import { addClass, fieldsStringSelector, isFieldForChangeEvent, removeClass } from './helpers';
 import { submit } from './submit';
 
 export const callbackFns = {

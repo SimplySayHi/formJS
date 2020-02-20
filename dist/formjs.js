@@ -880,8 +880,6 @@
                     handleFileUpload: true,
                     handleValidation: true,
                     maxFileSize: 10,
-                    onPastePrevented: [],
-                    onValidation: [ _optionsUtils__WEBPACK_IMPORTED_MODULE_0__["defaultCallbacksInOptions"].fieldOptions.onValidation ],
                     onValidationCheckAll: true,
                     preventPasteFields: '[type="password"], [data-equal-to]',
                     skipUIfeedback: false,
@@ -913,10 +911,7 @@
                         valid: "is-valid"
                     },
                     getFormData: _optionsUtils__WEBPACK_IMPORTED_MODULE_0__["defaultCallbacksInOptions"].formOptions.getFormData,
-                    handleSubmit: true,
-                    onSubmitComplete: [],
-                    onSubmitError: [],
-                    onSubmitSuccess: []
+                    handleSubmit: true
                 }
             };
         },
