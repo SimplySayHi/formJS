@@ -174,7 +174,7 @@ Array.from(formsList).forEach(function(formEl, idx){
 
     switch( num ){
         case 5:
-            formEl.addEventListener('fjs.field:validated', function(event){
+            formEl.addEventListener('fjs.field:validation', function(event){
                 console.log(event.type, event.data);
                 console.log( 'field "' + event.data.fieldEl.name + '" is valid? ', event.data.result );
                 if( event.data.errors ){
@@ -182,7 +182,7 @@ Array.from(formsList).forEach(function(formEl, idx){
                 }
                 onValidationDemoErrorsCss( [event.data], this.formjs.options );
             });
-            formEl.addEventListener('fjs.form:validated', function(event){
+            formEl.addEventListener('fjs.form:validation', function(event){
                 console.log(event.type, event.data);
                 event.data.fields.forEach(function(obj){
                     console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
@@ -194,7 +194,7 @@ Array.from(formsList).forEach(function(formEl, idx){
             });
             break;
         case 6:
-            formEl.addEventListener('fjs.field:validated', function(event){
+            formEl.addEventListener('fjs.field:validation', function(event){
                 console.log(event.type, event.data);
                 console.log( 'field "' + event.data.fieldEl.name + '" is valid? ', event.data.result );
                 if( event.data.errors ){
@@ -202,7 +202,7 @@ Array.from(formsList).forEach(function(formEl, idx){
                 }
                 onValidationDemoErrorsJs( [event.data], this.formjs.options );
             });
-            formEl.addEventListener('fjs.form:validated', function(event){
+            formEl.addEventListener('fjs.form:validation', function(event){
                 console.log(event.type, event.data);
                 event.data.fields.forEach(function(obj){
                     console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
@@ -214,14 +214,14 @@ Array.from(formsList).forEach(function(formEl, idx){
             });
             break;
         default:
-            formEl.addEventListener('fjs.field:validated', function(event){
+            formEl.addEventListener('fjs.field:validation', function(event){
                 console.log(event.type, event.data);
                 console.log( 'field "' + event.data.fieldEl.name + '" is valid? ', event.data.result );
                 if( event.data.errors ){
                     console.log('field errors:', event.data.errors);
                 }
             });
-            formEl.addEventListener('fjs.form:validated', function(event){
+            formEl.addEventListener('fjs.form:validation', function(event){
                 console.log(event.type, event.data);
                 event.data.fields.forEach(function(obj){
                     console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
@@ -233,37 +233,19 @@ Array.from(formsList).forEach(function(formEl, idx){
             break;
     }
 
-    formEl.addEventListener('fjs.form:ajax-error', function(event){
-        console.log(event.type);
-
-        var instance = formEl.formjs;
-
-        if( instance.options.formOptions.ajaxSubmit ){
-            var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
-            feedbackEl.classList.remove( 'alert-success' );
-            feedbackEl.classList.add( 'alert-danger' );
-            feedbackEl.classList.remove( 'd-none' );
-            feedbackEl.innerHTML = 'Oh no, something went wrong! :( Retry';
-        }
-    });
-
-    formEl.addEventListener('fjs.form:ajax-success', function(event){
-        console.log(event.type, event.data);
-
-        var instance = formEl.formjs;
-
-        if( instance.options.formOptions.ajaxSubmit ){
-            var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
-            feedbackEl.classList.remove( 'alert-danger' );
-            feedbackEl.classList.add( 'alert-success' );
-            feedbackEl.classList.remove( 'd-none' );
-            feedbackEl.innerHTML = 'Great! Your infos have been sent :D';
-        }
-    });
-
-    formEl.addEventListener('fjs.form:ajax-complete', function(event){
-        console.log(event.type);
-    });
+    formEl.addEventListener('fjs.form:submit', function(e){
+        console.log(e.type, e.data);
+        e.data
+            .catch(function(error){
+                console.log(e.type, 'catch', error);
+            })
+            .then(function(data){
+                console.log(e.type, 'then', data);
+            })
+            .finally(function(){
+                console.log(e.type, 'finally');
+            });
+    }, false);
 
     window[fNum].init().then(function( obj ){
         console.log('formJsInstance '+ fNum +' obj.instance', obj.instance);

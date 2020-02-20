@@ -25,7 +25,7 @@ export function destroy(){
         formEl.removeEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
     });
 
-    formEl.removeEventListener(customEvents.field.validated, self.listenerCallbacks.validated, false);
+    formEl.removeEventListener(customEvents.field.validation, self.listenerCallbacks.validationEnd, false);
 
     delete self.formEl.formjs;
     

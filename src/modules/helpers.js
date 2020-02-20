@@ -45,15 +45,11 @@ checkFormEl = formEl => {
 
 customEvents = {
     field: {
-        validated:          'fjs.field:validated'
+        validation: 'fjs.field:validation'
     },
     form: {
-        ajax: {
-            complete:       'fjs.form:ajax-complete',
-            error:          'fjs.form:ajax-error',
-            success:        'fjs.form:ajax-success'
-        },
-        validated:          'fjs.form:validated'
+        submit:     'fjs.form:submit',
+        validation: 'fjs.form:validation'
     }
 },
 

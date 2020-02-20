@@ -38,7 +38,7 @@ export function formStartup(){
             formEl.addEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
         });
 
-        formEl.addEventListener(customEvents.field.validated, self.listenerCallbacks.validated, false);
+        formEl.addEventListener(customEvents.field.validation, self.listenerCallbacks.validationEnd, false);
 
     }
     

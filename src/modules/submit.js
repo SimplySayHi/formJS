@@ -1,5 +1,5 @@
 
-import { addClass, removeClass, runFunctionsSequence, validateFormObjDefault } from './helpers';
+import { addClass, customEvents, dispatchCustomEvent, removeClass, runFunctionsSequence, validateFormObjDefault } from './helpers';
 import { ajaxCall } from './ajaxCall';
 
 export function submit( event ){
@@ -69,7 +69,7 @@ export function submit( event ){
 
             const formData = dataList[dataList.length - 1].formData;
             addClass( formEl, formCssClasses.ajaxPending );
-            ajaxCall.call(self, formData);
+            dispatchCustomEvent( formEl, customEvents.form.submit, ajaxCall.call(self, formData) );
             
         }
 

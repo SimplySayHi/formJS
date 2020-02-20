@@ -126,7 +126,7 @@ export const callbackFns = {
         
     },
 
-    validated: function( event ){
+    validationEnd: function( event ){
 
         const self = this,
               options = self.options.fieldOptions,

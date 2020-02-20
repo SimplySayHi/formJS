@@ -197,7 +197,7 @@
                         controller.abort();
                     }), ajaxOptions.timeout);
                 }
-                fetch(ajaxOptions.url, ajaxOptions).then((function(response) {
+                return fetch(ajaxOptions.url, ajaxOptions).then((function(response) {
                     if (!response.ok) {
                         return Promise.reject(response);
                     }
@@ -214,10 +214,10 @@
                     return response[fetchMethod]();
                 })).then((function(data) {
                     Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formOptions.cssClasses.ajaxSuccess);
-                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.ajax.success, data);
+                    return data;
                 }))["catch"]((function(error) {
                     Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formOptions.cssClasses.ajaxError);
-                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.ajax.error, error);
+                    return error;
                 }))["finally"]((function() {
                     if (timeoutTimer) {
                         window.clearTimeout(timeoutTimer);
@@ -225,7 +225,6 @@
                     Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(formEl, formOptions.cssClasses.submit + " " + formOptions.cssClasses.ajaxPending);
                     Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formOptions.cssClasses.ajaxComplete);
                     btnEl.disabled = false;
-                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.ajax.complete);
                 }));
             }
         },
@@ -259,7 +258,7 @@
                     pastePrevent: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].pastePrevent.bind(self),
                     submit: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].submit.bind(self),
                     validation: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].validation.bind(self),
-                    validated: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].validated.bind(self)
+                    validationEnd: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].validationEnd.bind(self)
                 };
                 Object.freeze(self.listenerCallbacks);
                 _formStartup__WEBPACK_IMPORTED_MODULE_2__["formStartup"].call(self);
@@ -288,7 +287,7 @@
                     var useCapturing = eventName === "blur" ? true : false;
                     formEl.removeEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
                 }));
-                formEl.removeEventListener(_helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validated, self.listenerCallbacks.validated, false);
+                formEl.removeEventListener(_helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validation, self.listenerCallbacks.validationEnd, false);
                 delete self.formEl.formjs;
             }
         },
@@ -315,7 +314,7 @@
                         var useCapturing = eventName === "blur" ? true : false;
                         formEl.addEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
                     }));
-                    formEl.addEventListener(_helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validated, self.listenerCallbacks.validated, false);
+                    formEl.addEventListener(_helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validation, self.listenerCallbacks.validationEnd, false);
                 }
                 if (formOptions.handleSubmit) {
                     formEl.addEventListener("submit", self.listenerCallbacks.submit);
@@ -450,15 +449,11 @@
                 return obj;
             }, customEvents = {
                 field: {
-                    validated: "fjs.field:validated"
+                    validation: "fjs.field:validation"
                 },
                 form: {
-                    ajax: {
-                        complete: "fjs.form:ajax-complete",
-                        error: "fjs.form:ajax-error",
-                        success: "fjs.form:ajax-success"
-                    },
-                    validated: "fjs.form:validated"
+                    submit: "fjs.form:submit",
+                    validation: "fjs.form:validation"
                 }
             }, dispatchCustomEvent = function dispatchCustomEvent(elem, eventName) {
                 var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
@@ -826,7 +821,7 @@
                         }
                     }
                 },
-                validated: function validated(event) {
+                validationEnd: function validationEnd(event) {
                     var self = this, options = self.options.fieldOptions, fieldsArray = event.data.fieldEl ? [ event.data ] : event.data.fields;
                     fieldsArray.forEach((function(obj) {
                         var fieldEl = obj.fieldEl;
@@ -1033,7 +1028,7 @@
                     if (isAjaxForm) {
                         var formData = dataList[dataList.length - 1].formData;
                         Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formCssClasses.ajaxPending);
-                        _ajaxCall__WEBPACK_IMPORTED_MODULE_1__["ajaxCall"].call(self, formData);
+                        Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.submit, _ajaxCall__WEBPACK_IMPORTED_MODULE_1__["ajaxCall"].call(self, formData));
                     }
                 }));
             }
@@ -1055,13 +1050,13 @@
                 })).then((function(obj) {
                     return new Promise((function(resolve) {
                         if (obj.fieldEl) {
-                            Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(self.formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validated, obj);
+                            Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(self.formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validation, obj);
                             if (fieldOptions.onValidationCheckAll && obj.result) {
                                 self.options.fieldOptions.skipUIfeedback = true;
                                 resolve(_isValidForm__WEBPACK_IMPORTED_MODULE_2__["isValidForm"].call(self).then((function(dataForm) {
                                     var clMethodName = dataForm.result ? "add" : "remove";
                                     self.formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid);
-                                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(self.formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.validated, dataForm);
+                                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(self.formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.validation, dataForm);
                                     self.options.fieldOptions.skipUIfeedback = skipUIfeedback;
                                     return obj;
                                 })));
@@ -1091,10 +1086,10 @@
                 })).then((function(data) {
                     var clMethodName = data.result ? "add" : "remove";
                     self.formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid);
-                    self.listenerCallbacks.validated.call(self, {
+                    self.listenerCallbacks.validationEnd.call(self, {
                         data: data
                     });
-                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(self.formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.validated, data);
+                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(self.formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.validation, data);
                     return data;
                 }));
             }

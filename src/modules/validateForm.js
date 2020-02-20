@@ -16,8 +16,8 @@ export function validateForm( fieldOptionsObj = {} ){
 
         const clMethodName = data.result ? 'add' : 'remove';
         self.formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
-        self.listenerCallbacks.validated.call( self, {data} );
-        dispatchCustomEvent( self.formEl, customEvents.form.validated, data );
+        self.listenerCallbacks.validationEnd.call( self, {data} );
+        dispatchCustomEvent( self.formEl, customEvents.form.validation, data );
 
         return data;
 

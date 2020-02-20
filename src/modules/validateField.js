@@ -20,7 +20,7 @@ export function validateField( fieldElem, fieldOptionsObj ){
         return new Promise(resolve => {
             if( obj.fieldEl ){
 
-                dispatchCustomEvent( self.formEl, customEvents.field.validated, obj );
+                dispatchCustomEvent( self.formEl, customEvents.field.validation, obj );
 
                 if( fieldOptions.onValidationCheckAll && obj.result ){
                     // FORCE skipUIfeedback TO true
@@ -30,7 +30,7 @@ export function validateField( fieldElem, fieldOptionsObj ){
                             const clMethodName = dataForm.result ? 'add' : 'remove';
 
                             self.formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
-                            dispatchCustomEvent( self.formEl, customEvents.form.validated, dataForm );
+                            dispatchCustomEvent( self.formEl, customEvents.form.validation, dataForm );
                             // RESTORE skipUIfeedback TO THE ORIGINAL VALUE
                             self.options.fieldOptions.skipUIfeedback = skipUIfeedback;
 

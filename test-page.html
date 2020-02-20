@@ -207,14 +207,28 @@
 
         var formJsInstance = new Form( formEl, options );
 
-        formEl.addEventListener('fjs.field:validated', function(e){
+        formEl.addEventListener('fjs.field:validation', function(e){
             console.log(e.type, e.data);
             console.log('--- FIELD IS ' + (e.data.result ? '' : 'NOT ') + 'VALID');
         }, false);
 
-        formEl.addEventListener('fjs.form:validated', function(e){
+        formEl.addEventListener('fjs.form:validation', function(e){
             console.log(e.type, e.data);
             console.log('--- FORM IS ' + (e.data.result ? '' : 'NOT ') + 'VALID');
+        }, false);
+
+        formEl.addEventListener('fjs.form:submit', function(e){
+            console.log(e.type, e.data);
+            e.data
+                .catch(function(error){
+                    console.log(e.type, 'catch', error);
+                })
+                .then(function(data){
+                    console.log(e.type, 'then', data);
+                })
+                .finally(function(){
+                    console.log(e.type, 'finally');
+                });
         }, false);
 
         formJsInstance.init().then(function( obj ){

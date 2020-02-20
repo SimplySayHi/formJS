@@ -1425,7 +1425,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                 <div class="card-body">
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-6">
-                            <pre class="text-green">fjs.field:validated</pre>
+                            <pre class="text-green">fjs.field:validation</pre>
                             <p>
                                 Fires just after a field has been validated.<br />
                                 ( If the field was evaluated as valid the entire form check is fired )
@@ -1457,9 +1457,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                     </div>
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-6">
-                            <pre class="text-green">fjs.form:ajax-complete</pre>
+                            <pre class="text-green">fjs.form:submit</pre>
                             <p>
-                                Fires when the AJAX call for submit has completed.
+                                Fires when the form has finished submitting the data and the AJAX call is finished.
                             </p>
                         </div>
                         <div class="col-lg-6">
@@ -1467,51 +1467,13 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 additional parameter data
                             </p>
                             <p>
-                                This event has no additional data.
+                                In this case, the Promise returned by the AJAX call will be assigned to <code>event.data</code>.
                             </p>
                         </div>
                     </div>
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-6">
-                            <pre class="text-green">fjs.form:ajax-error</pre>
-                            <p>
-                                Fires when the AJAX call for submit has returned with an error.
-                            </p>
-                        </div>
-                        <div class="col-lg-6">
-                            <p class="d-lg-none">
-                                additional parameter data
-                            </p>
-<pre>
-{...}
-</pre>
-                            <p>
-                                This object will contain the error object as returned by the AJAX call
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-6">
-                            <pre class="text-green">fjs.form:ajax-success</pre>
-                            <p>
-                                Fires when the AJAX call for submit has returned with success.
-                            </p>
-                        </div>
-                        <div class="col-lg-6">
-                            <p class="d-lg-none">
-                                additional parameter data
-                            </p>
-<pre>
-{...}
-</pre>
-                            <p>
-                                This object will contain the response object as returned by the AJAX call
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-6">
-                            <pre class="text-green">fjs.form:validated</pre>
+                            <pre class="text-green">fjs.form:validation</pre>
                             <p>
                                 Fires just after the form has been validated.
                             </p>
@@ -1528,7 +1490,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
 </pre>
                             <ul>
                                 <li>
-                                    <span class="text-green">fields</span>: Array of objects ( each object is like described in <code>fjs.field:validated</code> event )
+                                    <span class="text-green">fields</span>: Array of objects ( each object is like described in <code>fjs.field:validation</code> event )
                                 </li>
                                 <li>
                                     <span class="text-green">result</span>: Boolean
@@ -2664,7 +2626,10 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 Method "init" now returns a Promise
                             </li>
                             <li>
-                                Added events listeners to replace callback options ( but "onPastePrevented" )
+                                Added custom event listener for form submit
+                            </li>
+                            <li>
+                                Added custom events to replace callback options ( but "onPastePrevented" )
                                 <ul>
                                     <li>
                                         Removed callbacks "onPastePrevented" and "onValidation" from "fieldOptions"
