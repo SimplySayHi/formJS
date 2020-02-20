@@ -217,7 +217,7 @@
                     return data;
                 }))["catch"]((function(error) {
                     Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formOptions.cssClasses.ajaxError);
-                    return error;
+                    return Promise.reject(error);
                 }))["finally"]((function() {
                     if (timeoutTimer) {
                         window.clearTimeout(timeoutTimer);

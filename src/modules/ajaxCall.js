@@ -66,7 +66,6 @@ export function ajaxCall( formDataObj ){
 
     return fetch(ajaxOptions.url, ajaxOptions)
         .then(function( response ){
-
             if( !response.ok ){
                 return Promise.reject(response);
             }
@@ -86,7 +85,6 @@ export function ajaxCall( formDataObj ){
             let fetchMethod = getFetchMethod( response );
 
             return response[fetchMethod]();
-
         })
         .then(function( data ){
             addClass( formEl, formOptions.cssClasses.ajaxSuccess );
@@ -94,17 +92,15 @@ export function ajaxCall( formDataObj ){
         })
         .catch(function( error ){
             addClass( formEl, formOptions.cssClasses.ajaxError );
-            return error;
+            return Promise.reject(error);
         })
         .finally(function(){
-
             if( timeoutTimer ){
                 window.clearTimeout( timeoutTimer );
             }
             removeClass( formEl, formOptions.cssClasses.submit + ' ' + formOptions.cssClasses.ajaxPending );
             addClass( formEl, formOptions.cssClasses.ajaxComplete );
             btnEl.disabled = false;
-
         });
-    
+
 }

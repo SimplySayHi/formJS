@@ -220,11 +220,11 @@
         formEl.addEventListener('fjs.form:submit', function(e){
             console.log(e.type, e.data);
             e.data
+                .then(function(response){
+                    console.log(e.type, 'then', response);
+                })
                 .catch(function(error){
                     console.log(e.type, 'catch', error);
-                })
-                .then(function(data){
-                    console.log(e.type, 'then', data);
                 })
                 .finally(function(){
                     console.log(e.type, 'finally');
@@ -234,7 +234,7 @@
         formJsInstance.init().then(function( obj ){
             console.log('formJsInstance obj.instance', obj.instance);
             console.log('formJsInstance obj.fields', obj.fields);
-        }); 
+        });
     </script>
     <script src="dist/additionals/utils.js"></script>
     
