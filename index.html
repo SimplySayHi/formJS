@@ -32,6 +32,7 @@
                     <a class="dropdown-item" href="#initialization">Initialization</a>
                     <a class="dropdown-item" href="#options-list">Options</a>
                     <a class="dropdown-item" href="#methods">Methods</a>
+                    <a class="dropdown-item" href="#builtin-events">Events</a>
                     <a class="dropdown-item" href="#builtin-validations">Validation Rules</a>
                     <a class="dropdown-item" href="#builtin-errors">Validation Errors</a>
                     <div class="dropdown-divider"></div>
@@ -251,11 +252,11 @@
             </ul>
             <hr />
             <p>
-                <span class="text-yellow">*</span> for compatibility with IE 10/11 and old versions of Edge you have to load some JS polyfills ( from <a href="https://polyfill.io" target="_blank">polyfill.io</a> or else ):<br />
-                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>AbortController</code> <code>fetch</code>
+                <span class="text-yellow">*</span> for compatibility with IE 10/11 and/or old versions of Edge you have to load some JS polyfills ( from <a href="https://polyfill.io" target="_blank">polyfill.io</a> or else ):<br />
+                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>AbortController</code> <code>fetch</code> <code>Event</code>
             </p>
             <pre>
-&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch"&gt;&lt;/script&gt;</pre>
+&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"&gt;&lt;/script&gt;</pre>
         </div>
         
         <!-- Usage -->
@@ -403,7 +404,7 @@ var Form = require('formjs-plugin');
             <pre>var formEl = document.querySelector('form');
 var options = {...};
 var formInstance = new Form( formEl, options );
-formInstance.init().then(function( obj ){
+formInstance.init().then(obj => {
     console.log('formInstance obj.instance', obj.instance);
     console.log('formInstance obj.fields', obj.fields);
 });
@@ -584,7 +585,7 @@ formInstance.init().then(function( obj ){
                             </div>
                             <div class="col-lg-8 col-xl-5">
                                 <p>
-                                    Whether or not the plugin must handle the fields validation ( as single check and on form submit ).
+                                    Whether or not the plugin must handle the fields validation ( as single checks and on form submit ).
                                 </p>
                             </div>
                         </div>
@@ -607,94 +608,6 @@ formInstance.init().then(function( obj ){
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
-                                <pre class="text-green">onPastePrevented</pre>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-lg-4 col-xl-3">
-                                function / array of functions
-                                <br /><br />
-                            </div>
-                            <div class="col-lg-8 col-xl-5">
-                                <p>
-                                    Each function:<br /><br />
-                                    Fires when the paste event has been prevented on the field(s) ( see "preventPasteFields" option ).
-                                    <br />
-                                    <span class="small">( NOT fired if <code>handleValidation: false</code> )</span>
-                                </p>
-                                <p>
-                                    Additionally, the "this" keyword is bound to the Form instance.
-                                </p>
-                                <div class="card-footer bg-transparent pb-0 px-0">
-                                    <p class="text-green">
-                                        Arguments
-                                    </p>
-                                    <ul>
-                                        <li>
-                                            fieldEl: JS node element
-                                        </li>
-                                        <li>
-                                            tempOptions: ( Object ) temporary options ( this object can be useful when manually validating a field with new options used only for that specific case )
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-4">
-                                <pre class="text-green">onValidation</pre>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-lg-4 col-xl-3">
-                                function / array of functions
-                                <br /><br />
-                            </div>
-                            <div class="col-lg-8 col-xl-5">
-                                <p>
-                                    Each function:<br /><br />
-                                    Fires just after a field has been validated.<br />
-                                    If the field was evaluated as valid the entire form check is fired. So, this callback will run passing "fieldsList" as an array with one object for each form field.
-                                </p>
-                                <p>
-                                    Additionally, the "this" keyword is bound to the Form instance.
-                                </p>
-                                <div class="card-footer bg-transparent pb-0 px-0">
-                                    <p class="text-green">
-                                        Arguments
-                                    </p>
-                                    <ul>
-                                        <li>
-                                            fieldsList: ( Array ) list of JS objects<span class="text-yellow">*</span>:
-<pre>
-[{
-    fieldEl: fieldEl,
-    result: true,
-    errors: {}
-}]
-</pre>
-                                            <ul>
-                                                <li>
-                                                    fieldEl: JS node element
-                                                </li>
-                                                <li>
-                                                    result: Boolean
-                                                </li>
-                                                <li>
-                                                    errors: ( Object - only in case of invalid field )
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            tempOptions: ( Object ) temporary options ( this object can be useful when manually validating a field with new options used only for that specific case )
-                                        </li>
-                                    </ul>
-                                    <p class="small">
-                                        <span class="text-yellow">*</span> in case of single field validation, as per method <code>validateField</code>, the array will contain only one object. In case of full form validation, as per method <code>validateForm</code>, the array will contain one object for each form field.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">onValidationCheckAll</pre>
                             </div>
                             <div class="w-100 d-xl-none"></div>
@@ -704,7 +617,7 @@ formInstance.init().then(function( obj ){
                             </div>
                             <div class="col-lg-8 col-xl-5">
                                 <p>
-                                    If set to <code>true</code>, when a field is valid, this will fire the whole form validation without feedback on the UI. Also, the callback <code>onValidation</code> is fired passing all the validated form fields.
+                                    If set to <code>true</code>, when a field is valid, this will fire the whole form validation without feedback on the UI.
                                 </p>
                             </div>
                         </div>
@@ -818,8 +731,6 @@ formInstance.init().then(function( obj ){
     handleFileUpload:       true,
     handleValidation:       true,
     maxFileSize:            10,
-    onPastePrevented:       [],
-    onValidation:           [onValidationDefault],
     onValidationCheckAll:   true,
     preventPasteFields:     '[type="password"], [data-equal-to]',
     skipUIfeedback:         false,
@@ -900,10 +811,10 @@ formInstance.init().then(function( obj ){
 }</pre>
                                         <ul>
                                             <li>
-                                                <span class="text-green">formData</span>: ( Object - ONLY for AJAX forms ) with the form data
+                                                <span class="text-green">formData</span>: Object ( ONLY for AJAX forms ) with the form data
                                             </li>
                                             <li>
-                                                <span class="text-green">stopExecution</span>: ( Boolean - default is false ) whether or not to prevent the form submit ( AJAX or default ).
+                                                <span class="text-green">stopExecution</span>: Boolean ( default is false ) whether or not to prevent the form submit ( AJAX or default ).
                                             </li>
                                         </ul>
                                     </li>
@@ -930,11 +841,10 @@ formInstance.init().then(function( obj ){
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3">
                                 <pre class="text-green">cssClasses</pre>
+                                <p>( object )</p>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-6 col-xl-5">
-                                object
-                                <br /><br />
                             </div>
                             <div class="col-lg-6 col-xl-4">
                                 <p>
@@ -1020,111 +930,6 @@ formInstance.init().then(function( obj ){
                                 </p>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3">
-                                <pre class="text-green">onSubmitComplete</pre>
-                                <p>( function / array of functions )</p>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-lg-6 col-xl-5">
-                                <p class="d-lg-none m-0">
-                                    Arguments:
-                                </p>
-                                <p>
-                                    Each function:
-                                </p>
-                                <ul>
-                                    <li>
-                                        <span class="text-green">ajaxData</span>: ( Object ) an empty object.
-                                    </li>
-                                    <li>
-                                        <span class="text-green">tempOptions</span>: ( Object ) temporary options
-                                    </li>
-                                </ul>
-                                <p>
-                                    Additionally, the "this" keyword is bound to the Form instance.
-                                </p>
-                            </div>
-                            <div class="col-lg-6 col-xl-4">
-                                <p class="d-lg-none m-0">
-                                    Description:
-                                </p>
-                                <p>
-                                    Each function:<br />
-                                    Fires at AJAX call equivalent. 
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3">
-                                <pre class="text-green">onSubmitError</pre>
-                                <p>( function / array of functions )</p>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-lg-6 col-xl-5">
-                                <p class="d-lg-none m-0">
-                                    Arguments:
-                                </p>
-                                <p>
-                                    Each function:
-                                </p>
-                                <ul>
-                                    <li>
-                                        <span class="text-green">errorData</span>: ( Object ) containing the ajax call response.
-                                    </li>
-                                    <li>
-                                        <span class="text-green">tempOptions</span>: ( Object ) temporary options
-                                    </li>
-                                </ul>
-                                <p>
-                                    Additionally, the "this" keyword is bound to the Form instance.
-                                </p>
-                            </div>
-                            <div class="col-lg-6 col-xl-4">
-                                <p class="d-lg-none m-0">
-                                    Description:
-                                </p>
-                                <p>
-                                    Each function:<br />
-                                    Fires at AJAX call equivalent. 
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3">
-                                <pre class="text-green">onSubmitSuccess</pre>
-                                <p>( function / array of functions )</p>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-lg-6 col-xl-5">
-                                <p class="d-lg-none m-0">
-                                    Arguments:
-                                </p>
-                                <p>
-                                    Each function:
-                                </p>
-                                <ul>
-                                    <li>
-                                        <span class="text-green">ajaxData</span>: ( Object ) containing the ajax call response.
-                                    </li>
-                                    <li>
-                                        <span class="text-green">tempOptions</span>: ( Object ) temporary options
-                                    </li>
-                                </ul>
-                                <p>
-                                    Additionally, the "this" keyword is bound to the Form instance.
-                                </p>
-                            </div>
-                            <div class="col-lg-6 col-xl-4">
-                                <p class="d-lg-none m-0">
-                                    Description:
-                                </p>
-                                <p>
-                                    Each function:<br />
-                                    Fires at AJAX call equivalent. 
-                                </p>
-                            </div>
-                        </div>
                     </div>
                     <div class="card-footer no-bg">
                         <div class="mt-3">
@@ -1157,10 +962,7 @@ formInstance.init().then(function( obj ){
         valid:          'is-valid'
     },
     getFormData:        getFormDataDefault,
-    handleSubmit:       true,
-    onSubmitComplete:   [],
-    onSubmitError:      [],
-    onSubmitSuccess:    []
+    handleSubmit:       true
 }</pre>
                             
                         </div>
@@ -1279,8 +1081,22 @@ formInstance.init().then(function( obj ){
                                     Return value:
                                 </p>
                                 <p>
-                                    The Form instance.
+                                    A Promise to which will be passed an object like:
                                 </p>
+<pre>
+{
+    instance:   formInstance,
+    fields:     [{...}]
+}
+</pre>
+                                <ul>
+                                    <li>
+                                        <span class="text-green">instance</span>: ( Form instance )
+                                    </li>
+                                    <li>
+                                        <span class="text-green">fields</span>: ( Array ) list of validated fields ( with value already set when init method is called )
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -1585,6 +1401,141 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                     <p class="small">
                         You can also add / override validation rules/errors from the Form instance but it doesn't have much sense.
                     </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Built-in Events -->
+        <div id="builtin-events">
+            <h3 class="sticky-title">Built-in Events</h3>
+            <p>
+                Each built-in event has the extra object <code>data</code> attahched to the event object as defined in "additional event data" ( eg. <code>event.data.result</code> ).
+            </p>
+            <div class="panel panel-default panel-transparent no-bg">
+                <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
+                    <div class="d-flex">
+                        <div class="col-lg-6">
+                            name, description
+                        </div>
+                        <div class="col-lg-6">
+                            additional event data
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div class="col-lg-6">
+                            <pre class="text-green">fjs.field:validated</pre>
+                            <p>
+                                Fires just after a field has been validated.<br />
+                                ( If the field was evaluated as valid the entire form check is fired )
+                            </p>
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="d-lg-none">
+                                additional parameter data
+                            </p>
+<pre>
+{
+    fieldEl: fieldEl,
+    result: true,
+    errors: {}
+}
+</pre>
+                            <ul>
+                                <li>
+                                    <span class="text-green">fieldEl</span>: JS node element
+                                </li>
+                                <li>
+                                    <span class="text-green">result</span>: Boolean
+                                </li>
+                                <li>
+                                    <span class="text-green">errors</span>: Object ( only in case of invalid field )
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div class="col-lg-6">
+                            <pre class="text-green">fjs.form:ajax-complete</pre>
+                            <p>
+                                Fires when the AJAX call for submit has completed.
+                            </p>
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="d-lg-none">
+                                additional parameter data
+                            </p>
+                            <p>
+                                This event has no additional data.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div class="col-lg-6">
+                            <pre class="text-green">fjs.form:ajax-error</pre>
+                            <p>
+                                Fires when the AJAX call for submit has returned with an error.
+                            </p>
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="d-lg-none">
+                                additional parameter data
+                            </p>
+<pre>
+{...}
+</pre>
+                            <p>
+                                This object will contain the error object as returned by the AJAX call
+                            </p>
+                        </div>
+                    </div>
+                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div class="col-lg-6">
+                            <pre class="text-green">fjs.form:ajax-success</pre>
+                            <p>
+                                Fires when the AJAX call for submit has returned with success.
+                            </p>
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="d-lg-none">
+                                additional parameter data
+                            </p>
+<pre>
+{...}
+</pre>
+                            <p>
+                                This object will contain the response object as returned by the AJAX call
+                            </p>
+                        </div>
+                    </div>
+                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div class="col-lg-6">
+                            <pre class="text-green">fjs.form:validated</pre>
+                            <p>
+                                Fires just after the form has been validated.
+                            </p>
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="d-lg-none">
+                                additional parameter data
+                            </p>
+<pre>
+{
+    fields: [{...}],
+    result: true
+}
+</pre>
+                            <ul>
+                                <li>
+                                    <span class="text-green">fields</span>: Array of objects ( each object is like described in <code>fjs.field:validated</code> event )
+                                </li>
+                                <li>
+                                    <span class="text-green">result</span>: Boolean
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2710,7 +2661,18 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                     <div class="media-body pl-2">
                         <ul>
                             <li>
-                                ...
+                                Method "init" now returns a Promise
+                            </li>
+                            <li>
+                                Added events listeners to replace callback options ( but "onPastePrevented" )
+                                <ul>
+                                    <li>
+                                        Removed callbacks "onPastePrevented" and "onValidation" from "fieldOptions"
+                                    </li>
+                                    <li>
+                                        Removed callbacks "onSubmitComplete", "onSubmitError" and "onSubmitSuccess" from "formOptions"
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>

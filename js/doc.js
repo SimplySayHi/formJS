@@ -1,19 +1,5 @@
 
 var optionsPlugin = {
-        fieldOptions: {
-            onPastePrevented: function( fieldEl ){
-                console.log( 'Paste event prevented on field ', fieldEl );
-            },
-            onValidation: function( fieldsArray ){
-                console.log('onValidation fieldsArray ', fieldsArray);
-                fieldsArray.forEach(function(obj){
-                    console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
-                    if( obj.errors ){
-                        console.log('field errors:', obj.errors);
-                    }
-                });
-            }
-        },
         formOptions: {
             beforeSend: function( data ){
                 console.log( 'beforeSend data ', data );
@@ -22,40 +8,63 @@ var optionsPlugin = {
                 feedbackEl.classList.add('d-none');
 
                 return Promise.resolve(data);
-            },
-            onSubmitSuccess: function( ajaxData ){
-                console.log( 'onSubmitSuccess ajaxData ', ajaxData );
-
-                let formEl = this.formEl;
-
-                if( this.options.formOptions.ajaxSubmit ){
-                    var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
-                    feedbackEl.classList.remove( 'alert-danger' );
-                    feedbackEl.classList.add( 'alert-success' );
-                    feedbackEl.classList.remove( 'd-none' );
-                    feedbackEl.innerHTML = 'Great! Your infos have been sent :D';
-                }
-            },
-            onSubmitError: function( ajaxData ){
-                console.log( 'onSubmitError ajaxData ', ajaxData );
-
-                let formEl = this.formEl;
-
-                if( this.options.formOptions.ajaxSubmit ){
-                    var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
-                    feedbackEl.classList.remove( 'alert-success' );
-                    feedbackEl.classList.add( 'alert-danger' );
-                    feedbackEl.classList.remove( 'd-none' );
-                    feedbackEl.innerHTML = 'Oh no, something went wrong! :( Retry';
-                }
-            },
-            onSubmitComplete: function(){
-                console.log('onSubmitComplete...');
             }
         }
     };
 
-let formInstance = new Form( document.querySelector('form'), optionsPlugin );
+var formEl = document.querySelector('form');
+var formInstance = new Form( formEl, optionsPlugin );
+
+formEl.addEventListener('fjs.field:validated', function(event){
+    console.log(event.type, event.data);
+    console.log( 'field "' + event.data.fieldEl.name + '" is valid? ', event.data.result );
+    if( event.data.errors ){
+        console.log('field errors:', event.data.errors);
+    }
+});
+
+formEl.addEventListener('fjs.form:validated', function(event){
+    console.log(event.type, event.data);
+    event.data.fields.forEach(function(obj){
+        console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
+        if( obj.errors ){
+            console.log('field errors:', obj.errors);
+        }
+    });
+});
+
+formEl.addEventListener('fjs.form:ajax-error', function(event){
+    console.log(event.type);
+
+    var instance = formEl.formjs;
+
+    if( instance.options.formOptions.ajaxSubmit ){
+        var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
+        feedbackEl.classList.remove( 'alert-success' );
+        feedbackEl.classList.add( 'alert-danger' );
+        feedbackEl.classList.remove( 'd-none' );
+        feedbackEl.innerHTML = 'Oh no, something went wrong! :( Retry';
+    }
+});
+
+formEl.addEventListener('fjs.form:ajax-success', function(event){
+    console.log(event.type, event.data);
+
+    var instance = formEl.formjs;
+
+    if( instance.options.formOptions.ajaxSubmit ){
+        var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
+        feedbackEl.classList.remove( 'alert-danger' );
+        feedbackEl.classList.add( 'alert-success' );
+        feedbackEl.classList.remove( 'd-none' );
+        feedbackEl.innerHTML = 'Great! Your infos have been sent :D';
+    }
+});
+
+formEl.addEventListener('fjs.form:ajax-complete', function(event){
+    console.log(event.type);
+});
+
 formInstance.init().then(function( obj ){
     console.log('formJsInstance obj.instance', obj.instance);
     console.log('formJsInstance obj.fields', obj.fields);

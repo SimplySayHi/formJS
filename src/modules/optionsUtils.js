@@ -1,5 +1,5 @@
 
-import { addClass, checkDirtyField, mergeObjects, removeClass } from './helpers';
+import { addClass, checkDirtyField } from './helpers';
 
 export const defaultCallbacksInOptions = {
     fieldOptions: {
@@ -11,56 +11,6 @@ export const defaultCallbacksInOptions = {
                 addClass( fieldObj.fieldEl.closest('[data-formjs-question]'), this.options.fieldOptions.cssClasses.pending );
             }
 
-        },
-
-        onValidation: function onValidationDefault ( fieldsArray, tempOptions = {} ) {
-
-            let self = this,
-                options = mergeObjects( {}, self.options.fieldOptions, tempOptions.fieldOptions );
-
-            fieldsArray.forEach(function( obj ){
-                let fieldEl = obj.fieldEl,
-                    containerEl = fieldEl.closest('[data-formjs-question]'),
-                    isReqFrom = fieldEl.matches('[data-required-from]'),
-                    reqMoreEl = self.formEl.querySelector( fieldEl.getAttribute('data-required-from') );
-
-                if( containerEl !== null ){
-                    removeClass( containerEl, options.cssClasses.pending );
-                }
-
-                if( containerEl !== null && !options.skipUIfeedback ){
-
-                    if( obj.result ){
-
-                        if( !isReqFrom || (isReqFrom && reqMoreEl.checked) ){
-                            // IF FIELD IS VALID
-                            let errorClasses = options.cssClasses.error + ' ' + options.cssClasses.errorEmpty + ' ' + options.cssClasses.errorRule;
-                            removeClass( containerEl, errorClasses );
-                            addClass( containerEl, options.cssClasses.valid );
-                        }
-
-                    } else {
-
-                        // IF FIELD IS NOT VALID
-                        let extraErrorClass = options.cssClasses.errorRule;
-
-                        // HANDLE CASE OF FIELD data-checks
-                        let isChecks = fieldEl.matches('[data-checks]'),
-                            checkedElLength = (isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0);
-
-                        if( (!isChecks && (obj.errors && obj.errors.empty)) || (isChecks && checkedElLength === 0) ){
-                            extraErrorClass = options.cssClasses.errorEmpty;
-                        }
-
-                        let errorClasses = options.cssClasses.error + ' ' + extraErrorClass,
-                            errorClassToRemove = options.cssClasses.errorEmpty + ' ' + options.cssClasses.errorRule;
-                        removeClass( containerEl, options.cssClasses.valid + ' ' + errorClassToRemove );
-                        addClass( containerEl, errorClasses );
-
-                    }
-                }
-            });
-            
         }
 
     },

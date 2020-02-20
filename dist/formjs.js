@@ -214,16 +214,10 @@
                     return response[fetchMethod]();
                 })).then((function(data) {
                     Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formOptions.cssClasses.ajaxSuccess);
-                    _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
-                        fn: formOptions.onSubmitSuccess,
-                        data: data
-                    });
+                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.ajax.success, data);
                 }))["catch"]((function(error) {
                     Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formOptions.cssClasses.ajaxError);
-                    _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
-                        fn: formOptions.onSubmitError,
-                        data: error
-                    });
+                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.ajax.error, error);
                 }))["finally"]((function() {
                     if (timeoutTimer) {
                         window.clearTimeout(timeoutTimer);
@@ -231,9 +225,7 @@
                     Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(formEl, formOptions.cssClasses.submit + " " + formOptions.cssClasses.ajaxPending);
                     Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formOptions.cssClasses.ajaxComplete);
                     btnEl.disabled = false;
-                    _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
-                        fn: formOptions.onSubmitComplete
-                    });
+                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.ajax.complete);
                 }));
             }
         },
@@ -266,7 +258,8 @@
                     keypressMaxlength: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].keypressMaxlength,
                     pastePrevent: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].pastePrevent.bind(self),
                     submit: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].submit.bind(self),
-                    validation: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].validation.bind(self)
+                    validation: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].validation.bind(self),
+                    validated: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].validated.bind(self)
                 };
                 Object.freeze(self.listenerCallbacks);
                 _formStartup__WEBPACK_IMPORTED_MODULE_2__["formStartup"].call(self);
@@ -278,6 +271,7 @@
             __webpack_require__.d(__webpack_exports__, "destroy", (function() {
                 return destroy;
             }));
+            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             function destroy() {
                 var self = this, formEl = self.formEl, validationListenerNames = self.options.fieldOptions.validateOnEvents;
                 if (self.options.fieldOptions.strictHtmlValidation) {
@@ -294,6 +288,7 @@
                     var useCapturing = eventName === "blur" ? true : false;
                     formEl.removeEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
                 }));
+                formEl.removeEventListener(_helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validated, self.listenerCallbacks.validated, false);
                 delete self.formEl.formjs;
             }
         },
@@ -303,6 +298,7 @@
             __webpack_require__.d(__webpack_exports__, "formStartup", (function() {
                 return formStartup;
             }));
+            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             function formStartup() {
                 var self = this, formEl = self.formEl;
                 formEl.noValidate = true;
@@ -319,6 +315,7 @@
                         var useCapturing = eventName === "blur" ? true : false;
                         formEl.addEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
                     }));
+                    formEl.addEventListener(_helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validated, self.listenerCallbacks.validated, false);
                 }
                 if (formOptions.handleSubmit) {
                     formEl.addEventListener("submit", self.listenerCallbacks.submit);
@@ -364,6 +361,12 @@
             }));
             __webpack_require__.d(__webpack_exports__, "checkFormEl", (function() {
                 return checkFormEl;
+            }));
+            __webpack_require__.d(__webpack_exports__, "customEvents", (function() {
+                return customEvents;
+            }));
+            __webpack_require__.d(__webpack_exports__, "dispatchCustomEvent", (function() {
+                return dispatchCustomEvent;
             }));
             __webpack_require__.d(__webpack_exports__, "executeCallback", (function() {
                 return executeCallback;
@@ -445,6 +448,25 @@
                     element: isString === "string" ? document.querySelector(formEl) : formEl
                 };
                 return obj;
+            }, customEvents = {
+                field: {
+                    validated: "fjs.field:validated"
+                },
+                form: {
+                    ajax: {
+                        complete: "fjs.form:ajax-complete",
+                        error: "fjs.form:ajax-error",
+                        success: "fjs.form:ajax-success"
+                    },
+                    validated: "fjs.form:validated"
+                }
+            }, dispatchCustomEvent = function dispatchCustomEvent(elem, eventName) {
+                var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+                var eventObj = new Event(eventName, {
+                    bubbles: true
+                });
+                eventObj.data = data;
+                elem.dispatchEvent(eventObj);
             }, executeCallback = function executeCallback() {
                 var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {}, _ref$fn = _ref.fn, fn = _ref$fn === void 0 ? null : _ref$fn, _ref$data = _ref.data, data = _ref$data === void 0 ? {} : _ref$data, _ref$options = _ref.options, options = _ref$options === void 0 ? {} : _ref$options;
                 var self = this, optionsNew = mergeObjects({}, self.options, options), callbackFnList = [];
@@ -760,10 +782,6 @@
                     var fieldOptions = self.options.fieldOptions;
                     if (fieldEl.matches(fieldOptions.preventPasteFields)) {
                         event.preventDefault();
-                        _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
-                            fn: fieldOptions.onPastePrevented,
-                            data: fieldEl
-                        });
                     }
                 },
                 submit: function submit(event) {
@@ -807,6 +825,36 @@
                             }));
                         }
                     }
+                },
+                validated: function validated(event) {
+                    var self = this, options = self.options.fieldOptions, fieldsArray = event.data.fieldEl ? [ event.data ] : event.data.fields;
+                    fieldsArray.forEach((function(obj) {
+                        var fieldEl = obj.fieldEl;
+                        if (fieldEl.matches(_helpers__WEBPACK_IMPORTED_MODULE_0__["fieldsStringSelector"])) {
+                            var containerEl = fieldEl.closest("[data-formjs-question]"), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = self.formEl.querySelector(fieldEl.getAttribute("data-required-from"));
+                            if (containerEl !== null) {
+                                Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(containerEl, options.cssClasses.pending);
+                            }
+                            if (containerEl !== null && !options.skipUIfeedback) {
+                                if (obj.result) {
+                                    if (!isReqFrom || isReqFrom && reqMoreEl.checked) {
+                                        var errorClasses = options.cssClasses.error + " " + options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
+                                        Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(containerEl, errorClasses);
+                                        Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(containerEl, options.cssClasses.valid);
+                                    }
+                                } else {
+                                    var extraErrorClass = options.cssClasses.errorRule;
+                                    var isChecks = fieldEl.matches("[data-checks]"), checkedElLength = isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0;
+                                    if (!isChecks && obj.errors && obj.errors.empty || isChecks && checkedElLength === 0) {
+                                        extraErrorClass = options.cssClasses.errorEmpty;
+                                    }
+                                    var _errorClasses = options.cssClasses.error + " " + extraErrorClass, errorClassToRemove = options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
+                                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(containerEl, options.cssClasses.valid + " " + errorClassToRemove);
+                                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(containerEl, _errorClasses);
+                                }
+                            }
+                        }
+                    }));
                 }
             };
         },
@@ -886,34 +934,6 @@
                         if (!this.options.fieldOptions.skipUIfeedback) {
                             Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(fieldObj.fieldEl.closest("[data-formjs-question]"), this.options.fieldOptions.cssClasses.pending);
                         }
-                    },
-                    onValidation: function onValidationDefault(fieldsArray) {
-                        var tempOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-                        var self = this, options = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options.fieldOptions, tempOptions.fieldOptions);
-                        fieldsArray.forEach((function(obj) {
-                            var fieldEl = obj.fieldEl, containerEl = fieldEl.closest("[data-formjs-question]"), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = self.formEl.querySelector(fieldEl.getAttribute("data-required-from"));
-                            if (containerEl !== null) {
-                                Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(containerEl, options.cssClasses.pending);
-                            }
-                            if (containerEl !== null && !options.skipUIfeedback) {
-                                if (obj.result) {
-                                    if (!isReqFrom || isReqFrom && reqMoreEl.checked) {
-                                        var errorClasses = options.cssClasses.error + " " + options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
-                                        Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(containerEl, errorClasses);
-                                        Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(containerEl, options.cssClasses.valid);
-                                    }
-                                } else {
-                                    var extraErrorClass = options.cssClasses.errorRule;
-                                    var isChecks = fieldEl.matches("[data-checks]"), checkedElLength = isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0;
-                                    if (!isChecks && obj.errors && obj.errors.empty || isChecks && checkedElLength === 0) {
-                                        extraErrorClass = options.cssClasses.errorEmpty;
-                                    }
-                                    var _errorClasses = options.cssClasses.error + " " + extraErrorClass, errorClassToRemove = options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
-                                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(containerEl, options.cssClasses.valid + " " + errorClassToRemove);
-                                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(containerEl, _errorClasses);
-                                }
-                            }
-                        }));
                     }
                 },
                 formOptions: {
@@ -1040,33 +1060,18 @@
                 })).then((function(obj) {
                     return new Promise((function(resolve) {
                         if (obj.fieldEl) {
-                            var runCallback = function runCallback(data) {
-                                var fieldOptionsNew = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-                                var options = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, {
-                                    fieldOptions: fieldOptions
-                                }, {
-                                    fieldOptions: fieldOptionsNew
-                                });
-                                _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
-                                    fn: fieldOptions.onValidation,
-                                    data: data,
-                                    options: options
-                                });
-                            };
-                            runCallback([ obj ]);
+                            Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(self.formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validated, obj);
                             if (fieldOptions.onValidationCheckAll && obj.result) {
                                 self.options.fieldOptions.skipUIfeedback = true;
                                 resolve(_isValidForm__WEBPACK_IMPORTED_MODULE_2__["isValidForm"].call(self).then((function(dataForm) {
                                     var clMethodName = dataForm.result ? "add" : "remove";
                                     self.formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid);
-                                    runCallback(dataForm.fields, {
-                                        skipUIfeedback: true
-                                    });
+                                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(self.formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.validated, dataForm);
                                     self.options.fieldOptions.skipUIfeedback = skipUIfeedback;
                                     return obj;
                                 })));
                             } else if (!obj.result) {
-                                Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(formEl, self.options.formOptions.cssClasses.valid);
+                                Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(self.formEl, self.options.formOptions.cssClasses.valid);
                             }
                         }
                         resolve(obj);
@@ -1088,17 +1093,14 @@
                 return new Promise((function(resolve) {
                     var prom = _isValidForm__WEBPACK_IMPORTED_MODULE_1__["isValidForm"].call(self, fieldOptions);
                     resolve(prom);
-                })).then((function(obj) {
-                    var clMethodName = obj.result ? "add" : "remove";
+                })).then((function(data) {
+                    var clMethodName = data.result ? "add" : "remove";
                     self.formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid);
-                    _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
-                        fn: fieldOptions.onValidation,
-                        data: obj.fields,
-                        options: {
-                            fieldOptions: fieldOptions
-                        }
+                    self.listenerCallbacks.validated.call(self, {
+                        data: data
                     });
-                    return obj;
+                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(self.formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.validated, data);
+                    return data;
                 }));
             }
         },

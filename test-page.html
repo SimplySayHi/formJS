@@ -40,9 +40,6 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <p class="text-white small">
-                            In this demo the error messages will be shown thanks to a JS function that dynamically prints them.
-                        </p>
                         <form method="POST" action="json/data.json" name="ajax-form-post-js-errors">
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
@@ -135,6 +132,15 @@
     <script src="dist/additionals/validationRules.js"></script>
     <script src="dist/additionals/validationErrors.js"></script>
     <script>
+        function populatePasswords(){
+            var pswFields = document.querySelectorAll('form [type="password"]');
+            Array.from(pswFields).forEach(function(field){
+                field.value = 'asdAsd123';
+            });
+        }
+
+        //populatePasswords();
+
         //document.querySelector('.card-header').click();
         var formEl = document.querySelector('form');
         var options = {
@@ -157,21 +163,7 @@
                         return fieldObj;
                     } */
                 ],
-                onPastePrevented: [function(){
-                    console.log('onPastePrevented');
-                }/* ,function(){
-                    console.log('onPastePrevented 2');
-                } */],
-                onValidation: function onValidation_testPage( fields ){
-                    if( fields.length === 1 ){
-                        var field = fields[0];
-                        console.log('--- onValidation_testPage field', field);
-                    } else {
-                        console.log('--- onValidation_testPage fields list', fields);
-                        const formValidity = fields.filter(function(field){ return !field.result; }).length === 0 ? 'VALID' : 'NOT VALID';
-                        console.log('--- FORM IS ' + formValidity);
-                    }
-                }
+                
             },
             formOptions: {
                 beforeSend: [
@@ -182,6 +174,7 @@
                         if( feedbackEl ){
                             feedbackEl.classList.add( 'd-none' );
                         }
+                        //data.stopExecution = true;
 
                         return Promise.resolve(data);
                     },
@@ -208,24 +201,26 @@
 
                         });
                     } */
-                ],
+                ]
             }
         };
+
         var formJsInstance = new Form( formEl, options );
 
-        populatePasswords();
+        formEl.addEventListener('fjs.field:validated', function(e){
+            console.log(e.type, e.data);
+            console.log('--- FIELD IS ' + (e.data.result ? '' : 'NOT ') + 'VALID');
+        }, false);
+
+        formEl.addEventListener('fjs.form:validated', function(e){
+            console.log(e.type, e.data);
+            console.log('--- FORM IS ' + (e.data.result ? '' : 'NOT ') + 'VALID');
+        }, false);
+
         formJsInstance.init().then(function( obj ){
             console.log('formJsInstance obj.instance', obj.instance);
             console.log('formJsInstance obj.fields', obj.fields);
-        });
-
-        function populatePasswords(){
-            var pswFields = document.querySelectorAll('form [type="password"]');
-            Array.from(pswFields).forEach(function(field){
-                var eventName = formJsInstance.options.fieldOptions.validateOnEvents.split(' ')[0];
-                field.value = 'asdAsd123';
-            });
-        }   
+        }); 
     </script>
     <script src="dist/additionals/utils.js"></script>
     

@@ -18,28 +18,7 @@ var options = {
                     fieldObj.aaa = 'ciao';
                     return fieldObj;
                 }
-            ],
-            onPastePrevented: function onPastePreventedTest ( fieldEl, tempOptions ){
-                console.log('onPastePrevented field', fieldEl);
-                console.log('onPastePrevented tempOptions', tempOptions);
-            },
-            onValidation: function onValidationTest ( fieldsArray, tempOptions ){
-                console.log('onValidation fieldsArray', fieldsArray);
-                console.log('onValidation tempOptions', tempOptions);
-                
-                fieldsArray.forEach(function(obj){
-                    console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
-                    if( obj.errors ){
-                        console.log('field errors:', obj.errors);
-                    }
-                });
-
-                if( fieldsArray.length > 1 ){
-                    console.log('--- onValidationTest fields list', fieldsArray);
-                    const formValidity = fieldsArray.filter(function(field){ return !field.result; }).length === 0 ? 'VALID' : 'NOT VALID';
-                    console.log('--- FORM IS ' + formValidity , this.formEl);
-                }
-            }
+            ]
         },
         formOptions: {
             ajaxOptions: {
@@ -78,43 +57,7 @@ var options = {
 
                     });
                 }
-            ],
-            onSubmitSuccess: function onSubmitSuccessTest ( ajaxData, tempOptions ){
-                console.log('onSubmitSuccess ajaxData', ajaxData);
-                console.log('onSubmitSuccess tempOptions', tempOptions);
-
-                if( typeof ajaxData === 'string' ){
-                    ajaxData = JSON.parse(ajaxData);
-                }
-
-                var formEl = this.formEl;
-
-                if( this.options.formOptions.ajaxSubmit ){
-                    var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
-                    feedbackEl.classList.remove( 'alert-danger' );
-                    feedbackEl.classList.add( 'alert-success' );
-                    feedbackEl.classList.remove( 'd-none' );
-                    feedbackEl.innerHTML = 'Great! Your infos have been sent :D';
-                }
-            },
-            onSubmitError: function onSubmitErrorTest ( ajaxData, tempOptions ){
-                console.log('onSubmitError ajaxData', ajaxData);
-                console.log('onSubmitError tempOptions', tempOptions);
-
-                var formEl = this.formEl;
-
-                if( this.options.formOptions.ajaxSubmit ){
-                    var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
-                    feedbackEl.classList.remove( 'alert-success' );
-                    feedbackEl.classList.add( 'alert-danger' );
-                    feedbackEl.classList.remove( 'd-none' );
-                    feedbackEl.innerHTML = 'Oh no, something went wrong! :( Retry';
-                }
-            },
-            onSubmitComplete: function onSubmitCompleteTest ( ajaxData, tempOptions ){
-                console.log('onSubmitComplete ajaxData', ajaxData);
-                console.log('onSubmitComplete tempOptions', tempOptions);
-            }
+            ]
         }
     };
 
@@ -126,6 +69,57 @@ Array.from(formsList).forEach(function(formEl, idx){
     if( isLocalEnv ){ formEl.method = 'GET'; }
 
     window[fNum] = new Form( formEl, options );
+
+    formEl.addEventListener('fjs.field:validated', function(event){
+        console.log(event.type, event.data);
+        console.log( 'field "' + event.data.fieldEl.name + '" is valid? ', event.data.result );
+        if( event.data.errors ){
+            console.log('field errors:', event.data.errors);
+        }
+    });
+
+    formEl.addEventListener('fjs.form:validated', function(event){
+        console.log(event.type, event.data);
+        event.data.fields.forEach(function(obj){
+            console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
+            if( obj.errors ){
+                console.log('field errors:', obj.errors);
+            }
+        });
+    });
+
+    formEl.addEventListener('fjs.form:ajax-error', function(event){
+        console.log(event.type);
+
+        var instance = formEl.formjs;
+
+        if( instance.options.formOptions.ajaxSubmit ){
+            var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
+            feedbackEl.classList.remove( 'alert-success' );
+            feedbackEl.classList.add( 'alert-danger' );
+            feedbackEl.classList.remove( 'd-none' );
+            feedbackEl.innerHTML = 'Oh no, something went wrong! :( Retry';
+        }
+    });
+
+    formEl.addEventListener('fjs.form:ajax-success', function(event){
+        console.log(event.type, event.data);
+
+        var instance = formEl.formjs;
+
+        if( instance.options.formOptions.ajaxSubmit ){
+            var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
+            feedbackEl.classList.remove( 'alert-danger' );
+            feedbackEl.classList.add( 'alert-success' );
+            feedbackEl.classList.remove( 'd-none' );
+            feedbackEl.innerHTML = 'Great! Your infos have been sent :D';
+        }
+    });
+
+    formEl.addEventListener('fjs.form:ajax-complete', function(event){
+        console.log(event.type);
+    });
+
     window[fNum].init().then(function( obj ){
         console.log('formJsInstance '+ fNum +' obj.instance', obj.instance);
         console.log('formJsInstance '+ fNum +' obj.fields', obj.fields);

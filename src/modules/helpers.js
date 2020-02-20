@@ -3,7 +3,7 @@ export const
 
 fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea',
 
-addClass = function( element, cssClasses ){
+addClass = ( element, cssClasses ) => {
     cssClasses.split(' ').forEach(function(className){
         element.classList.add( className );
     });
@@ -31,7 +31,7 @@ checkDirtyField = function( fields, cssClasses = this.options.fieldOptions.cssCl
     
 },
 
-checkFormEl = function( formEl ){
+checkFormEl = formEl => {
     let isString = typeof formEl,
         isValidNodeSelector = isString === 'string' && isDOMNode(document.querySelector(formEl)),
         isFormSelector = isValidNodeSelector && document.querySelector(formEl).tagName.toLowerCase() === 'form',
@@ -41,6 +41,26 @@ checkFormEl = function( formEl ){
         };
 
     return obj;
+},
+
+customEvents = {
+    field: {
+        validated:          'fjs.field:validated'
+    },
+    form: {
+        ajax: {
+            complete:       'fjs.form:ajax-complete',
+            error:          'fjs.form:ajax-error',
+            success:        'fjs.form:ajax-success'
+        },
+        validated:          'fjs.form:validated'
+    }
+},
+
+dispatchCustomEvent = ( elem, eventName, data = {} ) => {
+    const eventObj = new Event(eventName, { bubbles: true });
+    eventObj.data = data;
+    elem.dispatchEvent( eventObj );
 },
 
 executeCallback = function( {fn = null, data = {}, options = {}} = {} ){
@@ -59,7 +79,7 @@ executeCallback = function( {fn = null, data = {}, options = {}} = {} ){
     });
 },
 
-getFilledFields = function( formEl ){
+getFilledFields = formEl => {
     return getUniqueFields( formEl.querySelectorAll(fieldsStringSelector) )
     .map(fieldEl => {
 
@@ -81,7 +101,7 @@ getFilledFields = function( formEl ){
     });
 },
 
-getSplitChar = function( string ){
+getSplitChar = string => {
     let splitChar = '.';
 
     if( string.indexOf(splitChar) === -1 ){
@@ -95,7 +115,7 @@ getSplitChar = function( string ){
     return splitChar;
 },
 
-getUniqueFields = function( nodeList ){
+getUniqueFields = nodeList => {
 
     let currentFieldName = '',
         currentFieldType = '';
@@ -117,19 +137,19 @@ getUniqueFields = function( nodeList ){
     
 },
 
-isDOMNode = function( node ){
+isDOMNode = node => {
     return Element.prototype.isPrototypeOf( node );
 },
 
-isFieldForChangeEvent = function ( fieldEl ) {
+isFieldForChangeEvent = fieldEl => {
     return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
 },
 
-isNodeList = function( nodeList ){
+isNodeList = nodeList => {
     return NodeList.prototype.isPrototypeOf( nodeList );
 },
 
-isPlainObject = function( object ){
+isPlainObject = object => {
     return Object.prototype.toString.call( object ) === '[object Object]';
 },
 
@@ -174,7 +194,7 @@ mergeObjects = function( out = {} ){
     return out;
 },
 
-removeClass = function( element, cssClasses ){
+removeClass = ( element, cssClasses ) => {
     cssClasses.split(' ').forEach(function(className){
         element.classList.remove( className );
     });
@@ -200,7 +220,7 @@ runFunctionsSequence = function( { functionsList = [], data = {}, stopConditionF
     });
 },
 
-serializeObject = function( obj ){
+serializeObject = obj => {
     var objToString = (
             (obj && typeof obj === 'object' && obj.constructor === Object) ? 
             Object.keys(obj)
@@ -213,7 +233,7 @@ serializeObject = function( obj ){
     return objToString;
 },
 
-toCamelCase = function( string ){
+toCamelCase = string => {
     return string.replace(/-([a-z])/ig, function(all, letter){ return letter.toUpperCase(); });
 },
 

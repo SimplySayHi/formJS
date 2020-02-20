@@ -37,11 +37,76 @@ function removeClass ( element, cssClasses ){
     }
 }
 
+function onValidationDemoErrorsCss ( fieldsArray, options ){
+    fieldsArray.forEach(function( obj ){
+        var isValid = obj.result,
+            fieldEl = obj.fieldEl,
+            containerEl = fieldEl.closest('[data-formjs-question]');
+
+        if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
+            if( isValid ){
+
+                var errorClasses = getErrorRuleClassesFromContainer(containerEl);
+                if( errorClasses ){
+                    removeClass( containerEl, errorClasses );
+                }
+
+            } else {
+
+                var errorClasses = getErrorRuleClassesFromErrorsObj(obj.errors),
+                    errorClassToRemove = getErrorRuleClassesFromContainer(containerEl);
+                removeClass( containerEl, errorClassToRemove );
+                addClass( containerEl, errorClasses );
+
+            }
+        }
+    });
+}
+
+function onValidationDemoErrorsJs ( fieldsArray, options ){
+    fieldsArray.forEach(function( obj ){
+        var isValid = obj.result,
+            fieldEl = obj.fieldEl,
+            containerEl = fieldEl.closest('[data-formjs-question]');
+
+        if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
+            if( isValid ){
+
+                // REMOVE ERRORS FROM PAGE
+                containerEl.querySelector('.field-error-message').innerHTML = '';
+
+            } else {
+
+                // PRINT ERRORS AS FOR obj.errors
+                if( obj.errors ){
+                    var errorsHTML = '';
+
+                    if( obj.errors.empty ){
+                        errorsHTML += '<p>This field cannot be empty</p>';
+                    } else {
+                        for(var errorName in obj.errors){
+                            if( errorName !== 'rule' ){
+                                var printError = errorName.replace(/([A-Z])/g, function(all, letter){
+                                        return ' ' + letter.toLowerCase();
+                                    });
+                                errorsHTML += '<li>Error: '+ printError +'</li>';
+                            }
+                        }
+                        errorsHTML = 'This field is not valid:<ul>' + errorsHTML + '</ul>';
+                    }
+
+                    containerEl.querySelector('.field-error-message').innerHTML = errorsHTML;
+                }
+
+            }
+        }
+    });
+}
+
 // WORKS ONLY FOR NEW INSTANCES
 function setNewDefaultOptions () {
     var addToDefOpts = {
             fieldOptions: {
-                onValidation: function onValidationDemoDefaultNew ( fieldsArray ){},
                 maxFileSize: 99,
                 validateOnEvents: 'blur change',
                 cssClasses: { error: 'has-error custom-error-class' }
@@ -55,9 +120,6 @@ var formsList = document.querySelectorAll('form'),
         form_1: {
             fieldOptions: {
                 cssClasses: { dirty: 'is-dirty custom-dirty-field' },
-                onPastePrevented: function onPastePreventedDemo01 ( fieldEl ){
-                    console.log( 'Paste event prevented on field ', fieldEl );
-                },
                 onValidation: function onValidationDemo01 ( fieldsArray ){
                     console.log('onValidation fieldsArray ', fieldsArray);
                     fieldsArray.forEach(function(obj){
@@ -78,35 +140,6 @@ var formsList = document.querySelectorAll('form'),
                     }
 
                     return Promise.resolve(data);
-                },
-                onSubmitSuccess: function onSubmitSuccessDemo01 ( ajaxData ){
-                    console.log( 'onSubmitSuccess ajaxData ', ajaxData );
-
-                    let formEl = this.formEl;
-
-                    if( this.options.formOptions.ajaxSubmit ){
-                        var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
-                        feedbackEl.classList.remove( 'alert-danger' );
-                        feedbackEl.classList.add( 'alert-success' );
-                        feedbackEl.classList.remove( 'd-none' );
-                        feedbackEl.innerHTML = 'Great! Your infos have been sent :D';
-                    }
-                },
-                onSubmitError: function onSubmitErrorDemo01 ( ajaxData ){
-                    console.log( 'onSubmitError ajaxData ', ajaxData );
-
-                    let formEl = this.formEl;
-
-                    if( this.options.formOptions.ajaxSubmit ){
-                        var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
-                        feedbackEl.classList.remove( 'alert-success' );
-                        feedbackEl.classList.add( 'alert-danger' );
-                        feedbackEl.classList.remove( 'd-none' );
-                        feedbackEl.innerHTML = 'Oh no, something went wrong! :( Retry';
-                    }
-                },
-                onSubmitComplete: function onSubmitCompleteDemo01 (){
-                    console.log('onSubmitComplete...');
                 }
             }
         },
@@ -114,98 +147,14 @@ var formsList = document.querySelectorAll('form'),
         form_3: { formOptions: { ajaxSubmit: false } },
         form_4: {
             fieldOptions: {
-                cssClasses: { dirty: 'is-dirty custom-dirty-field' },
-                onPastePrevented: function onPastePreventedDemo02 ( fieldEl ){
-                    console.log( 'Paste event prevented on field ', fieldEl );
-                },
-                onValidation: function onValidationDemo02 ( fieldsArray ){
-                    console.log('onValidation fieldsArray ', fieldsArray);
-                    fieldsArray.forEach(function(obj){
-                        console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
-                        if( obj.errors ){
-                            console.log('field errors:', obj.errors);
-                        }
-                    });
-                }
+                cssClasses: { dirty: 'is-dirty custom-dirty-field' }
             },
             formOptions: {
                 ajaxSubmit: false
             }
         },
-        form_5: {
-            fieldOptions: {
-                onValidation: function onValidationDemoErrorsCss ( fieldsArray ){
-                    var self = this;
-                    fieldsArray.forEach(function( obj ){
-                        var isValid = obj.result,
-                            fieldEl = obj.fieldEl,
-                            containerEl = fieldEl.closest('[data-formjs-question]');
-
-                        if( containerEl !== null && !self.options.fieldOptions.skipUIfeedback ){
-                            if( isValid ){
-
-                                var errorClasses = getErrorRuleClassesFromContainer(containerEl);
-                                if( errorClasses ){
-                                    removeClass( containerEl, errorClasses );
-                                }
-
-                            } else {
-
-                                var errorClasses = getErrorRuleClassesFromErrorsObj(obj.errors),
-                                    errorClassToRemove = getErrorRuleClassesFromContainer(containerEl);
-                                removeClass( containerEl, errorClassToRemove );
-                                addClass( containerEl, errorClasses );
-
-                            }
-                        }
-                    });
-                }
-            }
-        },
-        form_6: {
-            fieldOptions: {
-                onValidation: function onValidationDemoErrorsJs ( fieldsArray ){
-                    var self = this;
-                    fieldsArray.forEach(function( obj ){
-                        var isValid = obj.result,
-                            fieldEl = obj.fieldEl,
-                            containerEl = fieldEl.closest('[data-formjs-question]');
-
-                        if( containerEl !== null && !self.options.fieldOptions.skipUIfeedback ){
-                            if( isValid ){
-
-                                // REMOVE ERRORS FROM PAGE
-                                containerEl.querySelector('.field-error-message').innerHTML = '';
-
-                            } else {
-
-                                // PRINT ERRORS AS FOR obj.errors
-                                if( obj.errors ){
-                                    var errorsHTML = '';
-
-                                    if( obj.errors.empty ){
-                                        errorsHTML += '<p>This field cannot be empty</p>';
-                                    } else {
-                                        for(var errorName in obj.errors){
-                                            if( errorName !== 'rule' ){
-                                                var printError = errorName.replace(/([A-Z])/g, function(all, letter){
-                                                        return ' ' + letter.toLowerCase();
-                                                    });
-                                                errorsHTML += '<li>Error: '+ printError +'</li>';
-                                            }
-                                        }
-                                        errorsHTML = 'This field is not valid:<ul>' + errorsHTML + '</ul>';
-                                    }
-
-                                    containerEl.querySelector('.field-error-message').innerHTML = errorsHTML;
-                                }
-
-                            }
-                        }
-                    });
-                }
-            }
-        }
+        form_5: {},
+        form_6: {}
     };
 
 Array.from(formsList).forEach(function(formEl, idx){
@@ -214,17 +163,108 @@ Array.from(formsList).forEach(function(formEl, idx){
         options = optionsObjs['form_'+num] || optionsObjs.form_1;
 
     switch( num ){
-
         case 2:
             // CHANGE DEFAULT OPTIONS BEFORE INITIALIZE THE 2ND FORM
             setNewDefaultOptions();
             break;
-
         default: break;
-
     }
 
     window[fNum] = new Form( formEl, options );
+
+    switch( num ){
+        case 5:
+            formEl.addEventListener('fjs.field:validated', function(event){
+                console.log(event.type, event.data);
+                console.log( 'field "' + event.data.fieldEl.name + '" is valid? ', event.data.result );
+                if( event.data.errors ){
+                    console.log('field errors:', event.data.errors);
+                }
+                onValidationDemoErrorsCss( [event.data], this.formjs.options );
+            });
+            formEl.addEventListener('fjs.form:validated', function(event){
+                console.log(event.type, event.data);
+                event.data.fields.forEach(function(obj){
+                    console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
+                    if( obj.errors ){
+                        console.log('field errors:', obj.errors);
+                    }
+                });
+                onValidationDemoErrorsCss( event.data.fields, this.formjs.options );
+            });
+            break;
+        case 6:
+            formEl.addEventListener('fjs.field:validated', function(event){
+                console.log(event.type, event.data);
+                console.log( 'field "' + event.data.fieldEl.name + '" is valid? ', event.data.result );
+                if( event.data.errors ){
+                    console.log('field errors:', event.data.errors);
+                }
+                onValidationDemoErrorsJs( [event.data], this.formjs.options );
+            });
+            formEl.addEventListener('fjs.form:validated', function(event){
+                console.log(event.type, event.data);
+                event.data.fields.forEach(function(obj){
+                    console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
+                    if( obj.errors ){
+                        console.log('field errors:', obj.errors);
+                    }
+                });
+                onValidationDemoErrorsJs( event.data.fields, this.formjs.options );
+            });
+            break;
+        default:
+            formEl.addEventListener('fjs.field:validated', function(event){
+                console.log(event.type, event.data);
+                console.log( 'field "' + event.data.fieldEl.name + '" is valid? ', event.data.result );
+                if( event.data.errors ){
+                    console.log('field errors:', event.data.errors);
+                }
+            });
+            formEl.addEventListener('fjs.form:validated', function(event){
+                console.log(event.type, event.data);
+                event.data.fields.forEach(function(obj){
+                    console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
+                    if( obj.errors ){
+                        console.log('field errors:', obj.errors);
+                    }
+                });
+            });
+            break;
+    }
+
+    formEl.addEventListener('fjs.form:ajax-error', function(event){
+        console.log(event.type);
+
+        var instance = formEl.formjs;
+
+        if( instance.options.formOptions.ajaxSubmit ){
+            var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
+            feedbackEl.classList.remove( 'alert-success' );
+            feedbackEl.classList.add( 'alert-danger' );
+            feedbackEl.classList.remove( 'd-none' );
+            feedbackEl.innerHTML = 'Oh no, something went wrong! :( Retry';
+        }
+    });
+
+    formEl.addEventListener('fjs.form:ajax-success', function(event){
+        console.log(event.type, event.data);
+
+        var instance = formEl.formjs;
+
+        if( instance.options.formOptions.ajaxSubmit ){
+            var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
+            feedbackEl.classList.remove( 'alert-danger' );
+            feedbackEl.classList.add( 'alert-success' );
+            feedbackEl.classList.remove( 'd-none' );
+            feedbackEl.innerHTML = 'Great! Your infos have been sent :D';
+        }
+    });
+
+    formEl.addEventListener('fjs.form:ajax-complete', function(event){
+        console.log(event.type);
+    });
+
     window[fNum].init().then(function( obj ){
         console.log('formJsInstance '+ fNum +' obj.instance', obj.instance);
         console.log('formJsInstance '+ fNum +' obj.fields', obj.fields);

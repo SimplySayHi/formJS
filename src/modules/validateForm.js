@@ -1,5 +1,5 @@
 
-import { executeCallback, mergeObjects } from './helpers';
+import { customEvents, dispatchCustomEvent, mergeObjects } from './helpers';
 import { isValidForm } from './isValidForm';
 
 export function validateForm( fieldOptionsObj = {} ){
@@ -12,14 +12,14 @@ export function validateForm( fieldOptionsObj = {} ){
         const prom = isValidForm.call( self, fieldOptions );
         resolve(prom);
 
-    }).then(obj => {
+    }).then(data => {
 
-        const clMethodName = obj.result ? 'add' : 'remove';
-
+        const clMethodName = data.result ? 'add' : 'remove';
         self.formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
-        executeCallback.call( self, {fn: fieldOptions.onValidation, data: obj.fields, options: {fieldOptions}} );
+        self.listenerCallbacks.validated.call( self, {data} );
+        dispatchCustomEvent( self.formEl, customEvents.form.validated, data );
 
-        return obj;
+        return data;
 
     });
     

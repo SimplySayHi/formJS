@@ -1,4 +1,6 @@
 
+import { customEvents } from './helpers';
+
 export function destroy(){
 
     const self = this,
@@ -22,6 +24,8 @@ export function destroy(){
         let useCapturing = (eventName === 'blur' ? true : false);
         formEl.removeEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
     });
+
+    formEl.removeEventListener(customEvents.field.validated, self.listenerCallbacks.validated, false);
 
     delete self.formEl.formjs;
     

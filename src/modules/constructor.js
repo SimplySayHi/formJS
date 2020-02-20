@@ -27,7 +27,8 @@ export function constructorFn( formEl, optionsObj = {} ){
         keypressMaxlength:  callbackFns.keypressMaxlength,
         pastePrevent:       callbackFns.pastePrevent.bind(self),
         submit:             callbackFns.submit.bind(self),
-        validation:         callbackFns.validation.bind(self)
+        validation:         callbackFns.validation.bind(self),
+        validated:          callbackFns.validated.bind(self)
     };
     Object.freeze(self.listenerCallbacks);
 

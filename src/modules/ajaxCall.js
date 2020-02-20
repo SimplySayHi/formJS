@@ -1,5 +1,5 @@
 
-import { addClass, executeCallback, mergeObjects, removeClass, serializeObject } from './helpers';
+import { addClass, customEvents, dispatchCustomEvent, mergeObjects, removeClass, serializeObject } from './helpers';
 
 // AJAX CALL USING fetch API
 export function ajaxCall( formDataObj ){
@@ -90,11 +90,11 @@ export function ajaxCall( formDataObj ){
         })
         .then(function( data ){
             addClass( formEl, formOptions.cssClasses.ajaxSuccess );
-            executeCallback.call( self, {fn: formOptions.onSubmitSuccess, data} );
+            dispatchCustomEvent( formEl, customEvents.form.ajax.success, data );
         })
         .catch(function( error ){
             addClass( formEl, formOptions.cssClasses.ajaxError );
-            executeCallback.call( self, {fn: formOptions.onSubmitError, data: error} );
+            dispatchCustomEvent( formEl, customEvents.form.ajax.error, error );
         })
         .finally(function(){
 
@@ -104,7 +104,7 @@ export function ajaxCall( formDataObj ){
             removeClass( formEl, formOptions.cssClasses.submit + ' ' + formOptions.cssClasses.ajaxPending );
             addClass( formEl, formOptions.cssClasses.ajaxComplete );
             btnEl.disabled = false;
-            executeCallback.call( self, {fn: formOptions.onSubmitComplete} );
+            dispatchCustomEvent( formEl, customEvents.form.ajax.complete );
 
         });
     

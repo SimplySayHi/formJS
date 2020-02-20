@@ -1,4 +1,6 @@
 
+import { customEvents } from './helpers';
+
 export function formStartup(){
 
     const self = this,
@@ -35,6 +37,8 @@ export function formStartup(){
             let useCapturing = (eventName === 'blur' ? true : false);
             formEl.addEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
         });
+
+        formEl.addEventListener(customEvents.field.validated, self.listenerCallbacks.validated, false);
 
     }
     
