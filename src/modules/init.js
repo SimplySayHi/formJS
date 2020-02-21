@@ -1,17 +1,16 @@
 
 import { getFilledFields, isFieldForChangeEvent } from './helpers';
 
-export const init = function(){
+export const init = function( instance, formEl, listenerCallbacks ){
 
-    const instance = this,
-          formFields = getFilledFields( instance.formEl );
+    const formFields = getFilledFields( formEl );
 
     // VALIDATE ALL FILLED FIELDS
     return Promise.all( formFields.map(fieldEl => {
 
         const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl);
         const fakeEventObj = { target: fieldEl, type: (isFieldForChangeEventBoolean ? 'change': '') };
-        return instance.listenerCallbacks.validation.call( instance, fakeEventObj );
+        return listenerCallbacks.validation.call( instance, fakeEventObj );
 
     }) ).then(fields => {
 
