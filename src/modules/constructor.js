@@ -21,6 +21,23 @@ export function constructorFn( self, formEl, optionsObj ){
     self.formEl = checkFormElem.element;
     self.formEl.formjs = self;
     self.options = mergeObjects({}, self.constructor.prototype.options, optionsObj);
+
+    // BINDING CONTEXT FOR FUTURE EXECUTION
+    const cbList = [
+        // IN fieldOptions
+        'beforeValidation',
+        // IN formOptions
+        'beforeSend'
+    ];
+    cbList.forEach(cbName => {
+        let optionType = Array.isArray(self.options.formOptions[cbName]) ? 'formOptions' : 'fieldOptions',
+            cbOpt = self.options[optionType][cbName];
+
+        if( cbOpt && Array.isArray(cbOpt) ){
+            self.options[optionType][cbName] = cbOpt.map(cbFn => cbFn.bind(self));
+        }
+    });
+
     self.listenerCallbacks = {
         dataTypeNumber:     callbackFns.dataTypeNumber,
         keypressMaxlength:  callbackFns.keypressMaxlength,

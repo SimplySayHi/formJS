@@ -33,10 +33,11 @@ class Form {
     }
 
     init(){
-        return init.call(this);
+        // REFACTORING OK
+        return init( this, this.formEl, this.listenerCallbacks );
     }
 
-    validateField( fieldEl, fieldOptions ){
+    validateField( fieldEl, fieldOptions = {} ){
         // REFACTORING OK
         fieldEl = (typeof fieldEl === 'string' ? this.formEl.querySelector(fieldEl) : fieldEl);
         const options = mergeObjects({}, this.options, {fieldOptions});
