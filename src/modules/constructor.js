@@ -41,10 +41,10 @@ export function constructorFn( self, formEl, optionsObj ){
     self.listenerCallbacks = {
         dataTypeNumber:     callbackFns.dataTypeNumber,
         keypressMaxlength:  callbackFns.keypressMaxlength,
-        pastePrevent:       callbackFns.pastePrevent.bind(self),
-        submit:             callbackFns.submit.bind(self),
+        pastePrevent:       callbackFns.pastePrevent,
+        submit:             callbackFns.submit,
         validation:         callbackFns.validation.bind(self),
-        validationEnd:      callbackFns.validationEnd.bind(self)
+        validationEnd:      callbackFns.validationEnd
     };
     Object.freeze(self.listenerCallbacks);
 

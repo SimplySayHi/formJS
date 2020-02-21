@@ -13,7 +13,7 @@ export function validateForm( formEl, options, listenerCallbacks, validationRule
 
         const clMethodName = data.result ? 'add' : 'remove';
         formEl.classList[clMethodName]( options.formOptions.cssClasses.valid );
-        listenerCallbacks.validationEnd.call( formEl.formjs, {data} );
+        listenerCallbacks.validationEnd( {data} );
         dispatchCustomEvent( formEl, customEvents.form.validation, data );
 
         return data;

@@ -39,9 +39,8 @@ export const callbackFns = {
 
     pastePrevent: function( event ){
 
-        const self = this,
-              fieldEl = event.target;
-        let fieldOptions = self.options.fieldOptions;
+        const fieldEl = event.target;
+        let fieldOptions = fieldEl.closest('form').formjs.options.fieldOptions;
 
         if( fieldEl.matches( fieldOptions.preventPasteFields ) ){     
             event.preventDefault();
@@ -128,16 +127,15 @@ export const callbackFns = {
 
     validationEnd: function( event ){
 
-        const self = this,
-              options = self.options.fieldOptions,
-              fieldsArray = event.data.fieldEl ? [event.data] : event.data.fields;
+        const fieldsArray = event.data.fieldEl ? [event.data] : event.data.fields,
+              options = fieldsArray[0].fieldEl.closest('form').formjs.options.fieldOptions;
 
         fieldsArray.forEach(function( obj ){
             let fieldEl = obj.fieldEl;
             if( fieldEl.matches( fieldsStringSelector ) ){
                 let containerEl = fieldEl.closest('[data-formjs-question]'),
                     isReqFrom = fieldEl.matches('[data-required-from]'),
-                    reqMoreEl = self.formEl.querySelector( fieldEl.getAttribute('data-required-from') );
+                    reqMoreEl = document.querySelector( fieldEl.getAttribute('data-required-from') );
 
                 if( containerEl !== null ){
                     removeClass( containerEl, options.cssClasses.pending );

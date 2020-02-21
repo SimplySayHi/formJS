@@ -197,10 +197,6 @@ runFunctionsSequence = ( { functionsList = [], data = {}, stopConditionFn = func
         });
     }, Promise.resolve([data]))
         .then(dataList => dataList.length > 1 ? dataList.slice(1) : []);
-        /* .then(dataList => {
-            if( dataList.length > 1 ){ dataList.shift(); }
-            return dataList;
-        }); */
 },
 
 serializeObject = obj => {

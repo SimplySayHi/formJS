@@ -16,36 +16,30 @@ const version = '4.0.0';
 class Form {
 
     constructor( formEl, optionsObj ){
-        // REFACTORING OK
         constructorFn(this, formEl, optionsObj);
     }
 
     destroy(){
-        // REFACTORING OK
         destroy(this.formEl, this.options, this.listenerCallbacks);
     }
     
     getFormData(){
-        // REFACTORING OK
         const formFieldsEl = this.formEl.querySelectorAll('input, select, textarea'),
               filteredFields = Array.from( formFieldsEl ).filter( elem => elem.matches(excludeSelector) );
         return this.options.formOptions.getFormData.call(this, filteredFields);
     }
 
     init(){
-        // REFACTORING OK
         return init( this, this.formEl, this.listenerCallbacks );
     }
 
     validateField( fieldEl, fieldOptions = {} ){
-        // REFACTORING OK
         fieldEl = (typeof fieldEl === 'string' ? this.formEl.querySelector(fieldEl) : fieldEl);
         const options = mergeObjects({}, this.options, {fieldOptions});
         return validateField( fieldEl, options, this.validationRules, this.validationErrors );
     }
 
     validateForm( fieldOptions = {} ){
-        // REFACTORING OK
         const options = mergeObjects({}, this.options, {fieldOptions});
         options.fieldOptions.beforeValidation = options.fieldOptions.beforeValidation.map( func => func.bind( this ) );
         return validateForm( this.formEl, options, this.listenerCallbacks, this.validationRules, this.validationErrors );

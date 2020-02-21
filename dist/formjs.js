@@ -281,10 +281,10 @@
                 self.listenerCallbacks = {
                     dataTypeNumber: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].dataTypeNumber,
                     keypressMaxlength: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].keypressMaxlength,
-                    pastePrevent: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].pastePrevent.bind(self),
-                    submit: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].submit.bind(self),
+                    pastePrevent: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].pastePrevent,
+                    submit: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].submit,
                     validation: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].validation.bind(self),
-                    validationEnd: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].validationEnd.bind(self)
+                    validationEnd: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].validationEnd
                 };
                 Object.freeze(self.listenerCallbacks);
                 Object(_formStartup__WEBPACK_IMPORTED_MODULE_2__["formStartup"])(self.formEl, self.options, self.listenerCallbacks);
@@ -765,8 +765,8 @@
                     }
                 },
                 pastePrevent: function pastePrevent(event) {
-                    var self = this, fieldEl = event.target;
-                    var fieldOptions = self.options.fieldOptions;
+                    var fieldEl = event.target;
+                    var fieldOptions = fieldEl.closest("form").formjs.options.fieldOptions;
                     if (fieldEl.matches(fieldOptions.preventPasteFields)) {
                         event.preventDefault();
                     }
@@ -814,11 +814,11 @@
                     }
                 },
                 validationEnd: function validationEnd(event) {
-                    var self = this, options = self.options.fieldOptions, fieldsArray = event.data.fieldEl ? [ event.data ] : event.data.fields;
+                    var fieldsArray = event.data.fieldEl ? [ event.data ] : event.data.fields, options = fieldsArray[0].fieldEl.closest("form").formjs.options.fieldOptions;
                     fieldsArray.forEach((function(obj) {
                         var fieldEl = obj.fieldEl;
                         if (fieldEl.matches(_helpers__WEBPACK_IMPORTED_MODULE_0__["fieldsStringSelector"])) {
-                            var containerEl = fieldEl.closest("[data-formjs-question]"), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = self.formEl.querySelector(fieldEl.getAttribute("data-required-from"));
+                            var containerEl = fieldEl.closest("[data-formjs-question]"), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = document.querySelector(fieldEl.getAttribute("data-required-from"));
                             if (containerEl !== null) {
                                 Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(containerEl, options.cssClasses.pending);
                             }
@@ -1080,7 +1080,7 @@
                 })).then((function(data) {
                     var clMethodName = data.result ? "add" : "remove";
                     formEl.classList[clMethodName](options.formOptions.cssClasses.valid);
-                    listenerCallbacks.validationEnd.call(formEl.formjs, {
+                    listenerCallbacks.validationEnd({
                         data: data
                     });
                     Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.validation, data);
