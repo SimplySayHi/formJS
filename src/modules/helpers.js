@@ -59,22 +59,6 @@ dispatchCustomEvent = ( elem, eventName, data = {} ) => {
     elem.dispatchEvent( eventObj );
 },
 
-executeCallback = function( {fn = null, data = {}, options = {}} = {} ){
-    let self = this,
-        optionsNew = mergeObjects({}, self.options, options),
-        callbackFnList = [];
-
-    if( typeof fn === 'function' ){
-        callbackFnList.push( fn );
-    } else if( Array.isArray(fn) ) {
-        callbackFnList = fn;
-    }
-
-    callbackFnList.forEach(function(promiseFn){
-        promiseFn.call( self, data, optionsNew );
-    });
-},
-
 getFilledFields = formEl => {
     return getUniqueFields( formEl.querySelectorAll(fieldsStringSelector) )
     .map(fieldEl => {

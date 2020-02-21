@@ -367,9 +367,6 @@
             __webpack_require__.d(__webpack_exports__, "dispatchCustomEvent", (function() {
                 return dispatchCustomEvent;
             }));
-            __webpack_require__.d(__webpack_exports__, "executeCallback", (function() {
-                return executeCallback;
-            }));
             __webpack_require__.d(__webpack_exports__, "getFilledFields", (function() {
                 return getFilledFields;
             }));
@@ -462,17 +459,6 @@
                 });
                 eventObj.data = data;
                 elem.dispatchEvent(eventObj);
-            }, executeCallback = function executeCallback() {
-                var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {}, _ref$fn = _ref.fn, fn = _ref$fn === void 0 ? null : _ref$fn, _ref$data = _ref.data, data = _ref$data === void 0 ? {} : _ref$data, _ref$options = _ref.options, options = _ref$options === void 0 ? {} : _ref$options;
-                var self = this, optionsNew = mergeObjects({}, self.options, options), callbackFnList = [];
-                if (typeof fn === "function") {
-                    callbackFnList.push(fn);
-                } else if (Array.isArray(fn)) {
-                    callbackFnList = fn;
-                }
-                callbackFnList.forEach((function(promiseFn) {
-                    promiseFn.call(self, data, optionsNew);
-                }));
             }, getFilledFields = function getFilledFields(formEl) {
                 return getUniqueFields(formEl.querySelectorAll(fieldsStringSelector)).map((function(fieldEl) {
                     var name = fieldEl.name, type = fieldEl.type, isCheckboxOrRadio = type === "checkbox" || type === "radio", fieldChecked = formEl.querySelector('[name="' + name + '"]:checked'), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isReqFrom ? formEl.querySelector(fieldEl.getAttribute("data-required-from")) : null;
@@ -545,9 +531,9 @@
                     element.classList.remove(className);
                 }));
             }, runFunctionsSequence = function runFunctionsSequence() {
-                var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {}, _ref2$functionsList = _ref2.functionsList, functionsList = _ref2$functionsList === void 0 ? [] : _ref2$functionsList, _ref2$data = _ref2.data, data = _ref2$data === void 0 ? {} : _ref2$data, _ref2$stopConditionFn = _ref2.stopConditionFn, stopConditionFn = _ref2$stopConditionFn === void 0 ? function() {
+                var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {}, _ref$functionsList = _ref.functionsList, functionsList = _ref$functionsList === void 0 ? [] : _ref$functionsList, _ref$data = _ref.data, data = _ref$data === void 0 ? {} : _ref$data, _ref$stopConditionFn = _ref.stopConditionFn, stopConditionFn = _ref$stopConditionFn === void 0 ? function() {
                     return false;
-                } : _ref2$stopConditionFn;
+                } : _ref$stopConditionFn;
                 var self = this;
                 return functionsList.reduce((function(acc, promiseFn) {
                     return acc.then((function(res) {
