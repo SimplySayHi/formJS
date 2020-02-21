@@ -18,7 +18,7 @@ export function validateField( fieldEl, options, validationRules, validationErro
         return new Promise(resolve => {
             if( obj.fieldEl ){
 
-                dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, obj );
+                dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, obj, { bubbles: false } );
                 dispatchCustomEvent( formEl, customEvents.field.validation, obj );
 
                 if( options.fieldOptions.onValidationCheckAll && obj.result ){

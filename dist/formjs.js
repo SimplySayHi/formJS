@@ -467,9 +467,11 @@
                 }
             }, dispatchCustomEvent = function dispatchCustomEvent(elem, eventName) {
                 var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-                var eventObj = new Event(eventName, {
+                var eventOptions = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+                eventOptions = mergeObjects({}, {
                     bubbles: true
-                });
+                }, eventOptions);
+                var eventObj = new Event(eventName, eventOptions);
                 eventObj.data = data;
                 elem.dispatchEvent(eventObj);
             }, excludeSelector = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])', fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', getFilledFields = function getFilledFields(formEl) {
@@ -1045,7 +1047,9 @@
                 })).then((function(obj) {
                     return new Promise((function(resolve) {
                         if (obj.fieldEl) {
-                            Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(obj.fieldEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validation, obj);
+                            Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(obj.fieldEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validation, obj, {
+                                bubbles: false
+                            });
                             Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validation, obj);
                             if (options.fieldOptions.onValidationCheckAll && obj.result) {
                                 options.fieldOptions.skipUIfeedback = true;
