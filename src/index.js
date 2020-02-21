@@ -1,5 +1,5 @@
 
-import { mergeObjects }         from './modules/helpers';
+import { excludeSelector, mergeObjects } from './modules/helpers';
 import { options }              from './modules/options';
 import { validationRules }      from './modules/validationRules';
 import { validationErrors }     from './modules/validationErrors';
@@ -7,7 +7,6 @@ import { validationErrors }     from './modules/validationErrors';
 // CONSTRUCTOR FUNCTION & PUBLIC METHODS
 import { constructorFn }        from './modules/constructor';
 import { destroy }              from './modules/destroy';
-import { getFormData }          from './modules/getFormData';
 import { init }                 from './modules/init';
 import { validateField }        from './modules/validateField';
 import { validateForm }         from './modules/validateForm';
@@ -17,15 +16,20 @@ const version = '4.0.0';
 class Form {
 
     constructor( formEl, optionsObj ){
-        constructorFn.call(this, formEl, optionsObj);
+        // REFACTORING OK
+        constructorFn(this, formEl, optionsObj);
     }
 
     destroy(){
-        destroy.call(this);
+        // REFACTORING OK
+        destroy(this.formEl, this.options, this.listenerCallbacks);
     }
     
     getFormData(){
-        return getFormData.call(this);
+        // REFACTORING OK
+        const formFieldsEl = this.formEl.querySelectorAll('input, select, textarea'),
+              filteredFields = Array.from( formFieldsEl ).filter( elem => elem.matches(excludeSelector) );
+        return this.options.formOptions.getFormData.call(this, filteredFields);
     }
 
     init(){

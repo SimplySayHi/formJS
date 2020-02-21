@@ -1,32 +1,28 @@
 
 import { customEvents } from './helpers';
 
-export function destroy(){
+export function destroy( formEl, options, listenerCallbacks ){
 
-    const self = this,
-          formEl = self.formEl,
-          validationListenerNames = self.options.fieldOptions.validateOnEvents;
-
-    if( self.options.fieldOptions.strictHtmlValidation ){
-        formEl.removeEventListener('keypress', self.listenerCallbacks.keypressMaxlength, false);
-        formEl.removeEventListener('input', self.listenerCallbacks.dataTypeNumber, false);
+    if( options.fieldOptions.strictHtmlValidation ){
+        formEl.removeEventListener('keypress', listenerCallbacks.keypressMaxlength, false);
+        formEl.removeEventListener('input', listenerCallbacks.dataTypeNumber, false);
     }
 
-    if( self.options.fieldOptions.preventPasteFields ){
-        formEl.removeEventListener('paste', self.listenerCallbacks.pastePrevent, false);
+    if( options.fieldOptions.preventPasteFields ){
+        formEl.removeEventListener('paste', listenerCallbacks.pastePrevent, false);
     }
 
-    if( self.options.formOptions.handleSubmit ){
-        formEl.removeEventListener('submit', self.listenerCallbacks.submit);
+    if( options.formOptions.handleSubmit ){
+        formEl.removeEventListener('submit', listenerCallbacks.submit);
     }
 
-    validationListenerNames.split(' ').forEach(function( eventName ){
+    options.fieldOptions.validateOnEvents.split(' ').forEach(function( eventName ){
         let useCapturing = (eventName === 'blur' ? true : false);
-        formEl.removeEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
+        formEl.removeEventListener(eventName, listenerCallbacks.validation, useCapturing);
     });
 
-    formEl.removeEventListener(customEvents.field.validation, self.listenerCallbacks.validationEnd, false);
+    formEl.removeEventListener(customEvents.field.validation, listenerCallbacks.validationEnd, false);
 
-    delete self.formEl.formjs;
+    delete formEl.formjs;
     
 }

@@ -3,10 +3,9 @@ import { checkFormEl, isNodeList, mergeObjects }   from './helpers';
 import { callbackFns }                             from './listenerCallbacks';
 import { formStartup }                             from './formStartup';
 
-export function constructorFn( formEl, optionsObj = {} ){
+export function constructorFn( self, formEl, optionsObj ){
 
-    let self = this,
-        argsL = arguments.length,
+    let argsL = arguments.length,
         checkFormElem = checkFormEl(formEl);
 
     if( argsL === 0 || (argsL > 0 && !formEl) ){
@@ -32,6 +31,6 @@ export function constructorFn( formEl, optionsObj = {} ){
     };
     Object.freeze(self.listenerCallbacks);
 
-    formStartup.call( self );
+    formStartup( self.formEl, self.options, self.listenerCallbacks );
     
 }

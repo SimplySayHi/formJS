@@ -76,10 +76,9 @@
             var _modules_validationErrors__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./src/modules/validationErrors.js");
             var _modules_constructor__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./src/modules/constructor.js");
             var _modules_destroy__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./src/modules/destroy.js");
-            var _modules_getFormData__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./src/modules/getFormData.js");
-            var _modules_init__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("./src/modules/init.js");
-            var _modules_validateField__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("./src/modules/validateField.js");
-            var _modules_validateForm__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("./src/modules/validateForm.js");
+            var _modules_init__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./src/modules/init.js");
+            var _modules_validateField__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("./src/modules/validateField.js");
+            var _modules_validateForm__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("./src/modules/validateForm.js");
             function _classCallCheck(instance, Constructor) {
                 if (!(instance instanceof Constructor)) {
                     throw new TypeError("Cannot call a class as a function");
@@ -103,32 +102,35 @@
             var Form = function() {
                 function Form(formEl, optionsObj) {
                     _classCallCheck(this, Form);
-                    _modules_constructor__WEBPACK_IMPORTED_MODULE_4__["constructorFn"].call(this, formEl, optionsObj);
+                    Object(_modules_constructor__WEBPACK_IMPORTED_MODULE_4__["constructorFn"])(this, formEl, optionsObj);
                 }
                 _createClass(Form, [ {
                     key: "destroy",
                     value: function destroy() {
-                        _modules_destroy__WEBPACK_IMPORTED_MODULE_5__["destroy"].call(this);
+                        Object(_modules_destroy__WEBPACK_IMPORTED_MODULE_5__["destroy"])(this.formEl, this.options, this.listenerCallbacks);
                     }
                 }, {
                     key: "getFormData",
                     value: function getFormData() {
-                        return _modules_getFormData__WEBPACK_IMPORTED_MODULE_6__["getFormData"].call(this);
+                        var formFieldsEl = this.formEl.querySelectorAll("input, select, textarea"), filteredFields = Array.from(formFieldsEl).filter((function(elem) {
+                            return elem.matches(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["excludeSelector"]);
+                        }));
+                        return this.options.formOptions.getFormData.call(this, filteredFields);
                     }
                 }, {
                     key: "init",
                     value: function init() {
-                        return _modules_init__WEBPACK_IMPORTED_MODULE_7__["init"].call(this);
+                        return _modules_init__WEBPACK_IMPORTED_MODULE_6__["init"].call(this);
                     }
                 }, {
                     key: "validateField",
                     value: function validateField(fieldEl, fieldOptions) {
-                        return _modules_validateField__WEBPACK_IMPORTED_MODULE_8__["validateField"].call(this, fieldEl, fieldOptions);
+                        return _modules_validateField__WEBPACK_IMPORTED_MODULE_7__["validateField"].call(this, fieldEl, fieldOptions);
                     }
                 }, {
                     key: "validateForm",
                     value: function validateForm(fieldOptions) {
-                        return _modules_validateForm__WEBPACK_IMPORTED_MODULE_9__["validateForm"].call(this, fieldOptions);
+                        return _modules_validateForm__WEBPACK_IMPORTED_MODULE_8__["validateForm"].call(this, fieldOptions);
                     }
                 } ], [ {
                     key: "addValidationErrors",
@@ -237,9 +239,8 @@
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/listenerCallbacks.js");
             var _formStartup__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/formStartup.js");
-            function constructorFn(formEl) {
-                var optionsObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-                var self = this, argsL = arguments.length, checkFormElem = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["checkFormEl"])(formEl);
+            function constructorFn(self, formEl, optionsObj) {
+                var argsL = arguments.length, checkFormElem = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["checkFormEl"])(formEl);
                 if (argsL === 0 || argsL > 0 && !formEl) {
                     throw new Error('First argument "formEl" is missing or falsy!');
                 }
@@ -261,7 +262,7 @@
                     validationEnd: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].validationEnd.bind(self)
                 };
                 Object.freeze(self.listenerCallbacks);
-                _formStartup__WEBPACK_IMPORTED_MODULE_2__["formStartup"].call(self);
+                Object(_formStartup__WEBPACK_IMPORTED_MODULE_2__["formStartup"])(self.formEl, self.options, self.listenerCallbacks);
             }
         },
         "./src/modules/destroy.js": function(module, __webpack_exports__, __webpack_require__) {
@@ -271,24 +272,23 @@
                 return destroy;
             }));
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
-            function destroy() {
-                var self = this, formEl = self.formEl, validationListenerNames = self.options.fieldOptions.validateOnEvents;
-                if (self.options.fieldOptions.strictHtmlValidation) {
-                    formEl.removeEventListener("keypress", self.listenerCallbacks.keypressMaxlength, false);
-                    formEl.removeEventListener("input", self.listenerCallbacks.dataTypeNumber, false);
+            function destroy(formEl, options, listenerCallbacks) {
+                if (options.fieldOptions.strictHtmlValidation) {
+                    formEl.removeEventListener("keypress", listenerCallbacks.keypressMaxlength, false);
+                    formEl.removeEventListener("input", listenerCallbacks.dataTypeNumber, false);
                 }
-                if (self.options.fieldOptions.preventPasteFields) {
-                    formEl.removeEventListener("paste", self.listenerCallbacks.pastePrevent, false);
+                if (options.fieldOptions.preventPasteFields) {
+                    formEl.removeEventListener("paste", listenerCallbacks.pastePrevent, false);
                 }
-                if (self.options.formOptions.handleSubmit) {
-                    formEl.removeEventListener("submit", self.listenerCallbacks.submit);
+                if (options.formOptions.handleSubmit) {
+                    formEl.removeEventListener("submit", listenerCallbacks.submit);
                 }
-                validationListenerNames.split(" ").forEach((function(eventName) {
+                options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                     var useCapturing = eventName === "blur" ? true : false;
-                    formEl.removeEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
+                    formEl.removeEventListener(eventName, listenerCallbacks.validation, useCapturing);
                 }));
-                formEl.removeEventListener(_helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validation, self.listenerCallbacks.validationEnd, false);
-                delete self.formEl.formjs;
+                formEl.removeEventListener(_helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validation, listenerCallbacks.validationEnd, false);
+                delete formEl.formjs;
             }
         },
         "./src/modules/formStartup.js": function(module, __webpack_exports__, __webpack_require__) {
@@ -298,26 +298,25 @@
                 return formStartup;
             }));
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
-            function formStartup() {
-                var self = this, formEl = self.formEl;
+            function formStartup(formEl, options, listenerCallbacks) {
                 formEl.noValidate = true;
-                var fieldOptions = self.options.fieldOptions, formOptions = self.options.formOptions;
+                var fieldOptions = options.fieldOptions, formOptions = options.formOptions;
                 if (fieldOptions.handleValidation) {
                     if (fieldOptions.strictHtmlValidation) {
-                        formEl.addEventListener("keypress", self.listenerCallbacks.keypressMaxlength, false);
-                        formEl.addEventListener("input", self.listenerCallbacks.dataTypeNumber, false);
+                        formEl.addEventListener("keypress", listenerCallbacks.keypressMaxlength, false);
+                        formEl.addEventListener("input", listenerCallbacks.dataTypeNumber, false);
                     }
                     if (fieldOptions.preventPasteFields && formEl.querySelectorAll(fieldOptions.preventPasteFields).length) {
-                        formEl.addEventListener("paste", self.listenerCallbacks.pastePrevent, false);
+                        formEl.addEventListener("paste", listenerCallbacks.pastePrevent, false);
                     }
                     fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                         var useCapturing = eventName === "blur" ? true : false;
-                        formEl.addEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
+                        formEl.addEventListener(eventName, listenerCallbacks.validation, useCapturing);
                     }));
-                    formEl.addEventListener(_helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validation, self.listenerCallbacks.validationEnd, false);
+                    formEl.addEventListener(_helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validation, listenerCallbacks.validationEnd, false);
                 }
                 if (formOptions.handleSubmit) {
-                    formEl.addEventListener("submit", self.listenerCallbacks.submit);
+                    formEl.addEventListener("submit", listenerCallbacks.submit);
                     if (formOptions.ajaxSubmit) {
                         if (formEl.getAttribute("enctype")) {
                             formOptions.ajaxOptions.contentType = formEl.getAttribute("enctype");
@@ -333,25 +332,9 @@
                 }
             }
         },
-        "./src/modules/getFormData.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "getFormData", (function() {
-                return getFormData;
-            }));
-            function getFormData() {
-                var self = this, formEl = self.formEl, formFieldsEl = formEl.querySelectorAll("input, select, textarea"), excludeSelectors = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])', filteredFields = Array.from(formFieldsEl).filter((function(elem) {
-                    return elem.matches(excludeSelectors);
-                }));
-                return self.options.formOptions.getFormData.call(self, filteredFields);
-            }
-        },
         "./src/modules/helpers.js": function(module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "fieldsStringSelector", (function() {
-                return fieldsStringSelector;
-            }));
             __webpack_require__.d(__webpack_exports__, "addClass", (function() {
                 return addClass;
             }));
@@ -366,6 +349,12 @@
             }));
             __webpack_require__.d(__webpack_exports__, "dispatchCustomEvent", (function() {
                 return dispatchCustomEvent;
+            }));
+            __webpack_require__.d(__webpack_exports__, "excludeSelector", (function() {
+                return excludeSelector;
+            }));
+            __webpack_require__.d(__webpack_exports__, "fieldsStringSelector", (function() {
+                return fieldsStringSelector;
             }));
             __webpack_require__.d(__webpack_exports__, "getFilledFields", (function() {
                 return getFilledFields;
@@ -421,12 +410,11 @@
                 }
                 return _typeof(obj);
             }
-            var fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', addClass = function addClass(element, cssClasses) {
+            var addClass = function addClass(element, cssClasses) {
                 cssClasses.split(" ").forEach((function(className) {
                     element.classList.add(className);
                 }));
-            }, checkDirtyField = function checkDirtyField(fields) {
-                var cssClasses = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.options.fieldOptions.cssClasses.dirty;
+            }, checkDirtyField = function checkDirtyField(fields, cssClasses) {
                 var fields = isNodeList(fields) ? Array.from(fields) : [ fields ];
                 fields.forEach((function(fieldEl) {
                     if (fieldEl.type !== "checkbox" && fieldEl.type !== "radio") {
@@ -459,7 +447,7 @@
                 });
                 eventObj.data = data;
                 elem.dispatchEvent(eventObj);
-            }, getFilledFields = function getFilledFields(formEl) {
+            }, excludeSelector = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])', fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', getFilledFields = function getFilledFields(formEl) {
                 return getUniqueFields(formEl.querySelectorAll(fieldsStringSelector)).map((function(fieldEl) {
                     var name = fieldEl.name, type = fieldEl.type, isCheckboxOrRadio = type === "checkbox" || type === "radio", fieldChecked = formEl.querySelector('[name="' + name + '"]:checked'), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isReqFrom ? formEl.querySelector(fieldEl.getAttribute("data-required-from")) : null;
                     return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && reqMoreEl.checked || !isReqFrom && fieldEl.value ? fieldEl : null;
@@ -906,17 +894,19 @@
             var defaultCallbacksInOptions = {
                 fieldOptions: {
                     beforeValidation: function beforeValidationDefault(fieldObj) {
-                        _helpers__WEBPACK_IMPORTED_MODULE_0__["checkDirtyField"].call(this, fieldObj.fieldEl);
-                        if (!this.options.fieldOptions.skipUIfeedback) {
-                            Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(fieldObj.fieldEl.closest("[data-formjs-question]"), this.options.fieldOptions.cssClasses.pending);
+                        var fieldOptions = this.options.fieldOptions;
+                        Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["checkDirtyField"])(fieldObj.fieldEl, fieldOptions.cssClasses.dirty);
+                        if (!fieldOptions.skipUIfeedback) {
+                            Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(fieldObj.fieldEl.closest("[data-formjs-question]"), fieldOptions.cssClasses.pending);
                         }
                     }
                 },
                 formOptions: {
                     getFormData: function getFormDataDefault(filteredFields) {
-                        var formData = {}, self = this, formEl = self.formEl;
+                        var formData = {}, formEl = this.formEl;
                         filteredFields.forEach((function(fieldEl) {
-                            var isCheckbox = fieldEl.type === "checkbox", isRadio = fieldEl.type === "radio", isSelect = fieldEl.matches("select"), name = fieldEl.name, value = fieldEl.value;
+                            var isCheckbox = fieldEl.type === "checkbox", isRadio = fieldEl.type === "radio", isSelect = fieldEl.matches("select"), name = fieldEl.name;
+                            var value = fieldEl.value;
                             if (isCheckbox) {
                                 value = fieldEl.checked;
                                 var checkboxes = Array.from(formEl.querySelectorAll('[name="' + name + '"]'));

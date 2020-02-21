@@ -1,19 +1,17 @@
 
 export const
 
-fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea',
-
 addClass = ( element, cssClasses ) => {
-    cssClasses.split(' ').forEach(function(className){
+    cssClasses.split(' ').forEach(className => {
         element.classList.add( className );
     });
 },
 
-checkDirtyField = function( fields, cssClasses = this.options.fieldOptions.cssClasses.dirty ){
+checkDirtyField = ( fields, cssClasses ) => {
 
     var fields = (isNodeList(fields) ? Array.from( fields ) : [fields]);
     
-    fields.forEach(function(fieldEl){
+    fields.forEach(fieldEl => {
         if( fieldEl.type !== 'checkbox' && fieldEl.type !== 'radio' ){
             let containerEl = fieldEl.closest('[data-formjs-question]') || fieldEl;
 
@@ -58,6 +56,10 @@ dispatchCustomEvent = ( elem, eventName, data = {} ) => {
     eventObj.data = data;
     elem.dispatchEvent( eventObj );
 },
+
+excludeSelector = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])',
+
+fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea',
 
 getFilledFields = formEl => {
     return getUniqueFields( formEl.querySelectorAll(fieldsStringSelector) )
@@ -175,7 +177,7 @@ mergeObjects = function( out = {} ){
 },
 
 removeClass = ( element, cssClasses ) => {
-    cssClasses.split(' ').forEach(function(className){
+    cssClasses.split(' ').forEach(className => {
         element.classList.remove( className );
     });
 },
@@ -183,13 +185,13 @@ removeClass = ( element, cssClasses ) => {
 runFunctionsSequence = function( { functionsList = [], data = {}, stopConditionFn = function(){return false} } = {} ){
     const self = this;
 
-    return functionsList.reduce(function(acc, promiseFn){
-        return acc.then(function (res) {
+    return functionsList.reduce((acc, promiseFn) => {
+        return acc.then(res => {
             let dataNew = mergeObjects({}, res[res.length - 1]);
             if( stopConditionFn(dataNew) ){
                 return Promise.resolve(res);
             }
-            return new Promise(resolve => { resolve(promiseFn.call(self, dataNew)) }).then(function (result = dataNew) {
+            return new Promise(resolve => { resolve(promiseFn.call(self, dataNew)) }).then((result = dataNew) => {
                 res.push(result);
                 return res;
             });
@@ -204,7 +206,7 @@ serializeObject = obj => {
     var objToString = (
             (obj && typeof obj === 'object' && obj.constructor === Object) ? 
             Object.keys(obj)
-                .reduce(function(a,k){
+                .reduce((a,k) => {
                     a.push(k+'='+encodeURIComponent(obj[k]));
                     return a
                 },[]).join('&') : 
@@ -214,7 +216,7 @@ serializeObject = obj => {
 },
 
 toCamelCase = string => {
-    return string.replace(/-([a-z])/ig, function(all, letter){ return letter.toUpperCase(); });
+    return string.replace(/-([a-z])/ig, (all, letter) => { return letter.toUpperCase(); });
 },
 
 validateFieldObjDefault = { result: false, fieldEl: null },

@@ -6,9 +6,11 @@ export const defaultCallbacksInOptions = {
 
         beforeValidation: function beforeValidationDefault ( fieldObj ) {
 
-            checkDirtyField.call( this, fieldObj.fieldEl );
-            if( !this.options.fieldOptions.skipUIfeedback ){
-                addClass( fieldObj.fieldEl.closest('[data-formjs-question]'), this.options.fieldOptions.cssClasses.pending );
+            const fieldOptions = this.options.fieldOptions;
+
+            checkDirtyField( fieldObj.fieldEl, fieldOptions.cssClasses.dirty );
+            if( !fieldOptions.skipUIfeedback ){
+                addClass( fieldObj.fieldEl.closest('[data-formjs-question]'), fieldOptions.cssClasses.pending );
             }
 
         }
@@ -18,16 +20,15 @@ export const defaultCallbacksInOptions = {
 
         getFormData: function getFormDataDefault ( filteredFields ) {
 
-            let formData = {},
-                self = this,
-                formEl = self.formEl;
+            const formData = {},
+                  formEl = this.formEl;
 
             filteredFields.forEach(function( fieldEl ){
-                let isCheckbox = fieldEl.type === 'checkbox',
-                    isRadio = fieldEl.type === 'radio',
-                    isSelect = fieldEl.matches('select'),
-                    name = fieldEl.name,
-                    value = fieldEl.value;
+                const isCheckbox = fieldEl.type === 'checkbox',
+                      isRadio = fieldEl.type === 'radio',
+                      isSelect = fieldEl.matches('select'),
+                      name = fieldEl.name;
+                let value = fieldEl.value;
                                 
                 if( isCheckbox ) {
                     
