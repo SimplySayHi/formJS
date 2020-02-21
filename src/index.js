@@ -44,8 +44,11 @@ class Form {
         return validateField( fieldEl, options, this.validationRules, this.validationErrors );
     }
 
-    validateForm( fieldOptions ){
-        return validateForm.call(this, fieldOptions);
+    validateForm( fieldOptions = {} ){
+        // REFACTORING OK
+        const options = mergeObjects({}, this.options, {fieldOptions});
+        options.fieldOptions.beforeValidation = options.fieldOptions.beforeValidation.map( func => func.bind( this ) );
+        return validateForm( this.formEl, options, this.listenerCallbacks, this.validationRules, this.validationErrors );
     }
     
     static addValidationErrors( errorsObj ){

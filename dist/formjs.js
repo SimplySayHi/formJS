@@ -134,8 +134,16 @@
                     }
                 }, {
                     key: "validateForm",
-                    value: function validateForm(fieldOptions) {
-                        return _modules_validateForm__WEBPACK_IMPORTED_MODULE_8__["validateForm"].call(this, fieldOptions);
+                    value: function validateForm() {
+                        var _this = this;
+                        var fieldOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+                        var options = Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, this.options, {
+                            fieldOptions: fieldOptions
+                        });
+                        options.fieldOptions.beforeValidation = options.fieldOptions.beforeValidation.map((function(func) {
+                            return func.bind(_this);
+                        }));
+                        return Object(_modules_validateForm__WEBPACK_IMPORTED_MODULE_8__["validateForm"])(this.formEl, options, this.listenerCallbacks, this.validationRules, this.validationErrors);
                     }
                 } ], [ {
                     key: "addValidationErrors",
@@ -1062,19 +1070,17 @@
             }));
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _isValidForm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/isValidForm.js");
-            function validateForm() {
-                var fieldOptionsObj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-                var self = this, fieldOptions = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options.fieldOptions, fieldOptionsObj);
+            function validateForm(formEl, options, listenerCallbacks, validationRules, validationErrors) {
                 return new Promise((function(resolve) {
-                    var prom = _isValidForm__WEBPACK_IMPORTED_MODULE_1__["isValidForm"].call(self, fieldOptions);
+                    var prom = Object(_isValidForm__WEBPACK_IMPORTED_MODULE_1__["isValidForm"])(formEl, options.fieldOptions, validationRules, validationErrors);
                     resolve(prom);
                 })).then((function(data) {
                     var clMethodName = data.result ? "add" : "remove";
-                    self.formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid);
-                    self.listenerCallbacks.validationEnd.call(self, {
+                    formEl.classList[clMethodName](options.formOptions.cssClasses.valid);
+                    listenerCallbacks.validationEnd.call(formEl.formjs, {
                         data: data
                     });
-                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(self.formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.validation, data);
+                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.validation, data);
                     return data;
                 }));
             }
