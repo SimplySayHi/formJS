@@ -2,17 +2,16 @@
 import { fieldsStringSelector, getUniqueFields, mergeObjects, validateFormObjDefault } from './helpers';
 import { isValidField } from './isValidField';
 
-export function isValidForm( fieldOptionsObj = {} ){
+export function isValidForm( formEl, fieldOptions, validationRules, validationErrors ){
 
-    const self = this,
-          formEl = self.formEl,
-          obj = mergeObjects({}, validateFormObjDefault),
-          fieldOptions = mergeObjects( {}, fieldOptionsObj, {focusOnRelated: false} ),
+    fieldOptions = mergeObjects( {}, fieldOptions, {focusOnRelated: false} );
+
+    const obj = mergeObjects({}, validateFormObjDefault),
           fieldsList = getUniqueFields( formEl.querySelectorAll(fieldsStringSelector) );
 
-    return Promise.all( fieldsList.map(function( fieldEl ){
+    return Promise.all( fieldsList.map(fieldEl => {
         
-        return isValidField.call( self, fieldEl, fieldOptions );
+        return isValidField( fieldEl, fieldOptions, validationRules, validationErrors );
 
     }) ).then(list => {
 

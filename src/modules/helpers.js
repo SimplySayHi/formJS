@@ -182,24 +182,25 @@ removeClass = ( element, cssClasses ) => {
     });
 },
 
-runFunctionsSequence = function( { functionsList = [], data = {}, stopConditionFn = function(){return false} } = {} ){
-    const self = this;
-
+runFunctionsSequence = ( { functionsList = [], data = {}, stopConditionFn = function(){return false} } = {} ) => {
     return functionsList.reduce((acc, promiseFn) => {
         return acc.then(res => {
             let dataNew = mergeObjects({}, res[res.length - 1]);
             if( stopConditionFn(dataNew) ){
                 return Promise.resolve(res);
             }
-            return new Promise(resolve => { resolve(promiseFn.call(self, dataNew)) }).then((result = dataNew) => {
-                res.push(result);
-                return res;
-            });
+            return new Promise(resolve => { resolve(promiseFn(dataNew)) })
+                .then((result = dataNew) => {
+                    res.push(result);
+                    return res;
+                });
         });
-    }, Promise.resolve([data])).then(dataList => {
-        if( dataList.length > 1 ){ dataList.shift(); }
-        return dataList;
-    });
+    }, Promise.resolve([data]))
+        .then(dataList => dataList.length > 1 ? dataList.slice(1) : []);
+        /* .then(dataList => {
+            if( dataList.length > 1 ){ dataList.shift(); }
+            return dataList;
+        }); */
 },
 
 serializeObject = obj => {

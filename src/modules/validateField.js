@@ -1,18 +1,16 @@
 
-import { customEvents, dispatchCustomEvent, mergeObjects, removeClass } from './helpers';
+import { customEvents, dispatchCustomEvent, removeClass } from './helpers';
 import { isValidField } from './isValidField';
 import { isValidForm } from './isValidForm';
 
-export function validateField( fieldElem, fieldOptionsObj ){
+export function validateField( fieldEl, options, validationRules, validationErrors ){
 
-    const self = this,
-          fieldEl = (typeof fieldElem === 'string' ? self.formEl.querySelector(fieldElem) : fieldElem),
-          skipUIfeedback = self.options.fieldOptions.skipUIfeedback,
-          fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptionsObj);
+    const formEl = fieldEl.closest('form');
+    const skipUIfeedback = options.fieldOptions.skipUIfeedback;
     
     return new Promise(function(resolve){
 
-        const prom = isValidField.call( self, fieldEl, fieldOptions );
+        const prom = isValidField( fieldEl, options.fieldOptions, validationRules, validationErrors );
         resolve( prom );
 
     }).then(obj => {
@@ -21,25 +19,26 @@ export function validateField( fieldElem, fieldOptionsObj ){
             if( obj.fieldEl ){
 
                 dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, obj );
-                dispatchCustomEvent( self.formEl, customEvents.field.validation, obj );
+                dispatchCustomEvent( formEl, customEvents.field.validation, obj );
 
-                if( fieldOptions.onValidationCheckAll && obj.result ){
+                if( options.fieldOptions.onValidationCheckAll && obj.result ){
                     // FORCE skipUIfeedback TO true
-                    self.options.fieldOptions.skipUIfeedback = true;
+                    options.fieldOptions.skipUIfeedback = true;
                     resolve(
-                        isValidForm.call( self ).then(dataForm => {
-                            const clMethodName = dataForm.result ? 'add' : 'remove';
+                        isValidForm( formEl, options.fieldOptions, validationRules, validationErrors )
+                            .then(dataForm => {
+                                const clMethodName = dataForm.result ? 'add' : 'remove';
 
-                            self.formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
-                            dispatchCustomEvent( self.formEl, customEvents.form.validation, dataForm );
-                            // RESTORE skipUIfeedback TO THE ORIGINAL VALUE
-                            self.options.fieldOptions.skipUIfeedback = skipUIfeedback;
+                                formEl.classList[clMethodName]( options.formOptions.cssClasses.valid );
+                                dispatchCustomEvent( formEl, customEvents.form.validation, dataForm );
+                                // RESTORE skipUIfeedback TO THE ORIGINAL VALUE
+                                options.fieldOptions.skipUIfeedback = skipUIfeedback;
 
-                            return obj;
-                        })
+                                return obj;
+                            })
                     );
                 } else if( !obj.result ){
-                    removeClass( self.formEl, self.options.formOptions.cssClasses.valid );
+                    removeClass( formEl, options.formOptions.cssClasses.valid );
                 }
             }
             resolve( obj );

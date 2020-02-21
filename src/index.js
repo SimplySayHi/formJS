@@ -37,7 +37,10 @@ class Form {
     }
 
     validateField( fieldEl, fieldOptions ){
-        return validateField.call(this, fieldEl, fieldOptions);
+        // REFACTORING OK
+        fieldEl = (typeof fieldEl === 'string' ? this.formEl.querySelector(fieldEl) : fieldEl);
+        const options = mergeObjects({}, this.options, {fieldOptions});
+        return validateField( fieldEl, options, this.validationRules, this.validationErrors );
     }
 
     validateForm( fieldOptions ){
