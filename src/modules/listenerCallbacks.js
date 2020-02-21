@@ -50,7 +50,7 @@ export const callbackFns = {
     },
 
     submit: function( event ){
-        submit.call( this, event );
+        submit(event);
     },
 
     validation: function( event ){

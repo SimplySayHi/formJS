@@ -177,10 +177,22 @@
                 return ajaxCall;
             }));
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
-            function ajaxCall(formDataObj) {
-                var self = this, formEl = self.formEl, fieldOptions = self.options.fieldOptions, formOptions = self.options.formOptions, btnEl = formEl.querySelector('[type="submit"]'), timeoutTimer, ajaxOptions = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, formOptions.ajaxOptions), isMultipart = ajaxOptions.headers["Content-Type"] === "multipart/form-data";
+            var getFetchMethod = function getFetchMethod(response, options) {
+                var accept = options.headers.get("Accept");
+                var contentType = response.headers.get("Content-Type");
+                var headerOpt = accept || contentType || "";
+                if (headerOpt.indexOf("application/json") > -1 || headerOpt === "") {
+                    return "json";
+                } else if (headerOpt.indexOf("text/") > -1) {
+                    return "text";
+                } else {
+                    return "blob";
+                }
+            };
+            function ajaxCall(formEl, formDataObj, options) {
+                var btnEl = formEl.querySelector('[type="submit"]'), timeoutTimer, ajaxOptions = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, options.formOptions.ajaxOptions), isMultipart = ajaxOptions.headers["Content-Type"] === "multipart/form-data";
                 ajaxOptions.body = formDataObj;
-                if (isMultipart && fieldOptions.handleFileUpload) {
+                if (isMultipart && options.fieldOptions.handleFileUpload) {
                     var formDataMultipart = new FormData;
                     for (var key in ajaxOptions.body) {
                         formDataMultipart.append(key, ajaxOptions.body[key]);
@@ -216,29 +228,20 @@
                     if (!response.ok) {
                         return Promise.reject(response);
                     }
-                    var getFetchMethod = function getFetchMethod(response) {
-                        var contentType = response.headers.get("Content-Type"), methodName = "blob";
-                        if (contentType.indexOf("application/json") > -1) {
-                            methodName = "json";
-                        } else if (contentType.indexOf("text/") > -1) {
-                            methodName = "text";
-                        }
-                        return methodName;
-                    };
-                    var fetchMethod = getFetchMethod(response);
+                    var fetchMethod = getFetchMethod(response, ajaxOptions);
                     return response[fetchMethod]();
                 })).then((function(data) {
-                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formOptions.cssClasses.ajaxSuccess);
+                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, options.formOptions.cssClasses.ajaxSuccess);
                     return data;
                 }))["catch"]((function(error) {
-                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formOptions.cssClasses.ajaxError);
+                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, options.formOptions.cssClasses.ajaxError);
                     return Promise.reject(error);
                 }))["finally"]((function() {
                     if (timeoutTimer) {
                         window.clearTimeout(timeoutTimer);
                     }
-                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(formEl, formOptions.cssClasses.submit + " " + formOptions.cssClasses.ajaxPending);
-                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formOptions.cssClasses.ajaxComplete);
+                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(formEl, options.formOptions.cssClasses.submit + " " + options.formOptions.cssClasses.ajaxPending);
+                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, options.formOptions.cssClasses.ajaxComplete);
                     btnEl.disabled = false;
                 }));
             }
@@ -769,7 +772,7 @@
                     }
                 },
                 submit: function submit(event) {
-                    _submit__WEBPACK_IMPORTED_MODULE_1__["submit"].call(this, event);
+                    Object(_submit__WEBPACK_IMPORTED_MODULE_1__["submit"])(event);
                 },
                 validation: function validation(event) {
                     var self = this, eventName = event.type, fieldEl = event.target;
@@ -964,7 +967,7 @@
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _ajaxCall__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/ajaxCall.js");
             function submit(event) {
-                var self = this, options = self.options, formCssClasses = options.formOptions.cssClasses, isAjaxForm = options.formOptions.ajaxSubmit, formEl = self.formEl, btnEl = formEl.querySelector('[type="submit"]'), eventPreventDefault = function eventPreventDefault() {
+                var formEl = event.target, instance = formEl.formjs, options = instance.options, formCssClasses = options.formOptions.cssClasses, isAjaxForm = options.formOptions.ajaxSubmit, btnEl = formEl.querySelector('[type="submit"]'), eventPreventDefault = function eventPreventDefault() {
                     var enableBtn = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
                     if (btnEl && enableBtn) {
                         btnEl.disabled = false;
@@ -985,7 +988,7 @@
                 }
                 Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(formEl, formCssClasses.ajaxComplete + " " + formCssClasses.ajaxError + " " + formCssClasses.ajaxSuccess);
                 Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formCssClasses.submit);
-                var handleValidation = options.fieldOptions.handleValidation, formValidationPromise = handleValidation ? self.validateForm() : Promise.resolve(_helpers__WEBPACK_IMPORTED_MODULE_0__["validateFormObjDefault"]);
+                var handleValidation = options.fieldOptions.handleValidation, formValidationPromise = handleValidation ? instance.validateForm() : Promise.resolve(_helpers__WEBPACK_IMPORTED_MODULE_0__["validateFormObjDefault"]);
                 formValidationPromise.then((function(formValidation) {
                     var beforeSendData = {
                         stopExecution: false,
@@ -997,7 +1000,7 @@
                         beforeSendData.stopExecution = true;
                         return [ beforeSendData ];
                     }
-                    var formDataObj = isAjaxForm ? self.getFormData() : null, callbacksBeforeSend = options.formOptions.beforeSend;
+                    var formDataObj = isAjaxForm ? instance.getFormData() : null, callbacksBeforeSend = options.formOptions.beforeSend;
                     if (formDataObj) {
                         beforeSendData.formData = formDataObj;
                     }
@@ -1008,7 +1011,7 @@
                             return data.stopExecution;
                         }
                     };
-                    return _helpers__WEBPACK_IMPORTED_MODULE_0__["runFunctionsSequence"].call(self, rfsObject);
+                    return Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["runFunctionsSequence"])(rfsObject);
                 })).then((function(dataList) {
                     if (dataList.filter((function(data) {
                         return data.stopExecution;
@@ -1019,7 +1022,7 @@
                     if (isAjaxForm) {
                         var formData = dataList[dataList.length - 1].formData;
                         Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formCssClasses.ajaxPending);
-                        Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.submit, _ajaxCall__WEBPACK_IMPORTED_MODULE_1__["ajaxCall"].call(self, formData));
+                        Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.submit, Object(_ajaxCall__WEBPACK_IMPORTED_MODULE_1__["ajaxCall"])(formEl, formData, options));
                     }
                 }));
             }
