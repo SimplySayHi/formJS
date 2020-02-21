@@ -126,7 +126,7 @@
     </div>
 
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
-    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch"></script>
+    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
     <script src="js/include.js"></script>
     <script src="dist/formjs.min.js"></script>
     <script src="dist/additionals/validationRules.js"></script>
@@ -208,6 +208,13 @@
         var formJsInstance = new Form( formEl, options );
 
         formEl.addEventListener('fjs.field:validation', function(e){
+            console.log('--- GENERAL FIELD VALIDATION', this);
+            console.log(e.type, e.data);
+            console.log('--- FIELD IS ' + (e.data.result ? '' : 'NOT ') + 'VALID');
+        }, false);
+
+        formEl.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(e){
+            console.log('--- SPECIFIC FIELD VALIDATION ( EMAIL )', this);
             console.log(e.type, e.data);
             console.log('--- FIELD IS ' + (e.data.result ? '' : 'NOT ') + 'VALID');
         }, false);

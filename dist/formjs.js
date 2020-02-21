@@ -1050,6 +1050,7 @@
                 })).then((function(obj) {
                     return new Promise((function(resolve) {
                         if (obj.fieldEl) {
+                            Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(obj.fieldEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validation, obj);
                             Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(self.formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validation, obj);
                             if (fieldOptions.onValidationCheckAll && obj.result) {
                                 self.options.fieldOptions.skipUIfeedback = true;

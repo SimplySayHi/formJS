@@ -20,6 +20,7 @@ export function validateField( fieldElem, fieldOptionsObj ){
         return new Promise(resolve => {
             if( obj.fieldEl ){
 
+                dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, obj );
                 dispatchCustomEvent( self.formEl, customEvents.field.validation, obj );
 
                 if( fieldOptions.onValidationCheckAll && obj.result ){
