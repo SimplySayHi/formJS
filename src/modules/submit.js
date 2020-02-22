@@ -67,7 +67,7 @@ export function submit( event ){
         
         if( isAjaxForm ){
 
-            const formData = dataList[dataList.length - 1].formData;
+            const formData = dataList.pop().formData;
             addClass( formEl, formCssClasses.ajaxPending );
             dispatchCustomEvent( formEl, customEvents.form.submit, ajaxCall( formEl, formData, options ) );
             

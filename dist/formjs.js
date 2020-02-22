@@ -564,7 +564,7 @@
                         }));
                     }));
                 }), Promise.resolve([ data ])).then((function(dataList) {
-                    return dataList.length > 1 ? dataList.slice(1) : [];
+                    return dataList.length > 1 ? dataList.slice(1) : dataList;
                 }));
             }, serializeObject = function serializeObject(obj) {
                 var objToString = obj && _typeof(obj) === "object" && obj.constructor === Object ? Object.keys(obj).reduce((function(a, k) {
@@ -1022,7 +1022,7 @@
                         return false;
                     }
                     if (isAjaxForm) {
-                        var formData = dataList[dataList.length - 1].formData;
+                        var formData = dataList.pop().formData;
                         Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(formEl, formCssClasses.ajaxPending);
                         Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.submit, Object(_ajaxCall__WEBPACK_IMPORTED_MODULE_1__["ajaxCall"])(formEl, formData, options));
                     }

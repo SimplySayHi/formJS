@@ -146,24 +146,23 @@
         var options = {
             fieldOptions: {
                 beforeValidation: [
-                    /* function beforeValidation_testPage1( fieldObj ){
+                    function beforeValidation_testPage1( fieldObj ){
                         console.log('--- beforeValidation_testPage 1 fieldObj', fieldObj);
-                    }, */
-                    function beforeValidation_testPage( fieldObj ){
-                        console.log('--- beforeValidation_testPage fieldObj', fieldObj);
-                        /* return new Promise(function(resolve){
+                    },
+                    /* function beforeValidation_testPage2( fieldObj ){
+                        console.log('--- beforeValidation_testPage2 fieldObj', fieldObj);
+                        return new Promise(function(resolve){
                             setTimeout(function(){
                                 resolve( fieldObj );
                             }, 1000);
-                        }); */
-                    },
+                        });
+                    }, */
                     /* function beforeValidation_testPage3( fieldObj ){
                         console.log('--- beforeValidation_testPage 3 fieldObj', fieldObj);
                         fieldObj.aaa = 'ciao';
                         return fieldObj;
                     } */
-                ],
-                
+                ]
             },
             formOptions: {
                 beforeSend: [
