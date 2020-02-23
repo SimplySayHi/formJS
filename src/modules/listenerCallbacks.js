@@ -2,7 +2,7 @@
 import { addClass, fieldsStringSelector, isFieldForChangeEvent, removeClass } from './helpers';
 import { submit } from './submit';
 
-export const callbackFns = {
+export const listenerCallbacks = {
 
     dataTypeNumber: function( event ){
 
@@ -54,9 +54,9 @@ export const callbackFns = {
 
     validation: function( event ){
 
-        const self = this,
-              eventName = event.type,
-              fieldEl = event.target;
+        const eventName = event.type,
+              fieldEl = event.target,
+              self = fieldEl.closest('form').formjs;
 
         if( fieldEl.matches( fieldsStringSelector ) ){
             const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl),

@@ -107,7 +107,7 @@
                 _createClass(Form, [ {
                     key: "destroy",
                     value: function destroy() {
-                        Object(_modules_destroy__WEBPACK_IMPORTED_MODULE_5__["destroy"])(this.formEl, this.options, this.listenerCallbacks);
+                        Object(_modules_destroy__WEBPACK_IMPORTED_MODULE_5__["destroy"])(this.formEl, this.options);
                     }
                 }, {
                     key: "getFormData",
@@ -115,12 +115,12 @@
                         var formFieldsEl = this.formEl.querySelectorAll("input, select, textarea"), filteredFields = Array.from(formFieldsEl).filter((function(elem) {
                             return elem.matches(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["excludeSelector"]);
                         }));
-                        return this.options.formOptions.getFormData.call(this, filteredFields);
+                        return this.options.formOptions.getFormData(filteredFields);
                     }
                 }, {
                     key: "init",
                     value: function init() {
-                        return Object(_modules_init__WEBPACK_IMPORTED_MODULE_6__["init"])(this, this.formEl, this.listenerCallbacks);
+                        return Object(_modules_init__WEBPACK_IMPORTED_MODULE_6__["init"])(this.formEl);
                     }
                 }, {
                     key: "validateField",
@@ -135,15 +135,11 @@
                 }, {
                     key: "validateForm",
                     value: function validateForm() {
-                        var _this = this;
                         var fieldOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
                         var options = Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, this.options, {
                             fieldOptions: fieldOptions
                         });
-                        options.fieldOptions.beforeValidation = options.fieldOptions.beforeValidation.map((function(func) {
-                            return func.bind(_this);
-                        }));
-                        return Object(_modules_validateForm__WEBPACK_IMPORTED_MODULE_8__["validateForm"])(this.formEl, options, this.listenerCallbacks, this.validationRules, this.validationErrors);
+                        return Object(_modules_validateForm__WEBPACK_IMPORTED_MODULE_8__["validateForm"])(this.formEl, options, this.validationRules, this.validationErrors);
                     }
                 } ], [ {
                     key: "addValidationErrors",
@@ -253,8 +249,7 @@
                 return constructorFn;
             }));
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
-            var _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/listenerCallbacks.js");
-            var _formStartup__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/formStartup.js");
+            var _formStartup__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/formStartup.js");
             function constructorFn(self, formEl, optionsObj) {
                 var argsL = arguments.length, checkFormElem = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["checkFormEl"])(formEl);
                 if (argsL === 0 || argsL > 0 && !formEl) {
@@ -269,25 +264,16 @@
                 self.formEl = checkFormElem.element;
                 self.formEl.formjs = self;
                 self.options = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.constructor.prototype.options, optionsObj);
-                var cbList = [ "beforeValidation", "beforeSend" ];
+                var cbList = [ "beforeValidation", "beforeSend", "getFormData" ];
                 cbList.forEach((function(cbName) {
-                    var optionType = Array.isArray(self.options.formOptions[cbName]) ? "formOptions" : "fieldOptions", cbOpt = self.options[optionType][cbName];
-                    if (cbOpt && Array.isArray(cbOpt)) {
-                        self.options[optionType][cbName] = cbOpt.map((function(cbFn) {
+                    var optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions", cbOpt = self.options[optionType][cbName];
+                    if (cbOpt) {
+                        self.options[optionType][cbName] = Array.isArray(cbOpt) ? cbOpt.map((function(cbFn) {
                             return cbFn.bind(self);
-                        }));
+                        })) : cbOpt.bind(self);
                     }
                 }));
-                self.listenerCallbacks = {
-                    dataTypeNumber: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].dataTypeNumber,
-                    keypressMaxlength: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].keypressMaxlength,
-                    pastePrevent: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].pastePrevent,
-                    submit: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].submit,
-                    validation: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].validation.bind(self),
-                    validationEnd: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].validationEnd
-                };
-                Object.freeze(self.listenerCallbacks);
-                Object(_formStartup__WEBPACK_IMPORTED_MODULE_2__["formStartup"])(self.formEl, self.options, self.listenerCallbacks);
+                Object(_formStartup__WEBPACK_IMPORTED_MODULE_1__["formStartup"])(self.formEl, self.options);
             }
         },
         "./src/modules/destroy.js": function(module, __webpack_exports__, __webpack_require__) {
@@ -297,22 +283,23 @@
                 return destroy;
             }));
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
-            function destroy(formEl, options, listenerCallbacks) {
+            var _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/listenerCallbacks.js");
+            function destroy(formEl, options) {
                 if (options.fieldOptions.strictHtmlValidation) {
-                    formEl.removeEventListener("keypress", listenerCallbacks.keypressMaxlength, false);
-                    formEl.removeEventListener("input", listenerCallbacks.dataTypeNumber, false);
+                    formEl.removeEventListener("keypress", _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["listenerCallbacks"].keypressMaxlength, false);
+                    formEl.removeEventListener("input", _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["listenerCallbacks"].dataTypeNumber, false);
                 }
                 if (options.fieldOptions.preventPasteFields) {
-                    formEl.removeEventListener("paste", listenerCallbacks.pastePrevent, false);
+                    formEl.removeEventListener("paste", _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["listenerCallbacks"].pastePrevent, false);
                 }
                 if (options.formOptions.handleSubmit) {
-                    formEl.removeEventListener("submit", listenerCallbacks.submit);
+                    formEl.removeEventListener("submit", _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["listenerCallbacks"].submit);
                 }
                 options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                     var useCapturing = eventName === "blur" ? true : false;
-                    formEl.removeEventListener(eventName, listenerCallbacks.validation, useCapturing);
+                    formEl.removeEventListener(eventName, _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["listenerCallbacks"].validation, useCapturing);
                 }));
-                formEl.removeEventListener(_helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validation, listenerCallbacks.validationEnd, false);
+                formEl.removeEventListener(_helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validation, _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["listenerCallbacks"].validationEnd, false);
                 delete formEl.formjs;
             }
         },
@@ -323,28 +310,28 @@
                 return formStartup;
             }));
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
-            function formStartup(formEl, options, listenerCallbacks) {
+            var _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/listenerCallbacks.js");
+            function formStartup(formEl, options) {
                 formEl.noValidate = true;
                 var fieldOptions = options.fieldOptions, formOptions = options.formOptions;
                 if (fieldOptions.handleValidation) {
                     if (fieldOptions.strictHtmlValidation) {
-                        formEl.addEventListener("keypress", listenerCallbacks.keypressMaxlength, false);
-                        formEl.addEventListener("input", listenerCallbacks.dataTypeNumber, false);
+                        formEl.addEventListener("keypress", _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["listenerCallbacks"].keypressMaxlength, false);
+                        formEl.addEventListener("input", _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["listenerCallbacks"].dataTypeNumber, false);
                     }
                     if (fieldOptions.preventPasteFields && formEl.querySelectorAll(fieldOptions.preventPasteFields).length) {
-                        formEl.addEventListener("paste", listenerCallbacks.pastePrevent, false);
+                        formEl.addEventListener("paste", _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["listenerCallbacks"].pastePrevent, false);
                     }
                     fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                         var useCapturing = eventName === "blur" ? true : false;
-                        formEl.addEventListener(eventName, listenerCallbacks.validation, useCapturing);
+                        formEl.addEventListener(eventName, _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["listenerCallbacks"].validation, useCapturing);
                     }));
-                    formEl.addEventListener(_helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validation, listenerCallbacks.validationEnd, false);
+                    formEl.addEventListener(_helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].field.validation, _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["listenerCallbacks"].validationEnd, false);
                 }
                 if (formOptions.handleSubmit) {
-                    formEl.addEventListener("submit", listenerCallbacks.submit);
+                    formEl.addEventListener("submit", _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["listenerCallbacks"].submit);
                     if (formOptions.ajaxSubmit) {
                         if (formEl.getAttribute("enctype")) {
-                            formOptions.ajaxOptions.contentType = formEl.getAttribute("enctype");
                             formOptions.ajaxOptions.headers["Content-Type"] = formEl.getAttribute("enctype");
                         }
                         if (formEl.getAttribute("method")) {
@@ -591,7 +578,9 @@
                 return init;
             }));
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
-            var init = function init(instance, formEl, listenerCallbacks) {
+            var _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/listenerCallbacks.js");
+            var init = function init(formEl) {
+                var instance = formEl.formjs;
                 var formFields = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["getFilledFields"])(formEl);
                 return Promise.all(formFields.map((function(fieldEl) {
                     var isFieldForChangeEventBoolean = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isFieldForChangeEvent"])(fieldEl);
@@ -599,7 +588,7 @@
                         target: fieldEl,
                         type: isFieldForChangeEventBoolean ? "change" : ""
                     };
-                    return listenerCallbacks.validation.call(instance, fakeEventObj);
+                    return _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["listenerCallbacks"].validation(fakeEventObj);
                 }))).then((function(fields) {
                     instance.isInitialized = true;
                     return {
@@ -740,12 +729,12 @@
         "./src/modules/listenerCallbacks.js": function(module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "callbackFns", (function() {
-                return callbackFns;
+            __webpack_require__.d(__webpack_exports__, "listenerCallbacks", (function() {
+                return listenerCallbacks;
             }));
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _submit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/submit.js");
-            var callbackFns = {
+            var listenerCallbacks = {
                 dataTypeNumber: function dataTypeNumber(event) {
                     var fieldEl = event.target;
                     if (fieldEl.matches('[data-type="number"]')) {
@@ -777,7 +766,7 @@
                     Object(_submit__WEBPACK_IMPORTED_MODULE_1__["submit"])(event);
                 },
                 validation: function validation(event) {
-                    var self = this, eventName = event.type, fieldEl = event.target;
+                    var eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs;
                     if (fieldEl.matches(_helpers__WEBPACK_IMPORTED_MODULE_0__["fieldsStringSelector"])) {
                         var isFieldForChangeEventBoolean = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isFieldForChangeEvent"])(fieldEl), isRadio = fieldEl.type === "radio", isReqFrom = fieldEl.matches("[data-required-from]"), isReqMore = fieldEl.matches("[data-require-more]"), isValidValue = fieldEl.value.trim().length > 0;
                         if (isRadio && eventName === "change") {
@@ -1076,15 +1065,16 @@
                 return validateForm;
             }));
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
-            var _isValidForm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/isValidForm.js");
-            function validateForm(formEl, options, listenerCallbacks, validationRules, validationErrors) {
+            var _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/listenerCallbacks.js");
+            var _isValidForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/isValidForm.js");
+            function validateForm(formEl, options, validationRules, validationErrors) {
                 return new Promise((function(resolve) {
-                    var prom = Object(_isValidForm__WEBPACK_IMPORTED_MODULE_1__["isValidForm"])(formEl, options.fieldOptions, validationRules, validationErrors);
+                    var prom = Object(_isValidForm__WEBPACK_IMPORTED_MODULE_2__["isValidForm"])(formEl, options.fieldOptions, validationRules, validationErrors);
                     resolve(prom);
                 })).then((function(data) {
                     var clMethodName = data.result ? "add" : "remove";
                     formEl.classList[clMethodName](options.formOptions.cssClasses.valid);
-                    listenerCallbacks.validationEnd({
+                    _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["listenerCallbacks"].validationEnd({
                         data: data
                     });
                     Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["dispatchCustomEvent"])(formEl, _helpers__WEBPACK_IMPORTED_MODULE_0__["customEvents"].form.validation, data);

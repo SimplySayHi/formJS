@@ -20,29 +20,28 @@ class Form {
     }
 
     destroy(){
-        destroy(this.formEl, this.options, this.listenerCallbacks);
+        destroy(this.formEl, this.options);
     }
     
     getFormData(){
         const formFieldsEl = this.formEl.querySelectorAll('input, select, textarea'),
               filteredFields = Array.from( formFieldsEl ).filter( elem => elem.matches(excludeSelector) );
-        return this.options.formOptions.getFormData.call(this, filteredFields);
+        return this.options.formOptions.getFormData(filteredFields);
     }
 
     init(){
-        return init( this, this.formEl, this.listenerCallbacks );
+        return init(this.formEl);
     }
 
     validateField( fieldEl, fieldOptions = {} ){
         fieldEl = (typeof fieldEl === 'string' ? this.formEl.querySelector(fieldEl) : fieldEl);
         const options = mergeObjects({}, this.options, {fieldOptions});
-        return validateField( fieldEl, options, this.validationRules, this.validationErrors );
+        return validateField(fieldEl, options, this.validationRules, this.validationErrors);
     }
 
     validateForm( fieldOptions = {} ){
         const options = mergeObjects({}, this.options, {fieldOptions});
-        options.fieldOptions.beforeValidation = options.fieldOptions.beforeValidation.map( func => func.bind( this ) );
-        return validateForm( this.formEl, options, this.listenerCallbacks, this.validationRules, this.validationErrors );
+        return validateForm(this.formEl, options, this.validationRules, this.validationErrors);
     }
     
     static addValidationErrors( errorsObj ){

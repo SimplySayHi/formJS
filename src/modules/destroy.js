@@ -1,7 +1,9 @@
 
 import { customEvents } from './helpers';
+import { listenerCallbacks } from './listenerCallbacks';
 
-export function destroy( formEl, options, listenerCallbacks ){
+
+export function destroy( formEl, options ){
 
     if( options.fieldOptions.strictHtmlValidation ){
         formEl.removeEventListener('keypress', listenerCallbacks.keypressMaxlength, false);

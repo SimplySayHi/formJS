@@ -1,8 +1,9 @@
 
 import { customEvents, dispatchCustomEvent } from './helpers';
+import { listenerCallbacks } from './listenerCallbacks';
 import { isValidForm } from './isValidForm';
 
-export function validateForm( formEl, options, listenerCallbacks, validationRules, validationErrors ){
+export function validateForm( formEl, options, validationRules, validationErrors ){
 
     return new Promise(function(resolve){
 

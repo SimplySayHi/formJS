@@ -1,6 +1,5 @@
 
 import { checkFormEl, isNodeList, mergeObjects }   from './helpers';
-import { callbackFns }                             from './listenerCallbacks';
 import { formStartup }                             from './formStartup';
 
 export function constructorFn( self, formEl, optionsObj ){
@@ -27,27 +26,18 @@ export function constructorFn( self, formEl, optionsObj ){
         // IN fieldOptions
         'beforeValidation',
         // IN formOptions
-        'beforeSend'
+        'beforeSend',
+        'getFormData'
     ];
     cbList.forEach(cbName => {
-        let optionType = Array.isArray(self.options.formOptions[cbName]) ? 'formOptions' : 'fieldOptions',
+        let optionType = self.options.formOptions[cbName] ? 'formOptions' : 'fieldOptions',
             cbOpt = self.options[optionType][cbName];
 
-        if( cbOpt && Array.isArray(cbOpt) ){
-            self.options[optionType][cbName] = cbOpt.map(cbFn => cbFn.bind(self));
+        if( cbOpt ){
+            self.options[optionType][cbName] = ( Array.isArray(cbOpt) ? cbOpt.map(cbFn => cbFn.bind(self)) : cbOpt.bind(self) );
         }
     });
 
-    self.listenerCallbacks = {
-        dataTypeNumber:     callbackFns.dataTypeNumber,
-        keypressMaxlength:  callbackFns.keypressMaxlength,
-        pastePrevent:       callbackFns.pastePrevent,
-        submit:             callbackFns.submit,
-        validation:         callbackFns.validation.bind(self),
-        validationEnd:      callbackFns.validationEnd
-    };
-    Object.freeze(self.listenerCallbacks);
-
-    formStartup( self.formEl, self.options, self.listenerCallbacks );
+    formStartup( self.formEl, self.options );
     
 }
