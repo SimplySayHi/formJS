@@ -1,7 +1,7 @@
 {
     "name": "formjs-plugin",
     "title": "formJS",
-    "description": "Javascript Form Validation. Made Easy",
+    "description": "JavaScript Form Validation. Made Easy",
     "version": "4.0.0",
     "main": "dist/formjs.min.js",
     "module": "src/index.js",
