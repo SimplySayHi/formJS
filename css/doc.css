@@ -74,7 +74,7 @@ h3 .small { color: inherit; }
 .sticky-title {
     position: -webkit-sticky; position: sticky; margin-bottom: 0;
     top: 0; z-index: 10; background: #073B4C; border-bottom: 2px solid rgba(0,0,0,0.15);
-    padding: 0.45em 0.05em 0.33em 48px;
+    padding: 0.45em 0.05em 0.33em 52px;
     height: 60px;
 }
 .sticky-title + * { margin-top: 1rem !important; }
@@ -221,6 +221,11 @@ u { text-decoration: none; border-bottom: 1px solid #06d6a0; }
 .toggable-content-outer .fake-checkbox.btn-toggable-content:checked ~ .toggable-label span:last-child,
 .toggable-content-outer .fake-checkbox.btn-toggable-content:checked ~ .toggable-content {
     display: block;
+}
+
+.toggable-content-outer .fake-checkbox.btn-toggable-content:not(:checked) ~ .panel .validation-list .additional-validation,
+.toggable-content-outer .fake-checkbox.btn-toggable-content:not(:checked) ~ .panel .errors-list .additional-error {
+    display: none !important;
 }
 
 @media (max-width: 767px){

@@ -91,7 +91,9 @@ import Form from 'formjs-plugin';
                 <div class="row">
                     <div class="col-lg-6">
                         <p>
-                            This is the basic HTML structure to make the validation works. <span class="small">( Bootstrap CSS classes are optional )</span>
+                            This is the basic HTML structure to make the validation works <span class="small">( Bootstrap CSS classes are optional )</span>.
+                            <br /><br />
+                            formJS uses default HTML attributes to setup some instance options and also to enable JS standard and/or custom validation.
                         </p>
                         <pre>
 &lt;form action="/mypath/mypage.php" method="POST" novalidate name="my-form-example"&gt;
@@ -120,6 +122,20 @@ import Form from 'formjs-plugin';
                     </div>
                     <div class="col-lg-6">
                         <p>
+                            Some notes about form attributes <span class="small">( if set, they will replace options passed to the constructor function )</span>:
+                        </p>
+                        <ul>
+                            <li class="my-2">
+                                <code>action</code> will be set as <code>options.formOptions.ajaxOptions.url</code>
+                            </li>
+                            <li class="my-2">
+                                <code>enctype</code> will be set as <code>options.formOptions.ajaxOptions.headers['Content-Type']</code>
+                            </li>
+                            <li class="my-2">
+                                <code>method</code> will be set as <code>options.formOptions.ajaxOptions.method</code>
+                            </li>
+                        </ul>
+                        <p>
                             Some notes about field attributes:
                         </p>
                         <ul>
@@ -127,19 +143,19 @@ import Form from 'formjs-plugin';
                                 <code>data-formjs-question</code> ( optional | empty attribute ) used for visual feedback on valid / invalid / dirty fields ( to be used on a container element of a question )
                             </li>
                             <li class="my-2">
-                                <code>required</code> mandatory for fields that require an answer.
+                                <code>name</code> ( required ) used inside "getFormData" method to collect form data.
                             </li>
                             <li class="my-2">
-                                <code>name</code> ( required ) used inside "getFormData" method to collect form data.
+                                <code>required</code> mandatory for fields that require an answer.
                             </li>
                             <li class="my-2">
                                 <code>type</code> ( required ) used for field validation.
                             </li>
                             <li class="my-2">
-                                <code>data-type</code> ( optional ) by now only "number" is supported. See "strictHtmlValidation" option in <a href="#field-options">Field Options</a> section for details. 
+                                <code>data-type</code> ( optional ) by now only "number" is supported. See "strictHtmlValidation" option in <a href="api.html#field-options">Field Options</a> section for details. 
                             </li>
                             <li class="my-2">
-                                <code>data-subtype</code> ( optional ) for custom field types ( eg: VAT number, fiscal code, etc - see the <a href="#builtin-validations">full list</a> ).
+                                <code>data-subtype</code> ( optional ) for custom field types ( eg: VAT number, fiscal code, etc - see the <a href="api.html#builtin-validations">full list</a> ).
                             </li>
                             <li class="my-2">
                                 <code>data-exclude-data</code> ( optional | empty attribute ) used to avoid the plugin to take in consideration the field when collecting form data ( used inside "getFormData" method ).
@@ -169,7 +185,7 @@ formInstance.init().then(obj => {
                                 <code>formEl</code> ( required ) must be a <u>single form node</u> ( not a nodelist! ) or a <u>CSS string selector</u> <code>var formEl = '.my-container .my-form';</code>
                             </li>
                             <li>
-                                <code>options</code> ( optional ) a JS object with fieldOptions and formOptions ( see <a href="#options-list">Options section</a> )
+                                <code>options</code> ( optional ) a JS object with fieldOptions and formOptions ( see <a href="api.html#options-list">Options section</a> )
                             </li>
                         </ul>
                         <hr />

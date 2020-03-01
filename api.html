@@ -66,7 +66,7 @@
             <h3 class="sticky-title">Options<span class="small">:</span></h3>
             <div>
                 <p>
-                    formJS takes an object as second argument ( options ), as follow:
+                    formJS takes an object as second argument <code>options</code>, as follow:
                 </p>
                 <pre>
 {
@@ -1145,18 +1145,23 @@ formInstance.options.fieldOptions.maxFileSize = 50;
         </div>
 
         <!-- Built-in Validations -->
-        <div id="builtin-validations">
+        <div id="builtin-validations" class="toggable-content-outer">
             <h3 class="sticky-title">Built-in Validations</h3>
             <p>
                 Below the rules used to validate the fields depending on html basic/data-* attributes.<br />
                 You can add new validations or override existing ones - having "JS key" specified below - with <a href="#prototype-methods">addValidationRules</a> method.
                 <br />
-                Validations can also be async, see <a href="#validation-username">username validation</a> as example.
+                Validations can also be async, see <code>username</code> validation as example.
                 <br /><br />
                 After validation, in case of invalid field, the validation method will return the "errors" object ( see <a href="#builtin-errors">Built-in Errors Section</a> for details ).
                 <hr />
                 <span class="text-red">[ add. ]</span> : Additional validation that is not part of the core plugin. Can be found in file <code>dist/additionals/validationRules.js</code>.
             </p>
+            <input type="checkbox" class="fake-checkbox btn-toggable-content" id="validations-show-additional" />
+            <label class="toggable-label text-red mb-4" for="validations-show-additional">
+                <span>Show Additional Validations</span>
+                <span>Hide Additional Validations</span>
+            </label>
             <div class="panel panel-default panel-transparent no-bg">
                 <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
                     <div class="d-flex">
@@ -1172,8 +1177,8 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="">
-                        <div id="validation-alphabetic" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                    <div class="validation-list">
+                        <div id="validation-alphabetic" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Alphabetic
                                 <div>( alphabetic )</div>
@@ -1189,7 +1194,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div id="validation-alphabeticExtended" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div id="validation-alphabeticExtended" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Alphabetic Extended
                                 <div>( alphabeticExtended )</div>
@@ -1205,7 +1210,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div id="validation-alphanumeric" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div id="validation-alphanumeric" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Alphanumeric
                                 <div>( alphanumeric )</div>
@@ -1221,7 +1226,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div id="validation-cap" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div id="validation-cap" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 CAP <span class="text-yellow">*</span>
                                 <div>( cap )</div>
@@ -1270,7 +1275,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div id="validation-color" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div id="validation-color" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Color
                                 <div>( color )</div>
@@ -1352,7 +1357,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div id="validation-date-ddmmyyyy" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div id="validation-date-ddmmyyyy" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Date in format DDMMYYYY
                                 <div>( dateDDMMYYYY )</div>
@@ -1455,7 +1460,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div id="validation-fiscal-code" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div id="validation-fiscal-code" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Fiscal Code
                                 <div>( fiscalCode )</div>
@@ -1475,7 +1480,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div id="validation-landline-number" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div id="validation-landline-number" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Landline Number
                                 <div>( landlineNumber )</div>
@@ -1579,7 +1584,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div id="validation-mobile-number" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div id="validation-mobile-number" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Mobile Number
                                 <div>( mobileNumber )</div>
@@ -1624,7 +1629,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div id="validation-number-float" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div id="validation-number-float" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Number Float <span class="text-yellow">*</span>
                                 <div>( numberFloat )</div>
@@ -1649,7 +1654,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div id="validation-number-integer" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div id="validation-number-integer" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Number Integer <span class="text-yellow">*</span>
                                 <div>( numberInteger )</div>
@@ -1673,7 +1678,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div id="validation-password" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div id="validation-password" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Password
                                 <div>( password )</div>
@@ -1743,7 +1748,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div id="validation-tel" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div id="validation-tel" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Tel
                                 <div>( tel )</div>
@@ -1770,7 +1775,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </ul>
                             </div>
                         </div>
-                        <div id="validation-url" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div id="validation-url" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Url
                                 <div>( url )</div>
@@ -1792,7 +1797,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div id="validation-username" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div id="validation-username" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Username
                                 <div>( username )</div>
@@ -1833,7 +1838,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                             </div>
                         </div>
-                        <div id="validation-vat-number" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div id="validation-vat-number" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 VAT Number
                                 <div>( vatNumber )</div>
@@ -1867,7 +1872,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
         </div>
 
         <!-- Built-in Errors -->
-        <div id="builtin-errors">
+        <div id="builtin-errors" class="toggable-content-outer">
             <h3 class="sticky-title">Built-in Errors</h3>
             <p>
                 After validation, in case of invalid field, the validation method will return the "errors" object.
@@ -1897,6 +1902,11 @@ formInstance.options.fieldOptions.maxFileSize = 50;
             <p>
                 <span class="text-red">[ add. ]</span> : Additional error that is not part of the core plugin. Can be found in file <code>dist/additionals/validationErrors.js</code>.
             </p>
+            <input type="checkbox" class="fake-checkbox btn-toggable-content" id="errors-show-additional" />
+            <label class="toggable-label text-red mb-4" for="errors-show-additional">
+                <span>Show Additional Errors</span>
+                <span>Hide Additional Errors</span>
+            </label>
             <div class="panel panel-default panel-transparent no-bg">
                 <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
                     <div class="d-flex">
@@ -1912,8 +1922,8 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                    <div class="errors-list">
+                        <div class="additional-error clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 CAP
                                 <div>( cap )</div>
@@ -2136,7 +2146,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
 }</pre>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div class="additional-error clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Password
                                 <div>( password )</div>
@@ -2200,7 +2210,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
 }</pre>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div class="additional-error clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Username
                                 <div>( username )</div>
@@ -2223,7 +2233,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
 }</pre>
                             </div>
                         </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div class="additional-error clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 VAT Number
                                 <div>( vatNumber )</div>
