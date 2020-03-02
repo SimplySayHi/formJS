@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Expletus+Sans:500|Raleway:200&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/doc.css">
+    <link rel="stylesheet" href="css/prism.css">
 </head>
 
 <body>
@@ -59,14 +60,14 @@
                 <div class="row justify-content-between">
                     <div class="col-lg-5">
                         <p>
-                            Include the plugin script in your page ( examples below from CDN ):
+                            Include the plugin script in your page:
                         </p>
                         <pre>
-&lt;script src="https://unpkg.com/formjs-plugin@4"&gt;&lt;/script&gt;
-</pre>
+<code class="language-html">&lt;script src="https://unpkg.com/formjs-plugin@4"&gt;&lt;/script&gt;
+</code></pre>
                         <pre>
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@4/dist/formjs.min.js"&gt;&lt;/script&gt;
-</pre>
+<code class="language-html">&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@4/dist/formjs.min.js"&gt;&lt;/script&gt;
+</code></pre>
                     </div>
                     <div class="col-lg-auto align-self-center d-none d-lg-block">
                         or
@@ -76,11 +77,11 @@
                             <span class="d-inline d-lg-none">or</span> Install via NPM and import as ES6 module:
                         </p>
                         <pre>
-npm install formjs-plugin
-</pre>
+<code class="language-js">npm install formjs-plugin
+</code></pre>
                         <pre>
-import Form from 'formjs-plugin';
-</pre>
+<code class="language-js">import Form from 'formjs-plugin';
+</code></pre>
                     </div>
                 </div>
             </div>
@@ -96,7 +97,7 @@ import Form from 'formjs-plugin';
                             formJS uses default HTML attributes to setup some instance options and also to enable JS standard and/or custom validation.
                         </p>
                         <pre>
-&lt;form action="/mypath/mypage.php" method="POST" novalidate name="my-form-example"&gt;
+<code class="language-html">&lt;form action="/mypath/mypage.php" method="POST" novalidate name="my-form-example"&gt;
 
     &lt;!-- BASIC REQUIRED TEXT INPUT --&gt;
     &lt;div data-formjs-question&gt;
@@ -118,7 +119,9 @@ import Form from 'formjs-plugin';
     
     &lt;button type="submit" class="btn btn-light"&gt;SEND&lt;/button&gt;
     
-&lt;/form&gt;</pre>
+&lt;/form&gt;
+
+</code></pre>
                     </div>
                     <div class="col-lg-6">
                         <p>
@@ -170,14 +173,15 @@ import Form from 'formjs-plugin';
                 <h3 class="sticky-title">Initialize</h3>
                 <div class="row">
                     <div class="col-lg-6">
-                    <pre>var formEl = document.querySelector('form');
+                    <pre>
+<code class="language-js">var formEl = document.querySelector('form');
 var options = {...};
 var formInstance = new Form( formEl, options );
 formInstance.init().then(obj => {
     console.log('instance', obj.instance);
     console.log('validated fields', obj.fields);
 });
-</pre>
+</code></pre>
                     </div>
                     <div class="col-lg-6">
                         <ul>
@@ -216,6 +220,7 @@ formInstance.init().then(obj => {
         
     </div>
     
+    <script src="js/prism.js"></script>
     <script src="js/include.js"></script>
     
 </body>

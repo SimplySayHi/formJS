@@ -62,6 +62,6 @@ var initMaxFileSizeFields = function ( formEl ) {
 
 var forms = document.querySelectorAll('form[novalidate]');
 Array.from( forms ).forEach(function( formEl ){
-    initCharLengthFields( formEl );
-    initMaxFileSizeFields( formEl );
+    //initCharLengthFields( formEl );
+    //initMaxFileSizeFields( formEl );
 });

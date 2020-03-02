@@ -68,3 +68,11 @@ document.addEventListener('DOMContentLoaded', function(){
         elem.innerHTML = version;
     });
 });
+
+if( document.querySelector('[data-panel="html"] .card-header') ){
+    document.querySelector('[data-panel="html"] .card-header').click();
+}
+
+if( document.querySelector('[data-panel="js"] .card-header') ){
+    document.querySelector('[data-panel="js"] .card-header').click();
+}
