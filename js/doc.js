@@ -48,6 +48,8 @@ formEl.addEventListener('fjs.form:submit', function(e){
 }, false);
 
 formInstance.init().then(function( obj ){
+    initCharLengthFields( formEl );
+    initMaxFileSizeFields( formEl );
     console.log('formJsInstance obj.instance', obj.instance);
     console.log('formJsInstance obj.fields', obj.fields);
 });

@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Expletus+Sans:500|Raleway:200&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/doc.css">
+    <link rel="stylesheet" href="css/prism.css">
 </head>
 
 <body>
@@ -69,10 +70,10 @@
                     formJS takes an object as second argument <code>options</code>, as follow:
                 </p>
                 <pre>
-{
+<code class="language-js">{
     fieldOptions:   {...},
     formOptions:    {...}
-}</pre>
+}</code></pre>
                 <br />
             </div>
             <!-- Field Options -->
@@ -119,10 +120,10 @@
                                         <li>
                                             fieldObj: ( Object )
 <pre>
-{
+<code class="language-js">{
     fieldEl: fieldEl
 }
-</pre>
+</code></pre>
                                             <ul>
                                                 <li>
                                                     fieldEl: JS node element ( the field that will be validated )
@@ -347,7 +348,7 @@
                             Default field options:
                         </p>
                         <pre>
-{
+<code class="language-js">{
     beforeValidation:       [beforeValidationDefault],
     cssClasses: {
         dirty:              'is-dirty',
@@ -366,7 +367,9 @@
     skipUIfeedback:         false,
     strictHtmlValidation:   true,
     validateOnEvents:       'input change'
-}</pre>
+}
+
+</code></pre>
                     </div>
                 </div>
             </div>
@@ -445,10 +448,10 @@
                                     <li>
                                         <span class="text-green">data</span>: ( Object )
                                         <pre>
-{
+<code class="language-js">{
     formData:       {},
     stopExecution:  false
-}</pre>
+}</code></pre>
                                         <ul>
                                             <li>
                                                 <span class="text-green">formData</span>: Object ( ONLY for AJAX forms ) with the form data
@@ -577,7 +580,7 @@
                                 Default form options:
                             </p>
                             <pre>
-{
+<code class="language-js">{
     ajaxOptions: {
         cache:          'no-store',
         credentials:    'same-origin',
@@ -603,7 +606,9 @@
     },
     getFormData:        getFormDataDefault,
     handleSubmit:       true
-}</pre>
+}
+
+</code></pre>
                             
                         </div>
                     </div>
@@ -695,11 +700,11 @@
                                     Object like:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     name:   'Valerio',
     city:   'Milan',
     website:'http://www.valeriodipunzio.com'
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -724,11 +729,11 @@
                                     A Promise to which will be passed an object like:
                                 </p>
 <pre>
-{
+<code class="language-js">{
     instance:   formInstance,
     fields:     [{...}]
 }
-</pre>
+</code></pre>
                                 <ul>
                                     <li>
                                         <span class="text-green">instance</span>: ( Form instance )
@@ -771,7 +776,7 @@
                                             Example:<br>
                                     </span>
                                 </p>
-                                <pre>formInstance.validateField('[name="myEmail"]');</pre>
+                                <pre><code class="language-js">formInstance.validateField('[name="myEmail"]');</code></pre>
                             </div>
                             <div class="col-lg-5 col-xl-3">
                                 <p class="d-lg-none m-0">
@@ -781,11 +786,11 @@
                                     A Promise to which will be passed an object like:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     fieldEl: element,
     result:  false,
     errors:  {...}
-}</pre>
+}</code></pre>
                                 <ul>
                                     <li>
                                         <span class="text-green">fieldEl</span>: JS node element
@@ -829,10 +834,10 @@
                                     A Promise to which will be passed an object like:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     fields: [{...}],
     result: false
-}</pre>
+}</code></pre>
                                 <ul>
                                     <li>
                                         <span class="text-green">fields</span>: ( Array of Objects ) a list of the form fields as returned by "validateField" method
@@ -945,9 +950,9 @@
                                         </ul>
                                         It must return a JS object ( at least ) like:
                                         <pre>
-{
+<code class="language-js">{
     result: true
-}</pre>
+}</code></pre>
                                         In case of invalid field you can add the "errors" key to return the specific errors.
                                     </li>
                                 </ul>
@@ -989,7 +994,7 @@
                             Examples of usage:
                         </p>
                         <pre>
-Form.addValidationErrors({
+<code class="language-js">Form.addValidationErrors({
     username: function ( string ) {
         var obj = {};
         var strLength = string.length;
@@ -1015,13 +1020,14 @@ Form.addValidationRules({
 });
 
 Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
-</pre>
+
+</code></pre>
                     <br />
                     <p>
                         Or directly put it in the prototype:
                     </p>
                     <pre>
-// ADD/OVERRIDE A VALIDATION ERROR METHOD
+<code class="language-js">// ADD/OVERRIDE A VALIDATION ERROR METHOD
 Form.prototype.validationErrors.email = function( string ){ ... }
 
 // ADD/OVERRIDE A VALIDATION METHOD
@@ -1029,15 +1035,15 @@ Form.prototype.validationRules.myPassword = function( string, fieldEl ){ ... }
 
 // OVERRIDE AN OPTION
 Form.prototype.options.fieldOptions.maxFileSize = 100;
-</pre>
+</code></pre>
                     <br />
                     <p>
                         Or directly put it in the specific Form instance ( for example to update an option ):
                     </p>
                     <pre>
-// OVERRIDE AN OPTION
+<code class="language-js">// OVERRIDE AN OPTION
 formInstance.options.fieldOptions.maxFileSize = 50;
-</pre>
+</code></pre>
                     <p class="small">
                         You can also add / override validation rules/errors from the Form instance but it doesn't have much sense.
                     </p>
@@ -1078,12 +1084,12 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 additional parameter data
                             </p>
 <pre>
-{
+<code class="language-js">{
     fieldEl: fieldEl,
     result: true,
     errors: {}
 }
-</pre>
+</code></pre>
                             <ul>
                                 <li>
                                     <span class="text-green">fieldEl</span>: JS node element
@@ -1125,11 +1131,11 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 additional parameter data
                             </p>
 <pre>
-{
+<code class="language-js">{
     fields: [{...}],
     result: true
 }
-</pre>
+</code></pre>
                             <ul>
                                 <li>
                                     <span class="text-green">fields</span>: Array of objects ( each object is like described in <code>fjs.field:validation</code> event )
@@ -1883,19 +1889,19 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                 In case of empty field value, "errors" object will return only the "empty" error like:
             </p>
             <pre>
-{
+<code class="language-js">{
     empty: true
-}</pre>
+}</code></pre>
                 </div>
                 <div class="col-12 col-sm-6">
                     <p>
                 In case of invalid field value ( not compliant with validation rule ), "errors" object will return "rule" error and more specific errors as described below:
             </p>
             <pre>
-{
+<code class="language-js">{
     rule: true,
     ...
-}</pre>
+}</code></pre>
                 </div>
             </div>
             <hr />
@@ -1938,11 +1944,11 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     "errors" object can contain these specific errors:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     maxlength: true,
     minlength: true,
     invalidChars: true
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -1958,11 +1964,11 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     "errors" object can contain these specific errors:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     checks: true,
     maxChecks: true,
     minChecks: true
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -1980,14 +1986,14 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     "errors" object can contain these specific errors:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     missingAtChar: true,
     missingUserName: true,
     missingDomain: true,
     missingExtensionDot: true,
     missingExtension: true,
     minlengthExtension: true
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -2003,9 +2009,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     "errors" object can contain these specific errors:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     equalTo: true
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -2021,11 +2027,11 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     "errors" object can contain these specific errors:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     exactLength: true,
     maxlength: true,
     minlength: true
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -2041,11 +2047,11 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     "errors" object can contain these specific errors:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     file: true,
     maxFileSize: true,
     acceptedFileType: true
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -2061,11 +2067,11 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     "errors" object can contain these specific errors:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     stringLength: true,
     maxlength: true,
     minlength: true
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -2084,9 +2090,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     "errors" object can contain these specific errors:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     max: true
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -2102,9 +2108,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     "errors" object can contain these specific errors:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     maxlength: true
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -2123,9 +2129,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     "errors" object can contain these specific errors:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     min: true
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -2141,9 +2147,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     "errors" object can contain these specific errors:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     minlength: true
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                         <div class="additional-error clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -2162,13 +2168,13 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     "errors" object can contain these specific errors:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     minlength: true,
     missingNumber: true,
     missingLowercase: true,
     missingUppercase: true,
     invalidChars: true
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -2184,9 +2190,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     "errors" object can contain these specific errors:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     pattern: true
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -2205,9 +2211,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     For Required From field, "errors" object can contain these specific errors:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     requiredFrom: true
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                         <div class="additional-error clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -2225,12 +2231,12 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     "errors" object can contain these specific errors:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     minlength: true,
     maxlength: true,
     invalidChars: true,
     invalidStartChar: true
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                         <div class="additional-error clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -2248,10 +2254,10 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                     "errors" object can return these specific errors:
                                 </p>
                                 <pre>
-{
+<code class="language-js">{
     minlength: true,
     maxlength: true
-}</pre>
+}</code></pre>
                             </div>
                         </div>
                     </div>
@@ -2277,6 +2283,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
         
     </div>
     
+    <script src="js/prism.js"></script>
     <script src="js/include.js"></script>
     
 </body>

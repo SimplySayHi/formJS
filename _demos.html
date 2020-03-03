@@ -1,0 +1,647 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Demos | formJS  - JavaScript Form Validation. Made Easy</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="Valerio Di Punzio">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Expletus+Sans:500|Raleway:200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/doc.css">
+    <link rel="stylesheet" href="css/demo.css">
+</head>
+
+<body>
+
+    <div id="top" class="container-fluid mb-5">
+
+        <div id="menu" class="position-sticky text-right d-flex">
+            <div class="position-raltive w-100">
+                <a href="index.html" class="logo">f</a>
+                <nav class="position-absolute nav-desktop d-none d-md-flex align-items-center">
+                    <a href="get-started.html" class="p-2 m-2">Get Started</a>
+                    <a href="api.html" class="p-2 m-2">API</a>
+                    <a href="Demos.html" class="p-2 m-2">Demos</a>
+                    <a href="https://github.com/SimplySayHi/formJS" target="_blank" class="github-logo ml-2">
+                        <svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+         width="28px" height="28px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+                            <path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M16,0.112c-8.836,0-16,7.294-16,16.291 C0,23.6,4.584,29.706,10.942,31.86c0.801,0.148 1.093-0.354,1.093-0.785c0-0.387-0.015-1.412-0.021-2.771 c-4.451,0.984-5.39-2.184-5.39-2.184c-0.729-1.881-1.777-2.383-1.777-2.383c-1.452-1.01,0.11-0.99,0.11-0.99 .605,0.115,2.45,1.68,2.45,1.68c1.428,2.488,3.745,1.77,4.657,1.354c0.145-1.053,0.559-1.771,1.016-2.178 c-3.553-0.412-7.288-1.809-7.288-8.051c0-1.778,0.623-3.232,1.646-4.371c-0.164-0.412-0.713-2.068,0.157-4.311 c0,0,1.344-0.438,4.399,1.67c1.276-0.361,2.646-0.543,4.006-0.549c1.359,0.006,2.728,0.188,4.006,0.549 c3.056-2.108,4.396-1.67,4.396-1.67c0.873,2.242,0.323,3.898,0.159,4.311c1.024,1.139,1.644,2.593,1.644,4.371 c0,6.258-3.74,7.635-7.305,8.038c0.574,0.504,1.086,1.498,1.086,3.018c0,2.178-0.02,3.934-0.02,4.469 c0,0.436,0.288,0.941,1.101,0.783C27.421,29.7,32,23.598,32,16.403C32,7.406,24.837,0.112,16,0.112z" />
+                        </svg>
+                    </a>
+                </nav>
+                <div class="position-absolute dropdown d-inline-block d-md-none">
+                    <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2" data-toggle="dropdown" type="button">
+                        menu
+                    </button>
+                    <span class="dropdown-menu">
+                        <a class="dropdown-item" href="get-started.html">Get Started</a>
+                        <a class="dropdown-item" href="api.html">API</a>
+                        <a class="dropdown-item" href="demos.html">Demos</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS" target="_blank">View on Github</a>
+                        <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS/issues" target="_blank">Report a Bug</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content mt-5 pt-5">
+            <h4 class="m-0 px-2">formJS</h4>
+            <h1 class="border-0 m-0">Demos</h1>
+
+            <!-- Demos -->
+            <div id="demos" class="panel-collapsible row">
+
+                <!-- Demo Ajax Form ( POST ) -->
+                <div id="demo-01" class="col-md-6 py-3">
+                    <div class="panel no-bg">
+                        <div class="card-header bg-white text-dark">
+                            <div>
+                                <p class="m-0">Ajax Form ( POST )</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" enctype="multipart/form-data" action="json/data.json" name="ajax-form-post-01" novalidate>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="document" type="file" class="form-control" accept="image/png" required />
+                                        <label>File</label>
+                                    </div>
+                                    <div class="field-error-message small">You must select a PNG file and size limit is <span data-print-max-file-size></span>MB!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="name" type="text" data-length="[3,20]" class="form-control" required />
+                                        <label>Name</label>
+                                    </div>
+                                    <div class="field-error-message small">Write your name!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="surname" type="text" class="form-control" />
+                                        <label>Surname</label>
+                                    </div>
+                                    <div class="field-error-message small">Write your surname!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="email" type="email" class="form-control" required />
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your email address, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="mobileNumber" type="text" data-subtype="mobile-number" class="form-control" data-validate-if-filled />
+                                        <label>Mobile number</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your mobile number, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="username" type="text" data-subtype="username" class="form-control" required />
+                                        <label>Username</label>
+                                    </div>
+                                    <div class="field-error-message small">Username must have at least 3 characters (no special chars allowed)!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="password" type="password" class="form-control" required />
+                                        <label>Password</label>
+                                    </div>
+                                    <div class="field-error-message small">Password must have minimum 8 characters with one digit, one lowercase, one uppercase</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="passwordConfirm" type="password" data-equal-to="password" class="form-control" required />
+                                        <label>Confirm Password</label>
+                                    </div>
+                                    <div class="field-error-message small">Password and Confirm Password are not equal!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
+                                    <div class="answers-box">
+                                        <div class="form-check">
+                                            <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-a" required="" data-checks="[1,2]" />
+                                            <label class="form-check-label" for="checkbox-1-a">SMS</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input name="contactPrefCheck" type="checkbox" value="email" class="form-check-input" id="checkbox-2-a" required="" />
+                                            <label class="form-check-label" for="checkbox-2-a">Email</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input name="contactPrefCheck" type="checkbox" value="app-notiifcation" class="form-check-input" id="checkbox-3-a" required="" />
+                                            <label class="form-check-label" for="checkbox-3-a">App Notification</label>
+                                        </div>
+                                    </div>
+                                    <div class="field-error-message small">
+                                        You must select at least 1 and at most 2 answers!
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box">
+                                        <div class="small">
+                                            I agree with the <a href="#" target="_blank">Privacy Policy</a>.
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="privacyCheck" id="privacyCheck-1-a" value="accepted" required />
+                                            <label class="form-check-label" for="privacyCheck-1-a">Yes</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="privacyCheck" id="privacyCheck-2-a" value="" required />
+                                            <label class="form-check-label" for="privacyCheck-2-a">No</label>
+                                        </div>
+                                    </div>
+                                    <div class="field-error-message small">You must agree!</div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-light">SEND</button>
+                                </div>
+                                <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Demo Ajax Form ( GET ) -->
+                <div id="demo-02" class="col-md-6 py-3">
+                    <div class="panel no-bg">
+                        <div class="card-header bg-white text-dark">
+                            <div>
+                                <p class="m-0">Ajax Form ( GET )</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form action="json/data.json" method="GET" name="ajax-form-get-01" novalidate>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="name" type="text" class="form-control" required />
+                                        <label>Name</label>
+                                    </div>
+                                    <div class="field-error-message small">Write your name!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="surname" type="text" class="form-control" />
+                                        <label>Surname</label>
+                                    </div>
+                                    <div class="field-error-message small">Write your surname!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="email" type="email" class="form-control" required />
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your email address, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="mobileNumber" type="text" data-subtype="mobile-number" class="form-control" data-validate-if-filled />
+                                        <label>Mobile number</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your mobile number, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="username" type="text" data-subtype="username" class="form-control" required />
+                                        <label>Username</label>
+                                    </div>
+                                    <div class="field-error-message small">Username must have at least 3 characters (no special chars allowed)!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="password" type="password" class="form-control" required />
+                                        <label>Password</label>
+                                    </div>
+                                    <div class="field-error-message small">Password must have minimum 8 characters with one digit, one lowercase, one uppercase</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
+                                    <div class="answers-box">
+                                        <div class="form-check">
+                                            <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-b" required="" data-checks="[1,2]" />
+                                            <label class="form-check-label" for="checkbox-1-b">SMS</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input name="contactPrefCheck" type="checkbox" value="email" class="form-check-input" id="checkbox-2-b" required="" />
+                                            <label class="form-check-label" for="checkbox-2-b">Email</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input name="contactPrefCheck" type="checkbox" value="app-notiifcation" class="form-check-input" id="checkbox-3-b" required="" />
+                                            <label class="form-check-label" for="checkbox-3-b">App Notification</label>
+                                        </div>
+                                    </div>
+                                    <div class="field-error-message small">
+                                        <span>Select al least one of the options!</span>
+                                        <span>You can select 2 answers max!</span>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box">
+                                        <div class="small">
+                                            I agree with the <a href="#" target="_blank">Privacy Policy</a>.
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="privacyCheck" id="privacyCheck-1-b" value="accepted" required />
+                                            <label class="form-check-label" for="privacyCheck-1-b">Yes</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="privacyCheck" id="privacyCheck-2-b" value="" required />
+                                            <label class="form-check-label" for="privacyCheck-2-b">No</label>
+                                        </div>
+                                    </div>
+                                    <div class="field-error-message small">You must agree!</div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-light">SEND</button>
+                                </div>
+                                <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- separator -->
+                <div class="w-100"></div>
+                
+                <!-- Demo Basic Form ( POST ) -->
+                <div id="demo-03" class="col-md-6 py-3">
+                    <div class="panel no-bg">
+                        <div class="card-header bg-white text-dark">
+                            <div>
+                                <p class="m-0">Basic Form ( POST )</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form action="json/data.json" method="POST" name="basic-form-post-01" novalidate>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="name" type="text" class="form-control" required />
+                                        <label>Name</label>
+                                    </div>
+                                    <div class="field-error-message small">Write your name!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="surname" type="text" class="form-control" />
+                                        <label>Surname</label>
+                                    </div>
+                                    <div class="field-error-message small">Write your surname!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="email" type="email" class="form-control" required />
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your email address, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="mobileNumber" type="text" data-subtype="mobile-number" class="form-control" data-validate-if-filled />
+                                        <label>Mobile number</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your mobile number, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="username" type="text" data-subtype="username" class="form-control" required />
+                                        <label>Username</label>
+                                    </div>
+                                    <div class="field-error-message small">Username must have at least 3 characters (no special chars allowed)!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="password" type="password" class="form-control" required />
+                                        <label>Password</label>
+                                    </div>
+                                    <div class="field-error-message small">Password must have minimum 8 characters with one digit, one lowercase, one uppercase</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
+                                    <div class="answers-box">
+                                        <div class="form-check">
+                                            <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-c" data-checks="[1,2]" required="" />
+                                            <label class="form-check-label" for="checkbox-1-c">SMS</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input name="contactPrefCheck" type="checkbox" value="email" class="form-check-input" id="checkbox-2-c" required="" />
+                                            <label class="form-check-label" for="checkbox-2-c">Email</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input name="contactPrefCheck" type="checkbox" value="app-notiifcation" class="form-check-input" id="checkbox-3-c" required="" />
+                                            <label class="form-check-label" for="checkbox-3-c">App Notification</label>
+                                        </div>
+                                    </div>
+                                    <div class="field-error-message small">
+                                        <span>Select al least one of the options!</span>
+                                        <span>You can select 2 answers max!</span>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box">
+                                        <div class="small">
+                                            I agree with the <a href="#" target="_blank">Privacy Policy</a>.
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="privacyCheck" id="privacyCheck-1-c" value="accepted" required />
+                                            <label class="form-check-label" for="privacyCheck-1-c">Yes</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="privacyCheck" id="privacyCheck-2-c" value="" required />
+                                            <label class="form-check-label" for="privacyCheck-2-c">No</label>
+                                        </div>
+                                    </div>
+                                    <div class="field-error-message small">You must agree!</div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-light">SEND</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Demo Basic Form ( GET ) -->
+                <div id="demo-04" class="col-md-6 py-3">
+                    <div class="panel no-bg">
+                        <div class="card-header bg-white text-dark">
+                            <div>
+                                <p class="m-0">Basic Form ( GET )</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form action="json/data.json" method="GET" name="basic-form-get-01" novalidate>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="name" type="text" class="form-control" required />
+                                        <label>Name</label>
+                                    </div>
+                                    <div class="field-error-message small">Write your name!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="surname" type="text" class="form-control" />
+                                        <label>Surname</label>
+                                    </div>
+                                    <div class="field-error-message small">Write your surname!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="email" type="email" class="form-control" required />
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your email address, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="mobileNumber" type="text" data-subtype="mobile-number" class="form-control" data-validate-if-filled />
+                                        <label>Mobile number</label>
+                                    </div>
+                                    <div class="field-error-message small">Check your mobile number, it is not valid!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="username" type="text" data-subtype="username" class="form-control" required />
+                                        <label>Username</label>
+                                    </div>
+                                    <div class="field-error-message small">Username must have at least 3 characters (no special chars allowed)!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="password" type="password" class="form-control" required />
+                                        <label>Password</label>
+                                    </div>
+                                    <div class="field-error-message small">Password must have minimum 8 characters with one digit, one lowercase, one uppercase</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
+                                    <div class="answers-box">
+                                        <div class="form-check">
+                                            <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-d" data-checks="[1,2]" required="" />
+                                            <label class="form-check-label" for="checkbox-1-d">SMS</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input name="contactPrefCheck" type="checkbox" value="email" class="form-check-input" id="checkbox-2-d" required="" />
+                                            <label class="form-check-label" for="checkbox-2-d">Email</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input name="contactPrefCheck" type="checkbox" value="app-notiifcation" class="form-check-input" id="checkbox-3-d" required="" />
+                                            <label class="form-check-label" for="checkbox-3-d">App Notification</label>
+                                        </div>
+                                    </div>
+                                    <div class="field-error-message small">
+                                        <span>Select al least one of the options!</span>
+                                        <span>You can select 2 answers max!</span>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box">
+                                        <div class="small">
+                                            I agree with the <a href="#" target="_blank">Privacy Policy</a>.
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="privacyCheck" id="privacyCheck-1-d" value="accepted" required />
+                                            <label class="form-check-label" for="privacyCheck-1-d">Yes</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="privacyCheck" id="privacyCheck-2-d" value="" required />
+                                            <label class="form-check-label" for="privacyCheck-2-d">No</label>
+                                        </div>
+                                    </div>
+                                    <div class="field-error-message small">You must agree!</div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-light">SEND</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- separator -->
+                <div class="w-100"></div>
+
+                <!-- Demo Ajax Form ( POST ) CSS Error Messages -->
+                <div id="demo-06" class="col-md-6 py-3">
+                    <div class="panel no-bg">
+                        <div class="card-header bg-white text-dark">
+                            <div>
+                                <p class="m-0">Form with CSS Error Messages</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-white small">
+                                In this demo the error messages will be shown thanks to CSS classes.<bt />
+                                All error messages are already insdie the HTML.
+                            </p>
+                            <form method="POST" action="json/data.json" name="ajax-form-post-css-errors" novalidate>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="name" type="text" data-length="[3,20]" class="form-control" required />
+                                        <label>Name</label>
+                                    </div>
+                                    <div class="field-error-message small">Write your name!</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="email" type="email" class="form-control" required />
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="field-error-message small">
+                                        <div data-error-type="empty">
+                                            Email address cannot be empty!
+                                        </div>
+                                        <div data-error-type="rule">
+                                            Check your email address, it is not valid:
+                                            <ul>
+                                                <li data-error-type="missingAtChar">@ char is missing</li>
+                                                <li data-error-type="missingUserName">Username is missing</li>
+                                                <li data-error-type="missingDomain">Domain is missing</li>
+                                                <li data-error-type="missingExtensionDot">Extension dot is missing</li>
+                                                <li data-error-type="missingExtension">Extension is missing</li>
+                                                <li data-error-type="minlengthExtension">Extension isn't long enough</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="username" type="text" data-subtype="username" class="form-control" required />
+                                        <label>Username</label>
+                                    </div>
+                                    <div class="field-error-message small">
+                                        <div data-error-type="empty">
+                                            Username cannot be empty!
+                                        </div>
+                                        <div data-error-type="rule">
+                                            Username is not valid:
+                                            <ul>
+                                                <li data-error-type="minlength">Must be al least 3 chars long</li>
+                                                <li data-error-type="maxlength">Must be at most 24 chars long</li>
+                                                <li data-error-type="invalidChars">Contains not allowed chars. It must be with letters, numbers, underscores and/or . - @</li>
+                                                <li data-error-type="invalidStartChar">Must start with a letter, number or underscore</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="password" type="password" class="form-control" required />
+                                        <label>Password</label>
+                                    </div>
+                                    <div class="field-error-message small">
+                                        <div data-error-type="empty">
+                                            Password cannot be empty!
+                                        </div>
+                                        <div data-error-type="rule">
+                                            Check your password, it is not valid:
+                                            <ul>
+                                                <li data-error-type="minlength">Must have least 8 chars</li>
+                                                <li data-error-type="missingNumber">Must contain a number</li>
+                                                <li data-error-type="missingLowercase">Must contain a lowercase char</li>
+                                                <li data-error-type="missingUppercase">Must contain an uppercase char</li>
+                                                <li data-error-type="invalidChars">Can contain only letters and numbers</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="passwordConfirm" type="password" data-equal-to="password" class="form-control" required />
+                                        <label>Confirm Password</label>
+                                    </div>
+                                    <div class="field-error-message small">Password and Confirm Password are not equal!</div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-light">SEND</button>
+                                </div>
+                                <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo Ajax Form ( POST ) JS Error Messages -->
+                <div id="demo-07" class="col-md-6 py-3">
+                    <div class="panel no-bg">
+                        <div class="card-header bg-white text-dark">
+                            <div>
+                                <p class="m-0">Form with JS Error Messages</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-white small">
+                                In this demo the error messages will be shown thanks to a JS function that dynamically prints them.
+                            </p>
+                            <form method="POST" action="json/data.json" name="ajax-form-post-js-errors" novalidate>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="name" type="text" data-length="[3,20]" class="form-control" required />
+                                        <label>Name</label>
+                                    </div>
+                                    <div class="field-error-message small"></div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="email" type="email" class="form-control" required />
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="field-error-message small"></div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="username" type="text" data-subtype="username" class="form-control" required />
+                                        <label>Username</label>
+                                    </div>
+                                    <div class="field-error-message small"></div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="password" type="password" class="form-control" required />
+                                        <label>Password</label>
+                                    </div>
+                                    <div class="field-error-message small"></div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="passwordConfirm" type="password" data-equal-to="password" class="form-control" required />
+                                        <label>Confirm Password</label>
+                                    </div>
+                                    <div class="field-error-message small"></div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-light">SEND</button>
+                                </div>
+                                <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <footer class="text-center mt-5 pt-5 mb-3">
+            <hr />
+            <p class="small m-0">
+                Made with passion by <a href="https://valeriodipunzio.com" target="_blank">Valerio Di Punzio</a>
+            </p>
+        </footer>
+
+    </div>
+
+    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
+    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
+    <script src="js/include.js"></script>
+    <script src="dist/formjs.min.js"></script>
+    <script src="dist/additionals/validationRules.js"></script>
+    <script src="dist/additionals/validationErrors.js"></script>
+    <script src="js/demo.js"></script>
+    <script src="dist/additionals/utils.js"></script>
+    
+</body>
+</html>

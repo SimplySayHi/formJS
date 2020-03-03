@@ -97,10 +97,11 @@
                 <div id="demo" class="col-sm-8 col-md-6 col-xl-4 mx-auto panel-collapsible mt-4">
                     <div class="panel no-bg">
                         <div class="card-body d-block">
-                            <form action="json/data.json" name="my-form-4" novalidate>
+                            <form action="json/data.json" name="my-form-4">
                                 <p class="text-white">
                                     This form is validated with formJS
                                 </p>
+                                <hr />
                                 <div>
                                     <div data-formjs-question class="form-group">
                                         <div class="answers-box label-move-up">
@@ -639,11 +640,11 @@
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
     <script src="js/include.js"></script>
+    <script src="dist/additionals/utils.js"></script>
     <script src="dist/formjs.min.js"></script>
     <script src="dist/additionals/validationRules.js"></script>
     <script src="dist/additionals/validationErrors.js"></script>
     <script src="js/doc.js"></script>
-    <script src="dist/additionals/utils.js"></script>
     
 </body>
 </html>

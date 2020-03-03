@@ -60,7 +60,7 @@
             <h2 class="border-0 mt-2 mb-4 pt-0">Basic AJAX Form</h2>
 
             <div class="row justify-content-center">
-                <div class="col-md-6 col-lg-7 col-xl-8">
+                <div class="col-md-6 col-lg-7 col-xl-8 order-6 order-md-1">
                     <div class="panel-collapsible mb-4" data-panel="html">
                         <div class="panel no-bg">
                             <div class="card-header bg-white text-dark">
@@ -70,7 +70,7 @@
                             </div>
                             <div class="card-body p-0">
                                 <pre class="m-0">
-<code class="language-html">&lt;form method="POST" action="json/data.json" novalidate name="my-form"&gt;
+<code class="language-html">&lt;form action="json/data.json" name="my-form"&gt;
     &lt;div data-formjs-question class="form-group"&gt;
         &lt;div class="answers-box label-move-up"&gt;
             &lt;input name="name" type="text" data-length="[3,20]" class="form-control" required /&gt;
@@ -100,7 +100,7 @@
         &lt;div class="field-error-message small"&gt;Password and Confirm Password are not equal!&lt;/div&gt;
     &lt;/div&gt;
     &lt;div data-formjs-question class="form-group"&gt;
-        &lt;p class="mb-2 small"&gt;Select your contact preferences &lt;br /&gt;(2 answers max)&lt;/p&gt;
+        &lt;p class="mb-2 small"&gt;Select your contact preferences &lt;br /&gt;( 2 answers max )&lt;/p&gt;
         &lt;div class="answers-box"&gt;
             &lt;div class="form-check"&gt;
                 &lt;input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-a" required="" data-checks="[1,2]" /&gt;
@@ -157,7 +157,7 @@
 <code class="language-js">const formEl = document.querySelector('form');
 const formInstance = new Form( formEl );
 
-// WITH INITIALIZATION ( OPTIONAL )
+// INITIALIZATION ( OPTIONAL )
 formInstance.init().then(obj => {
     console.log('instance', obj.instance);
     console.log('validated fields', obj.fields);
@@ -167,10 +167,14 @@ formInstance.init().then(obj => {
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-5 col-xl-4 mx-auto">
-                    <div class="panel no-bg">
+                <div class="col-md-6 col-lg-5 col-xl-4 mx-auto order-1 order-md-6">
+                    <div class="panel no-bg mb-4">
                         <div class="card-body d-block">
-                            <form method="POST" action="json/data.json" name="my-form" novalidate>
+                            <form action="json/data.json" name="my-form">
+                                <p class="text-white">
+                                    Fill the form:
+                                </p>
+                                <hr />
                                 <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
                                         <input name="name" type="text" data-length="[3,20]" class="form-control" required />
@@ -200,7 +204,7 @@ formInstance.init().then(obj => {
                                     <div class="field-error-message small">Password and Confirm Password are not equal!</div>
                                 </div>
                                 <div data-formjs-question class="form-group">
-                                    <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
+                                    <p class="mb-2 small">Select your contact preferences <br />( 2 answers max )</p>
                                     <div class="answers-box">
                                         <div class="form-check">
                                             <input name="contactPrefCheck" type="checkbox" value="sms" class="form-check-input" id="checkbox-1-a" required="" data-checks="[1,2]" />
@@ -265,11 +269,11 @@ formInstance.init().then(obj => {
     <script src="dist/formjs.min.js"></script>
     <script src="dist/additionals/validationRules.js"></script>
     <script src="dist/additionals/validationErrors.js"></script>
-    <script src="dist/additionals/utils.js"></script>
     <script>
         var formEl = document.querySelector('form');
         var formInstance = new Form( formEl );
-        // WITH INITIALIZATION ( OPTIONAL )
+
+        // INITIALIZATION ( OPTIONAL )
         formInstance.init().then(function(obj){
             console.log('instance', obj.instance);
             console.log('validated fields', obj.fields);

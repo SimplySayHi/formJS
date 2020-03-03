@@ -1,6 +1,27 @@
 
+form {
+    font-size: 1.25rem;
+}
+
+.form-check:not(.form-check-inline) {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: baseline;
+    align-items: baseline;
+    padding-left: 0;
+}
+
+.form-check:not(.form-check-inline) .form-check-input {
+    position: static;
+    margin: 0 0.33em 0 0;
+}
+
 .input-group-addon, .form-control {
     font-size: 16px;
+}
+
+.form-group {
+    margin-bottom: 1em;
 }
 
 label {

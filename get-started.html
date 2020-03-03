@@ -177,6 +177,8 @@
 <code class="language-js">var formEl = document.querySelector('form');
 var options = {...};
 var formInstance = new Form( formEl, options );
+
+// INITIALIZATION ( OPTIONAL )
 formInstance.init().then(obj => {
     console.log('instance', obj.instance);
     console.log('validated fields', obj.fields);
