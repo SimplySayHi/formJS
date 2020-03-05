@@ -51,6 +51,7 @@
         </div>
 
         <div class="page-content mt-5 pt-5">
+            
             <div class="d-flex flex-wrap align-items-baseline px-2">
                 <h4 class="my-0">formJS</h4>
                 <span class="mx-2"> / </span>
@@ -76,7 +77,14 @@
             &lt;input name="name" type="text" data-length="[3,20]" class="form-control" required /&gt;
             &lt;label&gt;Name&lt;/label&gt;
         &lt;/div&gt;
-        &lt;div class="field-error-message small"&gt;Write your name!&lt;/div&gt;
+        &lt;div class="field-error-message small"&gt;Write your name! It must be between 3 and 20 chars.&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div data-formjs-question class="form-group"&gt;
+        &lt;div class="answers-box label-move-up"&gt;
+            &lt;input name="surname" type="text" data-length="[3,20]" class="form-control" data-validate-if-filled /&gt;
+            &lt;label&gt;Surname&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div class="field-error-message small"&gt;Surname is not mandatory but, if filled, it must be between 3 and 20 chars!&lt;/div&gt;
     &lt;/div&gt;
     &lt;div data-formjs-question class="form-group"&gt;
         &lt;div class="answers-box label-move-up"&gt;
@@ -84,20 +92,6 @@
             &lt;label&gt;Email&lt;/label&gt;
         &lt;/div&gt;
         &lt;div class="field-error-message small"&gt;Check your email address, it is not valid!&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div data-formjs-question class="form-group"&gt;
-        &lt;div class="answers-box label-move-up"&gt;
-            &lt;input name="password" type="password" class="form-control" required /&gt;
-            &lt;label&gt;Password&lt;/label&gt;
-        &lt;/div&gt;
-        &lt;div class="field-error-message small"&gt;Password must have minimum 8 characters with one digit, one lowercase, one uppercase&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div data-formjs-question class="form-group"&gt;
-        &lt;div class="answers-box label-move-up"&gt;
-            &lt;input name="passwordConfirm" type="password" data-equal-to="password" class="form-control" required /&gt;
-            &lt;label&gt;Confirm Password&lt;/label&gt;
-        &lt;/div&gt;
-        &lt;div class="field-error-message small"&gt;Password and Confirm Password are not equal!&lt;/div&gt;
     &lt;/div&gt;
     &lt;div data-formjs-question class="form-group"&gt;
         &lt;p class="mb-2 small"&gt;Select your contact preferences &lt;br /&gt;( 2 answers max )&lt;/p&gt;
@@ -180,7 +174,14 @@ formInstance.init().then(obj => {
                                         <input name="name" type="text" data-length="[3,20]" class="form-control" required />
                                         <label>Name</label>
                                     </div>
-                                    <div class="field-error-message small">Write your name!</div>
+                                    <div class="field-error-message small">Write your name! It must be between 3 and 20 chars.</div>
+                                </div>
+                                <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="surname" type="text" data-length="[3,20]" class="form-control" data-validate-if-filled />
+                                        <label>Surname</label>
+                                    </div>
+                                    <div class="field-error-message small">Surname is not mandatory but, if filled, it must be between 3 and 20 chars!</div>
                                 </div>
                                 <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
@@ -188,20 +189,6 @@ formInstance.init().then(obj => {
                                         <label>Email</label>
                                     </div>
                                     <div class="field-error-message small">Check your email address, it is not valid!</div>
-                                </div>
-                                <div data-formjs-question class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="password" type="password" class="form-control" required />
-                                        <label>Password</label>
-                                    </div>
-                                    <div class="field-error-message small">Password must have minimum 8 characters with one digit, one lowercase, one uppercase</div>
-                                </div>
-                                <div data-formjs-question class="form-group">
-                                    <div class="answers-box label-move-up">
-                                        <input name="passwordConfirm" type="password" data-equal-to="password" class="form-control" required />
-                                        <label>Confirm Password</label>
-                                    </div>
-                                    <div class="field-error-message small">Password and Confirm Password are not equal!</div>
                                 </div>
                                 <div data-formjs-question class="form-group">
                                     <p class="mb-2 small">Select your contact preferences <br />( 2 answers max )</p>
@@ -249,8 +236,6 @@ formInstance.init().then(obj => {
                 </div>
             </div>
 
-                    
-
         </div>
 
         <footer class="text-center mt-5 pt-5 mb-3">
@@ -263,12 +248,10 @@ formInstance.init().then(obj => {
     </div>
 
     <script src="js/prism.js"></script>
+
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
-    <script src="js/include.js"></script>
     <script src="dist/formjs.min.js"></script>
-    <script src="dist/additionals/validationRules.js"></script>
-    <script src="dist/additionals/validationErrors.js"></script>
     <script>
         var formEl = document.querySelector('form');
         var formInstance = new Form( formEl );
@@ -279,6 +262,8 @@ formInstance.init().then(obj => {
             console.log('validated fields', obj.fields);
         });
     </script>
+
+    <script src="js/include.js"></script>
     
 </body>
 </html>

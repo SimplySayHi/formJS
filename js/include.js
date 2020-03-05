@@ -63,6 +63,7 @@ Array.from(document.querySelectorAll('form')).forEach(function(formEl){
 });
 
 document.addEventListener('DOMContentLoaded', function(){
+    if( !window.Form ){ return; }
     var version = Form.prototype.version;
     Array.from( document.querySelectorAll('[data-print-current-version]') ).forEach(function( elem ){
         elem.innerHTML = version;
