@@ -51,6 +51,7 @@ body > .container-fluid > div { position: relative; z-index: 0; }
 
 #hero { min-height: calc(100vh - 120px); z-index: 5; }
 
+a { transition: all 0.15s linear; }
 h1, h2, h3 { font-family: 'Expletus Sans', cursive; }
 h2, h3 { color: #ffd166; margin-top: 2em; }
 h1 { font-size: 6em; line-height: 1; display: inline-block; border-bottom: 2px solid rgba(0,0,0,0.15); padding: 0.1em 0.05em; }
