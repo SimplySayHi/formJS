@@ -18,7 +18,7 @@
 
 <body>
     
-    <div id="top" class="container-fluid">
+    <div id="top" class="container-fluid d-flex flex-column">
 
         <div id="menu" class="position-sticky text-right d-flex">
             <div class="position-raltive w-100">
@@ -122,7 +122,7 @@
                                     </div>
                                     <p>,<br />sleep there for </p>
                                     <div data-formjs-question>
-                                        <input name="nights" type="number" data-subtype="number-integer" min="2" max="20" class="form-control" placeholder="# of" required />
+                                        <input name="nights" type="number" inputmode="numeric" pattern="[0-9]*" data-subtype="number-integer" min="2" max="20" class="form-control" placeholder="# of" required />
                                         <div class="field-error-message small">min 2, max 20</div>
                                     </div>
                                     <p>nights <br />starting from </p>

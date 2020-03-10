@@ -470,6 +470,8 @@ label, .radio label, .checkbox label {
 .nl-form [type="date"],
 .nl-form [data-subtype="date"] {
     text-align: center;
+    min-width: 200px;
+    height: 1.2em;
 }
 
 .nl-form .field-error-message,
