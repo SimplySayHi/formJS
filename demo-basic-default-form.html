@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Basic AJAX Form - Demos | formJS  - JavaScript Form Validation. Made Easy</title>
+    <title>Basic Default Form - Demos | formJS  - JavaScript Form Validation. Made Easy</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="Valerio Di Punzio">
@@ -58,7 +58,7 @@
                 <h4 class="my-0">Demos</h4>
             </div>
             
-            <h2 class="border-0 mt-2 mb-4 pt-0">Basic AJAX Form</h2>
+            <h2 class="border-0 mt-2 mb-4 pt-0">Basic Default Form</h2>
 
             <div class="row justify-content-center">
                 <div class="col-md-6 col-lg-7 col-xl-8 order-6 order-md-1">
@@ -149,7 +149,12 @@
                             <div class="card-body p-0">
                                 <pre class="m-0">
 <code class="language-js">const formEl = document.querySelector('form');
-const formInstance = new Form( formEl );
+const options = {
+    formOptions: {
+        ajaxSubmit: false
+    }
+};
+const formInstance = new Form( formEl, options );
 
 // INITIALIZATION ( OPTIONAL )
 formInstance.init().then(obj => {
@@ -254,7 +259,12 @@ formInstance.init().then(obj => {
     <script src="dist/formjs.min.js"></script>
     <script>
         var formEl = document.querySelector('form');
-        var formInstance = new Form( formEl );
+        var options = {
+            formOptions: {
+                ajaxSubmit: false
+            }
+        };
+        var formInstance = new Form( formEl, options );
 
         // INITIALIZATION ( OPTIONAL )
         formInstance.init().then(function(obj){

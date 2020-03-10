@@ -91,11 +91,27 @@ Array.from(formsList).forEach(function(formEl, idx){
     formEl.addEventListener('fjs.form:submit', function(e){
         console.log(e.type, e.data);
         e.data
-            .catch(function(error){
-                console.log(e.type, 'catch', error);
-            })
             .then(function(data){
                 console.log(e.type, 'then', data);
+                var formEl = e.target;
+                if( formEl.formjs.options.formOptions.ajaxSubmit ){
+                    var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
+                    feedbackEl.classList.remove( 'alert-danger' );
+                    feedbackEl.classList.add( 'alert-success' );
+                    feedbackEl.classList.remove( 'd-none' );
+                    feedbackEl.innerHTML = 'Great! Your infos have been sent :D';
+                }
+            })
+            .catch(function(error){
+                console.log(e.type, 'catch', error);
+                var formEl = e.target;
+                if( formEl.formjs.options.formOptions.ajaxSubmit ){
+                    var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
+                    feedbackEl.classList.remove( 'alert-success' );
+                    feedbackEl.classList.add( 'alert-danger' );
+                    feedbackEl.classList.remove( 'd-none' );
+                    feedbackEl.innerHTML = 'Oh no, something went wrong! :( Retry';
+                }
             })
             .finally(function(){
                 console.log(e.type, 'finally');

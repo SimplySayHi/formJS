@@ -53,7 +53,7 @@
         <div id="hero" class="d-flex flex-column justify-content-center">
             <div class="row pt-5 justify-content-center">
 
-                <div id="intro" class="col-md-6 text-center text-md-left d-flex flex-column mt-4">
+                <div id="intro" class="col-lg-6 text-center text-lg-left d-flex flex-column mt-4">
                     <div class="d-md-none">
                         <p class="d-inline-block my-4">
                             <a href="https://github.com/SimplySayHi/formJS" target="_blank" class="media">
@@ -65,7 +65,7 @@
                             </a>
                         </p>
                     </div>
-                    <h1 class="align-self-center align-self-md-start">formJS</h1>
+                    <h1 class="align-self-center align-self-lg-start">formJS</h1>
                     <p class="claim">
                         JavaScript Form Validation. <br class="d-sm-none" />Made Easy
                     </p>
@@ -94,53 +94,47 @@
                     </div>
                 </div>
 
-                <div id="demo" class="col-sm-8 col-md-6 col-xl-4 mx-auto panel-collapsible mt-4">
-                    <div class="panel no-bg">
-                        <div class="card-body d-block">
-                            <form action="json/data.json" name="my-form-4">
-                                <p class="text-white">
-                                    This form is validated with formJS
-                                </p>
-                                <hr />
-                                <div>
-                                    <div data-formjs-question class="form-group">
-                                        <div class="answers-box label-move-up">
-                                            <input name="name" type="text" class="form-control" required />
-                                            <label>Name</label>
-                                        </div>
-                                        <div class="field-error-message small">Write your name!</div>
+                <div id="demo" class="col-lg-6 col-xl-5 mx-auto panel-collapsible mt-4">
+                    <div class="card-body px-0 d-block">
+                        <form action="json/data.json" name="my-form-4" class="nl-form">
+                            <div class="nl-text-container d-flex flex-column">
+                                <div class="nl-text-box nl-text-out align-self-start">
+                                    <p>
+                                        Need a break?
+                                    </p>
+                                </div>
+                                <div class="nl-text-box nl-text-in text-right align-self-end">
+                                    <p>Yep! I'd like to book <br />a room for </p>
+                                    <div data-formjs-question>
+                                        <select name="guests" class="form-control" required>
+                                            <option value=""># people</option>
+                                            <option value="1">1 person</option>
+                                            <option value="2">2 people</option>
+                                            <option value="3">3 people</option>
+                                            <option value="4">4 people</option>
+                                        </select>
+                                        <div class="field-error-message small">how many guests?</div>
                                     </div>
-                                    <div data-formjs-question class="form-group">
-                                        <div class="answers-box label-move-up">
-                                            <input name="email" type="email" class="form-control" required />
-                                            <label>Email</label>
-                                        </div>
-                                        <div class="field-error-message small">Check your email address, it is not valid!</div>
+                                    <p><br />in </p>
+                                    <div data-formjs-question>
+                                        <input name="city" type="text" class="form-control" placeholder="any city" required />
+                                        <div class="field-error-message small">where do you wanna go?</div>
                                     </div>
-                                    <div data-formjs-question class="form-group">
-                                        <div class="answers-box label-move-up">
-                                            <textarea name="message" class="form-control" rows="3" maxlength="100" data-char-count></textarea>
-                                            <label>Message ( <span data-char-length></span>/<span data-char-maxlength></span> )</label>
-                                        </div>
+                                    <p>,<br />sleep there for </p>
+                                    <div data-formjs-question>
+                                        <input name="nights" type="number" data-subtype="number-integer" min="2" max="20" class="form-control" placeholder="# of" required />
+                                        <div class="field-error-message small">min 2, max 20</div>
                                     </div>
-                                    <div data-formjs-question class="form-group">
-                                        <div class="answers-box">
-                                            <div class="form-check">
-                                                <input id="regulationCheck" class="form-check-input" name="regulationCheck" type="checkbox" value="read" required />
-                                                <label for="regulationCheck" class="form-check-label">
-                                                    I agree with the <a href="">Privacy Policy</a>.
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="field-error-message small">You must agree!</div>
+                                    <p>nights <br />starting from </p>
+                                    <div data-formjs-question>
+                                        <input name="start-date" type="date" class="form-control" placeholder="a date" required />
+                                        <div class="field-error-message small">when will you arrive?</div>
                                     </div>
                                 </div>
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-light">TRY ME!</button>
-                                </div>
-                                <div class="d-none alert mt-5 mb-4" role="alert" data-formjs-global-feedback></div>
-                            </form>
-                        </div>
+                            </div>
+                            <button type="submit" class="btn btn-light btn-block">LET'S CHECK</button>
+                            <div class="d-none alert my-4 text-center" role="alert" data-formjs-global-feedback></div>
+                        </form>
                     </div>
                 </div>
             

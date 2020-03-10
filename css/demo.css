@@ -359,3 +359,127 @@ label, .radio label, .checkbox label {
 .has-error.has-error-rule-minlengthExtension li[data-error-type="minlengthExtension"] {
     display: list-item;
 }
+
+.nl-form {
+    line-height: 2;
+    font-size: 1.75em;
+}
+
+.nl-form [type="submit"] {
+    border-radius: 1.25em;
+    padding: 0.25em;
+    font-size: 0.8em;
+}
+
+.nl-form .nl-text-box {
+    position: relative;
+    border-radius: 1em;
+    padding: 0.25em 0.5em;
+    background-color: #063241;
+    margin: 0 15px 1em;
+    z-index: 10;
+}
+
+.nl-form .nl-text-box.nl-text-out:before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    bottom: 0;
+    left: -8px;
+    height: 20px;
+    width: 20px;
+    background-color: #063241;
+    background-attachment: fixed;
+    border-bottom-right-radius: 15px;
+}
+
+.nl-form .nl-text-box.nl-text-out:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    left: -9px;
+    width: 10px;
+    height: 20px;
+    background-color: #073b4c;
+    border-bottom-right-radius: 10px;
+}
+
+.nl-form .nl-text-box.nl-text-in {
+    background-color: #052b37;
+    padding-bottom: 0.5em;
+}
+
+.nl-form .nl-text-box.nl-text-in:before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    bottom: 0;
+    right: -8px;
+    height: 20px;
+    width: 20px;
+    background-color: #052b37;
+    background-attachment: fixed;
+    border-bottom-left-radius: 15px;
+}
+
+.nl-form .nl-text-box.nl-text-in:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    right: -9px;
+    width: 10px;
+    height: 20px;
+    background-color: #073b4c;
+    border-bottom-left-radius: 10px;
+}
+
+.nl-form p {
+    display: inline;
+}
+
+.nl-form [data-formjs-question] {
+    display: inline-flex;
+}
+
+.nl-form .form-control {
+    display: inline;
+    font-size: 1em;
+    min-height: auto;
+    height: auto;
+    padding: 0 0.125em;
+    line-height: 1.2;
+    border-radius: 0;
+}
+
+.nl-form select.form-control {
+    min-width: 150px;
+}
+
+.nl-form .form-control::placeholder{ color:#fff; }
+.nl-form .form-control:focus::placeholder{ opacity: 0.25; }
+
+.nl-form [type="number"],
+.nl-form [data-subtype="number"],
+.nl-form [data-subtype="number-integer"] {
+    inline-size: 7ch;
+    text-align: center;
+}
+
+.nl-form [type="date"],
+.nl-form [data-subtype="date"] {
+    text-align: center;
+}
+
+.nl-form .field-error-message,
+.nl-form [data-error-type] {
+    position: absolute;
+    font-size: 0.6em;
+    top: 100%;
+    line-height: 1.2;
+}
+
+.nl-form .alert {
+    border-radius: 1em;
+}

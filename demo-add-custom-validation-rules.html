@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Basic AJAX Form - Demos | formJS  - JavaScript Form Validation. Made Easy</title>
+    <title>Add Custom Validation Rules - Demos | formJS  - JavaScript Form Validation. Made Easy</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="Valerio Di Punzio">
@@ -58,7 +58,11 @@
                 <h4 class="my-0">Demos</h4>
             </div>
             
-            <h2 class="border-0 mt-2 mb-4 pt-0">Basic AJAX Form</h2>
+            <h2 class="border-0 mt-2 mb-4 pt-0">Add Custom Validation Rules</h2>
+
+            <p>
+                Validation for "Registration Code" is added as custom validation rule.
+            </p>
 
             <div class="row justify-content-center">
                 <div class="col-md-6 col-lg-7 col-xl-8 order-6 order-md-1">
@@ -81,10 +85,10 @@
     &lt;/div&gt;
     &lt;div data-formjs-question class="form-group"&gt;
         &lt;div class="answers-box label-move-up"&gt;
-            &lt;input name="surname" type="text" data-length="[3,20]" class="form-control" data-validate-if-filled /&gt;
-            &lt;label&gt;Surname&lt;/label&gt;
+            &lt;input name="code" type="text" data-subtype="registration-code" class="form-control" required /&gt;
+            &lt;label>Registration Code&lt;/label&gt;
         &lt;/div&gt;
-        &lt;div class="field-error-message small"&gt;Surname is not mandatory but, if filled, it must be between 3 and 20 chars!&lt;/div&gt;
+        &lt;div class="field-error-message small"&gt;Registration Code is not valid!&lt;/div&gt;
     &lt;/div&gt;
     &lt;div data-formjs-question class="form-group"&gt;
         &lt;div class="answers-box label-move-up"&gt;
@@ -148,8 +152,31 @@
                             </div>
                             <div class="card-body p-0">
                                 <pre class="m-0">
-<code class="language-js">const formEl = document.querySelector('form');
-const formInstance = new Form( formEl );
+<code class="language-js">Form.addValidationRules({
+    registrationCode: function( string, fieldEl ){
+        var obj = {
+            result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
+        };
+        return obj;
+    }
+});
+
+Form.addValidationErrors({
+    registrationCode: function( string ){
+        var obj = {};
+        if( string.length < 8 ){ obj.minlength = true; }
+        return obj;
+    }
+});
+
+var formEl = document.querySelector('form');
+var formInstance = new Form( formEl );
+
+formEl.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(event){
+    if( Object.keys(event.data.errors).length > 0 ){
+        console.log('EMAIL CUSTOM ERRORS', event.data.errors);
+    }
+});
 
 // INITIALIZATION ( OPTIONAL )
 formInstance.init().then(obj => {
@@ -178,10 +205,10 @@ formInstance.init().then(obj => {
                                 </div>
                                 <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
-                                        <input name="surname" type="text" data-length="[3,20]" class="form-control" data-validate-if-filled />
-                                        <label>Surname</label>
+                                        <input name="code" type="text" data-subtype="registration-code" class="form-control" required />
+                                        <label>Registration Code</label>
                                     </div>
-                                    <div class="field-error-message small">Surname is not mandatory but, if filled, it must be between 3 and 20 chars!</div>
+                                    <div class="field-error-message small">Registration Code is not valid!</div>
                                 </div>
                                 <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
@@ -253,6 +280,23 @@ formInstance.init().then(obj => {
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
     <script src="dist/formjs.min.js"></script>
     <script>
+        Form.addValidationRules({
+            registrationCode: function( string, fieldEl ){
+                var obj = {
+                    result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
+                };
+                return obj;
+            }
+        });
+
+        Form.addValidationErrors({
+            registrationCode: function( string ){
+                var obj = {};
+                if( string.length < 8 ){ obj.minlength = true; }
+                return obj;
+            }
+        });
+
         var formEl = document.querySelector('form');
         var formInstance = new Form( formEl );
 
