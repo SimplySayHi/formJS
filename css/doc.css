@@ -52,7 +52,7 @@ body > .container-fluid > div { position: relative; z-index: 0; }
 #hero { min-height: calc(100vh - 120px); z-index: 5; }
 
 a { transition: all 0.15s linear; }
-h1, h2, h3 { font-family: 'Expletus Sans', cursive; }
+h1, h2, h3 { font-family: 'Expletus Sans', sans-serif; }
 h2, h3 { color: #ffd166; margin-top: 2em; }
 h1 { font-size: 6em; line-height: 1; display: inline-block; border-bottom: 2px solid rgba(0,0,0,0.15); padding: 0.1em 0.05em; }
 h2 { font-size: 3em; border-bottom: 2px solid rgba(0,0,0,0.15); padding: 0.25em 0.0625em; }
@@ -61,7 +61,7 @@ h1 .small { font-family: 'Raleway', sans-serif; font-size: 0.5em; color: inherit
 h3 .small { color: inherit; }
 .claim { font-size: 2rem; }
 .logo {
-    font-family: 'Expletus Sans', cursive;
+    font-family: 'Expletus Sans', sans-serif;
     font-size: 32px;
     position: absolute;
     top: 10px;
