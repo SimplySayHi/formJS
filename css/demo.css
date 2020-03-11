@@ -350,7 +350,7 @@ label, .radio label, .checkbox label {
 .has-error.has-error-rule-missingLowercase li[data-error-type="missingLowercase"],
 .has-error.has-error-rule-missingUppercase li[data-error-type="missingUppercase"],
 .has-error.has-error-rule-invalidChars li[data-error-type="invalidChars"],
-.has-error.has-error-rule-invalidStartChar li[data-error-type="invalidStartChar"]
+.has-error.has-error-rule-invalidStartChar li[data-error-type="invalidStartChar"],
 .has-error.has-error-rule-missingAtChar li[data-error-type="missingAtChar"],
 .has-error.has-error-rule-missingUserName li[data-error-type="missingUserName"],
 .has-error.has-error-rule-missingDomain li[data-error-type="missingDomain"],
