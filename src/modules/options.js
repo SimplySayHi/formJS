@@ -1,7 +1,5 @@
 
 import { defaultCallbacksInOptions } from './optionsUtils';
-import { ajaxOptions } from './optionsAjax';
-//import { ajaxOptions } from './optionsAjaxXhr';
 
 export const options = {
 
@@ -19,8 +17,6 @@ export const options = {
         handleFileUpload:       true,
         handleValidation:       true,
         maxFileSize:            10,
-        onPastePrevented:       [],
-        onValidation:           [defaultCallbacksInOptions.fieldOptions.onValidation],
         onValidationCheckAll:   true,
         preventPasteFields:     '[type="password"], [data-equal-to]',
         skipUIfeedback:         false,
@@ -29,7 +25,19 @@ export const options = {
     },
 
     formOptions: {
-        ajaxOptions:            ajaxOptions,
+        ajaxOptions:            {
+            cache:              'no-store',
+            credentials:        'same-origin',
+            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept':       'application/json'
+            },
+            method:             'POST',
+            mode:               'same-origin',
+            redirect:           'follow',
+            timeout:            0,
+            url:                location.href
+        },
         ajaxSubmit:             true,
         beforeSend:             [],
         cssClasses: {
@@ -41,10 +49,7 @@ export const options = {
             valid:              'is-valid'
         },
         getFormData:            defaultCallbacksInOptions.formOptions.getFormData,
-        handleSubmit:           true,
-        onSubmitComplete:       [],
-        onSubmitError:          [],
-        onSubmitSuccess:        []
+        handleSubmit:           true
     }
     
 }

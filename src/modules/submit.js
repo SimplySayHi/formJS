@@ -1,15 +1,14 @@
 
-import { addClass, removeClass, runFunctionsSequence, validateFormObjDefault } from './helpers';
+import { addClass, customEvents, dispatchCustomEvent, removeClass, runFunctionsSequence, validateFormObjDefault } from './helpers';
 import { ajaxCall } from './ajaxCall';
-//import { ajaxCall } from './ajaxCallXhr';
 
 export function submit( event ){
 
-    const self = this,
-          options = self.options,
+    const formEl = event.target,
+          instance = formEl.formjs,
+          options = instance.options,
           formCssClasses = options.formOptions.cssClasses,
           isAjaxForm = options.formOptions.ajaxSubmit,
-          formEl = self.formEl,
           btnEl = formEl.querySelector('[type="submit"]'),
           eventPreventDefault = ( enableBtn = true ) => {
               if( btnEl && enableBtn ){ btnEl.disabled = false; }
@@ -32,7 +31,7 @@ export function submit( event ){
     addClass( formEl, formCssClasses.submit );
     
     const handleValidation = options.fieldOptions.handleValidation,
-          formValidationPromise = (handleValidation ? self.validateForm() : Promise.resolve(validateFormObjDefault));
+          formValidationPromise = (handleValidation ? instance.validateForm() : Promise.resolve(validateFormObjDefault));
 
     formValidationPromise.then(formValidation => {
 
@@ -45,7 +44,7 @@ export function submit( event ){
             return [beforeSendData];
         }
         
-        let formDataObj = (isAjaxForm ? self.getFormData() : null),
+        let formDataObj = (isAjaxForm ? instance.getFormData() : null),
             callbacksBeforeSend = options.formOptions.beforeSend;
 
         if( formDataObj ){
@@ -57,7 +56,7 @@ export function submit( event ){
             data: beforeSendData,
             stopConditionFn: function(data){ return data.stopExecution; }
         };
-        return runFunctionsSequence.call(self, rfsObject);
+        return runFunctionsSequence(rfsObject);
 
     }).then(dataList => {
 
@@ -68,9 +67,9 @@ export function submit( event ){
         
         if( isAjaxForm ){
 
-            const formData = dataList[dataList.length - 1].formData;
+            const formData = dataList.pop().formData;
             addClass( formEl, formCssClasses.ajaxPending );
-            ajaxCall.call(self, formData);
+            dispatchCustomEvent( formEl, customEvents.form.submit, ajaxCall( formEl, formData, options ) );
             
         }
 

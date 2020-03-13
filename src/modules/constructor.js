@@ -1,12 +1,10 @@
 
 import { checkFormEl, isNodeList, mergeObjects }   from './helpers';
-import { callbackFns }                             from './listenerCallbacks';
 import { formStartup }                             from './formStartup';
 
-export function constructorFn( formEl, optionsObj = {} ){
+export function constructorFn( self, formEl, optionsObj ){
 
-    let self = this,
-        argsL = arguments.length,
+    let argsL = arguments.length,
         checkFormElem = checkFormEl(formEl);
 
     if( argsL === 0 || (argsL > 0 && !formEl) ){
@@ -22,15 +20,24 @@ export function constructorFn( formEl, optionsObj = {} ){
     self.formEl = checkFormElem.element;
     self.formEl.formjs = self;
     self.options = mergeObjects({}, self.constructor.prototype.options, optionsObj);
-    self.listenerCallbacks = {
-        dataTypeNumber:     callbackFns.dataTypeNumber,
-        keypressMaxlength:  callbackFns.keypressMaxlength,
-        pastePrevent:       callbackFns.pastePrevent.bind(self),
-        submit:             callbackFns.submit.bind(self),
-        validation:         callbackFns.validation.bind(self)
-    };
-    Object.freeze(self.listenerCallbacks);
 
-    formStartup.call( self );
+    // BINDING CONTEXT FOR FUTURE EXECUTION
+    const cbList = [
+        // IN fieldOptions
+        'beforeValidation',
+        // IN formOptions
+        'beforeSend',
+        'getFormData'
+    ];
+    cbList.forEach(cbName => {
+        let optionType = self.options.formOptions[cbName] ? 'formOptions' : 'fieldOptions',
+            cbOpt = self.options[optionType][cbName];
+
+        if( cbOpt ){
+            self.options[optionType][cbName] = ( Array.isArray(cbOpt) ? cbOpt.map(cbFn => cbFn.bind(self)) : cbOpt.bind(self) );
+        }
+    });
+
+    formStartup( self.formEl, self.options );
     
 }

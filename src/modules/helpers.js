@@ -1,19 +1,17 @@
 
 export const
 
-fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea',
-
-addClass = function( element, cssClasses ){
-    cssClasses.split(' ').forEach(function(className){
+addClass = ( element, cssClasses ) => {
+    cssClasses.split(' ').forEach(className => {
         element.classList.add( className );
     });
 },
 
-checkDirtyField = function( fields, cssClasses = this.options.fieldOptions.cssClasses.dirty ){
+checkDirtyField = ( fields, cssClasses ) => {
 
     var fields = (isNodeList(fields) ? Array.from( fields ) : [fields]);
     
-    fields.forEach(function(fieldEl){
+    fields.forEach(fieldEl => {
         if( fieldEl.type !== 'checkbox' && fieldEl.type !== 'radio' ){
             let containerEl = fieldEl.closest('[data-formjs-question]') || fieldEl;
 
@@ -31,7 +29,7 @@ checkDirtyField = function( fields, cssClasses = this.options.fieldOptions.cssCl
     
 },
 
-checkFormEl = function( formEl ){
+checkFormEl = formEl => {
     let isString = typeof formEl,
         isValidNodeSelector = isString === 'string' && isDOMNode(document.querySelector(formEl)),
         isFormSelector = isValidNodeSelector && document.querySelector(formEl).tagName.toLowerCase() === 'form',
@@ -43,23 +41,28 @@ checkFormEl = function( formEl ){
     return obj;
 },
 
-executeCallback = function( {fn = null, data = {}, options = {}} = {} ){
-    let self = this,
-        optionsNew = mergeObjects({}, self.options, options),
-        callbackFnList = [];
-
-    if( typeof fn === 'function' ){
-        callbackFnList.push( fn );
-    } else if( Array.isArray(fn) ) {
-        callbackFnList = fn;
+customEvents = {
+    field: {
+        validation: 'fjs.field:validation'
+    },
+    form: {
+        submit:     'fjs.form:submit',
+        validation: 'fjs.form:validation'
     }
-
-    callbackFnList.forEach(function(promiseFn){
-        promiseFn.call( self, data, optionsNew );
-    });
 },
 
-getFilledFields = function( formEl ){
+dispatchCustomEvent = ( elem, eventName, data = {}, eventOptions = {} ) => {
+    eventOptions = mergeObjects({}, { bubbles: true }, eventOptions);
+    const eventObj = new Event(eventName, eventOptions);
+    eventObj.data = data;
+    elem.dispatchEvent( eventObj );
+},
+
+excludeSelector = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])',
+
+fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea',
+
+getFilledFields = formEl => {
     return getUniqueFields( formEl.querySelectorAll(fieldsStringSelector) )
     .map(fieldEl => {
 
@@ -81,7 +84,7 @@ getFilledFields = function( formEl ){
     });
 },
 
-getSplitChar = function( string ){
+getSplitChar = string => {
     let splitChar = '.';
 
     if( string.indexOf(splitChar) === -1 ){
@@ -95,7 +98,7 @@ getSplitChar = function( string ){
     return splitChar;
 },
 
-getUniqueFields = function( nodeList ){
+getUniqueFields = nodeList => {
 
     let currentFieldName = '',
         currentFieldType = '';
@@ -117,19 +120,19 @@ getUniqueFields = function( nodeList ){
     
 },
 
-isDOMNode = function( node ){
+isDOMNode = node => {
     return Element.prototype.isPrototypeOf( node );
 },
 
-isFieldForChangeEvent = function ( fieldEl ) {
+isFieldForChangeEvent = fieldEl => {
     return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
 },
 
-isNodeList = function( nodeList ){
+isNodeList = nodeList => {
     return NodeList.prototype.isPrototypeOf( nodeList );
 },
 
-isPlainObject = function( object ){
+isPlainObject = object => {
     return Object.prototype.toString.call( object ) === '[object Object]';
 },
 
@@ -174,37 +177,34 @@ mergeObjects = function( out = {} ){
     return out;
 },
 
-removeClass = function( element, cssClasses ){
-    cssClasses.split(' ').forEach(function(className){
+removeClass = ( element, cssClasses ) => {
+    cssClasses.split(' ').forEach(className => {
         element.classList.remove( className );
     });
 },
 
-runFunctionsSequence = function( { functionsList = [], data = {}, stopConditionFn = function(){return false} } = {} ){
-    const self = this;
-
-    return functionsList.reduce(function(acc, promiseFn){
-        return acc.then(function (res) {
+runFunctionsSequence = ( { functionsList = [], data = {}, stopConditionFn = function(){return false} } = {} ) => {
+    return functionsList.reduce((acc, promiseFn) => {
+        return acc.then(res => {
             let dataNew = mergeObjects({}, res[res.length - 1]);
             if( stopConditionFn(dataNew) ){
                 return Promise.resolve(res);
             }
-            return new Promise(resolve => { resolve(promiseFn.call(self, dataNew)) }).then(function (result = dataNew) {
-                res.push(result);
-                return res;
-            });
+            return new Promise(resolve => { resolve(promiseFn(dataNew)) })
+                .then((result = dataNew) => {
+                    res.push(result);
+                    return res;
+                });
         });
-    }, Promise.resolve([data])).then(dataList => {
-        if( dataList.length > 1 ){ dataList.shift(); }
-        return dataList;
-    });
+    }, Promise.resolve([data]))
+        .then(dataList => dataList.length > 1 ? dataList.slice(1) : dataList);
 },
 
-serializeObject = function( obj ){
+serializeObject = obj => {
     var objToString = (
             (obj && typeof obj === 'object' && obj.constructor === Object) ? 
             Object.keys(obj)
-                .reduce(function(a,k){
+                .reduce((a,k) => {
                     a.push(k+'='+encodeURIComponent(obj[k]));
                     return a
                 },[]).join('&') : 
@@ -213,8 +213,8 @@ serializeObject = function( obj ){
     return objToString;
 },
 
-toCamelCase = function( string ){
-    return string.replace(/-([a-z])/ig, function(all, letter){ return letter.toUpperCase(); });
+toCamelCase = string => {
+    return string.replace(/-([a-z])/ig, (all, letter) => { return letter.toUpperCase(); });
 },
 
 validateFieldObjDefault = { result: false, fieldEl: null },

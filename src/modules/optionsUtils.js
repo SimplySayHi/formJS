@@ -1,66 +1,18 @@
 
-import { addClass, checkDirtyField, mergeObjects, removeClass } from './helpers';
+import { addClass, checkDirtyField } from './helpers';
 
 export const defaultCallbacksInOptions = {
     fieldOptions: {
 
         beforeValidation: function beforeValidationDefault ( fieldObj ) {
 
-            checkDirtyField.call( this, fieldObj.fieldEl );
-            if( !this.options.fieldOptions.skipUIfeedback ){
-                addClass( fieldObj.fieldEl.closest('[data-formjs-question]'), this.options.fieldOptions.cssClasses.pending );
+            const fieldOptions = this.options.fieldOptions;
+
+            checkDirtyField( fieldObj.fieldEl, fieldOptions.cssClasses.dirty );
+            if( !fieldOptions.skipUIfeedback ){
+                addClass( fieldObj.fieldEl.closest('[data-formjs-question]'), fieldOptions.cssClasses.pending );
             }
 
-        },
-
-        onValidation: function onValidationDefault ( fieldsArray, tempOptions = {} ) {
-
-            let self = this,
-                options = mergeObjects( {}, self.options.fieldOptions, tempOptions.fieldOptions );
-
-            fieldsArray.forEach(function( obj ){
-                let fieldEl = obj.fieldEl,
-                    containerEl = fieldEl.closest('[data-formjs-question]'),
-                    isReqFrom = fieldEl.matches('[data-required-from]'),
-                    reqMoreEl = self.formEl.querySelector( fieldEl.getAttribute('data-required-from') );
-
-                if( containerEl !== null ){
-                    removeClass( containerEl, options.cssClasses.pending );
-                }
-
-                if( containerEl !== null && !options.skipUIfeedback ){
-
-                    if( obj.result ){
-
-                        if( !isReqFrom || (isReqFrom && reqMoreEl.checked) ){
-                            // IF FIELD IS VALID
-                            let errorClasses = options.cssClasses.error + ' ' + options.cssClasses.errorEmpty + ' ' + options.cssClasses.errorRule;
-                            removeClass( containerEl, errorClasses );
-                            addClass( containerEl, options.cssClasses.valid );
-                        }
-
-                    } else {
-
-                        // IF FIELD IS NOT VALID
-                        let extraErrorClass = options.cssClasses.errorRule;
-
-                        // HANDLE CASE OF FIELD data-checks
-                        let isChecks = fieldEl.matches('[data-checks]'),
-                            checkedElLength = (isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0);
-
-                        if( (!isChecks && (obj.errors && obj.errors.empty)) || (isChecks && checkedElLength === 0) ){
-                            extraErrorClass = options.cssClasses.errorEmpty;
-                        }
-
-                        let errorClasses = options.cssClasses.error + ' ' + extraErrorClass,
-                            errorClassToRemove = options.cssClasses.errorEmpty + ' ' + options.cssClasses.errorRule;
-                        removeClass( containerEl, options.cssClasses.valid + ' ' + errorClassToRemove );
-                        addClass( containerEl, errorClasses );
-
-                    }
-                }
-            });
-            
         }
 
     },
@@ -68,16 +20,15 @@ export const defaultCallbacksInOptions = {
 
         getFormData: function getFormDataDefault ( filteredFields ) {
 
-            let formData = {},
-                self = this,
-                formEl = self.formEl;
+            const formData = {},
+                  formEl = this.formEl;
 
             filteredFields.forEach(function( fieldEl ){
-                let isCheckbox = fieldEl.type === 'checkbox',
-                    isRadio = fieldEl.type === 'radio',
-                    isSelect = fieldEl.matches('select'),
-                    name = fieldEl.name,
-                    value = fieldEl.value;
+                const isCheckbox = fieldEl.type === 'checkbox',
+                      isRadio = fieldEl.type === 'radio',
+                      isSelect = fieldEl.matches('select'),
+                      name = fieldEl.name;
+                let value = fieldEl.value;
                                 
                 if( isCheckbox ) {
                     

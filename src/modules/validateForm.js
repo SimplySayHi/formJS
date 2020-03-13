@@ -1,25 +1,23 @@
 
-import { executeCallback, mergeObjects } from './helpers';
+import { customEvents, dispatchCustomEvent } from './helpers';
+import { listenerCallbacks } from './listenerCallbacks';
 import { isValidForm } from './isValidForm';
 
-export function validateForm( fieldOptionsObj = {} ){
-
-    const self = this,
-          fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptionsObj);
+export function validateForm( formEl, options, validationRules, validationErrors ){
 
     return new Promise(function(resolve){
 
-        const prom = isValidForm.call( self, fieldOptions );
+        const prom = isValidForm( formEl, options.fieldOptions, validationRules, validationErrors );
         resolve(prom);
 
-    }).then(obj => {
+    }).then(data => {
 
-        const clMethodName = obj.result ? 'add' : 'remove';
+        const clMethodName = data.result ? 'add' : 'remove';
+        formEl.classList[clMethodName]( options.formOptions.cssClasses.valid );
+        listenerCallbacks.validationEnd( {data} );
+        dispatchCustomEvent( formEl, customEvents.form.validation, data );
 
-        self.formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
-        executeCallback.call( self, {fn: fieldOptions.onValidation, data: obj.fields, options: {fieldOptions}} );
-
-        return obj;
+        return data;
 
     });
     

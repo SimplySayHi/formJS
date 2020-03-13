@@ -2,31 +2,26 @@
 import { isDOMNode, mergeObjects, runFunctionsSequence, validateFieldObjDefault } from './helpers';
 import { isValid } from './isValid';
 
-export function isValidField( fieldElem, fieldOptionsObj = {} ){
+export function isValidField( fieldEl, fieldOptions, validationRules, validationErrors ){
 
-    const self = this,
-          fieldEl = (typeof fieldElem === 'string' ? self.formEl.querySelector(fieldElem) : fieldElem);
-
-    let obj = mergeObjects({}, validateFieldObjDefault, {fieldEl});
+    const obj = mergeObjects({}, validateFieldObjDefault, {fieldEl});
 
     if( !isDOMNode(fieldEl) ){ return Promise.resolve(obj); }
 
-    let options =           mergeObjects( {}, self.options.fieldOptions, fieldOptionsObj ),
-        isValidValue =      fieldEl.value.trim().length > 0,
-        isRequired =        fieldEl.required,
-        isReqFrom =         fieldEl.matches('[data-required-from]'),
-        isValidateIfFilled =fieldEl.matches('[data-validate-if-filled]');
+    const isValidValue =      fieldEl.value.trim().length > 0,
+          isRequired =        fieldEl.required,
+          isReqFrom =         fieldEl.matches('[data-required-from]'),
+          isValidateIfFilled =fieldEl.matches('[data-validate-if-filled]'),
+          rfsObject = {
+            functionsList: fieldOptions.beforeValidation,
+            data: {fieldEl}
+        };
 
-    const rfsObject = {
-        functionsList: self.options.fieldOptions.beforeValidation,
-        data: {fieldEl}
-    };
-
-    return runFunctionsSequence.call(self, rfsObject)
+    return runFunctionsSequence(rfsObject)
         .then(data => {
 
             let dataObj = data.pop();
-            return new Promise(function(resolve){
+            return new Promise(resolve => {
                 if(
                     (!isRequired && !isValidateIfFilled && !isReqFrom) ||   // IT IS A NORMAL FORM FIELD
                     (isValidateIfFilled && !isValidValue) ||                // IT IS data-validate-if-filled AND EMPTY
@@ -38,7 +33,7 @@ export function isValidField( fieldElem, fieldOptionsObj = {} ){
                 
                 } else {
 
-                    resolve( isValid.call(self, fieldEl, options) );
+                    resolve( isValid( fieldEl, fieldOptions, validationRules, validationErrors ) );
                     
                 }
 

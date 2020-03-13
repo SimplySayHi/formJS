@@ -2,15 +2,16 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Test Page | formJS - Javascript Form Validation. Made Easy</title>
+    <title>Test Page | formJS - JavaScript Form Validation. Made Easy</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="Valerio Di Punzio">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great|Raleway:200" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Expletus+Sans:500|Raleway:200&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/doc.css">
     <link rel="stylesheet" href="css/demo.css">
 </head>
 
@@ -40,9 +41,6 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <p class="text-white small">
-                            In this demo the error messages will be shown thanks to a JS function that dynamically prints them.
-                        </p>
                         <form method="POST" action="json/data.json" name="ajax-form-post-js-errors">
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
@@ -129,49 +127,44 @@
     </div>
 
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
-    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch"></script>
+    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
     <script src="js/include.js"></script>
     <script src="dist/formjs.min.js"></script>
     <script src="dist/additionals/validationRules.js"></script>
     <script src="dist/additionals/validationErrors.js"></script>
     <script>
-        //document.querySelector('.card-header').click();
+        function populatePasswords(){
+            var pswFields = document.querySelectorAll('form [type="password"]');
+            Array.from(pswFields).forEach(function(field){
+                field.value = 'asdAsd123';
+            });
+        }
+
+        //populatePasswords();
+
+        document.querySelector('.card-header').click();
+        
         var formEl = document.querySelector('form');
         var options = {
             fieldOptions: {
                 beforeValidation: [
-                    /* function beforeValidation_testPage1( fieldObj ){
+                    function beforeValidation_testPage1( fieldObj ){
                         console.log('--- beforeValidation_testPage 1 fieldObj', fieldObj);
-                    }, */
-                    function beforeValidation_testPage( fieldObj ){
-                        console.log('--- beforeValidation_testPage fieldObj', fieldObj);
-                        /* return new Promise(function(resolve){
+                    },
+                    /* function beforeValidation_testPage2( fieldObj ){
+                        console.log('--- beforeValidation_testPage2 fieldObj', fieldObj);
+                        return new Promise(function(resolve){
                             setTimeout(function(){
                                 resolve( fieldObj );
                             }, 1000);
-                        }); */
-                    },
+                        });
+                    }, */
                     /* function beforeValidation_testPage3( fieldObj ){
                         console.log('--- beforeValidation_testPage 3 fieldObj', fieldObj);
                         fieldObj.aaa = 'ciao';
                         return fieldObj;
                     } */
-                ],
-                onPastePrevented: [function(){
-                    console.log('onPastePrevented');
-                }/* ,function(){
-                    console.log('onPastePrevented 2');
-                } */],
-                onValidation: function onValidation_testPage( fields ){
-                    if( fields.length === 1 ){
-                        var field = fields[0];
-                        console.log('--- onValidation_testPage field', field);
-                    } else {
-                        console.log('--- onValidation_testPage fields list', fields);
-                        const formValidity = fields.filter(function(field){ return !field.result; }).length === 0 ? 'VALID' : 'NOT VALID';
-                        console.log('--- FORM IS ' + formValidity);
-                    }
-                }
+                ]
             },
             formOptions: {
                 beforeSend: [
@@ -182,6 +175,7 @@
                         if( feedbackEl ){
                             feedbackEl.classList.add( 'd-none' );
                         }
+                        //data.stopExecution = true;
 
                         return Promise.resolve(data);
                     },
@@ -208,21 +202,47 @@
 
                         });
                     } */
-                ],
+                ]
             }
         };
+
         var formJsInstance = new Form( formEl, options );
 
-        populatePasswords();
-        formJsInstance.init();
+        formEl.addEventListener('fjs.field:validation', function(e){
+            console.log('--- GENERAL FIELD VALIDATION', this);
+            console.log(e.type, e.data);
+            console.log('--- FIELD IS ' + (e.data.result ? '' : 'NOT ') + 'VALID');
+        }, false);
 
-        function populatePasswords(){
-            var pswFields = document.querySelectorAll('form [type="password"]');
-            Array.from(pswFields).forEach(function(field){
-                var eventName = formJsInstance.options.fieldOptions.validateOnEvents.split(' ')[0];
-                field.value = 'asdAsd123';
-            });
-        }   
+        formEl.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(e){
+            console.log('--- SPECIFIC FIELD VALIDATION ( EMAIL )', this);
+            console.log(e.type, e.data);
+            console.log('--- FIELD IS ' + (e.data.result ? '' : 'NOT ') + 'VALID');
+        }, false);
+
+        formEl.addEventListener('fjs.form:validation', function(e){
+            console.log(e.type, e.data);
+            console.log('--- FORM IS ' + (e.data.result ? '' : 'NOT ') + 'VALID');
+        }, false);
+
+        formEl.addEventListener('fjs.form:submit', function(e){
+            console.log(e.type, e.data);
+            e.data
+                .then(function(response){
+                    console.log(e.type, 'then', response);
+                })
+                .catch(function(error){
+                    console.log(e.type, 'catch', error);
+                })
+                .finally(function(){
+                    console.log(e.type, 'finally');
+                });
+        }, false);
+
+        formJsInstance.init().then(function( obj ){
+            console.log('formJsInstance obj.instance', obj.instance);
+            console.log('formJsInstance obj.fields', obj.fields);
+        });
     </script>
     <script src="dist/additionals/utils.js"></script>
     

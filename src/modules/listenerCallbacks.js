@@ -1,8 +1,8 @@
 
-import { executeCallback, fieldsStringSelector, isFieldForChangeEvent } from './helpers';
+import { addClass, fieldsStringSelector, isFieldForChangeEvent, removeClass } from './helpers';
 import { submit } from './submit';
 
-export const callbackFns = {
+export const listenerCallbacks = {
 
     dataTypeNumber: function( event ){
 
@@ -39,26 +39,24 @@ export const callbackFns = {
 
     pastePrevent: function( event ){
 
-        const self = this,
-              fieldEl = event.target;
-        let fieldOptions = self.options.fieldOptions;
+        const fieldEl = event.target;
+        let fieldOptions = fieldEl.closest('form').formjs.options.fieldOptions;
 
         if( fieldEl.matches( fieldOptions.preventPasteFields ) ){     
             event.preventDefault();
-            executeCallback.call( self, {fn: fieldOptions.onPastePrevented, data: fieldEl} );
         }
 
     },
 
     submit: function( event ){
-        submit.call( this, event );
+        submit(event);
     },
 
     validation: function( event ){
 
-        const self = this,
-              eventName = event.type,
-              fieldEl = event.target;
+        const eventName = event.type,
+              fieldEl = event.target,
+              self = fieldEl.closest('form').formjs;
 
         if( fieldEl.matches( fieldsStringSelector ) ){
             const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl),
@@ -125,6 +123,58 @@ export const callbackFns = {
             }
         }
         
+    },
+
+    validationEnd: function( event ){
+
+        const fieldsArray = event.data.fieldEl ? [event.data] : event.data.fields,
+              options = fieldsArray[0].fieldEl.closest('form').formjs.options.fieldOptions;
+
+        fieldsArray.forEach(function( obj ){
+            let fieldEl = obj.fieldEl;
+            if( fieldEl.matches( fieldsStringSelector ) ){
+                let containerEl = fieldEl.closest('[data-formjs-question]'),
+                    isReqFrom = fieldEl.matches('[data-required-from]'),
+                    reqMoreEl = document.querySelector( fieldEl.getAttribute('data-required-from') );
+
+                if( containerEl !== null ){
+                    removeClass( containerEl, options.cssClasses.pending );
+                }
+
+                if( containerEl !== null && !options.skipUIfeedback ){
+
+                    if( obj.result ){
+
+                        if( !isReqFrom || (isReqFrom && reqMoreEl.checked) ){
+                            // IF FIELD IS VALID
+                            let errorClasses = options.cssClasses.error + ' ' + options.cssClasses.errorEmpty + ' ' + options.cssClasses.errorRule;
+                            removeClass( containerEl, errorClasses );
+                            addClass( containerEl, options.cssClasses.valid );
+                        }
+
+                    } else {
+
+                        // IF FIELD IS NOT VALID
+                        let extraErrorClass = options.cssClasses.errorRule;
+
+                        // HANDLE CASE OF FIELD data-checks
+                        let isChecks = fieldEl.matches('[data-checks]'),
+                            checkedElLength = (isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0);
+
+                        if( (!isChecks && (obj.errors && obj.errors.empty)) || (isChecks && checkedElLength === 0) ){
+                            extraErrorClass = options.cssClasses.errorEmpty;
+                        }
+
+                        let errorClasses = options.cssClasses.error + ' ' + extraErrorClass,
+                            errorClassToRemove = options.cssClasses.errorEmpty + ' ' + options.cssClasses.errorRule;
+                        removeClass( containerEl, options.cssClasses.valid + ' ' + errorClassToRemove );
+                        addClass( containerEl, errorClasses );
+
+                    }
+                }
+            }
+        });
+
     }
 
 }

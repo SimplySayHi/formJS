@@ -1,13 +1,13 @@
 
-export function formStartup(){
+import { customEvents } from './helpers';
+import { listenerCallbacks } from './listenerCallbacks';
 
-    const self = this,
-          formEl = self.formEl;
+export function formStartup( formEl, options ){
 
     formEl.noValidate = true;
 
-    let fieldOptions = self.options.fieldOptions,
-        formOptions = self.options.formOptions;
+    let fieldOptions = options.fieldOptions,
+        formOptions = options.formOptions;
 
     // HANDLE FIELD VALIDATION
     if( fieldOptions.handleValidation ){
@@ -17,41 +17,37 @@ export function formStartup(){
             
             // maxlength
             // MAXLENGTH IS BUGGY IN ANDROID BROWSERS
-            formEl.addEventListener('keypress', self.listenerCallbacks.keypressMaxlength, false);
+            formEl.addEventListener('keypress', listenerCallbacks.keypressMaxlength, false);
 
             // data-type="number"
             // SINCE VALIDATING type="number" WITH NON NUMERIC CHARS WILL RETURN EMPTY STRING IN SOME BROWSERS ( EG: FIREFOX )
-            formEl.addEventListener('input', self.listenerCallbacks.dataTypeNumber, false);
+            formEl.addEventListener('input', listenerCallbacks.dataTypeNumber, false);
             
         }
         
         if( fieldOptions.preventPasteFields && formEl.querySelectorAll( fieldOptions.preventPasteFields ).length ){
             // INIT EVENT LISTENER FOR "PASTE" EVENT TO PREVENT IT ON SPECIFIED FIELDS
-            formEl.addEventListener('paste', self.listenerCallbacks.pastePrevent, false);
+            formEl.addEventListener('paste', listenerCallbacks.pastePrevent, false);
         }
 
         // INIT EVENTS LISTENER ( AS IN fieldOptions )
         fieldOptions.validateOnEvents.split(' ').forEach(function( eventName ){
             let useCapturing = (eventName === 'blur' ? true : false);
-            formEl.addEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
+            formEl.addEventListener(eventName, listenerCallbacks.validation, useCapturing);
         });
+
+        formEl.addEventListener(customEvents.field.validation, listenerCallbacks.validationEnd, false);
 
     }
     
     // HANDLE FORM SUBMIT
     if( formOptions.handleSubmit ){
         // INIT FORM SUBMIT ( DEFAULT AND AJAX )
-        formEl.addEventListener('submit', self.listenerCallbacks.submit);
+        formEl.addEventListener('submit', listenerCallbacks.submit);
 
         if( formOptions.ajaxSubmit ){
             if( formEl.getAttribute('enctype') ){
-
-                // FOR XMLHttpRequest API
-                formOptions.ajaxOptions.contentType = formEl.getAttribute('enctype');
-
-                // FOR fetch API
                 formOptions.ajaxOptions.headers['Content-Type'] = formEl.getAttribute('enctype');
-                
             }
 
             if( formEl.getAttribute('method') ){

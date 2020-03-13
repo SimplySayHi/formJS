@@ -1,5 +1,5 @@
 
-import { mergeObjects }         from './modules/helpers';
+import { excludeSelector, mergeObjects } from './modules/helpers';
 import { options }              from './modules/options';
 import { validationRules }      from './modules/validationRules';
 import { validationErrors }     from './modules/validationErrors';
@@ -7,37 +7,41 @@ import { validationErrors }     from './modules/validationErrors';
 // CONSTRUCTOR FUNCTION & PUBLIC METHODS
 import { constructorFn }        from './modules/constructor';
 import { destroy }              from './modules/destroy';
-import { getFormData }          from './modules/getFormData';
 import { init }                 from './modules/init';
 import { validateField }        from './modules/validateField';
 import { validateForm }         from './modules/validateForm';
 
-const version = '3.3.2';
+const version = '4.0.0';
 
 class Form {
 
     constructor( formEl, optionsObj ){
-        constructorFn.call(this, formEl, optionsObj);
+        constructorFn(this, formEl, optionsObj);
     }
 
     destroy(){
-        destroy.call(this);
+        destroy(this.formEl, this.options);
     }
     
     getFormData(){
-        return getFormData.call(this);
+        const formFieldsEl = this.formEl.querySelectorAll('input, select, textarea'),
+              filteredFields = Array.from( formFieldsEl ).filter( elem => elem.matches(excludeSelector) );
+        return this.options.formOptions.getFormData(filteredFields);
     }
 
     init(){
-        return init.call(this);
+        return init(this.formEl);
     }
 
-    validateField( fieldEl, fieldOptions ){
-        return validateField.call(this, fieldEl, fieldOptions);
+    validateField( fieldEl, fieldOptions = {} ){
+        fieldEl = (typeof fieldEl === 'string' ? this.formEl.querySelector(fieldEl) : fieldEl);
+        const options = mergeObjects({}, this.options, {fieldOptions});
+        return validateField(fieldEl, options, this.validationRules, this.validationErrors);
     }
 
-    validateForm( fieldOptions ){
-        return validateForm.call(this, fieldOptions);
+    validateForm( fieldOptions = {} ){
+        const options = mergeObjects({}, this.options, {fieldOptions});
+        return validateForm(this.formEl, options, this.validationRules, this.validationErrors);
     }
     
     static addValidationErrors( errorsObj ){

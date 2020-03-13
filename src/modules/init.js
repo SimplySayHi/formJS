@@ -1,20 +1,22 @@
 
 import { getFilledFields, isFieldForChangeEvent } from './helpers';
+import { listenerCallbacks } from './listenerCallbacks';
 
-export const init = function(){
+export const init = function( formEl ){
 
-    const self = this,
-          formEl = self.formEl,
-          formFields = getFilledFields( formEl );
+    const instance = formEl.formjs;
+    const formFields = getFilledFields( formEl );
 
     // VALIDATE ALL FILLED FIELDS
-    formFields.forEach(fieldEl => {
+    return Promise.all( formFields.map(fieldEl => {
+
         const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl);
         const fakeEventObj = { target: fieldEl, type: (isFieldForChangeEventBoolean ? 'change': '') };
-        self.listenerCallbacks.validation.call( self, fakeEventObj );
-    });
+        return listenerCallbacks.validation( fakeEventObj );
 
-    self.isInitialized = true;
-    return self;
+    }) ).then(fields => {
+        instance.isInitialized = true;
+        return { instance, fields };
+    });;
 
 }

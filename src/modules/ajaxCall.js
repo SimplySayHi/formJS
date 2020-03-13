@@ -1,22 +1,31 @@
 
-import { addClass, executeCallback, mergeObjects, removeClass, serializeObject } from './helpers';
+import { addClass, mergeObjects, removeClass, serializeObject } from './helpers';
 
-// AJAX CALL USING fetch API
-export function ajaxCall( formDataObj ){
+const getFetchMethod = (response, options) => {
+    const accept = options.headers.get('Accept');
+    const contentType = response.headers.get('Content-Type');
+    const headerOpt = accept || contentType || '';
 
-    let self = this,
-        formEl = self.formEl,
-        fieldOptions = self.options.fieldOptions,
-        formOptions = self.options.formOptions,
-        btnEl = formEl.querySelector('[type="submit"]'),
+    if( headerOpt.indexOf('application/json') > -1 || headerOpt === '' ){
+        return 'json';
+    } else if( headerOpt.indexOf('text/') > -1 ){
+        return 'text';
+    } else {
+        return 'blob';
+    }
+};
+
+export function ajaxCall( formEl, formDataObj, options ){
+
+    let btnEl = formEl.querySelector('[type="submit"]'),
         timeoutTimer,
-        ajaxOptions = mergeObjects( {}, formOptions.ajaxOptions ),
+        ajaxOptions = mergeObjects( {}, options.formOptions.ajaxOptions ),
         isMultipart = ajaxOptions.headers['Content-Type'] === 'multipart/form-data';
 
     ajaxOptions.body = formDataObj;
     
     // POST A FormData OBJECT ( multipart )
-    if( isMultipart && fieldOptions.handleFileUpload ){
+    if( isMultipart && options.fieldOptions.handleFileUpload ){
         let formDataMultipart = new FormData();
         
         for(let key in ajaxOptions.body){
@@ -64,48 +73,31 @@ export function ajaxCall( formDataObj ){
         }, ajaxOptions.timeout);
     }
 
-    fetch(ajaxOptions.url, ajaxOptions)
+    return fetch(ajaxOptions.url, ajaxOptions)
         .then(function( response ){
-
             if( !response.ok ){
                 return Promise.reject(response);
             }
 
-            let getFetchMethod = function( response ){
-                let contentType = response.headers.get('Content-Type'),
-                    methodName = 'blob';
-
-                if( contentType.indexOf('application/json') > -1 ){
-                    methodName = 'json';
-                } else if( contentType.indexOf('text/') > -1 ){
-                    methodName = 'text';
-                }
-                
-                return methodName;
-            };
-            let fetchMethod = getFetchMethod( response );
+            let fetchMethod = getFetchMethod(response, ajaxOptions);
 
             return response[fetchMethod]();
-
         })
         .then(function( data ){
-            addClass( formEl, formOptions.cssClasses.ajaxSuccess );
-            executeCallback.call( self, {fn: formOptions.onSubmitSuccess, data} );
+            addClass( formEl, options.formOptions.cssClasses.ajaxSuccess );
+            return data;
         })
         .catch(function( error ){
-            addClass( formEl, formOptions.cssClasses.ajaxError );
-            executeCallback.call( self, {fn: formOptions.onSubmitError, data: error} );
+            addClass( formEl, options.formOptions.cssClasses.ajaxError );
+            return Promise.reject(error);
         })
         .finally(function(){
-
             if( timeoutTimer ){
                 window.clearTimeout( timeoutTimer );
             }
-            removeClass( formEl, formOptions.cssClasses.submit + ' ' + formOptions.cssClasses.ajaxPending );
-            addClass( formEl, formOptions.cssClasses.ajaxComplete );
+            removeClass( formEl, options.formOptions.cssClasses.submit + ' ' + options.formOptions.cssClasses.ajaxPending );
+            addClass( formEl, options.formOptions.cssClasses.ajaxComplete );
             btnEl.disabled = false;
-            executeCallback.call( self, {fn: formOptions.onSubmitComplete} );
-
         });
-    
+
 }
