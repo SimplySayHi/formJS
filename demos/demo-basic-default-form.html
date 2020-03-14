@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Callback "beforeValidation" - Demos | formJS  - JavaScript Form Validation. Made Easy</title>
+    <title>Basic Default Form - Demos | formJS  - JavaScript Form Validation. Made Easy</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="Valerio Di Punzio">
@@ -10,10 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link href="https://fonts.googleapis.com/css?family=Expletus+Sans:500|Raleway:200&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/doc.css">
-    <link rel="stylesheet" href="css/demo.css">
-    <link rel="stylesheet" href="css/prism.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/doc.css">
+    <link rel="stylesheet" href="../css/demo.css">
+    <link rel="stylesheet" href="../css/prism.css">
 </head>
 
 <body>
@@ -22,12 +22,12 @@
 
         <div id="menu" class="position-sticky text-right d-flex">
             <div class="position-raltive w-100">
-                <a href="index.html" class="logo">f</a>
+                <a href="../index.html" class="logo">f</a>
                 <nav class="position-absolute nav-desktop d-none d-md-flex align-items-center">
-                    <a href="index.html" class="p-2 m-2">Home</a>
-                    <a href="get-started.html" class="p-2 m-2">Get Started</a>
-                    <a href="api.html" class="p-2 m-2">API</a>
-                    <a href="demos.html" class="p-2 m-2">Demos</a>
+                    <a href="../index.html" class="p-2 m-2">Home</a>
+                    <a href="../get-started.html" class="p-2 m-2">Get Started</a>
+                    <a href="../api.html" class="p-2 m-2">API</a>
+                    <a href="../demos.html" class="p-2 m-2">Demos</a>
                     <a href="https://github.com/SimplySayHi/formJS" target="_blank" class="github-logo ml-2">
                         <svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
          width="28px" height="28px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
@@ -40,10 +40,10 @@
                         menu
                     </button>
                     <span class="dropdown-menu">
-                        <a class="dropdown-item" href="index.html">Home</a>
-                        <a class="dropdown-item" href="get-started.html">Get Started</a>
-                        <a class="dropdown-item" href="api.html">API</a>
-                        <a class="dropdown-item" href="demos.html">Demos</a>
+                        <a class="dropdown-item" href="../index.html">Home</a>
+                        <a class="dropdown-item" href="../get-started.html">Get Started</a>
+                        <a class="dropdown-item" href="../api.html">API</a>
+                        <a class="dropdown-item" href="../demos.html">Demos</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS" target="_blank">View on Github</a>
                         <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS/issues" target="_blank">Report a Bug</a>
@@ -60,7 +60,7 @@
                 <h4 class="my-0">Demos</h4>
             </div>
             
-            <h2 class="border-0 mt-2 mb-4 pt-0">Callback "beforeValidation"</h2>
+            <h2 class="border-0 mt-2 mb-4 pt-0">Basic Default Form</h2>
 
             <div class="row justify-content-center">
                 <div class="col-md-6 col-lg-7 col-xl-8 order-6 order-md-1">
@@ -152,15 +152,8 @@
                                 <pre class="m-0">
 <code class="language-js">const formEl = document.querySelector('form');
 const options = {
-    fieldOptions: {
-        beforeValidation: function( fieldObj ){
-            var fieldEl = fieldObj.fieldEl;
-            if( fieldEl.matches('[type="email"]') && fieldEl.value ){
-                console.log('beforeValidation fieldObj', fieldObj);
-                console.log('TRANSFORM FIELD VALUE TO UPPERCASE');
-                fieldEl.value = fieldEl.value.toUpperCase();
-            }
-        }
+    formOptions: {
+        ajaxSubmit: false
     }
 };
 const formInstance = new Form( formEl, options );
@@ -261,23 +254,16 @@ formInstance.init().then(obj => {
 
     </div>
 
-    <script src="js/prism.js"></script>
+    <script src="../js/prism.js"></script>
 
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
-    <script src="dist/formjs.min.js"></script>
+    <script src="../dist/formjs.min.js"></script>
     <script>
         var formEl = document.querySelector('form');
         var options = {
-            fieldOptions: {
-                beforeValidation: function( fieldObj ){
-                    var fieldEl = fieldObj.fieldEl;
-                    if( fieldEl.matches('[type="email"]') && fieldEl.value ){
-                        console.log('beforeValidation fieldObj', fieldObj);
-                        console.log('TRANSFORM FIELD VALUE TO UPPERCASE');
-                        fieldEl.value = fieldEl.value.toUpperCase();
-                    }
-                }
+            formOptions: {
+                ajaxSubmit: false
             }
         };
         var formInstance = new Form( formEl, options );
@@ -289,7 +275,7 @@ formInstance.init().then(obj => {
         });
     </script>
 
-    <script src="js/include.js"></script>
+    <script src="../js/include.js"></script>
     
 </body>
 </html>

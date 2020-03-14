@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Show Error Messages via CSS - Demos | formJS  - JavaScript Form Validation. Made Easy</title>
+    <title>Add Custom Validation Errors - Demos | formJS  - JavaScript Form Validation. Made Easy</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="Valerio Di Punzio">
@@ -10,10 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link href="https://fonts.googleapis.com/css?family=Expletus+Sans:500|Raleway:200&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/doc.css">
-    <link rel="stylesheet" href="css/demo.css">
-    <link rel="stylesheet" href="css/prism.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/doc.css">
+    <link rel="stylesheet" href="../css/demo.css">
+    <link rel="stylesheet" href="../css/prism.css">
 </head>
 
 <body>
@@ -22,12 +22,12 @@
 
         <div id="menu" class="position-sticky text-right d-flex">
             <div class="position-raltive w-100">
-                <a href="index.html" class="logo">f</a>
+                <a href="../index.html" class="logo">f</a>
                 <nav class="position-absolute nav-desktop d-none d-md-flex align-items-center">
-                    <a href="index.html" class="p-2 m-2">Home</a>
-                    <a href="get-started.html" class="p-2 m-2">Get Started</a>
-                    <a href="api.html" class="p-2 m-2">API</a>
-                    <a href="demos.html" class="p-2 m-2">Demos</a>
+                    <a href="../index.html" class="p-2 m-2">Home</a>
+                    <a href="../get-started.html" class="p-2 m-2">Get Started</a>
+                    <a href="../api.html" class="p-2 m-2">API</a>
+                    <a href="../demos.html" class="p-2 m-2">Demos</a>
                     <a href="https://github.com/SimplySayHi/formJS" target="_blank" class="github-logo ml-2">
                         <svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
          width="28px" height="28px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
@@ -40,10 +40,10 @@
                         menu
                     </button>
                     <span class="dropdown-menu">
-                        <a class="dropdown-item" href="index.html">Home</a>
-                        <a class="dropdown-item" href="get-started.html">Get Started</a>
-                        <a class="dropdown-item" href="api.html">API</a>
-                        <a class="dropdown-item" href="demos.html">Demos</a>
+                        <a class="dropdown-item" href="../index.html">Home</a>
+                        <a class="dropdown-item" href="../get-started.html">Get Started</a>
+                        <a class="dropdown-item" href="../api.html">API</a>
+                        <a class="dropdown-item" href="../demos.html">Demos</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS" target="_blank">View on Github</a>
                         <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS/issues" target="_blank">Report a Bug</a>
@@ -60,7 +60,7 @@
                 <h4 class="my-0">Demos</h4>
             </div>
             
-            <h2 class="border-0 mt-2 mb-4 pt-0">Show Error Messages via CSS</h2>
+            <h2 class="border-0 mt-2 mb-4 pt-0">Add Custom Validation Errors</h2>
 
             <div class="row justify-content-center">
                 <div class="col-md-6 col-lg-7 col-xl-8 order-6 order-md-1">
@@ -93,22 +93,7 @@
             &lt;input name="email" type="email" class="form-control" required /&gt;
             &lt;label&gt;Email&lt;/label&gt;
         &lt;/div&gt;
-        &lt;div class="field-error-message small"&gt;
-            &lt;div data-error-type="empty"&gt;
-                Email address cannot be empty!
-            &lt;/div&gt;
-            &lt;div data-error-type="rule"&gt;
-                Check your email address, it is not valid:
-                &lt;ul&gt;
-                    &lt;li data-error-type="missingAtChar"&gt;@ char is missing&lt;/li&gt;
-                    &lt;li data-error-type="missingUserName"&gt;Username is missing&lt;/li&gt;
-                    &lt;li data-error-type="missingDomain"&gt;Domain is missing&lt;/li&gt;
-                    &lt;li data-error-type="missingExtensionDot"&gt;Extension dot is missing&lt;/li&gt;
-                    &lt;li data-error-type="missingExtension"&gt;Extension is missing&lt;/li&gt;
-                    &lt;li data-error-type="minlengthExtension"&gt;Extension isn't long enough&lt;/li&gt;
-                &lt;/ul&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
+        &lt;div class="field-error-message small"&gt;Check your email address, it is not valid!&lt;/div&gt;
     &lt;/div&gt;
     &lt;div data-formjs-question class="form-group"&gt;
         &lt;p class="mb-2 small"&gt;Select your contact preferences &lt;br /&gt;( 2 answers max )&lt;/p&gt;
@@ -165,79 +150,22 @@
                             </div>
                             <div class="card-body p-0">
                                 <pre class="m-0">
-<code class="language-js">function addClass ( element, cssClasses ){
-    if( cssClasses ){
-        cssClasses.trim().split(' ').forEach(function(className){
-            element.classList.add( className );
-        });
+<code class="language-js">Form.addValidationErrors({
+    email: function( string ){
+        var obj = {};
+        if( string.indexOf('@') === -1 ){ obj.atChar = true; }
+        else if( string.split('@').filter(function(i){ return !!i; }).length < 2 ){ obj.incomplete = true; }
+        return obj;
     }
-}
-
-function getErrorRuleClassesFromContainer ( containerEl ) {
-    let errorClasses = '';
-
-    errorClasses = Array.from(containerEl.classList).filter(function( cssClass ){
-        return cssClass.indexOf('has-error-rule-') === 0;
-    }).join(' ');
-
-    return errorClasses;
-}
-
-function getErrorRuleClassesFromErrorsObj ( errorsObj ) {
-    let errorClasses = '';
-
-    for(let errorName in errorsObj){
-        if( errorName !== 'empty' && errorName !== 'rule' ){
-            errorClasses += ' has-error-rule-' + errorName;
-        }
-    }
-
-    return errorClasses.trim();
-}
-
-function removeClass ( element, cssClasses ){
-    if( cssClasses ){
-        cssClasses.trim().split(' ').forEach(function(className){
-            element.classList.remove( className );
-        });
-    }
-}
-
-function onValidationDemoErrorsCss ( fieldsArray, options ){
-    fieldsArray.forEach(function( obj ){
-        let isValid = obj.result,
-            fieldEl = obj.fieldEl,
-            containerEl = fieldEl.closest('[data-formjs-question]');
-
-        if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
-            if( isValid ){
-
-                let errorClasses = getErrorRuleClassesFromContainer(containerEl);
-                if( errorClasses ){
-                    removeClass( containerEl, errorClasses );
-                }
-
-            } else {
-
-                let errorClasses = getErrorRuleClassesFromErrorsObj(obj.errors),
-                    errorClassToRemove = getErrorRuleClassesFromContainer(containerEl);
-                removeClass( containerEl, errorClassToRemove );
-                addClass( containerEl, errorClasses );
-
-            }
-        }
-    });
-}
-
-const formEl = document.querySelector('form');
-const formInstance = new Form( formEl );
-
-formEl.addEventListener('fjs.field:validation', function(event){
-    onValidationDemoErrorsCss( [event.data], this.formjs.options );
 });
 
-formEl.addEventListener('fjs.form:validation', function(event){
-    onValidationDemoErrorsCss( event.data.fields, this.formjs.options );
+var formEl = document.querySelector('form');
+var formInstance = new Form( formEl );
+
+formEl.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(event){
+    if( Object.keys(event.data.errors).length > 0 ){
+        console.log('EMAIL CUSTOM ERRORS', event.data.errors);
+    }
 });
 
 // INITIALIZATION ( OPTIONAL )
@@ -277,22 +205,7 @@ formInstance.init().then(obj => {
                                         <input name="email" type="email" class="form-control" required />
                                         <label>Email</label>
                                     </div>
-                                    <div class="field-error-message small">
-                                        <div data-error-type="empty">
-                                            Email address cannot be empty!
-                                        </div>
-                                        <div data-error-type="rule">
-                                            Check your email address, it is not valid:
-                                            <ul>
-                                                <li data-error-type="missingAtChar">@ char is missing</li>
-                                                <li data-error-type="missingUserName">Username is missing</li>
-                                                <li data-error-type="missingDomain">Domain is missing</li>
-                                                <li data-error-type="missingExtensionDot">Extension dot is missing</li>
-                                                <li data-error-type="missingExtension">Extension is missing</li>
-                                                <li data-error-type="minlengthExtension">Extension isn't long enough</li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                                    <div class="field-error-message small">Check your email address, it is not valid!</div>
                                 </div>
                                 <div data-formjs-question class="form-group">
                                     <p class="mb-2 small">Select your contact preferences <br />( 2 answers max )</p>
@@ -351,85 +264,28 @@ formInstance.init().then(obj => {
 
     </div>
 
-    <script src="js/prism.js"></script>
+    <script src="../js/prism.js"></script>
 
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
-    <script src="dist/formjs.min.js"></script>
+    <script src="../dist/formjs.min.js"></script>
     <script>
-        function addClass ( element, cssClasses ){
-            if( cssClasses ){
-                cssClasses.trim().split(' ').forEach(function(className){
-                    element.classList.add( className );
-                });
+        Form.addValidationErrors({
+            email: function( string ){
+                var obj = {};
+                if( string.indexOf('@') === -1 ){ obj.atChar = true; }
+                else if( string.split('@').filter(function(i){ return !!i; }).length < 2 ){ obj.incomplete = true; }
+                return obj;
             }
-        }
+        });
 
-        function getErrorRuleClassesFromContainer ( containerEl ) {
-            var errorClasses = '';
-
-            errorClasses = Array.from(containerEl.classList).filter(function( cssClass ){
-                return cssClass.indexOf('has-error-rule-') === 0;
-            }).join(' ');
-
-            return errorClasses;
-        }
-
-        function getErrorRuleClassesFromErrorsObj ( errorsObj ) {
-            var errorClasses = '';
-
-            for(var errorName in errorsObj){
-                if( errorName !== 'empty' && errorName !== 'rule' ){
-                    errorClasses += ' has-error-rule-' + errorName;
-                }
-            }
-
-            return errorClasses.trim();
-        }
-
-        function removeClass ( element, cssClasses ){
-            if( cssClasses ){
-                cssClasses.trim().split(' ').forEach(function(className){
-                    element.classList.remove( className );
-                });
-            }
-        }
-
-        function onValidationDemoErrorsCss ( fieldsArray, options ){
-            fieldsArray.forEach(function( obj ){
-                var isValid = obj.result,
-                    fieldEl = obj.fieldEl,
-                    containerEl = fieldEl.closest('[data-formjs-question]');
-
-                if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
-                    if( isValid ){
-
-                        var errorClasses = getErrorRuleClassesFromContainer(containerEl);
-                        if( errorClasses ){
-                            removeClass( containerEl, errorClasses );
-                        }
-
-                    } else {
-
-                        var errorClasses = getErrorRuleClassesFromErrorsObj(obj.errors),
-                            errorClassToRemove = getErrorRuleClassesFromContainer(containerEl);
-                        removeClass( containerEl, errorClassToRemove );
-                        addClass( containerEl, errorClasses );
-
-                    }
-                }
-            });
-        }
-        
         var formEl = document.querySelector('form');
         var formInstance = new Form( formEl );
 
-        formEl.addEventListener('fjs.field:validation', function(event){
-            onValidationDemoErrorsCss( [event.data], this.formjs.options );
-        });
-
-        formEl.addEventListener('fjs.form:validation', function(event){
-            onValidationDemoErrorsCss( event.data.fields, this.formjs.options );
+        formEl.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(event){
+            if( Object.keys(event.data.errors).length > 0 ){
+                console.log('EMAIL CUSTOM ERRORS', event.data.errors);
+            }
         });
 
         // INITIALIZATION ( OPTIONAL )
@@ -439,7 +295,7 @@ formInstance.init().then(obj => {
         });
     </script>
 
-    <script src="js/include.js"></script>
+    <script src="../js/include.js"></script>
     
 </body>
 </html>

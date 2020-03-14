@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Show Error Messages via JS - Demos | formJS  - JavaScript Form Validation. Made Easy</title>
+    <title>Events Callback - Demos | formJS  - JavaScript Form Validation. Made Easy</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="Valerio Di Punzio">
@@ -10,10 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link href="https://fonts.googleapis.com/css?family=Expletus+Sans:500|Raleway:200&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/doc.css">
-    <link rel="stylesheet" href="css/demo.css">
-    <link rel="stylesheet" href="css/prism.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/doc.css">
+    <link rel="stylesheet" href="../css/demo.css">
+    <link rel="stylesheet" href="../css/prism.css">
 </head>
 
 <body>
@@ -22,12 +22,12 @@
 
         <div id="menu" class="position-sticky text-right d-flex">
             <div class="position-raltive w-100">
-                <a href="index.html" class="logo">f</a>
+                <a href="../index.html" class="logo">f</a>
                 <nav class="position-absolute nav-desktop d-none d-md-flex align-items-center">
-                    <a href="index.html" class="p-2 m-2">Home</a>
-                    <a href="get-started.html" class="p-2 m-2">Get Started</a>
-                    <a href="api.html" class="p-2 m-2">API</a>
-                    <a href="demos.html" class="p-2 m-2">Demos</a>
+                    <a href="../index.html" class="p-2 m-2">Home</a>
+                    <a href="../get-started.html" class="p-2 m-2">Get Started</a>
+                    <a href="../api.html" class="p-2 m-2">API</a>
+                    <a href="../demos.html" class="p-2 m-2">Demos</a>
                     <a href="https://github.com/SimplySayHi/formJS" target="_blank" class="github-logo ml-2">
                         <svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
          width="28px" height="28px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
@@ -40,10 +40,10 @@
                         menu
                     </button>
                     <span class="dropdown-menu">
-                        <a class="dropdown-item" href="index.html">Home</a>
-                        <a class="dropdown-item" href="get-started.html">Get Started</a>
-                        <a class="dropdown-item" href="api.html">API</a>
-                        <a class="dropdown-item" href="demos.html">Demos</a>
+                        <a class="dropdown-item" href="../index.html">Home</a>
+                        <a class="dropdown-item" href="../get-started.html">Get Started</a>
+                        <a class="dropdown-item" href="../api.html">API</a>
+                        <a class="dropdown-item" href="../demos.html">Demos</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS" target="_blank">View on Github</a>
                         <a class="dropdown-item" href="https://github.com/SimplySayHi/formJS/issues" target="_blank">Report a Bug</a>
@@ -60,7 +60,7 @@
                 <h4 class="my-0">Demos</h4>
             </div>
             
-            <h2 class="border-0 mt-2 mb-4 pt-0">Show Error Messages via JS</h2>
+            <h2 class="border-0 mt-2 mb-4 pt-0">Events Callback</h2>
 
             <div class="row justify-content-center">
                 <div class="col-md-6 col-lg-7 col-xl-8 order-6 order-md-1">
@@ -79,21 +79,21 @@
             &lt;input name="name" type="text" data-length="[3,20]" class="form-control" required /&gt;
             &lt;label&gt;Name&lt;/label&gt;
         &lt;/div&gt;
-        &lt;div class="field-error-message small"&gt;&lt;/div&gt;
+        &lt;div class="field-error-message small"&gt;Write your name! It must be between 3 and 20 chars.&lt;/div&gt;
     &lt;/div&gt;
     &lt;div data-formjs-question class="form-group"&gt;
         &lt;div class="answers-box label-move-up"&gt;
             &lt;input name="surname" type="text" data-length="[3,20]" class="form-control" data-validate-if-filled /&gt;
             &lt;label&gt;Surname&lt;/label&gt;
         &lt;/div&gt;
-        &lt;div class="field-error-message small"&gt;&lt;/div&gt;
+        &lt;div class="field-error-message small"&gt;Surname is not mandatory but, if filled, it must be between 3 and 20 chars!&lt;/div&gt;
     &lt;/div&gt;
     &lt;div data-formjs-question class="form-group"&gt;
         &lt;div class="answers-box label-move-up"&gt;
             &lt;input name="email" type="email" class="form-control" required /&gt;
             &lt;label&gt;Email&lt;/label&gt;
         &lt;/div&gt;
-        &lt;div class="field-error-message small"&gt;&lt;/div&gt;
+        &lt;div class="field-error-message small"&gt;Check your email address, it is not valid!&lt;/div&gt;
     &lt;/div&gt;
     &lt;div data-formjs-question class="form-group"&gt;
         &lt;p class="mb-2 small"&gt;Select your contact preferences &lt;br /&gt;( 2 answers max )&lt;/p&gt;
@@ -111,7 +111,9 @@
                 &lt;label class="form-check-label" for="checkbox-3-a"&gt;App Notification&lt;/label&gt;
             &lt;/div&gt;
         &lt;/div&gt;
-        &lt;div class="field-error-message small"&gt;&lt;/div&gt;
+        &lt;div class="field-error-message small"&gt;
+            You must select at least 1 and at most 2 answers!
+        &lt;/div&gt;
     &lt;/div&gt;
     &lt;div data-formjs-question class="form-group"&gt;
         &lt;div class="answers-box"&gt;
@@ -127,7 +129,7 @@
                 &lt;label class="form-check-label" for="privacyCheck-2-a"&gt;No&lt;/label&gt;
             &lt;/div&gt;
         &lt;/div&gt;
-        &lt;div class="field-error-message small"&gt;&lt;/div&gt;
+        &lt;div class="field-error-message small"&gt;You must agree!&lt;/div&gt;
     &lt;/div&gt;
     &lt;div class="text-center"&gt;
         &lt;button type="submit" class="btn btn-light"&gt;SEND&lt;/button&gt;
@@ -148,55 +150,13 @@
                             </div>
                             <div class="card-body p-0">
                                 <pre class="m-0">
-<code class="language-js">function onValidationDemoErrorsJs ( fieldsArray, options ){
-    fieldsArray.forEach(function( obj ){
-        var isValid = obj.result,
-            fieldEl = obj.fieldEl,
-            containerEl = fieldEl.closest('[data-formjs-question]');
-
-        if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
-            if( isValid ){
-
-                // REMOVE ERRORS FROM PAGE
-                containerEl.querySelector('.field-error-message').innerHTML = '';
-
-            } else {
-
-                // PRINT ERRORS AS FOR obj.errors
-                if( obj.errors ){
-                    var errorsHTML = '';
-
-                    if( obj.errors.empty ){
-                        errorsHTML += '&lt;p&gt;This field cannot be empty&lt;/p&gt;';
-                    } else {
-                        for(var errorName in obj.errors){
-                            if( errorName !== 'rule' ){
-                                var printError = errorName.replace(/([A-Z])/g, function(all, letter){
-                                        return ' ' + letter.toLowerCase();
-                                    });
-                                errorsHTML += '&lt;li&gt;Error: '+ printError +'&lt;/li&gt;';
-                            }
-                        }
-                        errorsHTML = 'This field is not valid:&lt;ul&gt;' + errorsHTML + '&lt;/ul&gt;';
-                    }
-
-                    containerEl.querySelector('.field-error-message').innerHTML = errorsHTML;
-                }
-
-            }
-        }
-    });
-}
-
-const formEl = document.querySelector('form');
+<code class="language-js">const formEl = document.querySelector('form');
 const formInstance = new Form( formEl );
 
-formEl.addEventListener('fjs.field:validation', function(event){
-    onValidationDemoErrorsJs( [event.data], this.formjs.options );
-});
-
 formEl.addEventListener('fjs.form:validation', function(event){
-    onValidationDemoErrorsJs( event.data.fields, this.formjs.options );
+    if( event.data.result ){
+        alert('THE FORM IS VALID!');
+    }
 });
 
 // INITIALIZATION ( OPTIONAL )
@@ -222,21 +182,21 @@ formInstance.init().then(obj => {
                                         <input name="name" type="text" data-length="[3,20]" class="form-control" required />
                                         <label>Name</label>
                                     </div>
-                                    <div class="field-error-message small"></div>
+                                    <div class="field-error-message small">Write your name! It must be between 3 and 20 chars.</div>
                                 </div>
                                 <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
                                         <input name="surname" type="text" data-length="[3,20]" class="form-control" data-validate-if-filled />
                                         <label>Surname</label>
                                     </div>
-                                    <div class="field-error-message small"></div>
+                                    <div class="field-error-message small">Surname is not mandatory but, if filled, it must be between 3 and 20 chars!</div>
                                 </div>
                                 <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
                                         <input name="email" type="email" class="form-control" required />
                                         <label>Email</label>
                                     </div>
-                                    <div class="field-error-message small"></div>
+                                    <div class="field-error-message small">Check your email address, it is not valid!</div>
                                 </div>
                                 <div data-formjs-question class="form-group">
                                     <p class="mb-2 small">Select your contact preferences <br />( 2 answers max )</p>
@@ -254,7 +214,9 @@ formInstance.init().then(obj => {
                                             <label class="form-check-label" for="checkbox-3-a">App Notification</label>
                                         </div>
                                     </div>
-                                    <div class="field-error-message small"></div>
+                                    <div class="field-error-message small">
+                                        You must select at least 1 and at most 2 answers!
+                                    </div>
                                 </div>
                                 <div data-formjs-question class="form-group">
                                     <div class="answers-box">
@@ -270,7 +232,7 @@ formInstance.init().then(obj => {
                                             <label class="form-check-label" for="privacyCheck-2-a">No</label>
                                         </div>
                                     </div>
-                                    <div class="field-error-message small"></div>
+                                    <div class="field-error-message small">You must agree!</div>
                                 </div>
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-light">SEND</button>
@@ -293,61 +255,19 @@ formInstance.init().then(obj => {
 
     </div>
 
-    <script src="js/prism.js"></script>
+    <script src="../js/prism.js"></script>
 
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
-    <script src="dist/formjs.min.js"></script>
+    <script src="../dist/formjs.min.js"></script>
     <script>
-        function onValidationDemoErrorsJs ( fieldsArray, options ){
-            fieldsArray.forEach(function( obj ){
-                var isValid = obj.result,
-                    fieldEl = obj.fieldEl,
-                    containerEl = fieldEl.closest('[data-formjs-question]');
-
-                if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
-                    if( isValid ){
-
-                        // REMOVE ERRORS FROM PAGE
-                        containerEl.querySelector('.field-error-message').innerHTML = '';
-
-                    } else {
-
-                        // PRINT ERRORS AS FOR obj.errors
-                        if( obj.errors ){
-                            var errorsHTML = '';
-
-                            if( obj.errors.empty ){
-                                errorsHTML += '<p>This field cannot be empty</p>';
-                            } else {
-                                for(var errorName in obj.errors){
-                                    if( errorName !== 'rule' ){
-                                        var printError = errorName.replace(/([A-Z])/g, function(all, letter){
-                                                return ' ' + letter.toLowerCase();
-                                            });
-                                        errorsHTML += '<li>Error: '+ printError +'</li>';
-                                    }
-                                }
-                                errorsHTML = 'This field is not valid:<ul>' + errorsHTML + '</ul>';
-                            }
-
-                            containerEl.querySelector('.field-error-message').innerHTML = errorsHTML;
-                        }
-
-                    }
-                }
-            });
-        }
-
         var formEl = document.querySelector('form');
         var formInstance = new Form( formEl );
 
-        formEl.addEventListener('fjs.field:validation', function(event){
-            onValidationDemoErrorsJs( [event.data], this.formjs.options );
-        });
-
         formEl.addEventListener('fjs.form:validation', function(event){
-            onValidationDemoErrorsJs( event.data.fields, this.formjs.options );
+            if( event.data.result ){
+                alert('THE FORM IS VALID!');
+            }
         });
 
         // INITIALIZATION ( OPTIONAL )
@@ -357,7 +277,7 @@ formInstance.init().then(obj => {
         });
     </script>
 
-    <script src="js/include.js"></script>
+    <script src="../js/include.js"></script>
     
 </body>
 </html>
