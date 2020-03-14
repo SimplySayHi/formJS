@@ -1,5 +1,9 @@
+------------------
+
 NOTE:
 Waiting for a fix for "minimist" dev dependency before publish v4 on NPM.
+
+------------------
 
 ![npm bundle size](https://img.shields.io/bundlephobia/min/formjs-plugin) [![npm](https://img.shields.io/npm/dm/formjs-plugin)](https://www.npmjs.com/package/formjs-plugin)
 
