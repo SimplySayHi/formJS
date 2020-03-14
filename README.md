@@ -1,7 +1,7 @@
 ------------------
 
 NOTE:
-Waiting for a fix for "minimist" dev dependency before publish v4 on NPM.
+Waiting for a fix from a dev dependency before publish v4 on NPM.
 
 ------------------
 
