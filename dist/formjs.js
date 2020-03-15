@@ -411,6 +411,7 @@
                 return validateFormObjDefault;
             }));
             function _typeof(obj) {
+                "@babel/helpers - typeof";
                 if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
                     _typeof = function _typeof(obj) {
                         return typeof obj;
