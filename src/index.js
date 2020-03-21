@@ -11,7 +11,7 @@ import { init }                 from './modules/init';
 import { validateField }        from './modules/validateField';
 import { validateForm }         from './modules/validateForm';
 
-const version = '4.0.0';
+const version = '4.0.1';
 
 class Form {
 
