@@ -1,7 +1,5 @@
 /* formJS v4.0.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
-!function(global, factory) {
-    "object" == typeof exports && "undefined" != typeof module ? module.exports = factory() : "function" == typeof define && define.amd ? define(factory) : (global = global || self).Form = factory();
-}(this, (function() {
+var Form = function() {
     "use strict";
     function _typeof(obj) {
         return (_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
@@ -695,4 +693,4 @@
             };
         }
     }, Form.prototype.version = "4.0.1", Form;
-}));
+}();

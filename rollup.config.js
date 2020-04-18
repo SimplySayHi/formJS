@@ -47,14 +47,14 @@ optionsESM = {
 
     ]
 },
-optionsUMD = {
+optionsIIFE = {
     input: 'src/index.js',
     output: [
 
-        // UMD TRANSPILED SCRIPT
+        // IIFE TRANSPILED SCRIPT
         {
             file: `dist/${libraryFileName}.js`,
-            format: 'umd',
+            format: 'iife',
             name: libraryNamespace,
             plugins: [
                 terser({
@@ -68,10 +68,50 @@ optionsUMD = {
             ]
         },
 
-        // UMD TRANSPILED SCRIPT MINIFIED
+        // IIFE TRANSPILED SCRIPT MINIFIED
         {
             file: `dist/${libraryFileName}.min.js`,
-            format: 'umd',
+            format: 'iife',
+            name: libraryNamespace,
+            plugins: [
+                terser({
+                    output: {
+                        beautify: false,
+                        preamble: initialComment
+                    }
+                })
+            ],
+            sourcemap: true
+        }
+
+    ],
+    plugins: [ resolve(), babel() ]
+},
+optionsSYS = {
+    input: 'src/index.js',
+    output: [
+
+        // SYSTEMJS TRANSPILED SCRIPT
+        {
+            file: `dist/${libraryFileName}-systemjs.js`,
+            format: 'system',
+            name: libraryNamespace,
+            plugins: [
+                terser({
+                    mangle: false,
+                    sourcemap: false,
+                    output: {
+                        beautify: true,
+                        preamble: initialComment
+                    }
+                })
+            ]
+        },
+
+        // SYSTEMJS TRANSPILED SCRIPT MINIFIED
+        {
+            file: `dist/${libraryFileName}-systemjs.min.js`,
+            format: 'system',
             name: libraryNamespace,
             plugins: [
                 terser({
@@ -88,4 +128,4 @@ optionsUMD = {
     plugins: [ resolve(), babel() ]
 };
 
-export default [ optionsESM, optionsUMD ]
+export default [ optionsESM, optionsIIFE, optionsSYS ]
