@@ -2,7 +2,7 @@
 import { getSplitChar } from './helpers';
 
 export const validationRules = {
-            
+    
     date: function( string ){
         // DATE AS ISO 8601 DATE FORMAT     YYYY MM DD | YYYY/MM/DD | YYYY.MM.DD | YYYY-MM-DD
 
@@ -15,11 +15,9 @@ export const validationRules = {
     },
     
     email: function( string ){
-        // FROM https://emailregex.com
-        // AS FOR RFC 5322 Official Standard EMAIL MUST BE AT LEAST:
-        // a@a.aa
+        // https://regex101.com/r/cdlyJy/3
         let obj = {
-            result: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test( string )
+            result: /^[a-zA-Z_-]([\w.-]?[a-zA-Z0-9])*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?){2,})+$/.test( string )
         };
 
         return obj;

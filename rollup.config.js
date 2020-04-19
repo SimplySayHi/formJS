@@ -10,6 +10,7 @@ const libraryFileName = myPackage.customData.libraryFileName;
 const libraryNamespace = myPackage.customData.libraryNamespace;
 
 const
+
 optionsESM = {
     input: 'src/index.js',
     output: [
@@ -47,46 +48,7 @@ optionsESM = {
 
     ]
 },
-optionsIIFE = {
-    input: 'src/index.js',
-    output: [
 
-        // IIFE TRANSPILED SCRIPT
-        {
-            file: `dist/${libraryFileName}.js`,
-            format: 'iife',
-            name: libraryNamespace,
-            plugins: [
-                terser({
-                    mangle: false,
-                    sourcemap: false,
-                    output: {
-                        beautify: true,
-                        preamble: initialComment
-                    }
-                })
-            ]
-        },
-
-        // IIFE TRANSPILED SCRIPT MINIFIED
-        {
-            file: `dist/${libraryFileName}.min.js`,
-            format: 'iife',
-            name: libraryNamespace,
-            plugins: [
-                terser({
-                    output: {
-                        beautify: false,
-                        preamble: initialComment
-                    }
-                })
-            ],
-            sourcemap: true
-        }
-
-    ],
-    plugins: [ resolve(), babel() ]
-},
 optionsSYS = {
     input: 'src/index.js',
     output: [
@@ -126,6 +88,49 @@ optionsSYS = {
 
     ],
     plugins: [ resolve(), babel() ]
-};
+},
 
-export default [ optionsESM, optionsIIFE, optionsSYS ]
+optionsIIFE = {
+    input: 'src/index.js',
+    output: [
+
+        // IIFE TRANSPILED SCRIPT
+        {
+            file: `dist/${libraryFileName}.js`,
+            format: 'iife',
+            name: libraryNamespace,
+            plugins: [
+                terser({
+                    mangle: false,
+                    sourcemap: false,
+                    output: {
+                        beautify: true,
+                        preamble: initialComment
+                    }
+                })
+            ]
+        },
+
+        // IIFE TRANSPILED SCRIPT MINIFIED
+        {
+            file: `dist/${libraryFileName}.min.js`,
+            format: 'iife',
+            name: libraryNamespace,
+            plugins: [
+                terser({
+                    output: {
+                        beautify: false,
+                        preamble: initialComment
+                    }
+                })
+            ],
+            sourcemap: true
+        }
+
+    ],
+    plugins: [ resolve(), babel() ]
+}
+
+;
+
+export default [ optionsESM, optionsSYS, optionsIIFE ]
