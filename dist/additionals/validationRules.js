@@ -1,4 +1,18 @@
 
+var ajaxOptions = {
+    cache:              'no-store',
+    credentials:        'same-origin',
+    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept':       'application/json'
+    },
+    method:             'POST',
+    mode:               'same-origin',
+    redirect:           'follow',
+    timeout:            0,
+    url:                location.href
+};
+
 var validationRules = {
 
     alphabetic: function( string ){
@@ -154,8 +168,10 @@ var validationRules = {
             return obj;
         }
 
-        var fetchOptions = instance.options.formOptions.ajaxOptions;
+        var formOptions = instance.options.formOptions;
+        var fetchOptions = formOptions ? formOptions.ajaxOptions : ajaxOptions;
         fetchOptions.body = JSON.stringify({username: string});
+        
         return fetch('remoteValidations/username.php', fetchOptions)
             .then(function(data){
                 return data.json();

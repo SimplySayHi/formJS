@@ -58,7 +58,7 @@
                             </div>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
-                                    <input name="username" type="text" data-subtype="username" class="form-control" />
+                                    <input name="username" type="text" data-subtype="username" class="form-control" required />
                                     <label>Username</label>
                                 </div>
                                 <div class="field-error-message small"></div>
@@ -206,7 +206,7 @@
             }
         };
 
-        var formJsInstance = new Form( formEl, options );
+        var formInstance = new Form( formEl, options );
 
         formEl.addEventListener('fjs.field:validation', function(e){
             console.log('--- GENERAL FIELD VALIDATION', this);
@@ -239,9 +239,9 @@
                 });
         }, false);
 
-        formJsInstance.init().then(function( obj ){
-            console.log('formJsInstance obj.instance', obj.instance);
-            console.log('formJsInstance obj.fields', obj.fields);
+        formInstance.init().then(function( obj ){
+            console.log('formInstance obj.instance', obj.instance);
+            console.log('formInstance obj.fields', obj.fields);
         });
     </script>
     <script src="dist/additionals/utils.js"></script>

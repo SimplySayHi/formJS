@@ -2,7 +2,7 @@
     "name": "formjs-plugin",
     "title": "formJS",
     "description": "JavaScript Form Validation. Made Easy",
-    "version": "4.0.1",
+    "version": "4.0.2",
     "main": "dist/formjs.min.js",
     "module": "dist/formjs-esm.min.js",
     "homepage": "https://valeriodipunzio.com/plugins/formJS/",
@@ -26,7 +26,8 @@
     },
     "license": "MIT",
     "scripts": {
-        "build": "rollup --config"
+        "build": "rollup --config",
+        "build-lite": "rollup --config rollup.config.lite.js"
     },
     "devDependencies": {
         "@babel/core": "^7.8.7",
