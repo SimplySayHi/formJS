@@ -1,5 +1,5 @@
 
-import { mergeObjects, toCamelCase } from './helpers';
+import { getValidateFieldDefault, mergeObjects, toCamelCase } from './helpers';
 import { validationRulesAttributes } from './validationRules';
 
 export function isValid( fieldEl, fieldOptions, validationRules, validationErrors ){
@@ -12,7 +12,7 @@ export function isValid( fieldEl, fieldOptions, validationRules, validationError
 
     const attrValidations = [];
     let attrValidationsResult = isValidValue,
-        obj = { result: isValidValue, fieldEl };
+        obj = getValidateFieldDefault({result: isValidValue, fieldEl});
 
     if( !obj.result ){
         obj.errors = { empty: true };

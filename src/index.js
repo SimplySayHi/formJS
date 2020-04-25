@@ -1,17 +1,16 @@
 
-import { excludeSelector, mergeObjects } from './modules/helpers';
+import { customEvents, dispatchCustomEvent, excludeSelector, mergeObjects, removeClass } from './modules/helpers';
 import { options }              from './modules/options';
 import { validationRules }      from './modules/validationRules';
 import { validationErrors }     from './modules/validationErrors';
-
-// CONSTRUCTOR FUNCTION & PUBLIC METHODS
+import { listenerCallbacks }    from './modules/listenerCallbacks';
 import { constructorFn }        from './modules/constructor';
 import { destroy }              from './modules/destroy';
 import { init }                 from './modules/init';
-import { validateField }        from './modules/validateField';
-import { validateForm }         from './modules/validateForm';
+import { checkFieldValidity }   from './modules/checkFieldValidity';
+import { checkFormValidity }    from './modules/checkFormValidity';
 
-const version = '4.0.1';
+const version = '4.0.2';
 
 class Form {
 
@@ -33,15 +32,52 @@ class Form {
         return init(this.formEl);
     }
 
-    validateField( fieldEl, fieldOptions = {} ){
+    validateField( fieldEl, fieldOptions ){
         fieldEl = (typeof fieldEl === 'string' ? this.formEl.querySelector(fieldEl) : fieldEl);
-        const options = mergeObjects({}, this.options, {fieldOptions});
-        return validateField(fieldEl, options, this.validationRules, this.validationErrors);
+        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
+        const formEl = this.formEl;
+        const skipUIfeedback = this.options.fieldOptions.skipUIfeedback;
+        return checkFieldValidity(fieldEl, fieldOptions, this.validationRules, this.validationErrors)
+            .then(obj => {
+                return new Promise(resolve => {
+                    if( obj.fieldEl ){
+                        dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, obj, { bubbles: false } );
+                        dispatchCustomEvent( formEl, customEvents.field.validation, obj );
+                        if( fieldOptions.onValidationCheckAll && obj.result ){
+                            // FORCE skipUIfeedback TO true
+                            fieldOptions.skipUIfeedback = true;
+                            resolve(
+                                checkFormValidity( formEl, fieldOptions, this.validationRules, this.validationErrors, fieldEl )
+                                    .then(dataForm => {
+                                        const clMethodName = dataForm.result ? 'add' : 'remove';
+                                        formEl.classList[clMethodName]( this.options.formOptions.cssClasses.valid );
+                                        dispatchCustomEvent( formEl, customEvents.form.validation, dataForm );
+                                        // RESTORE skipUIfeedback TO THE ORIGINAL VALUE
+                                        fieldOptions.skipUIfeedback = skipUIfeedback;
+                                        return obj;
+                                    })
+                            );
+                        } else if( !obj.result ){
+                            removeClass( formEl, this.options.formOptions.cssClasses.valid );
+                        }
+                    }
+                    resolve( obj );
+                });
+            });
     }
 
-    validateForm( fieldOptions = {} ){
-        const options = mergeObjects({}, this.options, {fieldOptions});
-        return validateForm(this.formEl, options, this.validationRules, this.validationErrors);
+    validateForm( fieldOptions ){
+        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
+        const formEl = this.formEl;
+        return checkFormValidity(formEl, fieldOptions, this.validationRules, this.validationErrors)
+            .then(data => {
+                const clMethodName = data.result ? 'add' : 'remove';
+                formEl.classList[clMethodName]( this.options.formOptions.cssClasses.valid );
+                listenerCallbacks.validationEnd( {data} );
+                dispatchCustomEvent( formEl, customEvents.form.validation, data );
+                return data;
+            });
+
     }
     
     static addValidationErrors( errorsObj ){

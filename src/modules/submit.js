@@ -1,5 +1,5 @@
 
-import { addClass, customEvents, dispatchCustomEvent, removeClass, runFunctionsSequence, validateFormObjDefault } from './helpers';
+import { addClass, customEvents, dispatchCustomEvent, getValidateFormDefault, removeClass, runFunctionsSequence } from './helpers';
 import { ajaxCall } from './ajaxCall';
 
 export function submit( event ){
@@ -31,7 +31,7 @@ export function submit( event ){
     addClass( formEl, formCssClasses.submit );
     
     const handleValidation = options.fieldOptions.handleValidation,
-          formValidationPromise = (handleValidation ? instance.validateForm() : Promise.resolve(validateFormObjDefault));
+          formValidationPromise = (handleValidation ? instance.validateForm() : Promise.resolve(getValidateFormDefault()));
 
     formValidationPromise.then(formValidation => {
 

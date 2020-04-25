@@ -3,8 +3,8 @@ import { mergeObjects }         from './modules/helpers';
 import { options }              from './modules-lite/options';
 import { validationRules }      from './modules/validationRules';
 import { constructorFn }        from './modules-lite/constructor';
-import { isValidField }         from './modules/isValidField';
-import { isValidForm }          from './modules/isValidForm';
+import { checkFieldValidity }   from './modules/checkFieldValidity';
+import { checkFormValidity }    from './modules/checkFormValidity';
 
 const version = '4.0.2';
 
@@ -18,15 +18,15 @@ class Form {
         delete this.formEl.formjs;
     }
 
-    validateField( fieldEl, fieldOptions = {} ){
+    validateField( fieldEl, fieldOptions ){
         fieldEl = (typeof fieldEl === 'string' ? this.formEl.querySelector(fieldEl) : fieldEl);
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-        return isValidField(fieldEl, fieldOptions, this.validationRules, this.validationErrors);
+        return checkFieldValidity(fieldEl, fieldOptions, this.validationRules, this.validationErrors);
     }
 
-    validateForm( fieldOptions = {} ){
+    validateForm( fieldOptions ){
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-        return isValidForm(this.formEl, fieldOptions, this.validationRules, this.validationErrors);
+        return checkFormValidity(this.formEl, fieldOptions, this.validationRules, this.validationErrors);
     }
     
     static addValidationErrors( errorsObj ){

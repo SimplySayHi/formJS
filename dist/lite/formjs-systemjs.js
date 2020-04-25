@@ -23,10 +23,27 @@ System.register("Form", [], (function(exports) {
                     result: isDOMNode(formEl) || isFormSelector,
                     element: "string" === isString ? document.querySelector(formEl) : formEl
                 };
-            }, getSplitChar = function(string) {
+            }, fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', getSplitChar = function(string) {
                 var splitChar = ".";
                 return -1 === string.indexOf(splitChar) && (string.indexOf("-") >= 0 ? splitChar = "-" : string.indexOf("/") >= 0 && (splitChar = "/")), 
                 splitChar;
+            }, getUniqueFields = function(nodeList) {
+                var currentFieldName = "", currentFieldType = "";
+                return Array.from(nodeList).filter((function(fieldEl) {
+                    var name = fieldEl.name, type = fieldEl.type;
+                    return (name !== currentFieldName || type !== currentFieldType) && (fieldEl.matches("[data-required-from]") || (currentFieldName = name, 
+                    currentFieldType = type), !0);
+                }));
+            }, getValidateFieldDefault = function(obj) {
+                return mergeObjects({}, {
+                    result: !1,
+                    fieldEl: null
+                }, obj);
+            }, getValidateFormDefault = function(obj) {
+                return mergeObjects({}, {
+                    result: !0,
+                    fields: []
+                }, obj);
             }, isDOMNode = function(node) {
                 return Element.prototype.isPrototypeOf(node);
             }, isNodeList = function(nodeList) {
@@ -44,12 +61,6 @@ System.register("Form", [], (function(exports) {
                 return string.replace(/-([a-z])/gi, (function(all, letter) {
                     return letter.toUpperCase();
                 }));
-            }, validateFieldObjDefault = {
-                result: !1,
-                fieldEl: null
-            }, validateFormObjDefault = {
-                result: !0,
-                fields: []
             }, validationRulesAttributes = {
                 checkbox: function(data) {
                     var dataChecksEl = data.fieldEl.closest("form").querySelector('[name="' + data.fieldEl.name + '"][data-checks]'), obj = {
@@ -180,11 +191,13 @@ System.register("Form", [], (function(exports) {
                     }), obj;
                 }
             };
-            function isValidField(fieldEl, fieldOptions, validationRules, validationErrors) {
-                var obj = mergeObjects({}, validateFieldObjDefault, {
-                    fieldEl: fieldEl
-                });
-                if (!isDOMNode(fieldEl)) return Promise.resolve(obj);
+            function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationErrors) {
+                if (!isDOMNode(fieldEl)) {
+                    var obj = getValidateFieldDefault({
+                        fieldEl: fieldEl
+                    });
+                    return Promise.resolve(obj);
+                }
                 var isValidValue = fieldEl.value.trim().length > 0, isRequired = fieldEl.required, isReqFrom = fieldEl.matches("[data-required-from]"), isValidateIfFilled = fieldEl.matches("[data-validate-if-filled]");
                 return function() {
                     var _ref = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}, _ref$functionsList = _ref.functionsList, functionsList = void 0 === _ref$functionsList ? [] : _ref$functionsList, _ref$data = _ref.data, data = void 0 === _ref$data ? {} : _ref$data, _ref$stopConditionFn = _ref.stopConditionFn, stopConditionFn = void 0 === _ref$stopConditionFn ? function() {
@@ -215,10 +228,10 @@ System.register("Form", [], (function(exports) {
                         resolve(dataObj)) : resolve(function(fieldEl, fieldOptions, validationRules, validationErrors) {
                             var fieldType = fieldEl.matches("[data-subtype]") ? toCamelCase(fieldEl.getAttribute("data-subtype")) : fieldEl.type, fieldValue = fieldEl.value, isValidValue = fieldValue.trim().length > 0, fieldAttributes = Array.from(fieldEl.attributes).sort((function(a, b) {
                                 return a.name < b.name;
-                            })), attrValidations = [], attrValidationsResult = isValidValue, obj = {
+                            })), attrValidations = [], attrValidationsResult = isValidValue, obj = getValidateFieldDefault({
                                 result: isValidValue,
                                 fieldEl: fieldEl
-                            };
+                            });
                             return obj.result ? (fieldAttributes.forEach((function(attr) {
                                 var attrName = toCamelCase(attr.name.replace("data-", "")), attrValue = attr.value, isAttrValueWithFn = "type" === attrName && "function" == typeof validationRulesAttributes[attrValue], isAttrNameWithFn = "function" == typeof validationRulesAttributes[attrName];
                                 if (isAttrValueWithFn || isAttrNameWithFn) {
@@ -248,25 +261,6 @@ System.register("Form", [], (function(exports) {
                             }, Promise.resolve(obj));
                         }(fieldEl, fieldOptions, validationRules, validationErrors));
                     }));
-                }));
-            }
-            function isValidForm(formEl, fieldOptions, validationRules, validationErrors) {
-                fieldOptions = mergeObjects({}, fieldOptions, {
-                    focusOnRelated: !1
-                });
-                var nodeList, currentFieldName, currentFieldType, obj = mergeObjects({}, validateFormObjDefault), fieldsList = (nodeList = formEl.querySelectorAll('input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea'), 
-                currentFieldName = "", currentFieldType = "", Array.from(nodeList).filter((function(fieldEl) {
-                    var name = fieldEl.name, type = fieldEl.type;
-                    return (name !== currentFieldName || type !== currentFieldType) && (fieldEl.matches("[data-required-from]") || (currentFieldName = name, 
-                    currentFieldType = type), !0);
-                })));
-                return Promise.all(fieldsList.map((function(fieldEl) {
-                    return isValidField(fieldEl, fieldOptions, validationRules, validationErrors);
-                }))).then((function(list) {
-                    var areAllFieldsValid = 0 === list.filter((function(fieldObj) {
-                        return !fieldObj.result;
-                    })).length;
-                    return obj.result = areAllFieldsValid, obj.fields = list, obj;
                 }));
             }
             var Form = function() {
@@ -308,16 +302,35 @@ System.register("Form", [], (function(exports) {
                     }
                 }, {
                     key: "validateField",
-                    value: function(fieldEl) {
-                        var fieldOptions = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
-                        return isValidField(fieldEl = "string" == typeof fieldEl ? this.formEl.querySelector(fieldEl) : fieldEl, fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), this.validationRules, this.validationErrors);
+                    value: function(fieldEl, fieldOptions) {
+                        return checkFieldValidity(fieldEl = "string" == typeof fieldEl ? this.formEl.querySelector(fieldEl) : fieldEl, fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), this.validationRules, this.validationErrors);
                     }
                 }, {
                     key: "validateForm",
-                    value: function() {
-                        var fieldOptions = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+                    value: function(fieldOptions) {
                         return fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), 
-                        isValidForm(this.formEl, fieldOptions, this.validationRules, this.validationErrors);
+                        function(formEl, fieldOptions, validationRules, validationErrors) {
+                            var fieldToSkip = arguments.length > 4 && void 0 !== arguments[4] ? arguments[4] : null;
+                            fieldOptions = mergeObjects({}, fieldOptions, {
+                                focusOnRelated: !1
+                            });
+                            var obj = getValidateFormDefault(), fieldsList = getUniqueFields(formEl.querySelectorAll(fieldsStringSelector));
+                            return Promise.all(fieldsList.map((function(fieldEl) {
+                                if (fieldToSkip && fieldEl === fieldToSkip) {
+                                    var obj2 = getValidateFieldDefault({
+                                        fieldEl: fieldEl,
+                                        result: !0
+                                    });
+                                    return Promise.resolve(obj2);
+                                }
+                                return checkFieldValidity(fieldEl, fieldOptions, validationRules, validationErrors);
+                            }))).then((function(list) {
+                                var areAllFieldsValid = 0 === list.filter((function(fieldObj) {
+                                    return !fieldObj.result;
+                                })).length;
+                                return obj.result = areAllFieldsValid, obj.fields = list, obj;
+                            }));
+                        }(this.formEl, fieldOptions, this.validationRules, this.validationErrors);
                     }
                 } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
                 Form;

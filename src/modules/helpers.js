@@ -120,6 +120,14 @@ getUniqueFields = nodeList => {
     
 },
 
+getValidateFieldDefault = obj => {
+    return mergeObjects({}, { result: false, fieldEl: null }, obj);
+},
+
+getValidateFormDefault = obj => {
+    return mergeObjects({}, { result: true, fields: [] }, obj);
+},
+
 isDOMNode = node => {
     return Element.prototype.isPrototypeOf( node );
 },
@@ -215,8 +223,4 @@ serializeObject = obj => {
 
 toCamelCase = string => {
     return string.replace(/-([a-z])/ig, (all, letter) => { return letter.toUpperCase(); });
-},
-
-validateFieldObjDefault = { result: false, fieldEl: null },
-
-validateFormObjDefault = { result: true, fields: [] }
+}

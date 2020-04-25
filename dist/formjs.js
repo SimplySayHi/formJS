@@ -1,4 +1,4 @@
-/* formJS v4.0.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v4.0.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 var Form = function() {
     "use strict";
     function _typeof(obj) {
@@ -48,6 +48,16 @@ var Form = function() {
             return (name !== currentFieldName || type !== currentFieldType) && (fieldEl.matches("[data-required-from]") || (currentFieldName = name, 
             currentFieldType = type), !0);
         }));
+    }, getValidateFieldDefault = function(obj) {
+        return mergeObjects({}, {
+            result: !1,
+            fieldEl: null
+        }, obj);
+    }, getValidateFormDefault = function(obj) {
+        return mergeObjects({}, {
+            result: !0,
+            fields: []
+        }, obj);
     }, isDOMNode = function(node) {
         return Element.prototype.isPrototypeOf(node);
     }, isFieldForChangeEvent = function(fieldEl) {
@@ -92,12 +102,6 @@ var Form = function() {
         return string.replace(/-([a-z])/gi, (function(all, letter) {
             return letter.toUpperCase();
         }));
-    }, validateFieldObjDefault = {
-        result: !1,
-        fieldEl: null
-    }, validateFormObjDefault = {
-        result: !0,
-        fields: []
     }, defaultCallbacksInOptions = {
         fieldOptions: {
             beforeValidation: function(fieldObj) {
@@ -326,7 +330,7 @@ var Form = function() {
             btnEl.disabled = !0;
         }
         removeClass(formEl, formCssClasses.ajaxComplete + " " + formCssClasses.ajaxError + " " + formCssClasses.ajaxSuccess), 
-        addClass(formEl, formCssClasses.submit), (options.fieldOptions.handleValidation ? instance.validateForm() : Promise.resolve(validateFormObjDefault)).then((function(formValidation) {
+        addClass(formEl, formCssClasses.submit), (options.fieldOptions.handleValidation ? instance.validateForm() : Promise.resolve(getValidateFormDefault())).then((function(formValidation) {
             var beforeSendData = {
                 stopExecution: !1,
                 formData: {}
@@ -483,11 +487,13 @@ var Form = function() {
             };
         }));
     };
-    function isValidField(fieldEl, fieldOptions, validationRules, validationErrors) {
-        var obj = mergeObjects({}, validateFieldObjDefault, {
-            fieldEl: fieldEl
-        });
-        if (!isDOMNode(fieldEl)) return Promise.resolve(obj);
+    function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationErrors) {
+        if (!isDOMNode(fieldEl)) {
+            var obj = getValidateFieldDefault({
+                fieldEl: fieldEl
+            });
+            return Promise.resolve(obj);
+        }
         var isValidValue = fieldEl.value.trim().length > 0, isRequired = fieldEl.required, isReqFrom = fieldEl.matches("[data-required-from]"), isValidateIfFilled = fieldEl.matches("[data-validate-if-filled]"), rfsObject = {
             functionsList: fieldOptions.beforeValidation,
             data: {
@@ -501,10 +507,10 @@ var Form = function() {
                 resolve(dataObj)) : resolve(function(fieldEl, fieldOptions, validationRules, validationErrors) {
                     var fieldType = fieldEl.matches("[data-subtype]") ? toCamelCase(fieldEl.getAttribute("data-subtype")) : fieldEl.type, fieldValue = fieldEl.value, isValidValue = fieldValue.trim().length > 0, fieldAttributes = Array.from(fieldEl.attributes).sort((function(a, b) {
                         return a.name < b.name;
-                    })), attrValidations = [], attrValidationsResult = isValidValue, obj = {
+                    })), attrValidations = [], attrValidationsResult = isValidValue, obj = getValidateFieldDefault({
                         result: isValidValue,
                         fieldEl: fieldEl
-                    };
+                    });
                     return obj.result ? (fieldAttributes.forEach((function(attr) {
                         var attrName = toCamelCase(attr.name.replace("data-", "")), attrValue = attr.value, isAttrValueWithFn = "type" === attrName && "function" == typeof validationRulesAttributes[attrValue], isAttrNameWithFn = "function" == typeof validationRulesAttributes[attrName];
                         if (isAttrValueWithFn || isAttrNameWithFn) {
@@ -536,46 +542,26 @@ var Form = function() {
             }));
         }));
     }
-    function isValidForm(formEl, fieldOptions, validationRules, validationErrors) {
+    function checkFormValidity(formEl, fieldOptions, validationRules, validationErrors) {
+        var fieldToSkip = arguments.length > 4 && void 0 !== arguments[4] ? arguments[4] : null;
         fieldOptions = mergeObjects({}, fieldOptions, {
             focusOnRelated: !1
         });
-        var obj = mergeObjects({}, validateFormObjDefault), fieldsList = getUniqueFields(formEl.querySelectorAll(fieldsStringSelector));
+        var obj = getValidateFormDefault(), fieldsList = getUniqueFields(formEl.querySelectorAll(fieldsStringSelector));
         return Promise.all(fieldsList.map((function(fieldEl) {
-            return isValidField(fieldEl, fieldOptions, validationRules, validationErrors);
+            if (fieldToSkip && fieldEl === fieldToSkip) {
+                var obj2 = getValidateFieldDefault({
+                    fieldEl: fieldEl,
+                    result: !0
+                });
+                return Promise.resolve(obj2);
+            }
+            return checkFieldValidity(fieldEl, fieldOptions, validationRules, validationErrors);
         }))).then((function(list) {
             var areAllFieldsValid = 0 === list.filter((function(fieldObj) {
                 return !fieldObj.result;
             })).length;
             return obj.result = areAllFieldsValid, obj.fields = list, obj;
-        }));
-    }
-    function validateField(fieldEl, options, validationRules, validationErrors) {
-        var formEl = fieldEl.closest("form"), skipUIfeedback = options.fieldOptions.skipUIfeedback;
-        return new Promise((function(resolve) {
-            resolve(isValidField(fieldEl, options.fieldOptions, validationRules, validationErrors));
-        })).then((function(obj) {
-            return new Promise((function(resolve) {
-                obj.fieldEl && (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
-                    bubbles: !1
-                }), dispatchCustomEvent(formEl, customEvents_field.validation, obj), options.fieldOptions.onValidationCheckAll && obj.result ? (options.fieldOptions.skipUIfeedback = !0, 
-                resolve(isValidForm(formEl, options.fieldOptions, validationRules, validationErrors).then((function(dataForm) {
-                    var clMethodName = dataForm.result ? "add" : "remove";
-                    return formEl.classList[clMethodName](options.formOptions.cssClasses.valid), dispatchCustomEvent(formEl, customEvents_form.validation, dataForm), 
-                    options.fieldOptions.skipUIfeedback = skipUIfeedback, obj;
-                })))) : obj.result || removeClass(formEl, options.formOptions.cssClasses.valid)), 
-                resolve(obj);
-            }));
-        }));
-    }
-    function validateForm(formEl, options, validationRules, validationErrors) {
-        return new Promise((function(resolve) {
-            resolve(isValidForm(formEl, options.fieldOptions, validationRules, validationErrors));
-        })).then((function(data) {
-            var clMethodName = data.result ? "add" : "remove";
-            return formEl.classList[clMethodName](options.formOptions.cssClasses.valid), listenerCallbacks_validationEnd({
-                data: data
-            }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
         }));
     }
     var Form = function() {
@@ -642,21 +628,39 @@ var Form = function() {
             }
         }, {
             key: "validateField",
-            value: function(fieldEl) {
-                var fieldOptions = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
-                fieldEl = "string" == typeof fieldEl ? this.formEl.querySelector(fieldEl) : fieldEl;
-                var options = mergeObjects({}, this.options, {
-                    fieldOptions: fieldOptions
-                });
-                return validateField(fieldEl, options, this.validationRules, this.validationErrors);
+            value: function(fieldEl, fieldOptions) {
+                var _this = this;
+                fieldEl = "string" == typeof fieldEl ? this.formEl.querySelector(fieldEl) : fieldEl, 
+                fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
+                var formEl = this.formEl, skipUIfeedback = this.options.fieldOptions.skipUIfeedback;
+                return checkFieldValidity(fieldEl, fieldOptions, this.validationRules, this.validationErrors).then((function(obj) {
+                    return new Promise((function(resolve) {
+                        obj.fieldEl && (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
+                            bubbles: !1
+                        }), dispatchCustomEvent(formEl, customEvents_field.validation, obj), fieldOptions.onValidationCheckAll && obj.result ? (fieldOptions.skipUIfeedback = !0, 
+                        resolve(checkFormValidity(formEl, fieldOptions, _this.validationRules, _this.validationErrors, fieldEl).then((function(dataForm) {
+                            var clMethodName = dataForm.result ? "add" : "remove";
+                            return formEl.classList[clMethodName](_this.options.formOptions.cssClasses.valid), 
+                            dispatchCustomEvent(formEl, customEvents_form.validation, dataForm), fieldOptions.skipUIfeedback = skipUIfeedback, 
+                            obj;
+                        })))) : obj.result || removeClass(formEl, _this.options.formOptions.cssClasses.valid)), 
+                        resolve(obj);
+                    }));
+                }));
             }
         }, {
             key: "validateForm",
-            value: function() {
-                var fieldOptions = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}, options = mergeObjects({}, this.options, {
-                    fieldOptions: fieldOptions
-                });
-                return validateForm(this.formEl, options, this.validationRules, this.validationErrors);
+            value: function(fieldOptions) {
+                var _this2 = this;
+                fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
+                var formEl = this.formEl;
+                return checkFormValidity(formEl, fieldOptions, this.validationRules, this.validationErrors).then((function(data) {
+                    var clMethodName = data.result ? "add" : "remove";
+                    return formEl.classList[clMethodName](_this2.options.formOptions.cssClasses.valid), 
+                    listenerCallbacks_validationEnd({
+                        data: data
+                    }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
+                }));
             }
         } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
         Form;
@@ -692,5 +696,5 @@ var Form = function() {
                 result: /[+-]?([0-9]*[.])?[0-9]+/.test(string)
             };
         }
-    }, Form.prototype.version = "4.0.1", Form;
+    }, Form.prototype.version = "4.0.2", Form;
 }();

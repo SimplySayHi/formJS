@@ -1,4 +1,4 @@
-/* formJS v4.0.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v4.0.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 const addClass = (element, cssClasses) => {
     cssClasses.split(" ").forEach(className => {
         element.classList.add(className);
@@ -31,7 +31,13 @@ const addClass = (element, cssClasses) => {
         return (name !== currentFieldName || type !== currentFieldType) && (fieldEl.matches("[data-required-from]") || (currentFieldName = name, 
         currentFieldType = type), !0);
     });
-}, isDOMNode = node => Element.prototype.isPrototypeOf(node), isFieldForChangeEvent = fieldEl => fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]'), isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), mergeObjects = function(out = {}) {
+}, getValidateFieldDefault = obj => mergeObjects({}, {
+    result: !1,
+    fieldEl: null
+}, obj), getValidateFormDefault = obj => mergeObjects({}, {
+    result: !0,
+    fields: []
+}, obj), isDOMNode = node => Element.prototype.isPrototypeOf(node), isFieldForChangeEvent = fieldEl => fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]'), isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), mergeObjects = function(out = {}) {
     for (let i = 1; i < arguments.length; i++) {
         let obj = arguments[i];
         if (obj) for (let key in obj) {
@@ -52,13 +58,7 @@ const addClass = (element, cssClasses) => {
         resolve(promiseFn(dataNew));
     }).then((result = dataNew) => (res.push(result), res));
 }), Promise.resolve([ data ])).then(dataList => dataList.length > 1 ? dataList.slice(1) : dataList), serializeObject = obj => obj && "object" == typeof obj && obj.constructor === Object ? Object.keys(obj).reduce((a, k) => (a.push(k + "=" + encodeURIComponent(obj[k])), 
-a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (all, letter) => letter.toUpperCase()), validateFieldObjDefault = {
-    result: !1,
-    fieldEl: null
-}, validateFormObjDefault = {
-    result: !0,
-    fields: []
-}, defaultCallbacksInOptions = {
+a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (all, letter) => letter.toUpperCase()), defaultCallbacksInOptions = {
     fieldOptions: {
         beforeValidation: function(fieldObj) {
             const fieldOptions = this.options.fieldOptions;
@@ -288,7 +288,7 @@ function submit(event) {
         btnEl.disabled = !0;
     }
     removeClass(formEl, formCssClasses.ajaxComplete + " " + formCssClasses.ajaxError + " " + formCssClasses.ajaxSuccess), 
-    addClass(formEl, formCssClasses.submit), (options.fieldOptions.handleValidation ? instance.validateForm() : Promise.resolve(validateFormObjDefault)).then(formValidation => {
+    addClass(formEl, formCssClasses.submit), (options.fieldOptions.handleValidation ? instance.validateForm() : Promise.resolve(getValidateFormDefault())).then(formValidation => {
         let beforeSendData = {
             stopExecution: !1,
             formData: {}
@@ -443,11 +443,13 @@ const init = function(formEl) {
     }));
 };
 
-function isValidField(fieldEl, fieldOptions, validationRules, validationErrors) {
-    const obj = mergeObjects({}, validateFieldObjDefault, {
-        fieldEl: fieldEl
-    });
-    if (!isDOMNode(fieldEl)) return Promise.resolve(obj);
+function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationErrors) {
+    if (!isDOMNode(fieldEl)) {
+        const obj = getValidateFieldDefault({
+            fieldEl: fieldEl
+        });
+        return Promise.resolve(obj);
+    }
     const isValidValue = fieldEl.value.trim().length > 0, isRequired = fieldEl.required, isReqFrom = fieldEl.matches("[data-required-from]"), isValidateIfFilled = fieldEl.matches("[data-validate-if-filled]"), rfsObject = {
         functionsList: fieldOptions.beforeValidation,
         data: {
@@ -460,10 +462,10 @@ function isValidField(fieldEl, fieldOptions, validationRules, validationErrors) 
             !isRequired && !isValidateIfFilled && !isReqFrom || isValidateIfFilled && !isValidValue || isReqFrom && !isRequired ? (dataObj.result = !0, 
             resolve(dataObj)) : resolve(function(fieldEl, fieldOptions, validationRules, validationErrors) {
                 const fieldType = fieldEl.matches("[data-subtype]") ? toCamelCase(fieldEl.getAttribute("data-subtype")) : fieldEl.type, fieldValue = fieldEl.value, isValidValue = fieldValue.trim().length > 0, fieldAttributes = Array.from(fieldEl.attributes).sort((a, b) => a.name < b.name), attrValidations = [];
-                let attrValidationsResult = isValidValue, obj = {
+                let attrValidationsResult = isValidValue, obj = getValidateFieldDefault({
                     result: isValidValue,
                     fieldEl: fieldEl
-                };
+                });
                 return obj.result ? (fieldAttributes.forEach(attr => {
                     const attrName = toCamelCase(attr.name.replace("data-", "")), attrValue = attr.value, isAttrValueWithFn = "type" === attrName && "function" == typeof validationRulesAttributes[attrValue], isAttrNameWithFn = "function" == typeof validationRulesAttributes[attrName];
                     if (isAttrValueWithFn || isAttrNameWithFn) {
@@ -496,12 +498,21 @@ function isValidField(fieldEl, fieldOptions, validationRules, validationErrors) 
     });
 }
 
-function isValidForm(formEl, fieldOptions, validationRules, validationErrors) {
+function checkFormValidity(formEl, fieldOptions, validationRules, validationErrors, fieldToSkip = null) {
     fieldOptions = mergeObjects({}, fieldOptions, {
         focusOnRelated: !1
     });
-    const obj = mergeObjects({}, validateFormObjDefault), fieldsList = getUniqueFields(formEl.querySelectorAll(fieldsStringSelector));
-    return Promise.all(fieldsList.map(fieldEl => isValidField(fieldEl, fieldOptions, validationRules, validationErrors))).then(list => {
+    const obj = getValidateFormDefault(), fieldsList = getUniqueFields(formEl.querySelectorAll(fieldsStringSelector));
+    return Promise.all(fieldsList.map(fieldEl => {
+        if (fieldToSkip && fieldEl === fieldToSkip) {
+            const obj2 = getValidateFieldDefault({
+                fieldEl: fieldEl,
+                result: !0
+            });
+            return Promise.resolve(obj2);
+        }
+        return checkFieldValidity(fieldEl, fieldOptions, validationRules, validationErrors);
+    })).then(list => {
         let areAllFieldsValid = 0 === list.filter(fieldObj => !fieldObj.result).length;
         return obj.result = areAllFieldsValid, obj.fields = list, obj;
     });
@@ -541,40 +552,33 @@ class Form {
     init() {
         return init(this.formEl);
     }
-    validateField(fieldEl, fieldOptions = {}) {
-        return function(fieldEl, options, validationRules, validationErrors) {
-            const formEl = fieldEl.closest("form"), skipUIfeedback = options.fieldOptions.skipUIfeedback;
-            return new Promise((function(resolve) {
-                resolve(isValidField(fieldEl, options.fieldOptions, validationRules, validationErrors));
-            })).then(obj => new Promise(resolve => {
-                obj.fieldEl && (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
-                    bubbles: !1
-                }), dispatchCustomEvent(formEl, customEvents_field.validation, obj), options.fieldOptions.onValidationCheckAll && obj.result ? (options.fieldOptions.skipUIfeedback = !0, 
-                resolve(isValidForm(formEl, options.fieldOptions, validationRules, validationErrors).then(dataForm => {
-                    const clMethodName = dataForm.result ? "add" : "remove";
-                    return formEl.classList[clMethodName](options.formOptions.cssClasses.valid), dispatchCustomEvent(formEl, customEvents_form.validation, dataForm), 
-                    options.fieldOptions.skipUIfeedback = skipUIfeedback, obj;
-                }))) : obj.result || removeClass(formEl, options.formOptions.cssClasses.valid)), 
-                resolve(obj);
-            }));
-        }(fieldEl = "string" == typeof fieldEl ? this.formEl.querySelector(fieldEl) : fieldEl, mergeObjects({}, this.options, {
-            fieldOptions: fieldOptions
-        }), this.validationRules, this.validationErrors);
+    validateField(fieldEl, fieldOptions) {
+        fieldEl = "string" == typeof fieldEl ? this.formEl.querySelector(fieldEl) : fieldEl, 
+        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
+        const formEl = this.formEl, skipUIfeedback = this.options.fieldOptions.skipUIfeedback;
+        return checkFieldValidity(fieldEl, fieldOptions, this.validationRules, this.validationErrors).then(obj => new Promise(resolve => {
+            obj.fieldEl && (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
+                bubbles: !1
+            }), dispatchCustomEvent(formEl, customEvents_field.validation, obj), fieldOptions.onValidationCheckAll && obj.result ? (fieldOptions.skipUIfeedback = !0, 
+            resolve(checkFormValidity(formEl, fieldOptions, this.validationRules, this.validationErrors, fieldEl).then(dataForm => {
+                const clMethodName = dataForm.result ? "add" : "remove";
+                return formEl.classList[clMethodName](this.options.formOptions.cssClasses.valid), 
+                dispatchCustomEvent(formEl, customEvents_form.validation, dataForm), fieldOptions.skipUIfeedback = skipUIfeedback, 
+                obj;
+            }))) : obj.result || removeClass(formEl, this.options.formOptions.cssClasses.valid)), 
+            resolve(obj);
+        }));
     }
-    validateForm(fieldOptions = {}) {
-        const options = mergeObjects({}, this.options, {
-            fieldOptions: fieldOptions
+    validateForm(fieldOptions) {
+        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
+        const formEl = this.formEl;
+        return checkFormValidity(formEl, fieldOptions, this.validationRules, this.validationErrors).then(data => {
+            const clMethodName = data.result ? "add" : "remove";
+            return formEl.classList[clMethodName](this.options.formOptions.cssClasses.valid), 
+            listenerCallbacks_validationEnd({
+                data: data
+            }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
         });
-        return function(formEl, options, validationRules, validationErrors) {
-            return new Promise((function(resolve) {
-                resolve(isValidForm(formEl, options.fieldOptions, validationRules, validationErrors));
-            })).then(data => {
-                const clMethodName = data.result ? "add" : "remove";
-                return formEl.classList[clMethodName](options.formOptions.cssClasses.valid), listenerCallbacks_validationEnd({
-                    data: data
-                }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
-            });
-        }(this.formEl, options, this.validationRules, this.validationErrors);
     }
     static addValidationErrors(errorsObj) {
         this.prototype.validationErrors = mergeObjects({}, this.prototype.validationErrors, errorsObj);
@@ -617,6 +621,6 @@ Form.prototype.isInitialized = !1, Form.prototype.options = options, Form.protot
             result: /[+-]?([0-9]*[.])?[0-9]+/.test(string)
         };
     }
-}, Form.prototype.version = "4.0.1";
+}, Form.prototype.version = "4.0.2";
 
 export default Form;

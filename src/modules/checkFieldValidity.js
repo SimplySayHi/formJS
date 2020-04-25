@@ -1,12 +1,13 @@
 
-import { isDOMNode, mergeObjects, runFunctionsSequence, validateFieldObjDefault } from './helpers';
+import { getValidateFieldDefault, isDOMNode, runFunctionsSequence } from './helpers';
 import { isValid } from './isValid';
 
-export function isValidField( fieldEl, fieldOptions, validationRules, validationErrors ){
+export function checkFieldValidity( fieldEl, fieldOptions, validationRules, validationErrors ){
 
-    const obj = mergeObjects({}, validateFieldObjDefault, {fieldEl});
-
-    if( !isDOMNode(fieldEl) ){ return Promise.resolve(obj); }
+    if( !isDOMNode(fieldEl) ){
+        const obj = getValidateFieldDefault({fieldEl});
+        return Promise.resolve(obj);
+    }
 
     const isValidValue =      fieldEl.value.trim().length > 0,
           isRequired =        fieldEl.required,
