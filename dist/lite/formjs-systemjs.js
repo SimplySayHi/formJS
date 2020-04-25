@@ -335,7 +335,7 @@ System.register("Form", [], (function(exports) {
                 } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
                 Form;
             }();
-            Form.prototype.isInitialized = !1, Form.prototype.options = {
+            Form.prototype.options = {
                 fieldOptions: {
                     beforeValidation: [],
                     maxFileSize: 10

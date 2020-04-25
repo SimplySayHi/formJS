@@ -333,7 +333,7 @@ var Form = function() {
         } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
         Form;
     }();
-    return Form.prototype.isInitialized = !1, Form.prototype.options = {
+    return Form.prototype.options = {
         fieldOptions: {
             beforeValidation: [],
             maxFileSize: 10

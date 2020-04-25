@@ -43,7 +43,6 @@ class Form {
 
 }
 
-Form.prototype.isInitialized = false;
 Form.prototype.options = options;
 Form.prototype.validationErrors = {};
 Form.prototype.validationRules = validationRules;

@@ -279,7 +279,7 @@ class Form {
     }
 }
 
-Form.prototype.isInitialized = !1, Form.prototype.options = {
+Form.prototype.options = {
     fieldOptions: {
         beforeValidation: [],
         maxFileSize: 10
