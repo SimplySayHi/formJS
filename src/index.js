@@ -1,4 +1,5 @@
 
+import { version }              from './modules/version';
 import { customEvents, dispatchCustomEvent, excludeSelector, mergeObjects, removeClass } from './modules/helpers';
 import { options }              from './modules/options';
 import { validationRules }      from './modules/validationRules';
@@ -9,8 +10,6 @@ import { destroy }              from './modules/destroy';
 import { init }                 from './modules/init';
 import { checkFieldValidity }   from './modules/checkFieldValidity';
 import { checkFormValidity }    from './modules/checkFormValidity';
-
-const version = '4.0.2';
 
 class Form {
 

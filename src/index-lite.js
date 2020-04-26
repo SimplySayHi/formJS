@@ -1,12 +1,11 @@
 
+import { version }              from './modules/version';
 import { mergeObjects }         from './modules/helpers';
 import { options }              from './modules-lite/options';
 import { validationRules }      from './modules/validationRules';
 import { constructorFn }        from './modules-lite/constructor';
 import { checkFieldValidity }   from './modules/checkFieldValidity';
 import { checkFormValidity }    from './modules/checkFormValidity';
-
-const version = '4.0.2';
 
 class Form {
 
