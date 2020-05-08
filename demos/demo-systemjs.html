@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Usage Via SystemJS - Demos | formJS - JavaScript Form Validation. Made Easy</title>
+    <title>Usage Via SystemJS 01 - Demos | formJS - JavaScript Form Validation. Made Easy</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="Valerio Di Punzio">
@@ -60,7 +60,7 @@
                 <h4 class="my-0">Demos</h4>
             </div>
             
-            <h2 class="border-0 mt-2 mb-4 pt-0">Usage Via SystemJS</h2>
+            <h2 class="border-0 mt-2 mb-4 pt-0">Usage Via SystemJS 01</h2>
 
             <div class="row justify-content-center">
                 <div class="col-md-6 col-lg-7 col-xl-8 order-6 order-md-1">
@@ -150,14 +150,27 @@
                             </div>
                             <div class="card-body p-0">
                                 <pre class="m-0">
-<code class="language-js">const formEl = document.querySelector('form');
-const formInstance = new Form( formEl );
-
-// INITIALIZATION ( OPTIONAL )
-formInstance.init().then(obj => {
-    console.log('instance', obj.instance);
-    console.log('validated fields', obj.fields);
-});
+<code class="language-js">&lt;script src="https://unpkg.com/systemjs@6.3.1/dist/s.js"&gt;&lt;/script&gt;
+&lt;script type="systemjs-importmap"&gt;
+    {
+        "imports": {
+            "Form": "../dist/formjs-systemjs.js"
+        }
+    }
+&lt;/script&gt;
+&lt;script&gt;
+    System.import('Form').then(({default:Form}) => {
+            var formEl = document.querySelector('form');
+            var formInstance = new Form( formEl );
+            formInstance.init().then(function( obj ){
+                console.log('formInstance obj.instance', obj.instance);
+                console.log('formInstance obj.fields', obj.fields);
+            });
+        })
+        .catch(function(e) {
+            console.error(e)
+        });
+&lt;/script&gt;
 </code></pre>
                             </div>
                         </div>

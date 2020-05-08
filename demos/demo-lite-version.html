@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Usage Via SystemJS 02 - Demos | formJS - JavaScript Form Validation. Made Easy</title>
+    <title>Lite Version - Demos | formJS  - JavaScript Form Validation. Made Easy</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="Valerio Di Punzio">
@@ -60,7 +60,7 @@
                 <h4 class="my-0">Demos</h4>
             </div>
             
-            <h2 class="border-0 mt-2 mb-4 pt-0">Usage Via SystemJS 02</h2>
+            <h2 class="border-0 mt-2 mb-4 pt-0">Lite Version</h2>
 
             <div class="row justify-content-center">
                 <div class="col-md-6 col-lg-7 col-xl-8 order-6 order-md-1">
@@ -150,20 +150,17 @@
                             </div>
                             <div class="card-body p-0">
                                 <pre class="m-0">
-<code class="language-js">&lt;script&gt;
-    import("../js/demos/app.js");
-    window.supportsDynamicImport = true;
-&lt;/script&gt;
-&lt;script&gt;
-    if (!window.supportsDynamicImport) {
-        const systemJsLoaderTag = document.createElement('script');
-        systemJsLoaderTag.src = 'https://unpkg.com/systemjs@6.3.1/dist/s.js';
-        systemJsLoaderTag.addEventListener('load', function () {
-            System.import('../js/demos/app-systemjs.js');
-        });
-        document.head.appendChild(systemJsLoaderTag);
-    }
-&lt;/script&gt;
+<code class="language-js">const formEl = document.querySelector('form');
+const formInstance = new Form( formEl );
+
+formEl.addEventListener('submit', function(event){
+    event.preventDefault();
+    formInstance.validateForm().then(function(obj){
+        console.log('validateForm then', obj);
+        const formValidity = obj.result ? 'valid' : 'not valid';
+        alert(`Form is ${formValidity}`);
+    });
+});
 </code></pre>
                             </div>
                         </div>
@@ -258,20 +255,20 @@
     <script src="../js/prism.js"></script>
 
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
-    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
+    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise"></script>
+    <script src="../dist/lite/formjs.min.js"></script>
     <script>
-        import("../js/demos/app.js");
-        window.supportsDynamicImport = true;
-    </script>
-    <script>
-        if (!window.supportsDynamicImport) {
-            const systemJsLoaderTag = document.createElement('script');
-            systemJsLoaderTag.src = 'https://unpkg.com/systemjs@6.3.1/dist/s.js';
-            systemJsLoaderTag.addEventListener('load', function () {
-                System.import('../js/demos/app-systemjs.js');
+        var formEl = document.querySelector('form');
+        var formInstance = new Form( formEl );
+
+        formEl.addEventListener('submit', function(event){
+            event.preventDefault();
+            formInstance.validateForm().then(function(obj){
+                console.log('validateForm then', obj);
+                var formValidity = obj.result ? 'valid' : 'not valid';
+                alert('Form is '+formValidity);
             });
-            document.head.appendChild(systemJsLoaderTag);
-        }
+        });
     </script>
 
     <script src="../js/include.js"></script>
