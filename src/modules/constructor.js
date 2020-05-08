@@ -34,7 +34,7 @@ export function constructorFn( self, formEl, optionsObj ){
             cbOpt = self.options[optionType][cbName];
 
         if( cbOpt ){
-            self.options[optionType][cbName] = cbOpt.map(cbFn => cbFn.bind(self));
+            self.options[optionType][cbName] = ( Array.isArray(cbOpt) ? cbOpt.map(cbFn => cbFn.bind(self)) : cbOpt.bind(self) );
         }
     });
 

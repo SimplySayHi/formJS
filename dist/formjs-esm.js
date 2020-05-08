@@ -529,7 +529,7 @@ class Form {
             const cbList = [ "beforeValidation", "beforeSend", "getFormData" ];
             cbList.forEach(cbName => {
                 let optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions", cbOpt = self.options[optionType][cbName];
-                cbOpt && (self.options[optionType][cbName] = cbOpt.map(cbFn => cbFn.bind(self)));
+                cbOpt && (self.options[optionType][cbName] = Array.isArray(cbOpt) ? cbOpt.map(cbFn => cbFn.bind(self)) : cbOpt.bind(self));
             }), formStartup(self.formEl, self.options);
         }(this, formEl, optionsObj);
     }
