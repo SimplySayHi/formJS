@@ -21,8 +21,7 @@ export function constructorFn( self, formEl, optionsObj ){
     self.options = mergeObjects({}, self.constructor.prototype.options, optionsObj);
 
     // BINDING CONTEXT FOR FUTURE EXECUTION
-    let beforeValidation = self.options.fieldOptions.beforeValidation;
-    self.options.fieldOptions.beforeValidation = ( Array.isArray(beforeValidation) ? beforeValidation.map(cbFn => cbFn.bind(self)) : beforeValidation.bind(self) );
+    self.options.fieldOptions.beforeValidation = self.options.fieldOptions.beforeValidation.map(cbFn => cbFn.bind(self));
 
     self.formEl.noValidate = true;
     

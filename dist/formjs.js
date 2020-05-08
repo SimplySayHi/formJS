@@ -577,9 +577,9 @@ var Form = function() {
                 var cbList = [ "beforeValidation", "beforeSend", "getFormData" ];
                 cbList.forEach((function(cbName) {
                     var optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions", cbOpt = self.options[optionType][cbName];
-                    cbOpt && (self.options[optionType][cbName] = Array.isArray(cbOpt) ? cbOpt.map((function(cbFn) {
+                    cbOpt && (self.options[optionType][cbName] = cbOpt.map((function(cbFn) {
                         return cbFn.bind(self);
-                    })) : cbOpt.bind(self));
+                    })));
                 })), formStartup(self.formEl, self.options);
             }(this, formEl, optionsObj);
         }
