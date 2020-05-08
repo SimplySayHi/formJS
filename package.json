@@ -27,7 +27,8 @@
     "license": "MIT",
     "scripts": {
         "build": "rollup --config",
-        "build-lite": "rollup --config rollup.config.lite.js"
+        "build-lite": "rollup --config rollup.config.lite.js",
+        "build-demo": "rollup js/demos/app.js -f system -o js/demos/app-systemjs.js"
     },
     "devDependencies": {
         "@babel/core": "^7.8.7",

@@ -1,5 +1,5 @@
 /* formJS v4.0.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
-System.register("Form", [], (function(exports) {
+System.register([], (function(exports) {
     "use strict";
     return {
         execute: function() {

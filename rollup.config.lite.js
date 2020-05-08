@@ -57,7 +57,6 @@ optionsSYS = {
         {
             file: `dist/lite/${libraryFileName}-systemjs.js`,
             format: 'system',
-            name: libraryNamespace,
             plugins: [
                 terser({
                     mangle: false,
@@ -74,7 +73,6 @@ optionsSYS = {
         {
             file: `dist/lite/${libraryFileName}-systemjs.min.js`,
             format: 'system',
-            name: libraryNamespace,
             plugins: [
                 terser({
                     output: {

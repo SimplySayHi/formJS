@@ -95,6 +95,7 @@ hr { border-top: 1px solid rgba(0, 0, 0, 0.2); }
 .text-green { color: #06d6a0; }
 .border-red { border-color: #ef476f !important; }
 .border-green { border-color: #06d6a0 !important; }
+.badge-yellow { background-color: #ffd166; color: #073b4c; }
 .text-opacity { opacity: 0.5; }
 ul { padding-left: 1em; }
 a { color: #ef476f; }
