@@ -255,7 +255,8 @@ class Form {
             if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
             self.formEl = checkFormElem.element, self.formEl.formjs = self, self.options = mergeObjects({}, self.constructor.prototype.options, optionsObj);
             let beforeValidation = self.options.fieldOptions.beforeValidation;
-            self.options.fieldOptions.beforeValidation = Array.isArray(beforeValidation) ? beforeValidation.map(cbFn => cbFn.bind(self)) : beforeValidation.bind(self);
+            self.options.fieldOptions.beforeValidation = Array.isArray(beforeValidation) ? beforeValidation.map(cbFn => cbFn.bind(self)) : beforeValidation.bind(self), 
+            self.formEl.noValidate = !0;
         }(this, formEl, optionsObj);
     }
     destroy() {
