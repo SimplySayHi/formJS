@@ -657,8 +657,21 @@
                                     Description:
                                 </p>
                                 <p>
-                                    Remove all events listeners from the form instance.
+                                    This method will:
                                 </p>
+                                <ul>
+                                    <li>
+                                        <p>
+                                            Remove all events listeners from the form instance
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            <span class="badge badge-pill badge-yellow">Lite</span>
+                                            Remove the form instance attached to the form element
+                                        </p>
+                                    </li>
+                                </ul>
                             </div>
                             <div class="col-lg-5 col-xl-3">
                             </div>
@@ -767,9 +780,26 @@
                                     Description:
                                 </p>
                                 <p>
-                                    Fires validation for the specified field.<br />
-                                    Then, this also fires feedback on UI ( basic feedback with css classes ) and callback function(s) ( "onValidation" in "fieldOptions" ).
+                                    <span class="badge badge-pill badge-yellow">Lite</span> Fires validation for the specified field.
+                                    <br /><br />
+                                    Then:
                                 </p>
+                                <ul>
+                                    <li>
+                                        <p>
+                                            Run feedback on UI ( basic feedback with css classes )
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            Emit event <code>fjs.field:validation</code> on the field and on the form
+                                        </p>
+                                    </li>
+                                    <li>
+                                        If field is valid and <code>onValidationCheckAll</code> is set to <code>true</code>, form validation will run ( with <code>skipUIfeedback</code> set ot <code>true</code> )
+                                    </li>
+                                </ul>
+                                <hr />
                                 <p class="d-lg-none m-0">
                                     Parameters:
                                 </p>
@@ -828,9 +858,23 @@
                                     Description:
                                 </p>
                                 <p>
-                                    Fires validation for the form.<br />
-                                    Then, this also fires feedback on UI for each field ( basic feedback with css classes ) and callback function(s) passing the full array of fields ( "onValidation" in "fieldOptions" ).
+                                    <span class="badge badge-pill badge-yellow">Lite</span> Fires validation for the form.
+                                    <br /><br />
+                                    Then:
                                 </p>
+                                <ul>
+                                    <li>
+                                        <p>
+                                            Run feedback on UI for each field ( basic feedback with css classes )
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            Emit event <code>fjs.form:validation</code> on the form
+                                        </p>
+                                    </li>
+                                </ul>
+                                <hr />
                                 <p class="d-lg-none m-0">
                                     Parameters:
                                 </p>
@@ -1261,11 +1305,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
-                                    /^[0-9]{5}$/
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    VALID ITALIAN CAP WITH 5 DIGITS
+                                    Valid italian CAP with 5 digits
                                 </p>
                             </div>
                         </div>
@@ -1313,13 +1353,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
-                                    /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/ 
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    HEX COLOR WITH/WITHOUT #. <br />
-                                    LOWERCASE AND/OR UPPERCASE <br />
-                                    CAN BE 3 OR 6 CHARACTERS ( 0fa | 00FFaa )
+                                    HEX color with/without #.<br />
+                                    Can be lowercase or uppercase.<br />
+                                    Can be 3 or 6 characters ( 0fa | 00FFaa ).
                                 </p>
                                 <p>
                                     <b>Important Note</b>:<br />
@@ -1351,16 +1387,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
-                                    /^((((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29))$/
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    DATE AS ISO 8601 DATE FORMAT<br />
+                                    Date as ISO 8601 date format with space / . - as separator:<br />
                                     YYYY MM DD | YYYY/MM/DD | YYYY.MM.DD | YYYY-MM-DD
-                                    <br /><br />
-                                    WITH SPACE / . - AS SEPARATOR
                                 </p>
-                                <br />
                                 <p>
                                     <b>Important Note</b>:<br />
                                     <code>type="date"</code> is not supported by:
@@ -1398,14 +1427,8 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
-                                    /^(((0[1-9]|[12]\d|3[01])[ \/\-.](0[13578]|1[02])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)[ \/\-.](0[13456789]|1[012])[ \/\-.]((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])[ \/\-.]02[ \/\-.]((19|[2-9]\d)\d{2}))|(29[ \/\-.]02[ \/\-.]((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    DATE AS ITALIAN SYNTAX<br />
+                                    Date as italian syntax with space / . - as separator:<br />
                                     DD MM YYYY | DD/MM/YYYY | DD.MM.YYYY | DD-MM-YYYY
-                                    <br /><br />
-                                    WITH SPACE / . - AS SEPARATOR
                                 </p>
                                 <p>
                                     See notes for date validation.
@@ -1425,15 +1448,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
-                                    /^[a-zA-Z_-]([\w.-]?[a-zA-Z0-9])*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?){2,})+$/
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity m-0">
-                                    EMAIL MUST BE AT LEAST ( FOR EXAMPLE ): a@a.aa<br />
-                                    Check common email addresses instead of RFC5322 Official Standard:
-                                </p>
-                                <p class="small text-lowercase">
-                                    <a href="https://regex101.com/r/cdlyJy/3" target="_blank">read this</a>
+                                    Check common email addresses instead of RFC5322 Official Standard ( <a href="https://regex101.com/r/cdlyJy/3" target="_blank">see tests</a> ).
                                 </p>
                             </div>
                         </div>
@@ -1450,9 +1465,8 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 <p>
                                     The "name" attribute of the field this answer value must be equal to 
                                 </p>
-                                <br />
                                 <p class="small text-lowercase text-opacity m-0">
-                                    Eg: for a confirm email/password field 
+                                    Eg: to confirm a field for email/password
                                 </p>
                             </div>
                         </div>
@@ -1503,11 +1517,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
-                                    /^(?:[B-DF-HJ-NP-TV-Z](?:[AEIOU]{2}|[AEIOU]X)|[AEIOU]{2}X|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[1256LMRS][\dLMNP-V])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[\dLMNP-V][1-9MNP-V]|[1-9MNP-V][0L]))[A-Z]$/i
-                                </p>
-                                <br />
-                                <p class="small text-lowercase">
-                                    <a href="http://blog.marketto.it/2016/01/regex-validazione-codice-fiscale-con-omocodia/" target="_blank">read this post</a>
+                                    Check italian fiscal code ( <a href="http://blog.marketto.it/2016/01/regex-validazione-codice-fiscale-con-omocodia/" target="_blank">read this post</a> ).
                                 </p>
                             </div>
                         </div>
@@ -1523,15 +1533,11 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
-                                    /^((00|\+)\d{2}[\-\. ]??)??(((0[\d]{1,4}))([\/\-\. ]){0,1}([\d, ]{5,10}))$/
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    LANDLINE PREFIX:<br />
-                                    +39 | 0039 | not-set ( ALSO WITH INTERNATIONAL PREFIXES WITH 2 DIGITS )
+                                    Landline prefix:<br />
+                                    +39 | 0039 | not-set ( also with international prefixes with 2 digits )
                                     <br /><br />
-                                    LANDLINE NUMBER MUST START WITH 0 ( AS FOR ITALIAN ONES ):<br />
-                                    1234567890 | 12 34567890 | 123456789 | 1234 56789 ( ALSO WITH . - / AS SEPARATOR )
+                                    Landline numbers must start with 0 ( as for italian ones ):<br />
+                                    1234567890 | 12 34567890 | 123456789 | 1234 56789 ( also with . - / as separator )
                                 </p>
                             </div>
                         </div>
@@ -1632,13 +1638,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
-                                    /^((00|\+)\d{2}[\-\. ]??)??3\d{2}[\-\. ]??\d{6,7}$/
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    +39 | 0039 | not-set ( ALSO WITH ALL INTERNATIONAL PREFIXES WITH 2 DIGITS )<br />
-                                    MOBILE NUMBER MUST START WITH 3<br />
-                                    3234567890 | 323 4567890 ( ALSO WITH . OR - AS SEPARATOR )
+                                    Mobile number must start with "3"<br />
+                                    +39 | 0039 | not-set ( also with international prefixes with 2 digits )<br />
+                                    3234567890 | 323 4567890 ( also with . or - as separator )
                                 </p>
                             </div>
                         </div>
@@ -1658,11 +1660,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
-                                    /[+-]?([0-9]*[.])?[0-9]+/
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    CHECK IF IT IS A NUMBER ( BOTH INTGER AND FLOATING ARE VALID )
+                                    Check if it is a number ( both integer and floating are valid )
                                 </p>
                             </div>
                         </div>
@@ -1682,12 +1680,8 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
-                                    /[+-]?([0-9]*[.])[0-9]+/
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    CHECK IF IT IS A FLOATING NUMBER<br />
-                                    VALID NUMBERS: 123.456 | .123
+                                    Check if it is a floating number.<br />
+                                    Valid numbers: 123.456 | .123
                                 </p>
                             </div>
                         </div>
@@ -1707,11 +1701,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
-                                    /^\d+$/
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    CHECK IF IT IS AN INTEGER NUMBER
+                                    Check if it is an integer number.
                                 </p>
                             </div>
                         </div>
@@ -1728,13 +1718,22 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
-                                    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
+                                    Password ( no special characters allowed ) with at least:
                                 </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    PASSWORD ( NO SPECIAL CHARACTERS ) WITH AT LEAST:<br />
-                                    ONE DIGIT and ONE LOWERCASE and ONE UPPERCASE and MIN LENGTH OF 8 CHARACTERS
-                                </p>
+                                <ul>
+                                    <li>
+                                        one digit
+                                    </li>
+                                    <li>
+                                        one lowercase
+                                    </li>
+                                    <li>
+                                        one uppercase
+                                    </li>
+                                    <li>
+                                        min length of 8 characters
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div id="validation-pattern" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -1827,11 +1826,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
-                                    /^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    MUST NOT CONTAIN PARAMETERS:<br />
+                                    Must not contain parameters:<br />
                                     www.mysite.com/index.html         --> VALID URL<br />
                                     www.mysite.com/index.html?v=hello --> INVALID URL
                                 </p>
@@ -1850,13 +1845,22 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
-                                    /^(?=\w)(?=[\-\.\@]?)[\w\-\.\@]{3,24}$/
+                                    Username must respect these criteria:
                                 </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    USERNAME MUST START WITH A LETTER / NUMBER / UNDERSCORE AND CAN ALSO CONTAIN . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
-                                </p>
-                                <br />
+                                <ul>
+                                    <li>
+                                        Start with: a letter or a number or an underscore
+                                    </li>
+                                    <li>
+                                        Can contain . - @
+                                    </li>
+                                    <li>
+                                        Min length of 3 characters
+                                    </li>
+                                    <li>
+                                        Max length of 24 characters
+                                    </li>
+                                </ul>
                                 <p>
                                     You can find the remote validation in <code>remoteValidations/username.php</code><br />
                                     It is just a demo. Please change it with your custom remote validation.
@@ -1891,11 +1895,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
-                                    /^(IT){0,1}[0-9]{11}$/i
-                                </p>
-                                <br />
-                                <p class="small text-lowercase text-opacity">
-                                    VAT NUMBER CAN CONTAIN OR NOT THE 'IT' STRING ( AS FOR ITALIAN VAT NUMBERS ) AND THEN 11 NUMBERS
+                                    VAT number can contain or not the string "it" ( as for italian VAT numbers ) and then 11 numbers
                                 </p>
                             </div>
                         </div>
