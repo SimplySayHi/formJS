@@ -566,7 +566,7 @@ System.register([], (function(exports) {
                     return obj.result = areAllFieldsValid, obj.fields = list, obj;
                 }));
             }
-            var Form = function() {
+            var Form = exports("default", function() {
                 function Form(formEl, optionsObj) {
                     !function(instance, Constructor) {
                         if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
@@ -666,7 +666,7 @@ System.register([], (function(exports) {
                     }
                 } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
                 Form;
-            }();
+            }());
             Form.prototype.isInitialized = !1, Form.prototype.options = options, Form.prototype.validationErrors = {
                 email: function(string) {
                     var obj = {};
@@ -698,7 +698,7 @@ System.register([], (function(exports) {
                         result: /[+-]?([0-9]*[.])?[0-9]+/.test(string)
                     };
                 }
-            }, Form.prototype.version = "4.0.2", exports("default", Form);
+            }, Form.prototype.version = "4.0.2";
         }
     };
 }));

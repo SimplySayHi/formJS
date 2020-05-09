@@ -263,7 +263,7 @@ System.register([], (function(exports) {
                     }));
                 }));
             }
-            var Form = function() {
+            var Form = exports("default", function() {
                 function Form(formEl, optionsObj) {
                     !function(instance, Constructor) {
                         if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
@@ -333,7 +333,7 @@ System.register([], (function(exports) {
                     }
                 } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
                 Form;
-            }();
+            }());
             Form.prototype.options = {
                 fieldOptions: {
                     beforeValidation: [],
@@ -356,7 +356,7 @@ System.register([], (function(exports) {
                         result: /[+-]?([0-9]*[.])?[0-9]+/.test(string)
                     };
                 }
-            }, Form.prototype.version = "4.0.2", exports("default", Form);
+            }, Form.prototype.version = "4.0.2";
         }
     };
 }));
