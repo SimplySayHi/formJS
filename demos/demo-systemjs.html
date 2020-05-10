@@ -160,8 +160,8 @@
 &lt;/script&gt;
 &lt;script&gt;
     System.import('Form').then(({default:Form}) => {
-            var formEl = document.querySelector('form');
-            var formInstance = new Form( formEl );
+            const formEl = document.querySelector('form');
+            const formInstance = new Form( formEl );
             formInstance.init().then(function( obj ){
                 console.log('formInstance obj.instance', obj.instance);
                 console.log('formInstance obj.fields', obj.fields);
@@ -275,7 +275,8 @@
         }
     </script>
     <script>
-        System.import('Form').then(function({default:Form}){
+        System.import('Form').then(function(mod){
+                var Form = mod.default;
                 var formEl = document.querySelector('form');
                 var formInstance = new Form( formEl );
                 formInstance.init().then(function( obj ){
