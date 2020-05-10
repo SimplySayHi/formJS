@@ -275,7 +275,7 @@
         }
     </script>
     <script>
-        System.import('Form').then(({default:Form}) => {
+        System.import('Form').then(function({default:Form}){
                 var formEl = document.querySelector('form');
                 var formInstance = new Form( formEl );
                 formInstance.init().then(function( obj ){

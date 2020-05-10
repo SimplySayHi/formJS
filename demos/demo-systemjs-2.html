@@ -265,7 +265,7 @@
     </script>
     <script>
         if (!window.supportsDynamicImport) {
-            const systemJsLoaderTag = document.createElement('script');
+            var systemJsLoaderTag = document.createElement('script');
             systemJsLoaderTag.src = 'https://unpkg.com/systemjs@6.3.1/dist/s.js';
             systemJsLoaderTag.addEventListener('load', function () {
                 System.import('../js/demos/app-systemjs.js');
