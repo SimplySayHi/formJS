@@ -26,14 +26,17 @@
     },
     "license": "MIT",
     "scripts": {
-        "build": "rollup --config",
-        "build-lite": "rollup --config rollup.config.lite.js",
-        "build-demo": "rollup js/demos/app.js -f system -o js/demos/app-systemjs.js -p node-resolve -p babel"
+        "build": "BABEL_ENV=build rollup --config",
+        "build-lite": "BABEL_ENV=build rollup --config rollup.config.lite.js",
+        "build-demo": "BABEL_ENV=build rollup js/demos/app.js -f system -o js/demos/app-systemjs.js -p node-resolve -p babel",
+        "test": "BABEL_ENV=test jest"
     },
     "devDependencies": {
         "@babel/core": "^7.9.6",
         "@babel/preset-env": "^7.9.6",
         "@rollup/plugin-node-resolve": "^7.1.1",
+        "babel-jest": "^26.0.1",
+        "jest": "^26.0.1",
         "rollup": "^2.8.2",
         "rollup-plugin-babel": "^4.4.0",
         "rollup-plugin-terser": "^5.3.0"

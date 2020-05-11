@@ -15,12 +15,25 @@ var Form = function() {
             "value" in descriptor && (descriptor.writable = !0), Object.defineProperty(target, descriptor.key, descriptor);
         }
     }
-    var checkFormEl = function(formEl) {
+    var isNodeList = function(nodeList) {
+        return NodeList.prototype.isPrototypeOf(nodeList);
+    }, isDOMNode = function(node) {
+        return Element.prototype.isPrototypeOf(node);
+    }, checkFormEl = function(formEl) {
         var isString = _typeof(formEl), isFormSelector = "string" === isString && isDOMNode(document.querySelector(formEl)) && "form" === document.querySelector(formEl).tagName.toLowerCase();
         return {
             result: isDOMNode(formEl) || isFormSelector,
             element: "string" === isString ? document.querySelector(formEl) : formEl
         };
+    }, mergeObjects = function mergeObjects() {
+        for (var out = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}, i = 1; i < arguments.length; i++) {
+            var obj = arguments[i];
+            if (obj) for (var key in obj) {
+                var isArray = "[object Array]" === Object.prototype.toString.call(obj[key]), isObject = "[object Object]" === Object.prototype.toString.call(obj[key]);
+                obj.hasOwnProperty(key) && (isArray ? (void 0 === out[key] && (out[key] = []), out[key] = out[key].concat(obj[key].slice(0))) : isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
+            }
+        }
+        return out;
     }, fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', getSplitChar = function(string) {
         var splitChar = ".";
         return -1 === string.indexOf(splitChar) && (string.indexOf("-") >= 0 ? splitChar = "-" : string.indexOf("/") >= 0 && (splitChar = "/")), 
@@ -42,19 +55,6 @@ var Form = function() {
             result: !0,
             fields: []
         }, obj);
-    }, isDOMNode = function(node) {
-        return Element.prototype.isPrototypeOf(node);
-    }, isNodeList = function(nodeList) {
-        return NodeList.prototype.isPrototypeOf(nodeList);
-    }, mergeObjects = function mergeObjects() {
-        for (var out = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}, i = 1; i < arguments.length; i++) {
-            var obj = arguments[i];
-            if (obj) for (var key in obj) {
-                var isArray = "[object Array]" === Object.prototype.toString.call(obj[key]), isObject = "[object Object]" === Object.prototype.toString.call(obj[key]);
-                obj.hasOwnProperty(key) && (isArray ? (void 0 === out[key] && (out[key] = []), out[key] = out[key].concat(obj[key].slice(0))) : isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
-            }
-        }
-        return out;
     }, toCamelCase = function(string) {
         return string.replace(/-([a-z])/gi, (function(all, letter) {
             return letter.toUpperCase();

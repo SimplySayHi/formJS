@@ -3,7 +3,11 @@ const addClass = (element, cssClasses) => {
     cssClasses.split(" ").forEach(className => {
         element.classList.add(className);
     });
-}, checkFormEl = formEl => {
+}, isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), removeClass = (element, cssClasses) => {
+    cssClasses.split(" ").forEach(className => {
+        element.classList.remove(className);
+    });
+}, isDOMNode = node => Element.prototype.isPrototypeOf(node), checkFormEl = formEl => {
     let isString = typeof formEl, isFormSelector = "string" === isString && isDOMNode(document.querySelector(formEl)) && "form" === document.querySelector(formEl).tagName.toLowerCase();
     return {
         result: isDOMNode(formEl) || isFormSelector,
@@ -14,6 +18,15 @@ const addClass = (element, cssClasses) => {
 }, customEvents_form = {
     submit: "fjs.form:submit",
     validation: "fjs.form:validation"
+}, mergeObjects = function(out = {}) {
+    for (let i = 1; i < arguments.length; i++) {
+        let obj = arguments[i];
+        if (obj) for (let key in obj) {
+            let isArray = "[object Array]" === Object.prototype.toString.call(obj[key]), isObject = "[object Object]" === Object.prototype.toString.call(obj[key]);
+            obj.hasOwnProperty(key) && (isArray ? (void 0 === out[key] && (out[key] = []), out[key] = out[key].concat(obj[key].slice(0))) : isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
+        }
+    }
+    return out;
 }, dispatchCustomEvent = (elem, eventName, data = {}, eventOptions = {}) => {
     eventOptions = mergeObjects({}, {
         bubbles: !0
@@ -37,20 +50,7 @@ const addClass = (element, cssClasses) => {
 }, obj), getValidateFormDefault = obj => mergeObjects({}, {
     result: !0,
     fields: []
-}, obj), isDOMNode = node => Element.prototype.isPrototypeOf(node), isFieldForChangeEvent = fieldEl => fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]'), isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), mergeObjects = function(out = {}) {
-    for (let i = 1; i < arguments.length; i++) {
-        let obj = arguments[i];
-        if (obj) for (let key in obj) {
-            let isArray = "[object Array]" === Object.prototype.toString.call(obj[key]), isObject = "[object Object]" === Object.prototype.toString.call(obj[key]);
-            obj.hasOwnProperty(key) && (isArray ? (void 0 === out[key] && (out[key] = []), out[key] = out[key].concat(obj[key].slice(0))) : isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
-        }
-    }
-    return out;
-}, removeClass = (element, cssClasses) => {
-    cssClasses.split(" ").forEach(className => {
-        element.classList.remove(className);
-    });
-}, runFunctionsSequence = ({functionsList: functionsList = [], data: data = {}, stopConditionFn: stopConditionFn = function() {
+}, obj), isFieldForChangeEvent = fieldEl => fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]'), runFunctionsSequence = ({functionsList: functionsList = [], data: data = {}, stopConditionFn: stopConditionFn = function() {
     return !1;
 }} = {}) => functionsList.reduce((acc, promiseFn) => acc.then(res => {
     let dataNew = mergeObjects({}, res[res.length - 1]);

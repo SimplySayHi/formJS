@@ -7,3 +7,4 @@ js/* linguist-documentation
 json/* linguist-documentation
 remoteValidations/* linguist-documentation
 dist/* linguist-generated=true
+__tests__/* linguist-generated=true

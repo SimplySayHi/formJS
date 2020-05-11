@@ -47,6 +47,17 @@ System.register([], function () {
           element.classList.add(className);
         });
       },
+          isNodeList = function isNodeList(nodeList) {
+        return NodeList.prototype.isPrototypeOf(nodeList);
+      },
+          removeClass = function removeClass(element, cssClasses) {
+        cssClasses.split(" ").forEach(function (className) {
+          element.classList.remove(className);
+        });
+      },
+          isDOMNode = function isDOMNode(node) {
+        return Element.prototype.isPrototypeOf(node);
+      },
           checkFormEl = function checkFormEl(formEl) {
         var isString = _typeof(formEl),
             isFormSelector = "string" === isString && isDOMNode(document.querySelector(formEl)) && "form" === document.querySelector(formEl).tagName.toLowerCase();
@@ -62,6 +73,20 @@ System.register([], function () {
           customEvents_form = {
         submit: "fjs.form:submit",
         validation: "fjs.form:validation"
+      },
+          mergeObjects = function mergeObjects() {
+        var out = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+        for (var i = 1; i < arguments.length; i++) {
+          var obj = arguments[i];
+          if (obj) for (var key in obj) {
+            var isArray = "[object Array]" === Object.prototype.toString.call(obj[key]),
+                isObject = "[object Object]" === Object.prototype.toString.call(obj[key]);
+            obj.hasOwnProperty(key) && (isArray ? (void 0 === out[key] && (out[key] = []), out[key] = out[key].concat(obj[key].slice(0))) : isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
+          }
+        }
+
+        return out;
       },
           dispatchCustomEvent = function dispatchCustomEvent(elem, eventName) {
         var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
@@ -98,33 +123,8 @@ System.register([], function () {
           fields: []
         }, obj);
       },
-          isDOMNode = function isDOMNode(node) {
-        return Element.prototype.isPrototypeOf(node);
-      },
           isFieldForChangeEvent = function isFieldForChangeEvent(fieldEl) {
         return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
-      },
-          isNodeList = function isNodeList(nodeList) {
-        return NodeList.prototype.isPrototypeOf(nodeList);
-      },
-          mergeObjects = function mergeObjects() {
-        var out = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-        for (var i = 1; i < arguments.length; i++) {
-          var obj = arguments[i];
-          if (obj) for (var key in obj) {
-            var isArray = "[object Array]" === Object.prototype.toString.call(obj[key]),
-                isObject = "[object Object]" === Object.prototype.toString.call(obj[key]);
-            obj.hasOwnProperty(key) && (isArray ? (void 0 === out[key] && (out[key] = []), out[key] = out[key].concat(obj[key].slice(0))) : isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
-          }
-        }
-
-        return out;
-      },
-          removeClass = function removeClass(element, cssClasses) {
-        cssClasses.split(" ").forEach(function (className) {
-          element.classList.remove(className);
-        });
       },
           runFunctionsSequence = function runFunctionsSequence() {
         var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},

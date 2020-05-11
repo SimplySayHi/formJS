@@ -19,6 +19,14 @@ var Form = function() {
         cssClasses.split(" ").forEach((function(className) {
             element.classList.add(className);
         }));
+    }, isNodeList = function(nodeList) {
+        return NodeList.prototype.isPrototypeOf(nodeList);
+    }, removeClass = function(element, cssClasses) {
+        cssClasses.split(" ").forEach((function(className) {
+            element.classList.remove(className);
+        }));
+    }, isDOMNode = function(node) {
+        return Element.prototype.isPrototypeOf(node);
     }, checkFormEl = function(formEl) {
         var isString = _typeof(formEl), isFormSelector = "string" === isString && isDOMNode(document.querySelector(formEl)) && "form" === document.querySelector(formEl).tagName.toLowerCase();
         return {
@@ -30,6 +38,15 @@ var Form = function() {
     }, customEvents_form = {
         submit: "fjs.form:submit",
         validation: "fjs.form:validation"
+    }, mergeObjects = function mergeObjects() {
+        for (var out = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}, i = 1; i < arguments.length; i++) {
+            var obj = arguments[i];
+            if (obj) for (var key in obj) {
+                var isArray = "[object Array]" === Object.prototype.toString.call(obj[key]), isObject = "[object Object]" === Object.prototype.toString.call(obj[key]);
+                obj.hasOwnProperty(key) && (isArray ? (void 0 === out[key] && (out[key] = []), out[key] = out[key].concat(obj[key].slice(0))) : isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
+            }
+        }
+        return out;
     }, dispatchCustomEvent = function(elem, eventName) {
         var data = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : {}, eventOptions = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : {};
         eventOptions = mergeObjects({}, {
@@ -58,25 +75,8 @@ var Form = function() {
             result: !0,
             fields: []
         }, obj);
-    }, isDOMNode = function(node) {
-        return Element.prototype.isPrototypeOf(node);
     }, isFieldForChangeEvent = function(fieldEl) {
         return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
-    }, isNodeList = function(nodeList) {
-        return NodeList.prototype.isPrototypeOf(nodeList);
-    }, mergeObjects = function mergeObjects() {
-        for (var out = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}, i = 1; i < arguments.length; i++) {
-            var obj = arguments[i];
-            if (obj) for (var key in obj) {
-                var isArray = "[object Array]" === Object.prototype.toString.call(obj[key]), isObject = "[object Object]" === Object.prototype.toString.call(obj[key]);
-                obj.hasOwnProperty(key) && (isArray ? (void 0 === out[key] && (out[key] = []), out[key] = out[key].concat(obj[key].slice(0))) : isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
-            }
-        }
-        return out;
-    }, removeClass = function(element, cssClasses) {
-        cssClasses.split(" ").forEach((function(className) {
-            element.classList.remove(className);
-        }));
     }, runFunctionsSequence = function() {
         var _ref = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}, _ref$functionsList = _ref.functionsList, functionsList = void 0 === _ref$functionsList ? [] : _ref$functionsList, _ref$data = _ref.data, data = void 0 === _ref$data ? {} : _ref$data, _ref$stopConditionFn = _ref.stopConditionFn, stopConditionFn = void 0 === _ref$stopConditionFn ? function() {
             return !1;

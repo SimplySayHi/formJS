@@ -1,6 +1,15 @@
 {
-    "exclude": "node_modules/**",
-    "presets": [
-        [ "@babel/env", {"modules": false} ]
-    ]
+    "env": {
+        "build": {
+            "exclude": "node_modules/**",
+            "presets": [
+                [ "@babel/env", {"modules": false} ]
+            ]
+        },
+        "test": {
+            "presets": [
+                [ "@babel/env", {"targets": {"node": "current"}} ]
+            ]
+        }
+    }
 }

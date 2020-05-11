@@ -9,3 +9,4 @@ remoteValidations
 *.zip
 .gitattributes
 coverage
+__tests__

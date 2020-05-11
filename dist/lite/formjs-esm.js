@@ -1,18 +1,11 @@
 /* formJS Lite v4.0.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
-const checkFormEl = formEl => {
+const isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), isDOMNode = node => Element.prototype.isPrototypeOf(node), checkFormEl = formEl => {
     let isString = typeof formEl, isFormSelector = "string" === isString && isDOMNode(document.querySelector(formEl)) && "form" === document.querySelector(formEl).tagName.toLowerCase();
     return {
         result: isDOMNode(formEl) || isFormSelector,
         element: "string" === isString ? document.querySelector(formEl) : formEl
     };
-}, getSplitChar = string => {
-    let splitChar = ".";
-    return -1 === string.indexOf(splitChar) && (string.indexOf("-") >= 0 ? splitChar = "-" : string.indexOf("/") >= 0 && (splitChar = "/")), 
-    splitChar;
-}, getValidateFieldDefault = obj => mergeObjects({}, {
-    result: !1,
-    fieldEl: null
-}, obj), isDOMNode = node => Element.prototype.isPrototypeOf(node), isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), mergeObjects = function(out = {}) {
+}, mergeObjects = function(out = {}) {
     for (let i = 1; i < arguments.length; i++) {
         let obj = arguments[i];
         if (obj) for (let key in obj) {
@@ -21,7 +14,14 @@ const checkFormEl = formEl => {
         }
     }
     return out;
-}, toCamelCase = string => string.replace(/-([a-z])/gi, (all, letter) => letter.toUpperCase()), validationRulesAttributes = {
+}, getSplitChar = string => {
+    let splitChar = ".";
+    return -1 === string.indexOf(splitChar) && (string.indexOf("-") >= 0 ? splitChar = "-" : string.indexOf("/") >= 0 && (splitChar = "/")), 
+    splitChar;
+}, getValidateFieldDefault = obj => mergeObjects({}, {
+    result: !1,
+    fieldEl: null
+}, obj), toCamelCase = string => string.replace(/-([a-z])/gi, (all, letter) => letter.toUpperCase()), validationRulesAttributes = {
     checkbox: function(data) {
         let dataChecksEl = data.fieldEl.closest("form").querySelector('[name="' + data.fieldEl.name + '"][data-checks]'), obj = {
             result: data.fieldEl.checked
