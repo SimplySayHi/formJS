@@ -61,7 +61,25 @@ System.register([], (function(exports) {
                 return string.replace(/-([a-z])/gi, (function(all, letter) {
                     return letter.toUpperCase();
                 }));
-            }, validationRulesAttributes = {
+            }, validationRules = {
+                date: function(string) {
+                    var date = /^((((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29))$/g.test(string);
+                    return {
+                        result: date
+                    };
+                },
+                email: function(string) {
+                    return {
+                        result: /^[a-zA-Z_-]([\w.-]?[a-zA-Z0-9])*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?){2,})+$/.test(string)
+                    };
+                },
+                number: function(string) {
+                    return {
+                        result: /[+-]?([0-9]*[.])?[0-9]+/.test(string)
+                    };
+                }
+            };
+            var validationRulesAttributes = {
                 checkbox: function(data) {
                     var dataChecksEl = data.fieldEl.closest("form").querySelector('[name="' + data.fieldEl.name + '"][data-checks]'), obj = {
                         result: data.fieldEl.checked
@@ -339,24 +357,8 @@ System.register([], (function(exports) {
                     beforeValidation: [],
                     maxFileSize: 10
                 }
-            }, Form.prototype.validationErrors = {}, Form.prototype.validationRules = {
-                date: function(string) {
-                    var date = /^((((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29))$/g.test(string);
-                    return {
-                        result: date
-                    };
-                },
-                email: function(string) {
-                    return {
-                        result: /^[a-zA-Z_-]([\w.-]?[a-zA-Z0-9])*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?){2,})+$/.test(string)
-                    };
-                },
-                number: function(string) {
-                    return {
-                        result: /[+-]?([0-9]*[.])?[0-9]+/.test(string)
-                    };
-                }
-            }, Form.prototype.version = "4.0.2";
+            }, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
+            Form.prototype.version = "4.0.2";
         }
     };
 }));
