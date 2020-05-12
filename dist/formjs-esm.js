@@ -146,136 +146,21 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
         getFormData: defaultCallbacksInOptions.formOptions.getFormData,
         handleSubmit: !0
     }
-}, validationRulesAttributes = {
-    checkbox: function(data) {
-        let dataChecksEl = data.fieldEl.closest("form").querySelector('[name="' + data.fieldEl.name + '"][data-checks]'), obj = {
-            result: data.fieldEl.checked
-        };
-        return null !== dataChecksEl && (obj = this.checks({
-            attrValue: dataChecksEl.getAttribute("data-checks"),
-            fieldEl: dataChecksEl
-        })), obj;
-    },
-    checks: function(data) {
-        try {
-            let attrValue = JSON.parse(data.attrValue), fieldEl = data.fieldEl, checkedElLength = fieldEl.closest("form").querySelectorAll('[name="' + fieldEl.name + '"]:checked').length, isMinOk = checkedElLength >= attrValue[0], isMaxOk = checkedElLength <= attrValue[1], obj = {
-                result: isMinOk && isMaxOk
-            };
-            return obj.result || (obj.errors = {
-                checks: !0
-            }, isMinOk || (obj.errors.minChecks = !0), isMaxOk || (obj.errors.maxChecks = !0)), 
-            obj;
-        } catch (e) {
-            throw new Error('"data-checks" attribute is not a valid array!');
-        }
-    },
-    equalTo: function(data) {
-        let fieldEl = data.fieldEl, checkFromEl = fieldEl.closest("form").querySelector('[name="' + fieldEl.getAttribute("data-equal-to") + '"]'), obj = {
-            result: fieldEl.value === checkFromEl.value
-        };
-        return obj.result || (obj.errors = {
-            equalTo: !0
-        }), obj;
-    },
-    exactLength: function(data) {
-        let valueLength = data.fieldEl.value.length, exactLength = 1 * data.attrValue, obj = {
-            result: valueLength === exactLength
-        };
-        return obj.result || (obj.errors = {
-            exactLength: !0
-        }, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), 
-        obj;
-    },
-    file: function(data) {
-        let fieldEl = data.fieldEl, maxFileSize = 1 * (fieldEl.getAttribute("data-max-file-size") || data.fieldOptions.maxFileSize), MIMEtype = fieldEl.accept ? new RegExp(fieldEl.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from(fieldEl.files), obj = {
-            result: !0
-        };
-        return filesList.forEach((function(file) {
-            let exceedMaxFileSize = maxFileSize > 0 && file.size / 1024 / 1024 > maxFileSize, isAcceptedFileType = null === MIMEtype || MIMEtype.test(file.type);
-            !exceedMaxFileSize && isAcceptedFileType || (obj.result = !1, void 0 === obj.errors && (obj.errors = {}), 
-            obj.errors.file = !0, exceedMaxFileSize && (obj.errors.maxFileSize = !0), isAcceptedFileType || (obj.errors.acceptedFileType = !0));
-        })), obj;
-    },
-    length: function(data) {
-        try {
-            let valueL = data.fieldEl.value.length, attrValue = JSON.parse(data.attrValue), isMinlengthOk = valueL >= attrValue[0], isMaxlengthOk = valueL <= attrValue[1], obj = {
-                result: isMinlengthOk && isMaxlengthOk
-            };
-            return obj.result || (obj.errors = {
-                stringLength: !0
-            }, isMinlengthOk || (obj.errors.minlength = !0), isMaxlengthOk || (obj.errors.maxlength = !0)), 
-            obj;
-        } catch (e) {
-            throw new Error('"data-length" attribute is not a valid array!');
-        }
-    },
-    max: function(data) {
-        let fieldEl = data.fieldEl, isDate = fieldEl.matches('[type="date"]') || fieldEl.matches('[data-subtype="date"]') || fieldEl.matches('[data-subtype="dateDDMMYYYY"]'), value = data.fieldEl.value, maxVal = data.attrValue;
-        if (isDate) {
-            let splitChar = getSplitChar(value);
-            value = 2 === value.indexOf(splitChar) ? value.split(splitChar).reverse() : value.split(splitChar), 
-            value = value.join(""), maxVal = maxVal.split("-").join("");
-        }
-        value *= 1, maxVal *= 1;
-        let obj = {
-            result: value <= maxVal
-        };
-        return obj.result || (obj.errors = {
-            max: !0
-        }), obj;
-    },
-    maxlength: function(data) {
-        const obj = {
-            result: data.fieldEl.value.length <= 1 * data.attrValue
-        };
-        return obj.result || (obj.errors = {
-            maxlength: !0
-        }), obj;
-    },
-    min: function(data) {
-        let fieldEl = data.fieldEl, isDate = fieldEl.matches('[type="date"]') || fieldEl.matches('[data-subtype="date"]') || fieldEl.matches('[data-subtype="dateDDMMYYYY"]'), value = data.fieldEl.value, minVal = data.attrValue;
-        if (isDate) {
-            let splitChar = getSplitChar(value);
-            value = 2 === value.indexOf(splitChar) ? value.split(splitChar).reverse() : value.split(splitChar), 
-            value = value.join(""), minVal = minVal.split("-").join("");
-        }
-        value *= 1, minVal *= 1;
-        let obj = {
-            result: value >= minVal
-        };
-        return obj.result || (obj.errors = {
-            min: !0
-        }), obj;
-    },
-    minlength: function(data) {
-        const obj = {
-            result: data.fieldEl.value.length >= 1 * data.attrValue
-        };
-        return obj.result || (obj.errors = {
-            minlength: !0
-        }), obj;
-    },
-    pattern: function(data) {
-        let fieldEl = data.fieldEl, fieldPattern = fieldEl.pattern, obj = {
-            result: new RegExp(fieldPattern).test(fieldEl.value)
-        };
-        return obj.result || (obj.errors = {
-            pattern: !0
-        }), obj;
-    },
-    radio: function(data) {
-        let fieldEl = data.fieldEl, fieldChecked = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"]:checked');
+}, validationRules = {
+    date: function(string) {
         return {
-            result: null !== fieldChecked && fieldChecked.value.trim().length > 0
+            result: /^((((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29))$/g.test(string)
         };
     },
-    requiredFrom: function(data) {
-        let fieldEl = data.fieldEl, formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0, reqMoreEl = formEl.querySelector(fieldEl.getAttribute("data-required-from")), obj = {
-            result: null !== formEl.querySelector('[name="' + reqMoreEl.name + '"]:checked')
+    email: function(string) {
+        return {
+            result: /^[a-zA-Z_-]([\w.-]?[a-zA-Z0-9])*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?){2,})+$/.test(string)
         };
-        return reqMoreEl.checked && reqMoreEl.required && (obj.result = isValidValue), obj.result || (obj.errors = {
-            requiredFrom: !0
-        }), obj;
+    },
+    number: function(string) {
+        return {
+            result: /[+-]?([0-9]*[.])?[0-9]+/.test(string)
+        };
     }
 };
 
@@ -441,6 +326,137 @@ const init = function(formEl) {
         instance: instance,
         fields: fields
     }));
+}, validationRulesAttributes = {
+    checkbox: function(data) {
+        let dataChecksEl = data.fieldEl.closest("form").querySelector('[name="' + data.fieldEl.name + '"][data-checks]'), obj = {
+            result: data.fieldEl.checked
+        };
+        return null !== dataChecksEl && (obj = this.checks({
+            attrValue: dataChecksEl.getAttribute("data-checks"),
+            fieldEl: dataChecksEl
+        })), obj;
+    },
+    checks: function(data) {
+        try {
+            let attrValue = JSON.parse(data.attrValue), fieldEl = data.fieldEl, checkedElLength = fieldEl.closest("form").querySelectorAll('[name="' + fieldEl.name + '"]:checked').length, isMinOk = checkedElLength >= attrValue[0], isMaxOk = checkedElLength <= attrValue[1], obj = {
+                result: isMinOk && isMaxOk
+            };
+            return obj.result || (obj.errors = {
+                checks: !0
+            }, isMinOk || (obj.errors.minChecks = !0), isMaxOk || (obj.errors.maxChecks = !0)), 
+            obj;
+        } catch (e) {
+            throw new Error('"data-checks" attribute is not a valid array!');
+        }
+    },
+    equalTo: function(data) {
+        let fieldEl = data.fieldEl, checkFromEl = fieldEl.closest("form").querySelector('[name="' + fieldEl.getAttribute("data-equal-to") + '"]'), obj = {
+            result: fieldEl.value === checkFromEl.value
+        };
+        return obj.result || (obj.errors = {
+            equalTo: !0
+        }), obj;
+    },
+    exactLength: function(data) {
+        let valueLength = data.fieldEl.value.length, exactLength = 1 * data.attrValue, obj = {
+            result: valueLength === exactLength
+        };
+        return obj.result || (obj.errors = {
+            exactLength: !0
+        }, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), 
+        obj;
+    },
+    file: function(data) {
+        let fieldEl = data.fieldEl, maxFileSize = 1 * (fieldEl.getAttribute("data-max-file-size") || data.fieldOptions.maxFileSize), MIMEtype = fieldEl.accept ? new RegExp(fieldEl.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from(fieldEl.files), obj = {
+            result: !0
+        };
+        return filesList.forEach((function(file) {
+            let exceedMaxFileSize = maxFileSize > 0 && file.size / 1024 / 1024 > maxFileSize, isAcceptedFileType = null === MIMEtype || MIMEtype.test(file.type);
+            !exceedMaxFileSize && isAcceptedFileType || (obj.result = !1, void 0 === obj.errors && (obj.errors = {}), 
+            obj.errors.file = !0, exceedMaxFileSize && (obj.errors.maxFileSize = !0), isAcceptedFileType || (obj.errors.acceptedFileType = !0));
+        })), obj;
+    },
+    length: function(data) {
+        try {
+            let valueL = data.fieldEl.value.length, attrValue = JSON.parse(data.attrValue), isMinlengthOk = valueL >= attrValue[0], isMaxlengthOk = valueL <= attrValue[1], obj = {
+                result: isMinlengthOk && isMaxlengthOk
+            };
+            return obj.result || (obj.errors = {
+                stringLength: !0
+            }, isMinlengthOk || (obj.errors.minlength = !0), isMaxlengthOk || (obj.errors.maxlength = !0)), 
+            obj;
+        } catch (e) {
+            throw new Error('"data-length" attribute is not a valid array!');
+        }
+    },
+    max: function(data) {
+        let fieldEl = data.fieldEl, isDate = fieldEl.matches('[type="date"]') || fieldEl.matches('[data-subtype="date"]') || fieldEl.matches('[data-subtype="dateDDMMYYYY"]'), value = data.fieldEl.value, maxVal = data.attrValue;
+        if (isDate) {
+            let splitChar = getSplitChar(value);
+            value = 2 === value.indexOf(splitChar) ? value.split(splitChar).reverse() : value.split(splitChar), 
+            value = value.join(""), maxVal = maxVal.split("-").join("");
+        }
+        value *= 1, maxVal *= 1;
+        let obj = {
+            result: value <= maxVal
+        };
+        return obj.result || (obj.errors = {
+            max: !0
+        }), obj;
+    },
+    maxlength: function(data) {
+        const obj = {
+            result: data.fieldEl.value.length <= 1 * data.attrValue
+        };
+        return obj.result || (obj.errors = {
+            maxlength: !0
+        }), obj;
+    },
+    min: function(data) {
+        let fieldEl = data.fieldEl, isDate = fieldEl.matches('[type="date"]') || fieldEl.matches('[data-subtype="date"]') || fieldEl.matches('[data-subtype="dateDDMMYYYY"]'), value = data.fieldEl.value, minVal = data.attrValue;
+        if (isDate) {
+            let splitChar = getSplitChar(value);
+            value = 2 === value.indexOf(splitChar) ? value.split(splitChar).reverse() : value.split(splitChar), 
+            value = value.join(""), minVal = minVal.split("-").join("");
+        }
+        value *= 1, minVal *= 1;
+        let obj = {
+            result: value >= minVal
+        };
+        return obj.result || (obj.errors = {
+            min: !0
+        }), obj;
+    },
+    minlength: function(data) {
+        const obj = {
+            result: data.fieldEl.value.length >= 1 * data.attrValue
+        };
+        return obj.result || (obj.errors = {
+            minlength: !0
+        }), obj;
+    },
+    pattern: function(data) {
+        let fieldEl = data.fieldEl, fieldPattern = fieldEl.pattern, obj = {
+            result: new RegExp(fieldPattern).test(fieldEl.value)
+        };
+        return obj.result || (obj.errors = {
+            pattern: !0
+        }), obj;
+    },
+    radio: function(data) {
+        let fieldEl = data.fieldEl, fieldChecked = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"]:checked');
+        return {
+            result: null !== fieldChecked && fieldChecked.value.trim().length > 0
+        };
+    },
+    requiredFrom: function(data) {
+        let fieldEl = data.fieldEl, formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0, reqMoreEl = formEl.querySelector(fieldEl.getAttribute("data-required-from")), obj = {
+            result: null !== formEl.querySelector('[name="' + reqMoreEl.name + '"]:checked')
+        };
+        return reqMoreEl.checked && reqMoreEl.required && (obj.result = isValidValue), obj.result || (obj.errors = {
+            requiredFrom: !0
+        }), obj;
+    }
 };
 
 function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationErrors) {
@@ -605,22 +621,6 @@ Form.prototype.isInitialized = !1, Form.prototype.options = options, Form.protot
         }
         return obj;
     }
-}, Form.prototype.validationRules = {
-    date: function(string) {
-        return {
-            result: /^((((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29))$/g.test(string)
-        };
-    },
-    email: function(string) {
-        return {
-            result: /^[a-zA-Z_-]([\w.-]?[a-zA-Z0-9])*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?){2,})+$/.test(string)
-        };
-    },
-    number: function(string) {
-        return {
-            result: /[+-]?([0-9]*[.])?[0-9]+/.test(string)
-        };
-    }
-}, Form.prototype.version = "4.0.2";
+}, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.0.2";
 
 export default Form;

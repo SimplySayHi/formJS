@@ -1,6 +1,6 @@
 
 import { getValidateFieldDefault, mergeObjects, toCamelCase } from './helpers';
-import { validationRulesAttributes } from './validationRules';
+import { validationRulesAttributes } from './validationRulesAttributes';
 
 export function isValid( fieldEl, fieldOptions, validationRules, validationErrors ){
 
