@@ -1,6 +1,3 @@
-![npm bundle size](https://img.shields.io/bundlephobia/min/formjs-plugin) [![npm](https://img.shields.io/npm/dm/formjs-plugin)](https://www.npmjs.com/package/formjs-plugin)
-
-
 
 <p>
 formJS is available on 
