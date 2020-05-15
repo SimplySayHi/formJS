@@ -376,29 +376,29 @@ System.register([], (function(exports) {
                         fields: fields
                     };
                 }));
+            }, checks = function(data) {
+                try {
+                    var attrValue = JSON.parse(data.attrValue), fieldEl = data.fieldEl, checkedElLength = fieldEl.closest("form").querySelectorAll('[name="' + fieldEl.name + '"]:checked').length, isMinOk = checkedElLength >= attrValue[0], isMaxOk = checkedElLength <= attrValue[1], obj = {
+                        result: isMinOk && isMaxOk
+                    };
+                    return obj.result || (obj.errors = {
+                        checks: !0
+                    }, isMinOk || (obj.errors.minChecks = !0), isMaxOk || (obj.errors.maxChecks = !0)), 
+                    obj;
+                } catch (e) {
+                    throw new Error('"data-checks" attribute is not a valid array!');
+                }
             }, validationRulesAttributes = {
                 checkbox: function(data) {
                     var dataChecksEl = data.fieldEl.closest("form").querySelector('[name="' + data.fieldEl.name + '"][data-checks]'), obj = {
                         result: data.fieldEl.checked
                     };
-                    return null !== dataChecksEl && (obj = this.checks({
+                    return null !== dataChecksEl && (obj = checks({
                         attrValue: dataChecksEl.getAttribute("data-checks"),
                         fieldEl: dataChecksEl
                     })), obj;
                 },
-                checks: function(data) {
-                    try {
-                        var attrValue = JSON.parse(data.attrValue), fieldEl = data.fieldEl, checkedElLength = fieldEl.closest("form").querySelectorAll('[name="' + fieldEl.name + '"]:checked').length, isMinOk = checkedElLength >= attrValue[0], isMaxOk = checkedElLength <= attrValue[1], obj = {
-                            result: isMinOk && isMaxOk
-                        };
-                        return obj.result || (obj.errors = {
-                            checks: !0
-                        }, isMinOk || (obj.errors.minChecks = !0), isMaxOk || (obj.errors.maxChecks = !0)), 
-                        obj;
-                    } catch (e) {
-                        throw new Error('"data-checks" attribute is not a valid array!');
-                    }
-                },
+                checks: checks,
                 equalTo: function(data) {
                     var fieldEl = data.fieldEl, checkFromEl = fieldEl.closest("form").querySelector('[name="' + fieldEl.getAttribute("data-equal-to") + '"]'), obj = {
                         result: fieldEl.value === checkFromEl.value

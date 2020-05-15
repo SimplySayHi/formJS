@@ -1,4 +1,5 @@
 
+import { checks } from './checks';
 
 export const checkbox = function( data ){
     let formEl = data.fieldEl.closest('form'),
@@ -6,7 +7,7 @@ export const checkbox = function( data ){
         obj = { result: data.fieldEl.checked };
 
     if( dataChecksEl !== null ){
-        obj = this.checks({ attrValue: dataChecksEl.getAttribute('data-checks'), fieldEl: dataChecksEl});
+        obj = checks({ attrValue: dataChecksEl.getAttribute('data-checks'), fieldEl: dataChecksEl});
     }
 
     return obj;
