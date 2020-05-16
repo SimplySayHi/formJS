@@ -24,6 +24,9 @@ describe( 'checkFieldValidity', () => {
                 <input name="custom" type="text" data-subtype="custom" minlength="3" required />
             </div>
             <div data-formjs-question>
+                <input name="fileUpload" type="file" files="[]" required />
+            </div>
+            <div data-formjs-question>
                 <input name="email-2" type="email" data-validate-if-filled />
             </div>
             <div data-formjs-question>
@@ -240,6 +243,19 @@ describe( 'checkFieldValidity', () => {
         const returnObj = {
             fieldEl: '[name="aaa"]',
             result: false
+        };
+        const promiseRun = checkFieldValidity( el, options.fieldOptions, validationRules, validationErrors );
+        return expect( promiseRun ).resolves.toEqual( returnObj );
+    } );
+
+    test( 'checkFieldValidity - all agrs - fieldEl fileUpload required', () => {
+        const el = document.querySelector('[name="fileUpload"]');
+        const returnObj = {
+            fieldEl: el,
+            result: false,
+            errors: {
+                empty: true
+            }
         };
         const promiseRun = checkFieldValidity( el, options.fieldOptions, validationRules, validationErrors );
         return expect( promiseRun ).resolves.toEqual( returnObj );
