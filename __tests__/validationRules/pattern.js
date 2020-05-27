@@ -23,7 +23,7 @@ describe( 'validationRules: pattern', () => {
         const returnObj = {
             result: true
         };
-        const runFn = pattern( {fieldEl:el} );
+        const runFn = pattern( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
@@ -35,7 +35,7 @@ describe( 'validationRules: pattern', () => {
                 pattern: true
             }
         };
-        const runFn = pattern( {fieldEl:el} );
+        const runFn = pattern( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
@@ -47,7 +47,7 @@ describe( 'validationRules: pattern', () => {
                 pattern: true
             }
         };
-        const runFn = pattern( {fieldEl:el} );
+        const runFn = pattern( el );
         expect( runFn ).toEqual( returnObj );
     } );
 

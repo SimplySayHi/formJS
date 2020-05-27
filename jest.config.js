@@ -31,6 +31,7 @@ module.exports = {
     "<rootDir>/src/modules/optionsUtils.js",
     "<rootDir>/src/modules/validationRules.js",
     "<rootDir>/src/modules/validationRulesAttributes.js",
+    "<rootDir>/src/modules/validationRules/checks.js",
     "<rootDir>/src/modules/validationErrors.js",
     "<rootDir>/src/modules-lite/options.js",
   ],

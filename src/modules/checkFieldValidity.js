@@ -9,37 +9,47 @@ export function checkFieldValidity( fieldEl, fieldOptions, validationRules, vali
         return Promise.resolve(obj);
     }
 
-    const isValidValue =      fieldEl.value.trim().length > 0,
-          isRequired =        fieldEl.required,
-          isReqFrom =         fieldEl.matches('[data-required-from]'),
-          isValidateIfFilled =fieldEl.matches('[data-validate-if-filled]'),
-          rfsObject = {
+    const formEl = fieldEl.closest('form'),
+          isValidValue = fieldEl.value.trim().length > 0;
+
+     // HANDLE FIELDS radio/data-require-more
+     if( fieldEl.type === 'radio' ){
+        const checkedEl = fieldEl.checked ? fieldEl : formEl.querySelector('[name="'+ fieldEl.name +'"]:checked'),
+              reqMoreIsChecked = checkedEl.matches('[data-require-more]'),
+              findReqMoreEl = reqMoreIsChecked ? checkedEl : formEl.querySelector('[data-require-more][name="'+ fieldEl.name +'"]'),
+              findReqFromEl = findReqMoreEl ? formEl.querySelector('[data-required-from="#'+ findReqMoreEl.id +'"]') : null;
+        
+        if( checkedEl && findReqFromEl ){
+            findReqFromEl.required = findReqMoreEl.required && findReqMoreEl.checked;
+            if( !reqMoreIsChecked ){
+                findReqFromEl.value = '';
+            } else if( fieldOptions.focusOnRelated ) {
+                findReqFromEl.focus();
+            }
+        }
+    }
+
+    // HANDLE FIELDS data-required-from
+    if( fieldEl.matches('[data-required-from]') && isValidValue ){
+        const reqMoreEl = formEl.querySelector( fieldEl.getAttribute('data-required-from') );
+        reqMoreEl.checked = true;
+        fieldEl.required = reqMoreEl.required;
+    }
+
+    const needsValidation = fieldEl.required || (fieldEl.matches('[data-validate-if-filled]') && isValidValue);
+
+    return runFunctionsSequence({
             functionsList: fieldOptions.beforeValidation,
             data: {fieldEl}
-        };
-
-    return runFunctionsSequence(rfsObject)
+        })
         .then(data => {
-
             let dataObj = data.pop();
             return new Promise(resolve => {
-                if(
-                    (!isRequired && !isValidateIfFilled && !isReqFrom) ||   // IT IS A NORMAL FORM FIELD
-                    (isValidateIfFilled && !isValidValue) ||                // IT IS data-validate-if-filled AND EMPTY
-                    (isReqFrom && !isRequired )                             // IT IS data-required-from AND NOT required
-                ){
-
+                if( !needsValidation ){
                     dataObj.result = true;
-                    resolve( dataObj );
-                
-                } else {
-
-                    resolve( isValid( fieldEl, fieldOptions, validationRules, validationErrors ) );
-                    
                 }
-
+                resolve( needsValidation ? isValid(fieldEl, fieldOptions, validationRules, validationErrors) : dataObj );
             });
-
         });
 
 }

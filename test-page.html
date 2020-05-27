@@ -97,6 +97,31 @@
                                     You must select at least 1 and at most 2 answers!
                                 </div>
                             </div>
+                            <div data-formjs-question="" class="form-group">
+                                <p class="mb-2 small">You must select one of these:</p>
+                                <div class="input-container form-check">
+                                    <input id="radio-5-20-6-01" name="radio-list-01" value="1" type="radio" class="form-check-input" required />
+                                    <label for="radio-5-20-6-01" class="form-check-label">
+                                        Answer One
+                                    </label>
+                                </div>
+                                <div class="input-container form-check">
+                                    <input id="radio-5-20-6-02" name="radio-list-01" value="2" type="radio" class="form-check-input" required />
+                                    <label for="radio-5-20-6-02" class="form-check-label">
+                                        Answer Two
+                                    </label>
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input id="radio-5-200-6-03" name="radio-list-01" value="3" data-require-more="" type="radio" required />
+                                            <label for="radio-5-200-6-03">&nbsp;Other:</label>
+                                        </div>
+                                    </span>
+                                    <input class="form-control" name="radio-list-01-more" data-required-from="#radio-5-200-6-03" type="text" />
+                                </div>
+                                <div class="field-error-message small">You must choose an answer ( and fill the text field if you selected "Other" )!</div>
+                            </div>
                             <div data-formjs-question class="form-group">
                                 <div class="answers-box">
                                     <div class="small">
@@ -129,7 +154,7 @@
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
     <script src="js/include.js"></script>
-    <script src="dist/formjs.min.js"></script>
+    <script src="dist/formjs.js"></script>
     <script src="dist/additionals/validationRules.js"></script>
     <script src="dist/additionals/validationErrors.js"></script>
     <script>
@@ -140,7 +165,7 @@
             });
         }
 
-        //populatePasswords();
+        populatePasswords();
 
         document.querySelector('.card-header').click();
         

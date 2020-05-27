@@ -28,57 +28,42 @@ describe( 'validationRules: checkbox', () => {
 
     test( 'validationRules: checkbox -> required & checked', () => {
         const el = document.querySelector('[name="check-1"]');
-        const data = {
-            fieldEl: el
-        };
         const returnObj = {
             result: true
         };
-        const runFn = checkbox( data );
+        const runFn = checkbox( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: checkbox -> not required & checked', () => {
         const el = document.querySelector('[name="check-2"]');
-        const data = {
-            fieldEl: el
-        };
         const returnObj = {
             result: false
         };
-        const runFn = checkbox( data );
+        const runFn = checkbox( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: checkbox -> required & checked', () => {
         const el = document.querySelector('[name="check-3"]');
-        const data = {
-            fieldEl: el
-        };
         const returnObj = {
             result: true
         };
-        const runFn = checkbox( data );
+        const runFn = checkbox( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: checkbox -> required & not checked', () => {
         const el = document.querySelector('[name="check-4"]');
-        const data = {
-            fieldEl: el
-        };
         const returnObj = {
             result: false
         };
-        const runFn = checkbox( data );
+        const runFn = checkbox( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: checkbox data-checks -> required & 0 checked', () => {
         const el = document.querySelector('[name="check-0"]');
-        const data = {
-            fieldEl: el
-        };
         const returnObj = {
             result: false,
             errors: {
@@ -86,7 +71,7 @@ describe( 'validationRules: checkbox', () => {
                 minChecks: true
             }
         };
-        const runFn = checkbox( data );
+        const runFn = checkbox( el );
         expect( runFn ).toEqual( returnObj );
     } );
 

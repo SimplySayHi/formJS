@@ -20,46 +20,34 @@ describe( 'validationRules: minlength', () => {
 
     test( 'validationRules: minlength -> valid', () => {
         const el = document.querySelector('[name="field-1"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.minLength
-        };
         const returnObj = {
             result: true
         };
-        const runFn = minlength( data );
+        const runFn = minlength( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: minlength -> not valid', () => {
         const el = document.querySelector('[name="field-2"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.minLength
-        };
         const returnObj = {
             result: false,
             errors: {
                 minlength: true
             }
         };
-        const runFn = minlength( data );
+        const runFn = minlength( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: minlength -> value not set', () => {
         const el = document.querySelector('[name="field-3"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.minLength
-        };
         const returnObj = {
             result: false,
             errors: {
                 minlength: true
             }
         };
-        const runFn = minlength( data );
+        const runFn = minlength( el );
         expect( runFn ).toEqual( returnObj );
     } );
 

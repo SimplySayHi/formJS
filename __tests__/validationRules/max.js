@@ -26,72 +26,52 @@ describe( 'validationRules: max', () => {
 
     test( 'validationRules: max number -> valid', () => {
         const el = document.querySelector('[name="field-1"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.max
-        };
         const returnObj = {
             result: true
         };
-        const runFn = max( data );
+        const runFn = max( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: max number -> not valid', () => {
         const el = document.querySelector('[name="field-2"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.max
-        };
         const returnObj = {
             result: false,
             errors: {
                 max: true
             }
         };
-        const runFn = max( data );
+        const runFn = max( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: max -> value not set', () => {
         const el = document.querySelector('[name="field-3"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.max
-        };
         const returnObj = {
             result: true
         };
-        const runFn = max( data );
+        const runFn = max( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: max date -> valid', () => {
         const el = document.querySelector('[name="field-4"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.max
-        };
         const returnObj = {
             result: true
         };
-        const runFn = max( data );
+        const runFn = max( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: max date -> not valid', () => {
         const el = document.querySelector('[name="field-5"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.max
-        };
         const returnObj = {
             result: false,
             errors: {
                 max: true
             }
         };
-        const runFn = max( data );
+        const runFn = max( el );
         expect( runFn ).toEqual( returnObj );
     } );
 

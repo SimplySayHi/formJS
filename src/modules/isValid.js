@@ -4,60 +4,41 @@ import { validationRulesAttributes } from './validationRulesAttributes';
 
 export function isValid( fieldEl, fieldOptions, validationRules, validationErrors ){
 
-    const fieldType = ( fieldEl.matches('[data-subtype]') ? toCamelCase( fieldEl.getAttribute('data-subtype') ) : fieldEl.type ),
+    const fieldType = fieldEl.matches('[data-subtype]') ? toCamelCase(fieldEl.getAttribute('data-subtype')) : fieldEl.type,
           fieldValue = fieldEl.value,
-          isValidValue = fieldValue.trim().length > 0,
-          // ALPHABETICAL REVERSE ORDER
-          fieldAttributes = Array.from(fieldEl.attributes).sort((a,b) => { return a.name < b.name });
+          isValidValue = fieldValue.trim().length > 0;
 
-    const attrValidations = [];
-    let attrValidationsResult = isValidValue,
-        obj = getValidateFieldDefault({result: isValidValue, fieldEl});
+    let obj = getValidateFieldDefault({result: isValidValue, fieldEl});
 
     if( !obj.result ){
         obj.errors = { empty: true };
         return Promise.resolve(obj);
     }
 
-    // COLLECT SPECIFIC VALIDATIONS FOR validationRulesAttributes
-    fieldAttributes.forEach(attr => {
-        // FOR data-* ATTRIBUTES -> REMOVE "data-" AND TRANSFORM TO CAMELCASE
-        const attrName = toCamelCase( attr.name.replace('data-', '') ),
-              attrValue = attr.value,
-              isAttrValueWithFn = attrName === 'type' && typeof validationRulesAttributes[attrValue] === 'function',
-              isAttrNameWithFn = typeof validationRulesAttributes[attrName] === 'function';
-
-        if( isAttrValueWithFn || isAttrNameWithFn ){
-
-            const extraValObj = {
-                    attrName: (isAttrValueWithFn ? attrValue : attrName),
-                    attrValue: attrValue,
-                    fieldEl,
-                    fieldOptions
-                };
-
-            if( isAttrValueWithFn || attrName === 'requiredFrom' ){
-                // THESE VALIDATIONS MUST RUN BEFORE ALL OTHERS
-                attrValidations.unshift( extraValObj );
-            } else {
-                attrValidations.push( extraValObj );
-            }
-
-        }
-    });
+    let attrValidationsResult;
 
     return new Promise(resolve => {
 
         // RUN SPECIFIC VALIDATIONS FOR validationRulesAttributes
-        attrValidations.forEach(item => {
-            const extraVal = validationRulesAttributes[item.attrName]( item );
-            if( !extraVal.result ){
-                obj = mergeObjects({}, obj, extraVal);
-                attrValidationsResult = false;
-            }
-        });
+        attrValidationsResult = Array.from(fieldEl.attributes).reduce((valResult, attr) => {
+            // FOR data-* ATTRIBUTES -> REMOVE "data-" AND TRANSFORM TO CAMELCASE
+            const attrName = toCamelCase( attr.name.replace('data-', '') ),
+                  attrValue = attr.value,
+                  isAttrValueWithFn = attrName === 'type' && typeof validationRulesAttributes[attrValue] === 'function',
+                  isAttrNameWithFn = typeof validationRulesAttributes[attrName] === 'function';
 
-        // RUN VALIDATIONS FOR validationRules
+            if( isAttrValueWithFn || isAttrNameWithFn ){
+                const method = isAttrValueWithFn ? attrValue : attrName;
+                const extraVal = validationRulesAttributes[method]( fieldEl, fieldOptions );
+                if( !extraVal.result ){
+                    obj = mergeObjects({}, obj, extraVal);
+                    return false;
+                }
+            }
+            return valResult;
+        }, isValidValue);
+
+        // RUN VALIDATION FOR validationRules
         if( typeof validationRules[fieldType] === 'function' ){
             resolve( validationRules[fieldType](fieldValue, fieldEl) );
         } else {
@@ -66,16 +47,13 @@ export function isValid( fieldEl, fieldOptions, validationRules, validationError
 
     }).then(data => {
 
-        obj = mergeObjects( {}, obj, data, {fieldEl} );
+        obj = mergeObjects( {}, obj, data );
         obj.result = obj.result && attrValidationsResult;
 
         if( !obj.result ){
             const fieldErrors = (typeof validationErrors[fieldType] === 'function' ? validationErrors[fieldType](fieldValue, fieldEl) : {});
-            if( typeof obj.errors === 'undefined' ){
-                obj.errors = {};
-            }
+            obj.errors = mergeObjects({}, obj.errors || {}, fieldErrors);
             obj.errors.rule = true;
-            obj.errors = mergeObjects({}, obj.errors, fieldErrors);
         }
         
         return obj;

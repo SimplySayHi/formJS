@@ -1,10 +1,8 @@
 
-export const checks = function( data ){
+export const checks = function( fieldEl ){
     try {
-        let attrValue = JSON.parse(data.attrValue),
-            fieldEl = data.fieldEl,
-            formEl = fieldEl.closest('form'),
-            checkedElLength = formEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length,
+        let attrValue = JSON.parse( fieldEl.getAttribute('data-checks') ),
+            checkedElLength = fieldEl.closest('form').querySelectorAll('[name="' + fieldEl.name + '"]:checked').length,
             isMinOk = checkedElLength >= attrValue[0],
             isMaxOk = checkedElLength <= attrValue[1],
             obj = { result: isMinOk && isMaxOk };

@@ -23,37 +23,35 @@ describe( 'validationRules: equalTo', () => {
 
     test( 'validationRules: equalTo -> valid', () => {
         const el = document.querySelector('[name="field-1-equalto"]');
-        const data = {
-            fieldEl: el
-        };
         const returnObj = {
             result: true
         };
-        const runFn = equalTo( data );
+        const runFn = equalTo( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: equalTo -> not valid', () => {
         const el = document.querySelector('[name="field-2-equalto"]');
-        const data = {
-            fieldEl: el
-        };
         const returnObj = {
             result: false,
             errors: {
                 equalTo: true
             }
         };
-        const runFn = equalTo( data );
+        const runFn = equalTo( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: equalTo -> field in data-equal-to does not exists', () => {
         const el = document.querySelector('[name="field-3-equalto"]');
-        const data = {
-            fieldEl: el
+        const returnObj = {
+            result: false,
+            errors: {
+                equalTo: true
+            }
         };
-        expect( () => { equalTo( data ) } ).toThrow( new TypeError('Cannot read property \'value\' of null') );
+        const runFn = equalTo( el );
+        expect( runFn ).toEqual( returnObj );
     } );
 
 });

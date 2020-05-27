@@ -46,7 +46,7 @@ class Form {
                             // FORCE skipUIfeedback TO true
                             fieldOptions.skipUIfeedback = true;
                             resolve(
-                                checkFormValidity( formEl, fieldOptions, this.validationRules, this.validationErrors, fieldEl )
+                                checkFormValidity( formEl, fieldOptions, this.validationRules, this.validationErrors, obj.fieldEl )
                                     .then(dataForm => {
                                         const clMethodName = dataForm.result ? 'add' : 'remove';
                                         formEl.classList[clMethodName]( this.options.formOptions.cssClasses.valid );

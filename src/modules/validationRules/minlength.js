@@ -1,12 +1,14 @@
 
-export const minlength = function( data ){
-    const obj = {
-        result: data.fieldEl.value.length >= (data.attrValue * 1)
-    };
+export const minlength = function( fieldEl ){
+    try {
+        const obj = { result: fieldEl.value.length >= fieldEl.minLength * 1 };
 
-    if( !obj.result ){
-        obj.errors = { minlength: true };
+        if( !obj.result ){
+            obj.errors = { minlength: true };
+        }
+
+        return obj;
+    }catch(e){
+        throw new Error('"minlength" is not a number!');
     }
-
-    return obj;
 }

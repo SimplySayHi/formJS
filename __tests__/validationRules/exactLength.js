@@ -23,23 +23,15 @@ describe( 'validationRules: exactLength', () => {
 
     test( 'validationRules: exactLength -> valid', () => {
         const el = document.querySelector('[name="field-1"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.dataset.exactLength
-        };
         const returnObj = {
             result: true
         };
-        const runFn = exactLength( data );
+        const runFn = exactLength( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: exactLength -> too long', () => {
         const el = document.querySelector('[name="field-2"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.dataset.exactLength
-        };
         const returnObj = {
             result: false,
             errors: {
@@ -47,16 +39,12 @@ describe( 'validationRules: exactLength', () => {
                 maxlength: true
             }
         };
-        const runFn = exactLength( data );
+        const runFn = exactLength( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: exactLength -> too short', () => {
         const el = document.querySelector('[name="field-3"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.dataset.exactLength
-        };
         const returnObj = {
             result: false,
             errors: {
@@ -64,16 +52,12 @@ describe( 'validationRules: exactLength', () => {
                 minlength: true
             }
         };
-        const runFn = exactLength( data );
+        const runFn = exactLength( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: exactLength -> attr value is not a number', () => {
         const el = document.querySelector('[name="field-4"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.dataset.exactLength
-        };
         const returnObj = {
             result: false,
             errors: {
@@ -81,7 +65,7 @@ describe( 'validationRules: exactLength', () => {
                 maxlength: true
             }
         };
-        const runFn = exactLength( data );
+        const runFn = exactLength( el );
         expect( runFn ).toEqual( returnObj );
     } );
 

@@ -1,7 +1,7 @@
 
 import { mergeObjects } from './mergeObjects';
 
-export const runFunctionsSequence = ( { functionsList = [], data = {}, stopConditionFn = function(){return false} } = {} ) => {
+export const runFunctionsSequence = ( { functionsList = [], data = {}, stopConditionFn = () => false } = {} ) => {
     return functionsList.reduce((acc, promiseFn) => {
         return acc.then(res => {
             let dataNew = mergeObjects({}, res[res.length - 1]);

@@ -1,7 +1,6 @@
 
-export const file = function( data ){
-    let fieldEl = data.fieldEl,
-        maxFileSize = (fieldEl.getAttribute('data-max-file-size') || data.fieldOptions.maxFileSize) * 1,
+export const file = function( fieldEl, fieldOptions ){
+    let maxFileSize = (fieldEl.getAttribute('data-max-file-size') || fieldOptions.maxFileSize) * 1,
         MIMEtype = (fieldEl.accept ? new RegExp(fieldEl.accept.replace( '*', '[^\\/,]+' )) : null),
         filesList = Array.from(fieldEl.files),
         obj = { result: true };

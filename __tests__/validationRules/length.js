@@ -23,23 +23,15 @@ describe( 'validationRules: length', () => {
 
     test( 'validationRules: length - valid', () => {
         const el = document.querySelector('[name="field-1"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.dataset.length
-        };
         const returnObj = {
             result: true
         };
-        const runFn = length( data );
+        const runFn = length( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: length - not valid minlength', () => {
         const el = document.querySelector('[name="field-2"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.dataset.length
-        };
         const returnObj = {
             result: false,
             errors: {
@@ -47,16 +39,12 @@ describe( 'validationRules: length', () => {
                 minlength: true
             }
         };
-        const runFn = length( data );
+        const runFn = length( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: length - not valid maxlength', () => {
         const el = document.querySelector('[name="field-3"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.dataset.length
-        };
         const returnObj = {
             result: false,
             errors: {
@@ -64,18 +52,14 @@ describe( 'validationRules: length', () => {
                 maxlength: true
             }
         };
-        const runFn = length( data );
+        const runFn = length( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: length - not valid data-length', () => {
         const el = document.querySelector('[name="field-4"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.dataset.length
-        };
         const returnObj = new Error('"data-length" attribute is not a valid array!');
-        expect( () => { length(data) } ).toThrow( returnObj );
+        expect( () => { length(el) } ).toThrow( returnObj );
     } );
 
 });

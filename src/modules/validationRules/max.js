@@ -1,24 +1,14 @@
 
 import { getSplitChar } from '../helpers';
 
-export const max = function( data ){
-    let fieldEl = data.fieldEl,
-        isDate = (fieldEl.matches('[type="date"]') || fieldEl.matches('[data-subtype="date"]') || fieldEl.matches('[data-subtype="dateDDMMYYYY"]')),
-        value = data.fieldEl.value,
-        maxVal = data.attrValue;
+export const max = function( fieldEl ){
+    let value = fieldEl.value,
+        maxVal = fieldEl.max;
     
-    if( isDate ){
+    //  if( fieldEl.type === 'date' || fieldEl.getAttribute('data-date-format') ){
+    if( fieldEl.type === 'date' ){
         let splitChar = getSplitChar( value );
-
-        if( value.indexOf(splitChar) === 2 ){
-            // DD MM YYYY
-            value = value.split( splitChar ).reverse();
-        } else {
-            // YYYY MM DD
-            value = value.split( splitChar );
-        }
-
-        value = value.join('');
+        value = value.split( splitChar ).join('');
         maxVal = maxVal.split('-').join('');
     }
 
@@ -27,7 +17,7 @@ export const max = function( data ){
 
     let obj = { result: value <= maxVal };
 
-    if( !obj.result ){        
+    if( !obj.result ){
         obj.errors = { max: true };
     }
     

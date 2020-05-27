@@ -20,43 +20,31 @@ describe( 'validationRules: maxlength', () => {
 
     test( 'validationRules: maxlength number -> valid', () => {
         const el = document.querySelector('[name="field-1"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.maxLength
-        };
         const returnObj = {
             result: true
         };
-        const runFn = maxlength( data );
+        const runFn = maxlength( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: maxlength number -> not valid', () => {
         const el = document.querySelector('[name="field-2"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.maxLength
-        };
         const returnObj = {
             result: false,
             errors: {
                 maxlength: true
             }
         };
-        const runFn = maxlength( data );
+        const runFn = maxlength( el );
         expect( runFn ).toEqual( returnObj );
     } );
 
     test( 'validationRules: maxlength -> value not set', () => {
         const el = document.querySelector('[name="field-3"]');
-        const data = {
-            fieldEl: el,
-            attrValue: el.maxLength
-        };
         const returnObj = {
             result: true
         };
-        const runFn = maxlength( data );
+        const runFn = maxlength( el );
         expect( runFn ).toEqual( returnObj );
     } );
 

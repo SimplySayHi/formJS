@@ -1,6 +1,5 @@
 
 import { checkbox }     from './validationRules/checkbox';
-import { checks }       from './validationRules/checks';
 import { equalTo }      from './validationRules/equalTo';
 import { exactLength }  from './validationRules/exactLength';
 import { file }         from './validationRules/file';
@@ -15,7 +14,6 @@ import { requiredFrom } from './validationRules/requiredFrom';
 
 export const validationRulesAttributes = {
     checkbox,
-    checks,
     equalTo,
     exactLength,
     file,

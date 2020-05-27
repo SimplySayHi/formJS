@@ -54,54 +54,16 @@ export const listenerCallbacks = {
 
     validation: function( event ){
 
-        const eventName = event.type,
+        const isChangeEvent = event.type === 'change',
               fieldEl = event.target,
               self = fieldEl.closest('form').formjs;
 
         if( fieldEl.matches( fieldsStringSelector ) ){
-            const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl),
-                isRadio = fieldEl.type === 'radio',
-                isReqFrom = fieldEl.matches('[data-required-from]'),
-                isReqMore = fieldEl.matches('[data-require-more]'),
-                isValidValue = fieldEl.value.trim().length > 0;
-
-            // HANDLE data-require-more FIELDS
-            if( isRadio && eventName === 'change' ){
-                let findReqMoreEl = (isReqMore ? fieldEl : self.formEl.querySelector('[name="'+ fieldEl.name +'"][data-require-more]')),
-                    findReqFromEl = (findReqMoreEl !== null ? self.formEl.querySelector('[data-required-from="#'+ findReqMoreEl.id +'"]') : null);
-
-                if( isReqMore ){
-
-                    if( findReqFromEl !== null ){
-                        findReqFromEl.required = fieldEl.required;
-                        if( self.options.fieldOptions.focusOnRelated ){
-                            findReqFromEl.focus();
-                        }
-                    }
-
-                } else if( findReqMoreEl !== null ){
-
-                    if( findReqFromEl !== null ){
-                        findReqFromEl.required = findReqMoreEl.required && findReqMoreEl.checked;
-                        findReqFromEl.value = '';
-                    }
-
-                }
-            }
-
-            // HANDLE data-required-from FIELDS
-            if( isReqFrom ){
-                if( isValidValue ){
-
-                    let reqMoreEl = self.formEl.querySelector( fieldEl.getAttribute('data-required-from') );
-                    reqMoreEl.checked = true;
-                    fieldEl.required = reqMoreEl.required;
-                }
-            }
+            const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl);
             
             if(
-                (isFieldForChangeEventBoolean && eventName === 'change') ||
-                (!isFieldForChangeEventBoolean && eventName !== 'change')
+                (isFieldForChangeEventBoolean && isChangeEvent) ||
+                (!isFieldForChangeEventBoolean && !isChangeEvent)
             ){
                 
                 return self.validateField( fieldEl ).then(obj => {

@@ -27,7 +27,7 @@ describe( 'requiredFrom', () => {
         const returnObj = {
             result: true
         };
-        const obj = requiredFrom( {fieldEl:field_1more} );
+        const obj = requiredFrom( field_1more );
         expect( obj ).toEqual( returnObj );
     } );
 
@@ -40,7 +40,7 @@ describe( 'requiredFrom', () => {
                 requiredFrom: true
             }
         };
-        const obj = requiredFrom( {fieldEl:field_2more} );
+        const obj = requiredFrom( field_2more );
         expect( obj ).toEqual( returnObj );
     } );
 

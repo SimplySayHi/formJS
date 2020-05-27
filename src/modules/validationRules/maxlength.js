@@ -1,12 +1,14 @@
 
-export const maxlength = function( data ){
-    const obj = {
-        result: data.fieldEl.value.length <= (data.attrValue * 1)
-    };
+export const maxlength = function( fieldEl ){
+    try {
+        const obj = { result: fieldEl.value.length <= fieldEl.maxLength * 1 };
 
-    if( !obj.result ){
-        obj.errors = { maxlength: true };
+        if( !obj.result ){
+            obj.errors = { maxlength: true };
+        }
+
+        return obj;
+    }catch(e){
+        throw new Error('"maxlength" is not a number!');
     }
-
-    return obj;
 }

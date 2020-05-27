@@ -15,9 +15,8 @@ const isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), isDOM
     }
     return out;
 }, getSplitChar = string => {
-    let splitChar = ".";
-    return -1 === string.indexOf(splitChar) && (string.indexOf("-") >= 0 ? splitChar = "-" : string.indexOf("/") >= 0 && (splitChar = "/")), 
-    splitChar;
+    const separator = string.match(/\D/);
+    return separator && separator.length > 0 ? separator[0] : null;
 }, getValidateFieldDefault = obj => mergeObjects({}, {
     result: !1,
     fieldEl: null
@@ -40,47 +39,47 @@ const isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), isDOM
 };
 
 const validationRulesAttributes = {
-    checkbox: function(data) {
-        let dataChecksEl = data.fieldEl.closest("form").querySelector('[name="' + data.fieldEl.name + '"][data-checks]'), obj = {
-            result: data.fieldEl.checked
+    checkbox: function(fieldEl) {
+        let dataChecksEl = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"][data-checks]');
+        return dataChecksEl ? function(fieldEl) {
+            try {
+                let attrValue = JSON.parse(fieldEl.getAttribute("data-checks")), checkedElLength = fieldEl.closest("form").querySelectorAll('[name="' + fieldEl.name + '"]:checked').length, isMinOk = checkedElLength >= attrValue[0], isMaxOk = checkedElLength <= attrValue[1], obj = {
+                    result: isMinOk && isMaxOk
+                };
+                return obj.result || (obj.errors = {
+                    checks: !0
+                }, isMinOk || (obj.errors.minChecks = !0), isMaxOk || (obj.errors.maxChecks = !0)), 
+                obj;
+            } catch (e) {
+                throw new Error('"data-checks" attribute is not a valid array!');
+            }
+        }(dataChecksEl) : {
+            result: fieldEl.checked
         };
-        return null !== dataChecksEl && (obj = this.checks({
-            attrValue: dataChecksEl.getAttribute("data-checks"),
-            fieldEl: dataChecksEl
-        })), obj;
     },
-    checks: function(data) {
-        try {
-            let attrValue = JSON.parse(data.attrValue), fieldEl = data.fieldEl, checkedElLength = fieldEl.closest("form").querySelectorAll('[name="' + fieldEl.name + '"]:checked').length, isMinOk = checkedElLength >= attrValue[0], isMaxOk = checkedElLength <= attrValue[1], obj = {
-                result: isMinOk && isMaxOk
-            };
-            return obj.result || (obj.errors = {
-                checks: !0
-            }, isMinOk || (obj.errors.minChecks = !0), isMaxOk || (obj.errors.maxChecks = !0)), 
-            obj;
-        } catch (e) {
-            throw new Error('"data-checks" attribute is not a valid array!');
-        }
-    },
-    equalTo: function(data) {
-        let fieldEl = data.fieldEl, checkFromEl = fieldEl.closest("form").querySelector('[name="' + fieldEl.getAttribute("data-equal-to") + '"]'), obj = {
-            result: fieldEl.value === checkFromEl.value
+    equalTo: function(fieldEl) {
+        let checkFromEl = fieldEl.closest("form").querySelector('[name="' + fieldEl.getAttribute("data-equal-to") + '"]'), obj = {
+            result: !!checkFromEl && fieldEl.value === checkFromEl.value
         };
         return obj.result || (obj.errors = {
             equalTo: !0
         }), obj;
     },
-    exactLength: function(data) {
-        let valueLength = data.fieldEl.value.length, exactLength = 1 * data.attrValue, obj = {
-            result: valueLength === exactLength
-        };
-        return obj.result || (obj.errors = {
-            exactLength: !0
-        }, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), 
-        obj;
+    exactLength: function(fieldEl) {
+        try {
+            let valueLength = fieldEl.value.length, exactLength = 1 * fieldEl.getAttribute("data-exact-length"), obj = {
+                result: !Number.isNaN(exactLength) && valueLength === exactLength
+            };
+            return obj.result || (obj.errors = {
+                exactLength: !0
+            }, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), 
+            obj;
+        } catch (e) {
+            throw new Error('"data-exact-length" attribute is not a number!');
+        }
     },
-    file: function(data) {
-        let fieldEl = data.fieldEl, maxFileSize = 1 * (fieldEl.getAttribute("data-max-file-size") || data.fieldOptions.maxFileSize), MIMEtype = fieldEl.accept ? new RegExp(fieldEl.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from(fieldEl.files), obj = {
+    file: function(fieldEl, fieldOptions) {
+        let maxFileSize = 1 * (fieldEl.getAttribute("data-max-file-size") || fieldOptions.maxFileSize), MIMEtype = fieldEl.accept ? new RegExp(fieldEl.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from(fieldEl.files), obj = {
             result: !0
         };
         return filesList.forEach((function(file) {
@@ -89,9 +88,9 @@ const validationRulesAttributes = {
             obj.errors.file = !0, exceedMaxFileSize && (obj.errors.maxFileSize = !0), isAcceptedFileType || (obj.errors.acceptedFileType = !0));
         })), obj;
     },
-    length: function(data) {
+    length: function(fieldEl) {
         try {
-            let valueL = data.fieldEl.value.length, attrValue = JSON.parse(data.attrValue), isMinlengthOk = valueL >= attrValue[0], isMaxlengthOk = valueL <= attrValue[1], obj = {
+            let valueL = fieldEl.value.length, attrValue = JSON.parse(fieldEl.getAttribute("data-length")), isMinlengthOk = valueL >= attrValue[0], isMaxlengthOk = valueL <= attrValue[1], obj = {
                 result: isMinlengthOk && isMaxlengthOk
             };
             return obj.result || (obj.errors = {
@@ -102,12 +101,11 @@ const validationRulesAttributes = {
             throw new Error('"data-length" attribute is not a valid array!');
         }
     },
-    max: function(data) {
-        let fieldEl = data.fieldEl, isDate = fieldEl.matches('[type="date"]') || fieldEl.matches('[data-subtype="date"]') || fieldEl.matches('[data-subtype="dateDDMMYYYY"]'), value = data.fieldEl.value, maxVal = data.attrValue;
-        if (isDate) {
+    max: function(fieldEl) {
+        let value = fieldEl.value, maxVal = fieldEl.max;
+        if ("date" === fieldEl.type) {
             let splitChar = getSplitChar(value);
-            value = 2 === value.indexOf(splitChar) ? value.split(splitChar).reverse() : value.split(splitChar), 
-            value = value.join(""), maxVal = maxVal.split("-").join("");
+            value = value.split(splitChar).join(""), maxVal = maxVal.split("-").join("");
         }
         value *= 1, maxVal *= 1;
         let obj = {
@@ -117,20 +115,23 @@ const validationRulesAttributes = {
             max: !0
         }), obj;
     },
-    maxlength: function(data) {
-        const obj = {
-            result: data.fieldEl.value.length <= 1 * data.attrValue
-        };
-        return obj.result || (obj.errors = {
-            maxlength: !0
-        }), obj;
+    maxlength: function(fieldEl) {
+        try {
+            const obj = {
+                result: fieldEl.value.length <= 1 * fieldEl.maxLength
+            };
+            return obj.result || (obj.errors = {
+                maxlength: !0
+            }), obj;
+        } catch (e) {
+            throw new Error('"maxlength" is not a number!');
+        }
     },
-    min: function(data) {
-        let fieldEl = data.fieldEl, isDate = fieldEl.matches('[type="date"]') || fieldEl.matches('[data-subtype="date"]') || fieldEl.matches('[data-subtype="dateDDMMYYYY"]'), value = data.fieldEl.value, minVal = data.attrValue;
-        if (isDate) {
+    min: function(fieldEl) {
+        let value = fieldEl.value, minVal = fieldEl.min;
+        if ("date" === fieldEl.type) {
             let splitChar = getSplitChar(value);
-            value = 2 === value.indexOf(splitChar) ? value.split(splitChar).reverse() : value.split(splitChar), 
-            value = value.join(""), minVal = minVal.split("-").join("");
+            value = value.split(splitChar).join(""), minVal = minVal.split("-").join("");
         }
         value *= 1, minVal *= 1;
         let obj = {
@@ -140,30 +141,38 @@ const validationRulesAttributes = {
             min: !0
         }), obj;
     },
-    minlength: function(data) {
-        const obj = {
-            result: data.fieldEl.value.length >= 1 * data.attrValue
-        };
-        return obj.result || (obj.errors = {
-            minlength: !0
-        }), obj;
+    minlength: function(fieldEl) {
+        try {
+            const obj = {
+                result: fieldEl.value.length >= 1 * fieldEl.minLength
+            };
+            return obj.result || (obj.errors = {
+                minlength: !0
+            }), obj;
+        } catch (e) {
+            throw new Error('"minlength" is not a number!');
+        }
     },
-    pattern: function(data) {
-        let fieldEl = data.fieldEl, fieldPattern = fieldEl.pattern, obj = {
-            result: new RegExp(fieldPattern).test(fieldEl.value)
-        };
-        return obj.result || (obj.errors = {
-            pattern: !0
-        }), obj;
+    pattern: function(fieldEl) {
+        try {
+            let fieldPattern = fieldEl.pattern, obj = {
+                result: new RegExp(fieldPattern).test(fieldEl.value)
+            };
+            return obj.result || (obj.errors = {
+                pattern: !0
+            }), obj;
+        } catch (e) {
+            throw new Error('"pattern" is not a valid RegExp!');
+        }
     },
-    radio: function(data) {
-        let fieldEl = data.fieldEl, fieldChecked = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"]:checked');
+    radio: function(fieldEl) {
+        let fieldChecked = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"]:checked');
         return {
             result: null !== fieldChecked && fieldChecked.value.trim().length > 0
         };
     },
-    requiredFrom: function(data) {
-        let fieldEl = data.fieldEl, formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0, reqMoreEl = formEl.querySelector(fieldEl.getAttribute("data-required-from")), obj = {
+    requiredFrom: function(fieldEl) {
+        let formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0, reqMoreEl = formEl.querySelector(fieldEl.getAttribute("data-required-from")), obj = {
             result: null !== formEl.querySelector('[name="' + reqMoreEl.name + '"]:checked')
         };
         return reqMoreEl.checked && reqMoreEl.required && (obj.result = isValidValue), obj.result || (obj.errors = {
@@ -179,10 +188,18 @@ function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationEr
         });
         return Promise.resolve(obj);
     }
-    const isValidValue = fieldEl.value.trim().length > 0, isRequired = fieldEl.required, isReqFrom = fieldEl.matches("[data-required-from]"), isValidateIfFilled = fieldEl.matches("[data-validate-if-filled]");
-    return (({functionsList: functionsList = [], data: data = {}, stopConditionFn: stopConditionFn = function() {
-        return !1;
-    }} = {}) => functionsList.reduce((acc, promiseFn) => acc.then(res => {
+    const formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0;
+    if ("radio" === fieldEl.type) {
+        const checkedEl = fieldEl.checked ? fieldEl : formEl.querySelector('[name="' + fieldEl.name + '"]:checked'), reqMoreIsChecked = checkedEl.matches("[data-require-more]"), findReqMoreEl = reqMoreIsChecked ? checkedEl : formEl.querySelector('[data-require-more][name="' + fieldEl.name + '"]'), findReqFromEl = findReqMoreEl ? formEl.querySelector('[data-required-from="#' + findReqMoreEl.id + '"]') : null;
+        checkedEl && findReqFromEl && (findReqFromEl.required = findReqMoreEl.required && findReqMoreEl.checked, 
+        reqMoreIsChecked ? fieldOptions.focusOnRelated && findReqFromEl.focus() : findReqFromEl.value = "");
+    }
+    if (fieldEl.matches("[data-required-from]") && isValidValue) {
+        const reqMoreEl = formEl.querySelector(fieldEl.getAttribute("data-required-from"));
+        reqMoreEl.checked = !0, fieldEl.required = reqMoreEl.required;
+    }
+    const needsValidation = fieldEl.required || fieldEl.matches("[data-validate-if-filled]") && isValidValue;
+    return (({functionsList: functionsList = [], data: data = {}, stopConditionFn: stopConditionFn = (() => !1)} = {}) => functionsList.reduce((acc, promiseFn) => acc.then(res => {
         let dataNew = mergeObjects({}, res[res.length - 1]);
         return stopConditionFn(dataNew) ? Promise.resolve(res) : new Promise(resolve => {
             resolve(promiseFn(dataNew));
@@ -195,41 +212,32 @@ function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationEr
     }).then(data => {
         let dataObj = data.pop();
         return new Promise(resolve => {
-            !isRequired && !isValidateIfFilled && !isReqFrom || isValidateIfFilled && !isValidValue || isReqFrom && !isRequired ? (dataObj.result = !0, 
-            resolve(dataObj)) : resolve(function(fieldEl, fieldOptions, validationRules, validationErrors) {
-                const fieldType = fieldEl.matches("[data-subtype]") ? toCamelCase(fieldEl.getAttribute("data-subtype")) : fieldEl.type, fieldValue = fieldEl.value, isValidValue = fieldValue.trim().length > 0, fieldAttributes = Array.from(fieldEl.attributes).sort((a, b) => a.name < b.name), attrValidations = [];
-                let attrValidationsResult = isValidValue, obj = getValidateFieldDefault({
+            needsValidation || (dataObj.result = !0), resolve(needsValidation ? function(fieldEl, fieldOptions, validationRules, validationErrors) {
+                const fieldType = fieldEl.matches("[data-subtype]") ? toCamelCase(fieldEl.getAttribute("data-subtype")) : fieldEl.type, fieldValue = fieldEl.value, isValidValue = fieldValue.trim().length > 0;
+                let attrValidationsResult, obj = getValidateFieldDefault({
                     result: isValidValue,
                     fieldEl: fieldEl
                 });
-                return obj.result ? (fieldAttributes.forEach(attr => {
-                    const attrName = toCamelCase(attr.name.replace("data-", "")), attrValue = attr.value, isAttrValueWithFn = "type" === attrName && "function" == typeof validationRulesAttributes[attrValue], isAttrNameWithFn = "function" == typeof validationRulesAttributes[attrName];
-                    if (isAttrValueWithFn || isAttrNameWithFn) {
-                        const extraValObj = {
-                            attrName: isAttrValueWithFn ? attrValue : attrName,
-                            attrValue: attrValue,
-                            fieldEl: fieldEl,
-                            fieldOptions: fieldOptions
-                        };
-                        isAttrValueWithFn || "requiredFrom" === attrName ? attrValidations.unshift(extraValObj) : attrValidations.push(extraValObj);
-                    }
-                }), new Promise(resolve => {
-                    attrValidations.forEach(item => {
-                        const extraVal = validationRulesAttributes[item.attrName](item);
-                        extraVal.result || (obj = mergeObjects({}, obj, extraVal), attrValidationsResult = !1);
-                    }), "function" == typeof validationRules[fieldType] ? resolve(validationRules[fieldType](fieldValue, fieldEl)) : resolve(obj);
+                return obj.result ? new Promise(resolve => {
+                    attrValidationsResult = Array.from(fieldEl.attributes).reduce((valResult, attr) => {
+                        const attrName = toCamelCase(attr.name.replace("data-", "")), attrValue = attr.value, isAttrValueWithFn = "type" === attrName && "function" == typeof validationRulesAttributes[attrValue], isAttrNameWithFn = "function" == typeof validationRulesAttributes[attrName];
+                        if (isAttrValueWithFn || isAttrNameWithFn) {
+                            const extraVal = validationRulesAttributes[isAttrValueWithFn ? attrValue : attrName](fieldEl, fieldOptions);
+                            if (!extraVal.result) return obj = mergeObjects({}, obj, extraVal), !1;
+                        }
+                        return valResult;
+                    }, isValidValue), "function" == typeof validationRules[fieldType] ? resolve(validationRules[fieldType](fieldValue, fieldEl)) : resolve(obj);
                 }).then(data => {
-                    if (obj = mergeObjects({}, obj, data, {
-                        fieldEl: fieldEl
-                    }), obj.result = obj.result && attrValidationsResult, !obj.result) {
+                    if (obj = mergeObjects({}, obj, data), obj.result = obj.result && attrValidationsResult, 
+                    !obj.result) {
                         const fieldErrors = "function" == typeof validationErrors[fieldType] ? validationErrors[fieldType](fieldValue, fieldEl) : {};
-                        void 0 === obj.errors && (obj.errors = {}), obj.errors.rule = !0, obj.errors = mergeObjects({}, obj.errors, fieldErrors);
+                        obj.errors = mergeObjects({}, obj.errors || {}, fieldErrors), obj.errors.rule = !0;
                     }
                     return obj;
-                })) : (obj.errors = {
+                }) : (obj.errors = {
                     empty: !0
                 }, Promise.resolve(obj));
-            }(fieldEl, fieldOptions, validationRules, validationErrors));
+            }(fieldEl, fieldOptions, validationRules, validationErrors) : dataObj);
         });
     });
 }
