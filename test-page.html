@@ -70,13 +70,27 @@
                                 </div>
                                 <div class="field-error-message small"></div>
                             </div>
-                            <!-- <div data-formjs-question class="form-group">
+                            <div data-formjs-question class="form-group">
                                 <div class="answers-box label-move-up">
-                                    <input name="passwordConfirm" type="password" data-equal-to="password" class="form-control" required />
-                                    <label>Confirm Password</label>
+                                    <input name="dateOfBirth" type="date" min="1980-01-11" max="2050-12-30" class="form-control" required />
+                                    <label>Date of Birth (type date)</label>
                                 </div>
                                 <div class="field-error-message small"></div>
-                            </div> -->
+                            </div>
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="dateOfBirth-YYYY-MM-DD" type="text" data-subtype="date" min="1980-01-11" max="2050-12-30" data-date-format="YYYY-MM-DD" class="form-control" required />
+                                    <label>Date of Birth (subtype date YYYY-MM-DD)</label>
+                                </div>
+                                <div class="field-error-message small"></div>
+                            </div>
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <input name="dateOfBirth-YYYY/MM/DD" type="text" data-subtype="date" min="1980-01-11" max="2050-12-30" data-date-format="YYYY MM DD" class="form-control" required />
+                                    <label>Date of Birth (subtype date YYYY MM DD)</label>
+                                </div>
+                                <div class="field-error-message small"></div>
+                            </div>
                             <div data-formjs-question class="form-group">
                                 <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
                                 <div class="answers-box">
@@ -172,6 +186,7 @@
         var formEl = document.querySelector('form');
         var options = {
             fieldOptions: {
+                // onValidationCheckAll: false,
                 beforeValidation: [
                     function beforeValidation_testPage1( fieldObj ){
                         console.log('--- beforeValidation_testPage 1 fieldObj', fieldObj);
@@ -231,6 +246,9 @@
             }
         };
 
+        // DECOMMENT TO TEST LITE VERSION
+        // delete options.formOptions;
+
         var formInstance = new Form( formEl, options );
 
         formEl.addEventListener('fjs.field:validation', function(e){
@@ -263,6 +281,14 @@
                     console.log(e.type, 'finally');
                 });
         }, false);
+
+        // DECOMMENT TO TEST LITE VERSION
+        /* formEl.addEventListener('submit', function(e){
+            e.preventDefault();
+            formInstance.validateForm().then(function(obj){
+                console.log('form validation', obj);
+            });
+        }); */
 
         formInstance.init().then(function( obj ){
             console.log('formInstance obj.instance', obj.instance);

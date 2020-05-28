@@ -1,14 +1,13 @@
 
-import { getSplitChar } from '../helpers';
+import { getDateAsNumber } from '../helpers';
 
 export const max = function( fieldEl ){
     let value = fieldEl.value,
-        maxVal = fieldEl.max;
+        maxVal = fieldEl.max,
+        dateFormat = fieldEl.getAttribute('data-date-format');
     
-    //  if( fieldEl.type === 'date' || fieldEl.getAttribute('data-date-format') ){
-    if( fieldEl.type === 'date' ){
-        let splitChar = getSplitChar( value );
-        value = value.split( splitChar ).join('');
+    if( fieldEl.type === 'date' || dateFormat ){
+        value = getDateAsNumber( value, dateFormat );
         maxVal = maxVal.split('-').join('');
     }
 

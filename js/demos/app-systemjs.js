@@ -41,7 +41,7 @@ System.register([], function () {
         return Constructor;
       }
 
-      /* formJS v4.0.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+      /* formJS v4.1.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
       var addClass = function addClass(element, cssClasses) {
         cssClasses.split(" ").forEach(function (className) {
           element.classList.add(className);
@@ -98,9 +98,26 @@ System.register([], function () {
         eventObj.data = data, elem.dispatchEvent(eventObj);
       },
           fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea',
-          getSplitChar = function getSplitChar(string) {
-        var separator = string.match(/\D/);
-        return separator && separator.length > 0 ? separator[0] : null;
+          formatMap = {
+        "YYYY-MM-DD": function YYYYMMDD(dateArray) {
+          return dateArray;
+        },
+        "MM-DD-YYYY": function MMDDYYYY(dateArray) {
+          return [dateArray[2], dateArray[0], dateArray[1]];
+        },
+        "DD-MM-YYYY": function DDMMYYYY(dateArray) {
+          return dateArray.reverse();
+        }
+      },
+          getDateAsNumber = function getDateAsNumber(dateString, dateFormat) {
+        dateFormat = dateFormat || "YYYY-MM-DD";
+
+        var splitChar = function (string) {
+          var separator = string.match(/\D/);
+          return separator && separator.length > 0 ? separator[0] : null;
+        }(dateString);
+
+        if (!(dateFormat.indexOf(splitChar) < 0)) return dateFormat = dateFormat.replace(/[^YMD]/g, "-"), dateString = dateString.split(splitChar), dateString = formatMap[dateFormat](dateString).join("");
       },
           getUniqueFields = function getUniqueFields(nodeList) {
         var currentFieldName = "",
@@ -561,14 +578,9 @@ System.register([], function () {
         },
         max: function max(fieldEl) {
           var value = fieldEl.value,
-              maxVal = fieldEl.max;
-
-          if ("date" === fieldEl.type) {
-            var splitChar = getSplitChar(value);
-            value = value.split(splitChar).join(""), maxVal = maxVal.split("-").join("");
-          }
-
-          value *= 1, maxVal *= 1;
+              maxVal = fieldEl.max,
+              dateFormat = fieldEl.getAttribute("data-date-format");
+          ("date" === fieldEl.type || dateFormat) && (value = getDateAsNumber(value, dateFormat), maxVal = maxVal.split("-").join("")), value *= 1, maxVal *= 1;
           var obj = {
             result: value <= maxVal
           };
@@ -590,14 +602,9 @@ System.register([], function () {
         },
         min: function min(fieldEl) {
           var value = fieldEl.value,
-              minVal = fieldEl.min;
-
-          if ("date" === fieldEl.type) {
-            var splitChar = getSplitChar(value);
-            value = value.split(splitChar).join(""), minVal = minVal.split("-").join("");
-          }
-
-          value *= 1, minVal *= 1;
+              minVal = fieldEl.min,
+              dateFormat = fieldEl.getAttribute("data-date-format");
+          ("date" === fieldEl.type || fieldEl.getAttribute("data-date-format")) && (value = getDateAsNumber(value, dateFormat), minVal = minVal.split("-").join("")), value *= 1, minVal *= 1;
           var obj = {
             result: value >= minVal
           };
@@ -662,7 +669,7 @@ System.register([], function () {
 
         if ("radio" === fieldEl.type) {
           var checkedEl = fieldEl.checked ? fieldEl : formEl.querySelector('[name="' + fieldEl.name + '"]:checked'),
-              reqMoreIsChecked = checkedEl.matches("[data-require-more]"),
+              reqMoreIsChecked = checkedEl && checkedEl.matches("[data-require-more]"),
               findReqMoreEl = reqMoreIsChecked ? checkedEl : formEl.querySelector('[data-require-more][name="' + fieldEl.name + '"]'),
               findReqFromEl = findReqMoreEl ? formEl.querySelector('[data-required-from="#' + findReqMoreEl.id + '"]') : null;
           checkedEl && findReqFromEl && (findReqFromEl.required = findReqMoreEl.required && findReqMoreEl.checked, reqMoreIsChecked ? fieldOptions.focusOnRelated && findReqFromEl.focus() : findReqFromEl.value = "");
@@ -856,7 +863,7 @@ System.register([], function () {
           }
           return obj;
         }
-      }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.0.2";
+      }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.1.0";
 
       var formEl = document.querySelector('form');
       var formInstance = new Form(formEl);

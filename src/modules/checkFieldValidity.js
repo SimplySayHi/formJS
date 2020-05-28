@@ -15,7 +15,7 @@ export function checkFieldValidity( fieldEl, fieldOptions, validationRules, vali
      // HANDLE FIELDS radio/data-require-more
      if( fieldEl.type === 'radio' ){
         const checkedEl = fieldEl.checked ? fieldEl : formEl.querySelector('[name="'+ fieldEl.name +'"]:checked'),
-              reqMoreIsChecked = checkedEl.matches('[data-require-more]'),
+              reqMoreIsChecked = checkedEl && checkedEl.matches('[data-require-more]'),
               findReqMoreEl = reqMoreIsChecked ? checkedEl : formEl.querySelector('[data-require-more][name="'+ fieldEl.name +'"]'),
               findReqFromEl = findReqMoreEl ? formEl.querySelector('[data-required-from="#'+ findReqMoreEl.id +'"]') : null;
         

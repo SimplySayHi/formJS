@@ -1,4 +1,4 @@
-/* formJS Lite v4.0.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS Lite v4.1.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 const isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), isDOMNode = node => Element.prototype.isPrototypeOf(node), checkFormEl = formEl => {
     let isString = typeof formEl, isFormSelector = "string" === isString && isDOMNode(document.querySelector(formEl)) && "form" === document.querySelector(formEl).tagName.toLowerCase();
     return {
@@ -14,9 +14,24 @@ const isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), isDOM
         }
     }
     return out;
-}, getSplitChar = string => {
-    const separator = string.match(/\D/);
-    return separator && separator.length > 0 ? separator[0] : null;
+}, formatMap = {
+    "YYYY-MM-DD": function(dateArray) {
+        return dateArray;
+    },
+    "MM-DD-YYYY": function(dateArray) {
+        return [ dateArray[2], dateArray[0], dateArray[1] ];
+    },
+    "DD-MM-YYYY": function(dateArray) {
+        return dateArray.reverse();
+    }
+}, getDateAsNumber = (dateString, dateFormat) => {
+    dateFormat = dateFormat || "YYYY-MM-DD";
+    const splitChar = (string => {
+        const separator = string.match(/\D/);
+        return separator && separator.length > 0 ? separator[0] : null;
+    })(dateString);
+    if (!(dateFormat.indexOf(splitChar) < 0)) return dateFormat = dateFormat.replace(/[^YMD]/g, "-"), 
+    dateString = dateString.split(splitChar), dateString = formatMap[dateFormat](dateString).join("");
 }, getValidateFieldDefault = obj => mergeObjects({}, {
     result: !1,
     fieldEl: null
@@ -102,12 +117,9 @@ const validationRulesAttributes = {
         }
     },
     max: function(fieldEl) {
-        let value = fieldEl.value, maxVal = fieldEl.max;
-        if ("date" === fieldEl.type) {
-            let splitChar = getSplitChar(value);
-            value = value.split(splitChar).join(""), maxVal = maxVal.split("-").join("");
-        }
-        value *= 1, maxVal *= 1;
+        let value = fieldEl.value, maxVal = fieldEl.max, dateFormat = fieldEl.getAttribute("data-date-format");
+        ("date" === fieldEl.type || dateFormat) && (value = getDateAsNumber(value, dateFormat), 
+        maxVal = maxVal.split("-").join("")), value *= 1, maxVal *= 1;
         let obj = {
             result: value <= maxVal
         };
@@ -128,12 +140,9 @@ const validationRulesAttributes = {
         }
     },
     min: function(fieldEl) {
-        let value = fieldEl.value, minVal = fieldEl.min;
-        if ("date" === fieldEl.type) {
-            let splitChar = getSplitChar(value);
-            value = value.split(splitChar).join(""), minVal = minVal.split("-").join("");
-        }
-        value *= 1, minVal *= 1;
+        let value = fieldEl.value, minVal = fieldEl.min, dateFormat = fieldEl.getAttribute("data-date-format");
+        ("date" === fieldEl.type || fieldEl.getAttribute("data-date-format")) && (value = getDateAsNumber(value, dateFormat), 
+        minVal = minVal.split("-").join("")), value *= 1, minVal *= 1;
         let obj = {
             result: value >= minVal
         };
@@ -190,7 +199,7 @@ function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationEr
     }
     const formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0;
     if ("radio" === fieldEl.type) {
-        const checkedEl = fieldEl.checked ? fieldEl : formEl.querySelector('[name="' + fieldEl.name + '"]:checked'), reqMoreIsChecked = checkedEl.matches("[data-require-more]"), findReqMoreEl = reqMoreIsChecked ? checkedEl : formEl.querySelector('[data-require-more][name="' + fieldEl.name + '"]'), findReqFromEl = findReqMoreEl ? formEl.querySelector('[data-required-from="#' + findReqMoreEl.id + '"]') : null;
+        const checkedEl = fieldEl.checked ? fieldEl : formEl.querySelector('[name="' + fieldEl.name + '"]:checked'), reqMoreIsChecked = checkedEl && checkedEl.matches("[data-require-more]"), findReqMoreEl = reqMoreIsChecked ? checkedEl : formEl.querySelector('[data-require-more][name="' + fieldEl.name + '"]'), findReqFromEl = findReqMoreEl ? formEl.querySelector('[data-required-from="#' + findReqMoreEl.id + '"]') : null;
         checkedEl && findReqFromEl && (findReqFromEl.required = findReqMoreEl.required && findReqMoreEl.checked, 
         reqMoreIsChecked ? fieldOptions.focusOnRelated && findReqFromEl.focus() : findReqFromEl.value = "");
     }
@@ -308,9 +317,10 @@ class Form {
 Form.prototype.options = {
     fieldOptions: {
         beforeValidation: [],
+        focusOnRelated: !0,
         maxFileSize: 10
     }
 }, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-Form.prototype.version = "4.0.2";
+Form.prototype.version = "4.1.0";
 
 export default Form;

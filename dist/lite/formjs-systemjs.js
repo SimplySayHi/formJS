@@ -1,4 +1,4 @@
-/* formJS Lite v4.0.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS Lite v4.1.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 System.register([], (function(exports) {
     "use strict";
     return {
@@ -36,9 +36,21 @@ System.register([], (function(exports) {
                     }
                 }
                 return out;
-            }, fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', getSplitChar = function(string) {
-                var separator = string.match(/\D/);
-                return separator && separator.length > 0 ? separator[0] : null;
+            }, fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', formatMap = {
+                "YYYY-MM-DD": function(dateArray) {
+                    return dateArray;
+                },
+                "MM-DD-YYYY": function(dateArray) {
+                    return [ dateArray[2], dateArray[0], dateArray[1] ];
+                },
+                "DD-MM-YYYY": function(dateArray) {
+                    return dateArray.reverse();
+                }
+            }, getDateAsNumber = function(dateString, dateFormat) {
+                dateFormat = dateFormat || "YYYY-MM-DD";
+                var separator, splitChar = (separator = dateString.match(/\D/)) && separator.length > 0 ? separator[0] : null;
+                if (!(dateFormat.indexOf(splitChar) < 0)) return dateFormat = dateFormat.replace(/[^YMD]/g, "-"), 
+                dateString = dateString.split(splitChar), dateString = formatMap[dateFormat](dateString).join("");
             }, getUniqueFields = function(nodeList) {
                 var currentFieldName = "", currentFieldType = "";
                 return Array.from(nodeList).filter((function(fieldEl) {
@@ -142,11 +154,9 @@ System.register([], (function(exports) {
                     }
                 },
                 max: function(fieldEl) {
-                    var value = fieldEl.value, maxVal = fieldEl.max;
-                    if ("date" === fieldEl.type) {
-                        var splitChar = getSplitChar(value);
-                        value = value.split(splitChar).join(""), maxVal = maxVal.split("-").join("");
-                    }
+                    var value = fieldEl.value, maxVal = fieldEl.max, dateFormat = fieldEl.getAttribute("data-date-format");
+                    ("date" === fieldEl.type || dateFormat) && (value = getDateAsNumber(value, dateFormat), 
+                    maxVal = maxVal.split("-").join(""));
                     var obj = {
                         result: (value *= 1) <= (maxVal *= 1)
                     };
@@ -167,11 +177,9 @@ System.register([], (function(exports) {
                     }
                 },
                 min: function(fieldEl) {
-                    var value = fieldEl.value, minVal = fieldEl.min;
-                    if ("date" === fieldEl.type) {
-                        var splitChar = getSplitChar(value);
-                        value = value.split(splitChar).join(""), minVal = minVal.split("-").join("");
-                    }
+                    var value = fieldEl.value, minVal = fieldEl.min, dateFormat = fieldEl.getAttribute("data-date-format");
+                    ("date" === fieldEl.type || fieldEl.getAttribute("data-date-format")) && (value = getDateAsNumber(value, dateFormat), 
+                    minVal = minVal.split("-").join(""));
                     var obj = {
                         result: (value *= 1) >= (minVal *= 1)
                     };
@@ -227,7 +235,7 @@ System.register([], (function(exports) {
                 }
                 var formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0;
                 if ("radio" === fieldEl.type) {
-                    var checkedEl = fieldEl.checked ? fieldEl : formEl.querySelector('[name="' + fieldEl.name + '"]:checked'), reqMoreIsChecked = checkedEl.matches("[data-require-more]"), findReqMoreEl = reqMoreIsChecked ? checkedEl : formEl.querySelector('[data-require-more][name="' + fieldEl.name + '"]'), findReqFromEl = findReqMoreEl ? formEl.querySelector('[data-required-from="#' + findReqMoreEl.id + '"]') : null;
+                    var checkedEl = fieldEl.checked ? fieldEl : formEl.querySelector('[name="' + fieldEl.name + '"]:checked'), reqMoreIsChecked = checkedEl && checkedEl.matches("[data-require-more]"), findReqMoreEl = reqMoreIsChecked ? checkedEl : formEl.querySelector('[data-require-more][name="' + fieldEl.name + '"]'), findReqFromEl = findReqMoreEl ? formEl.querySelector('[data-required-from="#' + findReqMoreEl.id + '"]') : null;
                     checkedEl && findReqFromEl && (findReqFromEl.required = findReqMoreEl.required && findReqMoreEl.checked, 
                     reqMoreIsChecked ? fieldOptions.focusOnRelated && findReqFromEl.focus() : findReqFromEl.value = "");
                 }
@@ -363,10 +371,11 @@ System.register([], (function(exports) {
             Form.prototype.options = {
                 fieldOptions: {
                     beforeValidation: [],
+                    focusOnRelated: !0,
                     maxFileSize: 10
                 }
             }, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-            Form.prototype.version = "4.0.2";
+            Form.prototype.version = "4.1.0";
         }
     };
 }));

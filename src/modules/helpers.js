@@ -6,6 +6,7 @@ export { customEvents }             from './helpers/customEvents';
 export { dispatchCustomEvent }      from './helpers/dispatchCustomEvent';
 export { excludeSelector }          from './helpers/excludeSelector';
 export { fieldsStringSelector }     from './helpers/fieldsStringSelector';
+export { getDateAsNumber }          from './helpers/getDateAsNumber';
 export { getSplitChar }             from './helpers/getSplitChar';
 export { getFilledFields }          from './helpers/getFilledFields';
 export { getUniqueFields }          from './helpers/getUniqueFields';

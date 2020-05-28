@@ -1,14 +1,13 @@
 
-import { getSplitChar } from '../helpers';
+import { getDateAsNumber } from '../helpers';
 
 export const min = function( fieldEl ){
     let value = fieldEl.value,
-        minVal = fieldEl.min;
+        minVal = fieldEl.min,
+        dateFormat = fieldEl.getAttribute('data-date-format');
     
-    //  if( fieldEl.type === 'date' || fieldEl.getAttribute('data-date-format') ){
-    if( fieldEl.type === 'date' ){
-        let splitChar = getSplitChar( value );
-        value = value.split( splitChar ).join('');
+    if( fieldEl.type === 'date' || fieldEl.getAttribute('data-date-format') ){
+        value = getDateAsNumber( value, dateFormat );
         minVal = minVal.split('-').join('');
     }
 
