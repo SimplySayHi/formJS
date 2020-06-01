@@ -332,41 +332,33 @@ const init = function(formEl) {
     checkbox: function(fieldEl) {
         let dataChecksEl = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"][data-checks]');
         return dataChecksEl ? function(fieldEl) {
-            try {
-                let attrValue = JSON.parse(fieldEl.getAttribute("data-checks")), checkedElLength = fieldEl.closest("form").querySelectorAll('[name="' + fieldEl.name + '"]:checked').length, isMinOk = checkedElLength >= attrValue[0], isMaxOk = checkedElLength <= attrValue[1], obj = {
-                    result: isMinOk && isMaxOk
-                };
-                return obj.result || (obj.errors = {
-                    checks: !0
-                }, isMinOk || (obj.errors.minChecks = !0), isMaxOk || (obj.errors.maxChecks = !0)), 
-                obj;
-            } catch (e) {
-                throw new Error('"data-checks" attribute is not a valid array!');
-            }
+            let attrValue = JSON.parse(fieldEl.getAttribute("data-checks")), checkedElLength = fieldEl.closest("form").querySelectorAll('[name="' + fieldEl.name + '"]:checked').length, isMinOk = checkedElLength >= attrValue[0], isMaxOk = checkedElLength <= attrValue[1], obj = {
+                result: isMinOk && isMaxOk
+            };
+            return obj.result || (obj.errors = {
+                checks: !0
+            }, isMinOk || (obj.errors.minChecks = !0), isMaxOk || (obj.errors.maxChecks = !0)), 
+            obj;
         }(dataChecksEl) : {
             result: fieldEl.checked
         };
     },
     equalTo: function(fieldEl) {
         let checkFromEl = fieldEl.closest("form").querySelector('[name="' + fieldEl.getAttribute("data-equal-to") + '"]'), obj = {
-            result: !!checkFromEl && fieldEl.value === checkFromEl.value
+            result: fieldEl.value === checkFromEl.value
         };
         return obj.result || (obj.errors = {
             equalTo: !0
         }), obj;
     },
     exactLength: function(fieldEl) {
-        try {
-            let valueLength = fieldEl.value.length, exactLength = 1 * fieldEl.getAttribute("data-exact-length"), obj = {
-                result: !Number.isNaN(exactLength) && valueLength === exactLength
-            };
-            return obj.result || (obj.errors = {
-                exactLength: !0
-            }, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), 
-            obj;
-        } catch (e) {
-            throw new Error('"data-exact-length" attribute is not a number!');
-        }
+        let valueLength = fieldEl.value.length, exactLength = 1 * fieldEl.getAttribute("data-exact-length"), obj = {
+            result: valueLength === exactLength
+        };
+        return obj.result || (obj.errors = {
+            exactLength: !0
+        }, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), 
+        obj;
     },
     file: function(fieldEl, fieldOptions) {
         let maxFileSize = 1 * (fieldEl.getAttribute("data-max-file-size") || fieldOptions.maxFileSize), MIMEtype = fieldEl.accept ? new RegExp(fieldEl.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from(fieldEl.files), obj = {
@@ -379,17 +371,13 @@ const init = function(formEl) {
         })), obj;
     },
     length: function(fieldEl) {
-        try {
-            let valueL = fieldEl.value.length, attrValue = JSON.parse(fieldEl.getAttribute("data-length")), isMinlengthOk = valueL >= attrValue[0], isMaxlengthOk = valueL <= attrValue[1], obj = {
-                result: isMinlengthOk && isMaxlengthOk
-            };
-            return obj.result || (obj.errors = {
-                stringLength: !0
-            }, isMinlengthOk || (obj.errors.minlength = !0), isMaxlengthOk || (obj.errors.maxlength = !0)), 
-            obj;
-        } catch (e) {
-            throw new Error('"data-length" attribute is not a valid array!');
-        }
+        let valueL = fieldEl.value.length, attrValue = JSON.parse(fieldEl.getAttribute("data-length")), isMinlengthOk = valueL >= attrValue[0], isMaxlengthOk = valueL <= attrValue[1], obj = {
+            result: isMinlengthOk && isMaxlengthOk
+        };
+        return obj.result || (obj.errors = {
+            stringLength: !0
+        }, isMinlengthOk || (obj.errors.minlength = !0), isMaxlengthOk || (obj.errors.maxlength = !0)), 
+        obj;
     },
     max: function(fieldEl) {
         let value = fieldEl.value, maxVal = fieldEl.max, dateFormat = fieldEl.getAttribute("data-date-format");
@@ -403,16 +391,12 @@ const init = function(formEl) {
         }), obj;
     },
     maxlength: function(fieldEl) {
-        try {
-            const obj = {
-                result: fieldEl.value.length <= 1 * fieldEl.maxLength
-            };
-            return obj.result || (obj.errors = {
-                maxlength: !0
-            }), obj;
-        } catch (e) {
-            throw new Error('"maxlength" is not a number!');
-        }
+        const obj = {
+            result: fieldEl.value.length <= 1 * fieldEl.maxLength
+        };
+        return obj.result || (obj.errors = {
+            maxlength: !0
+        }), obj;
     },
     min: function(fieldEl) {
         let value = fieldEl.value, minVal = fieldEl.min, dateFormat = fieldEl.getAttribute("data-date-format");
@@ -426,28 +410,20 @@ const init = function(formEl) {
         }), obj;
     },
     minlength: function(fieldEl) {
-        try {
-            const obj = {
-                result: fieldEl.value.length >= 1 * fieldEl.minLength
-            };
-            return obj.result || (obj.errors = {
-                minlength: !0
-            }), obj;
-        } catch (e) {
-            throw new Error('"minlength" is not a number!');
-        }
+        const obj = {
+            result: fieldEl.value.length >= 1 * fieldEl.minLength
+        };
+        return obj.result || (obj.errors = {
+            minlength: !0
+        }), obj;
     },
     pattern: function(fieldEl) {
-        try {
-            let fieldPattern = fieldEl.pattern, obj = {
-                result: new RegExp(fieldPattern).test(fieldEl.value)
-            };
-            return obj.result || (obj.errors = {
-                pattern: !0
-            }), obj;
-        } catch (e) {
-            throw new Error('"pattern" is not a valid RegExp!');
-        }
+        let fieldPattern = fieldEl.pattern, obj = {
+            result: new RegExp(fieldPattern).test(fieldEl.value)
+        };
+        return obj.result || (obj.errors = {
+            pattern: !0
+        }), obj;
     },
     radio: function(fieldEl) {
         let fieldChecked = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"]:checked');
@@ -456,12 +432,9 @@ const init = function(formEl) {
         };
     },
     requiredFrom: function(fieldEl) {
-        let formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0, reqMoreEl = formEl.querySelector(fieldEl.getAttribute("data-required-from")), obj = {
-            result: null !== formEl.querySelector('[name="' + reqMoreEl.name + '"]:checked')
+        return {
+            result: fieldEl.value.trim().length > 0
         };
-        return reqMoreEl.checked && reqMoreEl.required && (obj.result = isValidValue), obj.result || (obj.errors = {
-            requiredFrom: !0
-        }), obj;
     }
 };
 

@@ -60,6 +60,7 @@ h2 { font-size: 3em; border-bottom: 2px solid rgba(0,0,0,0.15); padding: 0.25em 
 h3 { font-size: 2em; }
 h1 .small { font-family: 'Raleway', sans-serif; font-size: 0.5em; color: inherit; }
 h3 .small { color: inherit; }
+.small-title { font-size: 1.25em; }
 .claim { font-size: 2rem; }
 .logo {
     font-family: 'Expletus Sans', sans-serif;

@@ -506,20 +506,16 @@ System.register([], function () {
         checkbox: function checkbox(fieldEl) {
           var dataChecksEl = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"][data-checks]');
           return dataChecksEl ? function (fieldEl) {
-            try {
-              var attrValue = JSON.parse(fieldEl.getAttribute("data-checks")),
-                  checkedElLength = fieldEl.closest("form").querySelectorAll('[name="' + fieldEl.name + '"]:checked').length,
-                  isMinOk = checkedElLength >= attrValue[0],
-                  isMaxOk = checkedElLength <= attrValue[1],
-                  obj = {
-                result: isMinOk && isMaxOk
-              };
-              return obj.result || (obj.errors = {
-                checks: !0
-              }, isMinOk || (obj.errors.minChecks = !0), isMaxOk || (obj.errors.maxChecks = !0)), obj;
-            } catch (e) {
-              throw new Error('"data-checks" attribute is not a valid array!');
-            }
+            var attrValue = JSON.parse(fieldEl.getAttribute("data-checks")),
+                checkedElLength = fieldEl.closest("form").querySelectorAll('[name="' + fieldEl.name + '"]:checked').length,
+                isMinOk = checkedElLength >= attrValue[0],
+                isMaxOk = checkedElLength <= attrValue[1],
+                obj = {
+              result: isMinOk && isMaxOk
+            };
+            return obj.result || (obj.errors = {
+              checks: !0
+            }, isMinOk || (obj.errors.minChecks = !0), isMaxOk || (obj.errors.maxChecks = !0)), obj;
           }(dataChecksEl) : {
             result: fieldEl.checked
           };
@@ -527,25 +523,21 @@ System.register([], function () {
         equalTo: function equalTo(fieldEl) {
           var checkFromEl = fieldEl.closest("form").querySelector('[name="' + fieldEl.getAttribute("data-equal-to") + '"]'),
               obj = {
-            result: !!checkFromEl && fieldEl.value === checkFromEl.value
+            result: fieldEl.value === checkFromEl.value
           };
           return obj.result || (obj.errors = {
             equalTo: !0
           }), obj;
         },
         exactLength: function exactLength(fieldEl) {
-          try {
-            var valueLength = fieldEl.value.length,
-                exactLength = 1 * fieldEl.getAttribute("data-exact-length"),
-                obj = {
-              result: !Number.isNaN(exactLength) && valueLength === exactLength
-            };
-            return obj.result || (obj.errors = {
-              exactLength: !0
-            }, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), obj;
-          } catch (e) {
-            throw new Error('"data-exact-length" attribute is not a number!');
-          }
+          var valueLength = fieldEl.value.length,
+              exactLength = 1 * fieldEl.getAttribute("data-exact-length"),
+              obj = {
+            result: valueLength === exactLength
+          };
+          return obj.result || (obj.errors = {
+            exactLength: !0
+          }, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), obj;
         },
         file: function file(fieldEl, fieldOptions) {
           var maxFileSize = 1 * (fieldEl.getAttribute("data-max-file-size") || fieldOptions.maxFileSize),
@@ -561,20 +553,16 @@ System.register([], function () {
           }), obj;
         },
         length: function length(fieldEl) {
-          try {
-            var valueL = fieldEl.value.length,
-                attrValue = JSON.parse(fieldEl.getAttribute("data-length")),
-                isMinlengthOk = valueL >= attrValue[0],
-                isMaxlengthOk = valueL <= attrValue[1],
-                obj = {
-              result: isMinlengthOk && isMaxlengthOk
-            };
-            return obj.result || (obj.errors = {
-              stringLength: !0
-            }, isMinlengthOk || (obj.errors.minlength = !0), isMaxlengthOk || (obj.errors.maxlength = !0)), obj;
-          } catch (e) {
-            throw new Error('"data-length" attribute is not a valid array!');
-          }
+          var valueL = fieldEl.value.length,
+              attrValue = JSON.parse(fieldEl.getAttribute("data-length")),
+              isMinlengthOk = valueL >= attrValue[0],
+              isMaxlengthOk = valueL <= attrValue[1],
+              obj = {
+            result: isMinlengthOk && isMaxlengthOk
+          };
+          return obj.result || (obj.errors = {
+            stringLength: !0
+          }, isMinlengthOk || (obj.errors.minlength = !0), isMaxlengthOk || (obj.errors.maxlength = !0)), obj;
         },
         max: function max(fieldEl) {
           var value = fieldEl.value,
@@ -589,16 +577,12 @@ System.register([], function () {
           }), obj;
         },
         maxlength: function maxlength(fieldEl) {
-          try {
-            var obj = {
-              result: fieldEl.value.length <= 1 * fieldEl.maxLength
-            };
-            return obj.result || (obj.errors = {
-              maxlength: !0
-            }), obj;
-          } catch (e) {
-            throw new Error('"maxlength" is not a number!');
-          }
+          var obj = {
+            result: fieldEl.value.length <= 1 * fieldEl.maxLength
+          };
+          return obj.result || (obj.errors = {
+            maxlength: !0
+          }), obj;
         },
         min: function min(fieldEl) {
           var value = fieldEl.value,
@@ -613,29 +597,21 @@ System.register([], function () {
           }), obj;
         },
         minlength: function minlength(fieldEl) {
-          try {
-            var obj = {
-              result: fieldEl.value.length >= 1 * fieldEl.minLength
-            };
-            return obj.result || (obj.errors = {
-              minlength: !0
-            }), obj;
-          } catch (e) {
-            throw new Error('"minlength" is not a number!');
-          }
+          var obj = {
+            result: fieldEl.value.length >= 1 * fieldEl.minLength
+          };
+          return obj.result || (obj.errors = {
+            minlength: !0
+          }), obj;
         },
         pattern: function pattern(fieldEl) {
-          try {
-            var fieldPattern = fieldEl.pattern,
-                obj = {
-              result: new RegExp(fieldPattern).test(fieldEl.value)
-            };
-            return obj.result || (obj.errors = {
-              pattern: !0
-            }), obj;
-          } catch (e) {
-            throw new Error('"pattern" is not a valid RegExp!');
-          }
+          var fieldPattern = fieldEl.pattern,
+              obj = {
+            result: new RegExp(fieldPattern).test(fieldEl.value)
+          };
+          return obj.result || (obj.errors = {
+            pattern: !0
+          }), obj;
         },
         radio: function radio(fieldEl) {
           var fieldChecked = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"]:checked');
@@ -644,15 +620,9 @@ System.register([], function () {
           };
         },
         requiredFrom: function requiredFrom(fieldEl) {
-          var formEl = fieldEl.closest("form"),
-              isValidValue = fieldEl.value.trim().length > 0,
-              reqMoreEl = formEl.querySelector(fieldEl.getAttribute("data-required-from")),
-              obj = {
-            result: null !== formEl.querySelector('[name="' + reqMoreEl.name + '"]:checked')
+          return {
+            result: fieldEl.value.trim().length > 0
           };
-          return reqMoreEl.checked && reqMoreEl.required && (obj.result = isValidValue), obj.result || (obj.errors = {
-            requiredFrom: !0
-          }), obj;
         }
       };
 

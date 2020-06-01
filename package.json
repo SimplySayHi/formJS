@@ -29,7 +29,7 @@
         "build": "BABEL_ENV=build rollup --config",
         "build-lite": "BABEL_ENV=build rollup --config rollup.config.lite.js",
         "build-demo": "BABEL_ENV=build rollup js/demos/app.js -f system -o js/demos/app-systemjs.js -p node-resolve -p babel",
-        "test": "BABEL_ENV=test jest"
+        "test": "BABEL_ENV=test jest --updateSnapshot"
     },
     "devDependencies": {
         "@babel/core": "^7.9.6",

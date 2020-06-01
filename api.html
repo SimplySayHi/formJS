@@ -66,9 +66,67 @@
             </div>
 
         <div class="mt-5">
-            <p>
+            <hr />
+            <p class="m-0">
                 Features included in Lite version have this badge: <span class="badge badge-pill badge-yellow">Lite</span>
             </p>
+            <div class="toggable-content-outer">
+                Get a quick peek of features included in Lite version:
+                <input type="checkbox" class="fake-checkbox btn-toggable-content" id="lite-show-more" />
+                <label class="toggable-label text-red" for="lite-show-more">
+                    <span>show more</span>
+                    <span>close</span>
+                </label>
+                <div class="toggable-content">
+                    <div class="d-flex flex-wrap">
+                        <div class="col-sm-6 col-md-3">
+                            <h3 class="small-title mt-3">Field Options</h3>
+                            <ul>
+                                <li>
+                                    beforeValidation
+                                </li>
+                                <li>
+                                    focusOnRelated
+                                </li>
+                                <li>
+                                    maxFileSize
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <h3 class="small-title mt-3">Methods</h3>
+                            <ul>
+                                <li>
+                                    destroy
+                                </li>
+                                <li>
+                                    validateField
+                                </li>
+                                <li>
+                                    validateForm
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <h3 class="small-title mt-3">Prototype</h3>
+                            <ul>
+                                <li>
+                                    as main version
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <h3 class="small-title mt-3">Validation Rules &amp; Errors</h3>
+                            <ul>
+                                <li>
+                                    as main version
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
         </div>
 
         <!-- Options -->
@@ -1486,6 +1544,10 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
                                 <div><code>type="file"</code></div>
+                                <p class="small mt-5 mb-1">
+                                    File size limit ( in MB ) can be specified like:
+                                </p>
+                                <div><code>data-max-file-size="10"</code></div>
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
@@ -2262,28 +2324,6 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 <pre>
 <code class="language-js">{
     pattern: true
-}</code></pre>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3 text-green">
-                                Require More &amp; Required From <span class="text-yellow">*</span>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
-                                <div>
-                                    <code>data-require-more="" id="element-that-requires-more"</code>
-                                    <code>data-required-from="#element-that-requires-more"</code>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
-                                <p>
-                                    For Required From field, "errors" object can contain these specific errors:
-                                </p>
-                                <pre>
-<code class="language-js">{
-    requiredFrom: true
 }</code></pre>
                             </div>
                         </div>
