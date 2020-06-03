@@ -199,11 +199,12 @@
                 <div class="row">
                     <div class="col-lg-6">
                     <pre>
-<code class="language-js">const formEl = document.querySelector('form');
+<code class="language-js">// STEP 1
+const formEl = document.querySelector('form');
 const options = {...};
 const formInstance = new Form( formEl, options );
 
-// INITIALIZATION ( OPTIONAL )
+// STEP 2 ( OPTIONAL )
 formInstance.init().then(obj => {
     console.log('instance', obj.instance);
     console.log('validated fields', obj.fields);
