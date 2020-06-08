@@ -8,9 +8,9 @@ export const defaultCallbacksInOptions = {
 
             const fieldOptions = this.options.fieldOptions;
 
-            checkDirtyField( fieldObj.fieldEl, fieldOptions.cssClasses.dirty );
+            checkDirtyField( fieldObj.fieldEl, fieldOptions );
             if( !fieldOptions.skipUIfeedback ){
-                addClass( fieldObj.fieldEl.closest('[data-formjs-question]'), fieldOptions.cssClasses.pending );
+                addClass( fieldObj.fieldEl.closest( fieldOptions.questionContainer ), fieldOptions.cssClasses.pending );
             }
 
         }

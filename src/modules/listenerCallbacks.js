@@ -95,7 +95,7 @@ export const listenerCallbacks = {
         fieldsArray.forEach(function( obj ){
             let fieldEl = obj.fieldEl;
             if( fieldEl.matches( fieldsStringSelector ) ){
-                let containerEl = fieldEl.closest('[data-formjs-question]'),
+                let containerEl = fieldEl.closest( options.questionContainer ),
                     isReqFrom = fieldEl.matches('[data-required-from]'),
                     reqMoreEl = document.querySelector( fieldEl.getAttribute('data-required-from') );
 

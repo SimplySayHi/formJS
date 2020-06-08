@@ -285,7 +285,12 @@
                             </div>
                             <div class="col-lg-8 col-xl-5">
                                 <p>
-                                    Whether or not the plugin must handle the fields validation ( as single checks and on form submit ).
+                                    Whether or not the plugin must handle the fields validation via event listener(s) and on form submit.
+                                </p>
+                                <p>
+                                    <span class="text-red">DEPRECATED</span><br />
+                                    Use Lite version to manually validate fields.
+                                    <br />This option will be removed soon.
                                 </p>
                             </div>
                         </div>
@@ -304,6 +309,11 @@
                                     Size limit ( in MB ) for each file to upload.<br />
                                     Set to 0 ( zero ) if you want to disable the size check.<br />
                                     Can also be set on the specific field via attribute <code>data-max-file-size</code> to set a custom limit.
+                                </p>
+                                <p>
+                                    <span class="text-red">DEPRECATED</span><br />
+                                    Use attribute <code>data-max-file-size</code> on the input field.
+                                    <br />This option will be removed soon.
                                 </p>
                             </div>
                         </div>
@@ -334,6 +344,21 @@
                             <div class="col-lg-8 col-xl-5">
                                 <p>
                                     CSS string selector for which the paste command will be disabled 
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                            <div class="col-lg-auto col-xl-4">
+                                <pre class="text-green">questionContainer</pre>
+                            </div>
+                            <div class="w-100 d-xl-none"></div>
+                            <div class="col-lg-4 col-xl-3">
+                                string
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-8 col-xl-5">
+                                <p>
+                                    CSS string selector used internally to find the container to add/remove CSS classes useful for feedback on UI.
                                 </p>
                             </div>
                         </div>
@@ -434,6 +459,7 @@
     maxFileSize:            10,
     onValidationCheckAll:   true,
     preventPasteFields:     '[type="password"], [data-equal-to]',
+    questionContainer:      '[data-formjs-question]',
     skipUIfeedback:         false,
     strictHtmlValidation:   true,
     validateOnEvents:       'input change'

@@ -19,6 +19,7 @@ export const options = {
         maxFileSize:            10,
         onValidationCheckAll:   true,
         preventPasteFields:     '[type="password"], [data-equal-to]',
+        questionContainer:      '[data-formjs-question]',
         skipUIfeedback:         false,
         strictHtmlValidation:   true,
         validateOnEvents:       'input change'

@@ -182,13 +182,14 @@ System.register([], function () {
         fieldOptions: {
           beforeValidation: function beforeValidation(fieldObj) {
             var fieldOptions = this.options.fieldOptions;
-            var fields, cssClasses;
-            fields = fieldObj.fieldEl, cssClasses = fieldOptions.cssClasses.dirty, (fields = isNodeList(fields) ? Array.from(fields) : [fields]).forEach(function (fieldEl) {
-              if ("checkbox" !== fieldEl.type && "radio" !== fieldEl.type) {
-                var containerEl = fieldEl.closest("[data-formjs-question]") || fieldEl;
-                fieldEl.value ? addClass(containerEl, cssClasses) : removeClass(containerEl, cssClasses);
-              }
-            }), fieldOptions.skipUIfeedback || addClass(fieldObj.fieldEl.closest("[data-formjs-question]"), fieldOptions.cssClasses.pending);
+            (function (fields, fieldOptions) {
+              (fields = isNodeList(fields) ? Array.from(fields) : [fields]).forEach(function (fieldEl) {
+                if ("checkbox" !== fieldEl.type && "radio" !== fieldEl.type) {
+                  var containerEl = fieldEl.closest(fieldOptions.questionContainer) || fieldEl;
+                  fieldEl.value ? addClass(containerEl, fieldOptions.cssClasses.dirty) : removeClass(containerEl, fieldOptions.cssClasses.dirty);
+                }
+              });
+            })(fieldObj.fieldEl, fieldOptions), fieldOptions.skipUIfeedback || addClass(fieldObj.fieldEl.closest(fieldOptions.questionContainer), fieldOptions.cssClasses.pending);
           }
         },
         formOptions: {
@@ -247,6 +248,7 @@ System.register([], function () {
           maxFileSize: 10,
           onValidationCheckAll: !0,
           preventPasteFields: '[type="password"], [data-equal-to]',
+          questionContainer: "[data-formjs-question]",
           skipUIfeedback: !1,
           strictHtmlValidation: !0,
           validateOnEvents: "input change"
@@ -440,7 +442,7 @@ System.register([], function () {
           var fieldEl = obj.fieldEl;
 
           if (fieldEl.matches(fieldsStringSelector)) {
-            var containerEl = fieldEl.closest("[data-formjs-question]"),
+            var containerEl = fieldEl.closest(options.questionContainer),
                 isReqFrom = fieldEl.matches("[data-required-from]"),
                 reqMoreEl = document.querySelector(fieldEl.getAttribute("data-required-from"));
             if (null !== containerEl && removeClass(containerEl, options.cssClasses.pending), null !== containerEl && !options.skipUIfeedback) if (obj.result) {

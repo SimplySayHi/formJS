@@ -19,7 +19,7 @@ export function isValid( fieldEl, fieldOptions, validationRules, validationError
 
     return new Promise(resolve => {
 
-        // RUN SPECIFIC VALIDATIONS FOR validationRulesAttributes
+        // RUN VALIDATIONS FROM validationRulesAttributes
         attrValidationsResult = Array.from(fieldEl.attributes).reduce((valResult, attr) => {
             // FOR data-* ATTRIBUTES -> REMOVE "data-" AND TRANSFORM TO CAMELCASE
             const attrName = toCamelCase( attr.name.replace('data-', '') ),
@@ -38,7 +38,7 @@ export function isValid( fieldEl, fieldOptions, validationRules, validationError
             return valResult;
         }, isValidValue);
 
-        // RUN VALIDATION FOR validationRules
+        // RUN VALIDATION FROM validationRules
         if( typeof validationRules[fieldType] === 'function' ){
             resolve( validationRules[fieldType](fieldValue, fieldEl) );
         } else {

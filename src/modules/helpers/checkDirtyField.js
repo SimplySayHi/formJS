@@ -3,22 +3,16 @@ import { addClass } from './addClass';
 import { isNodeList } from './isNodeList';
 import { removeClass } from './removeClass';
 
-export const checkDirtyField = ( fields, cssClasses ) => {
+export const checkDirtyField = ( fields, fieldOptions ) => {
 
-    var fields = (isNodeList(fields) ? Array.from( fields ) : [fields]);
-    
+    fields = isNodeList(fields) ? Array.from( fields ) : [fields];
     fields.forEach(fieldEl => {
         if( fieldEl.type !== 'checkbox' && fieldEl.type !== 'radio' ){
-            let containerEl = fieldEl.closest('[data-formjs-question]') || fieldEl;
-
+            const containerEl = fieldEl.closest( fieldOptions.questionContainer ) || fieldEl;
             if( fieldEl.value ){
-                
-                addClass( containerEl, cssClasses );
-                
+                addClass( containerEl, fieldOptions.cssClasses.dirty );
             } else {
-                
-                removeClass( containerEl, cssClasses );
-                
+                removeClass( containerEl, fieldOptions.cssClasses.dirty );
             }
         }
     });
