@@ -1,62 +1,60 @@
 
 import { getValidateFieldDefault, mergeObjects, toCamelCase } from './helpers';
-import { validationRulesAttributes } from './validationRulesAttributes';
 
 export function isValid( fieldEl, fieldOptions, validationRules, validationErrors ){
 
-    const fieldType = fieldEl.matches('[data-subtype]') ? toCamelCase(fieldEl.getAttribute('data-subtype')) : fieldEl.type,
-          fieldValue = fieldEl.value,
-          isValidValue = fieldValue.trim().length > 0;
+    const fieldValue = fieldEl.value;
 
-    let obj = getValidateFieldDefault({result: isValidValue, fieldEl});
+    let obj = getValidateFieldDefault({result: fieldValue.trim().length > 0, fieldEl});
 
     if( !obj.result ){
         obj.errors = { empty: true };
         return Promise.resolve(obj);
     }
 
-    let attrValidationsResult;
+    // COLLECT VALIDATION METHOD NAMES ( USED TO RUN VALIDATIONS AND GET ERRORS )
+    const validationMethods = Array.from(fieldEl.attributes).reduce((accList, attr) => {
+        const attrName = toCamelCase( attr.name.replace('data-', '') ),
+              attrValue = toCamelCase( attr.value ),
+              isAttrValueWithFn = (attrName === 'type' || attrName === 'subtype') && validationRules[attrValue],
+              isAttrNameWithFn = validationRules[attrName];
+
+        if( isAttrValueWithFn || isAttrNameWithFn ){
+            accList.push( isAttrValueWithFn ? attrValue : attrName );
+
+        }
+
+        return accList;
+    }, []);
 
     return new Promise(resolve => {
 
-        // RUN VALIDATIONS FROM validationRulesAttributes
-        attrValidationsResult = Array.from(fieldEl.attributes).reduce((valResult, attr) => {
-            // FOR data-* ATTRIBUTES -> REMOVE "data-" AND TRANSFORM TO CAMELCASE
-            const attrName = toCamelCase( attr.name.replace('data-', '') ),
-                  attrValue = attr.value,
-                  isAttrValueWithFn = attrName === 'type' && typeof validationRulesAttributes[attrValue] === 'function',
-                  isAttrNameWithFn = typeof validationRulesAttributes[attrName] === 'function';
-
-            if( isAttrValueWithFn || isAttrNameWithFn ){
-                const method = isAttrValueWithFn ? attrValue : attrName;
-                const extraVal = validationRulesAttributes[method]( fieldEl, fieldOptions );
-                if( !extraVal.result ){
-                    obj = mergeObjects({}, obj, extraVal);
-                    return false;
-                }
-            }
-            return valResult;
-        }, isValidValue);
-
-        // RUN VALIDATION FROM validationRules
-        if( typeof validationRules[fieldType] === 'function' ){
-            resolve( validationRules[fieldType](fieldValue, fieldEl) );
-        } else {
-            resolve( obj );
-        }
+        // RUN VALIDATIONS
+        const validationsResult = validationMethods.reduce((accPromise, methodName) => {
+            return accPromise.then(accObj => {
+                return new Promise(resolveVal => {
+                    // RUN VALIDATION INSIDE A PROMISE IS USEFUL FOR ASYNC VALIDATIONS
+                    resolveVal( validationRules[methodName](fieldValue, fieldEl, fieldOptions) );
+                }).then(valObj => {
+                    valObj = valObj.result ? {} : valObj;
+                    return mergeObjects(accObj, valObj);
+                });
+            });
+        }, Promise.resolve(obj));
+        
+        resolve(validationsResult);
 
     }).then(data => {
 
-        obj = mergeObjects( {}, obj, data );
-        obj.result = obj.result && attrValidationsResult;
-
-        if( !obj.result ){
-            const fieldErrors = (typeof validationErrors[fieldType] === 'function' ? validationErrors[fieldType](fieldValue, fieldEl) : {});
-            obj.errors = mergeObjects({}, obj.errors || {}, fieldErrors);
-            obj.errors.rule = true;
+        // GET ERRORS
+        if( !data.result ){
+            data.errors = validationMethods.reduce((accObj, methodName) => {
+                const errors = (validationErrors[methodName] && validationErrors[methodName](fieldValue, fieldEl, fieldOptions)) || {};
+                return mergeObjects(accObj, errors);
+            }, data.errors);
+            data.errors.rule = true;
         }
-        
-        return obj;
+        return data;
 
     });
 

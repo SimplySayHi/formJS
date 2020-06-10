@@ -1,9 +1,8 @@
 
 import { getDateAsNumber } from '../helpers';
 
-export const min = function( fieldEl ){
-    let value = fieldEl.value,
-        minVal = fieldEl.min,
+export const min = function( value, fieldEl ){
+    let minVal = fieldEl.min,
         dateFormat = fieldEl.getAttribute('data-date-format');
     
     if( fieldEl.type === 'date' || fieldEl.getAttribute('data-date-format') ){

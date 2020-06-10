@@ -1,9 +1,8 @@
 
 import { getDateAsNumber } from '../helpers';
 
-export const max = function( fieldEl ){
-    let value = fieldEl.value,
-        maxVal = fieldEl.max,
+export const max = function( value, fieldEl ){
+    let maxVal = fieldEl.max,
         dateFormat = fieldEl.getAttribute('data-date-format');
     
     if( fieldEl.type === 'date' || dateFormat ){

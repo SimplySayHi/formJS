@@ -86,10 +86,8 @@ var Form = function() {
             return {
                 result: /[+-]?([0-9]*[.])?[0-9]+/.test(string)
             };
-        }
-    };
-    var validationRulesAttributes = {
-        checkbox: function(fieldEl) {
+        },
+        checkbox: function(value, fieldEl) {
             var dataChecksEl = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"][data-checks]');
             return dataChecksEl ? function(fieldEl) {
                 var attrValue = JSON.parse(fieldEl.getAttribute("data-checks")), checkedElLength = fieldEl.closest("form").querySelectorAll('[name="' + fieldEl.name + '"]:checked').length, isMinOk = checkedElLength >= attrValue[0], isMaxOk = checkedElLength <= attrValue[1], obj = {
@@ -103,16 +101,16 @@ var Form = function() {
                 result: fieldEl.checked
             };
         },
-        equalTo: function(fieldEl) {
-            var checkFromEl = fieldEl.closest("form").querySelector('[name="' + fieldEl.getAttribute("data-equal-to") + '"]'), obj = {
-                result: fieldEl.value === checkFromEl.value
+        equalTo: function(value, fieldEl) {
+            var obj = {
+                result: value === fieldEl.closest("form").querySelector('[name="' + fieldEl.getAttribute("data-equal-to") + '"]').value
             };
             return obj.result || (obj.errors = {
                 equalTo: !0
             }), obj;
         },
-        exactLength: function(fieldEl) {
-            var valueLength = fieldEl.value.length, exactLength = 1 * fieldEl.getAttribute("data-exact-length"), obj = {
+        exactLength: function(value, fieldEl) {
+            var valueLength = value.length, exactLength = 1 * fieldEl.getAttribute("data-exact-length"), obj = {
                 result: valueLength === exactLength
             };
             return obj.result || (obj.errors = {
@@ -120,7 +118,7 @@ var Form = function() {
             }, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), 
             obj;
         },
-        file: function(fieldEl, fieldOptions) {
+        file: function(value, fieldEl, fieldOptions) {
             var maxFileSize = 1 * (fieldEl.getAttribute("data-max-file-size") || fieldOptions.maxFileSize), MIMEtype = fieldEl.accept ? new RegExp(fieldEl.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from(fieldEl.files), obj = {
                 result: !0
             };
@@ -130,8 +128,8 @@ var Form = function() {
                 obj.errors.file = !0, exceedMaxFileSize && (obj.errors.maxFileSize = !0), isAcceptedFileType || (obj.errors.acceptedFileType = !0));
             })), obj;
         },
-        length: function(fieldEl) {
-            var valueL = fieldEl.value.length, attrValue = JSON.parse(fieldEl.getAttribute("data-length")), isMinlengthOk = valueL >= attrValue[0], isMaxlengthOk = valueL <= attrValue[1], obj = {
+        length: function(value, fieldEl) {
+            var valueL = value.length, attrValue = JSON.parse(fieldEl.getAttribute("data-length")), isMinlengthOk = valueL >= attrValue[0], isMaxlengthOk = valueL <= attrValue[1], obj = {
                 result: isMinlengthOk && isMaxlengthOk
             };
             return obj.result || (obj.errors = {
@@ -139,8 +137,8 @@ var Form = function() {
             }, isMinlengthOk || (obj.errors.minlength = !0), isMaxlengthOk || (obj.errors.maxlength = !0)), 
             obj;
         },
-        max: function(fieldEl) {
-            var value = fieldEl.value, maxVal = fieldEl.max, dateFormat = fieldEl.getAttribute("data-date-format");
+        max: function(value, fieldEl) {
+            var maxVal = fieldEl.max, dateFormat = fieldEl.getAttribute("data-date-format");
             ("date" === fieldEl.type || dateFormat) && (value = getDateAsNumber(value, dateFormat), 
             maxVal = maxVal.split("-").join(""));
             var obj = {
@@ -150,16 +148,16 @@ var Form = function() {
                 max: !0
             }), obj;
         },
-        maxlength: function(fieldEl) {
+        maxlength: function(value, fieldEl) {
             var obj = {
-                result: fieldEl.value.length <= 1 * fieldEl.maxLength
+                result: value.length <= 1 * fieldEl.maxLength
             };
             return obj.result || (obj.errors = {
                 maxlength: !0
             }), obj;
         },
-        min: function(fieldEl) {
-            var value = fieldEl.value, minVal = fieldEl.min, dateFormat = fieldEl.getAttribute("data-date-format");
+        min: function(value, fieldEl) {
+            var minVal = fieldEl.min, dateFormat = fieldEl.getAttribute("data-date-format");
             ("date" === fieldEl.type || fieldEl.getAttribute("data-date-format")) && (value = getDateAsNumber(value, dateFormat), 
             minVal = minVal.split("-").join(""));
             var obj = {
@@ -169,31 +167,26 @@ var Form = function() {
                 min: !0
             }), obj;
         },
-        minlength: function(fieldEl) {
+        minlength: function(value, fieldEl) {
             var obj = {
-                result: fieldEl.value.length >= 1 * fieldEl.minLength
+                result: value.length >= 1 * fieldEl.minLength
             };
             return obj.result || (obj.errors = {
                 minlength: !0
             }), obj;
         },
-        pattern: function(fieldEl) {
+        pattern: function(value, fieldEl) {
             var fieldPattern = fieldEl.pattern, obj = {
-                result: new RegExp(fieldPattern).test(fieldEl.value)
+                result: new RegExp(fieldPattern).test(value)
             };
             return obj.result || (obj.errors = {
                 pattern: !0
             }), obj;
         },
-        radio: function(fieldEl) {
+        radio: function(value, fieldEl) {
             var fieldChecked = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"]:checked');
             return {
                 result: null !== fieldChecked && fieldChecked.value.trim().length > 0
-            };
-        },
-        requiredFrom: function(fieldEl) {
-            return {
-                result: fieldEl.value.trim().length > 0
             };
         }
     };
@@ -241,29 +234,34 @@ var Form = function() {
             var dataObj = data.pop();
             return new Promise((function(resolve) {
                 needsValidation || (dataObj.result = !0), resolve(needsValidation ? function(fieldEl, fieldOptions, validationRules, validationErrors) {
-                    var attrValidationsResult, fieldType = fieldEl.matches("[data-subtype]") ? toCamelCase(fieldEl.getAttribute("data-subtype")) : fieldEl.type, fieldValue = fieldEl.value, isValidValue = fieldValue.trim().length > 0, obj = getValidateFieldDefault({
-                        result: isValidValue,
+                    var fieldValue = fieldEl.value, obj = getValidateFieldDefault({
+                        result: fieldValue.trim().length > 0,
                         fieldEl: fieldEl
                     });
-                    return obj.result ? new Promise((function(resolve) {
-                        attrValidationsResult = Array.from(fieldEl.attributes).reduce((function(valResult, attr) {
-                            var attrName = toCamelCase(attr.name.replace("data-", "")), attrValue = attr.value, isAttrValueWithFn = "type" === attrName && "function" == typeof validationRulesAttributes[attrValue], isAttrNameWithFn = "function" == typeof validationRulesAttributes[attrName];
-                            if (isAttrValueWithFn || isAttrNameWithFn) {
-                                var extraVal = validationRulesAttributes[isAttrValueWithFn ? attrValue : attrName](fieldEl, fieldOptions);
-                                if (!extraVal.result) return obj = mergeObjects({}, obj, extraVal), !1;
-                            }
-                            return valResult;
-                        }), isValidValue), "function" == typeof validationRules[fieldType] ? resolve(validationRules[fieldType](fieldValue, fieldEl)) : resolve(obj);
-                    })).then((function(data) {
-                        if ((obj = mergeObjects({}, obj, data)).result = obj.result && attrValidationsResult, 
-                        !obj.result) {
-                            var fieldErrors = "function" == typeof validationErrors[fieldType] ? validationErrors[fieldType](fieldValue, fieldEl) : {};
-                            obj.errors = mergeObjects({}, obj.errors || {}, fieldErrors), obj.errors.rule = !0;
-                        }
-                        return obj;
-                    })) : (obj.errors = {
+                    if (!obj.result) return obj.errors = {
                         empty: !0
-                    }, Promise.resolve(obj));
+                    }, Promise.resolve(obj);
+                    var validationMethods = Array.from(fieldEl.attributes).reduce((function(accList, attr) {
+                        var attrName = toCamelCase(attr.name.replace("data-", "")), attrValue = toCamelCase(attr.value), isAttrValueWithFn = ("type" === attrName || "subtype" === attrName) && validationRules[attrValue], isAttrNameWithFn = validationRules[attrName];
+                        return (isAttrValueWithFn || isAttrNameWithFn) && accList.push(isAttrValueWithFn ? attrValue : attrName), 
+                        accList;
+                    }), []);
+                    return new Promise((function(resolve) {
+                        resolve(validationMethods.reduce((function(accPromise, methodName) {
+                            return accPromise.then((function(accObj) {
+                                return new Promise((function(resolveVal) {
+                                    resolveVal(validationRules[methodName](fieldValue, fieldEl, fieldOptions));
+                                })).then((function(valObj) {
+                                    return valObj = valObj.result ? {} : valObj, mergeObjects(accObj, valObj);
+                                }));
+                            }));
+                        }), Promise.resolve(obj)));
+                    })).then((function(data) {
+                        return data.result || (data.errors = validationMethods.reduce((function(accObj, methodName) {
+                            var errors = validationErrors[methodName] && validationErrors[methodName](fieldValue, fieldEl, fieldOptions) || {};
+                            return mergeObjects(accObj, errors);
+                        }), data.errors), data.errors.rule = !0), data;
+                    }));
                 }(fieldEl, fieldOptions, validationRules, validationErrors) : dataObj);
             }));
         }));

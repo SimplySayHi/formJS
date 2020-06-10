@@ -1,6 +1,6 @@
 
-export const requiredFrom = function( fieldEl ){
+export const requiredFrom = function( value ){
     return {
-        result: fieldEl.value.trim().length > 0
+        result: value.trim().length > 0
     };
 }

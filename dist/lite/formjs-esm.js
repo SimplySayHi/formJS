@@ -50,11 +50,8 @@ const isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), isDOM
         return {
             result: /[+-]?([0-9]*[.])?[0-9]+/.test(string)
         };
-    }
-};
-
-const validationRulesAttributes = {
-    checkbox: function(fieldEl) {
+    },
+    checkbox: function(value, fieldEl) {
         let dataChecksEl = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"][data-checks]');
         return dataChecksEl ? function(fieldEl) {
             let attrValue = JSON.parse(fieldEl.getAttribute("data-checks")), checkedElLength = fieldEl.closest("form").querySelectorAll('[name="' + fieldEl.name + '"]:checked').length, isMinOk = checkedElLength >= attrValue[0], isMaxOk = checkedElLength <= attrValue[1], obj = {
@@ -68,16 +65,16 @@ const validationRulesAttributes = {
             result: fieldEl.checked
         };
     },
-    equalTo: function(fieldEl) {
-        let checkFromEl = fieldEl.closest("form").querySelector('[name="' + fieldEl.getAttribute("data-equal-to") + '"]'), obj = {
-            result: fieldEl.value === checkFromEl.value
+    equalTo: function(value, fieldEl) {
+        let obj = {
+            result: value === fieldEl.closest("form").querySelector('[name="' + fieldEl.getAttribute("data-equal-to") + '"]').value
         };
         return obj.result || (obj.errors = {
             equalTo: !0
         }), obj;
     },
-    exactLength: function(fieldEl) {
-        let valueLength = fieldEl.value.length, exactLength = 1 * fieldEl.getAttribute("data-exact-length"), obj = {
+    exactLength: function(value, fieldEl) {
+        let valueLength = value.length, exactLength = 1 * fieldEl.getAttribute("data-exact-length"), obj = {
             result: valueLength === exactLength
         };
         return obj.result || (obj.errors = {
@@ -85,7 +82,7 @@ const validationRulesAttributes = {
         }, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), 
         obj;
     },
-    file: function(fieldEl, fieldOptions) {
+    file: function(value, fieldEl, fieldOptions) {
         let maxFileSize = 1 * (fieldEl.getAttribute("data-max-file-size") || fieldOptions.maxFileSize), MIMEtype = fieldEl.accept ? new RegExp(fieldEl.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from(fieldEl.files), obj = {
             result: !0
         };
@@ -95,8 +92,8 @@ const validationRulesAttributes = {
             obj.errors.file = !0, exceedMaxFileSize && (obj.errors.maxFileSize = !0), isAcceptedFileType || (obj.errors.acceptedFileType = !0));
         })), obj;
     },
-    length: function(fieldEl) {
-        let valueL = fieldEl.value.length, attrValue = JSON.parse(fieldEl.getAttribute("data-length")), isMinlengthOk = valueL >= attrValue[0], isMaxlengthOk = valueL <= attrValue[1], obj = {
+    length: function(value, fieldEl) {
+        let valueL = value.length, attrValue = JSON.parse(fieldEl.getAttribute("data-length")), isMinlengthOk = valueL >= attrValue[0], isMaxlengthOk = valueL <= attrValue[1], obj = {
             result: isMinlengthOk && isMaxlengthOk
         };
         return obj.result || (obj.errors = {
@@ -104,61 +101,56 @@ const validationRulesAttributes = {
         }, isMinlengthOk || (obj.errors.minlength = !0), isMaxlengthOk || (obj.errors.maxlength = !0)), 
         obj;
     },
-    max: function(fieldEl) {
-        let value = fieldEl.value, maxVal = fieldEl.max, dateFormat = fieldEl.getAttribute("data-date-format");
+    max: function(value, fieldEl) {
+        let maxVal = fieldEl.max, dateFormat = fieldEl.getAttribute("data-date-format");
         ("date" === fieldEl.type || dateFormat) && (value = getDateAsNumber(value, dateFormat), 
-        maxVal = maxVal.split("-").join("")), value *= 1, maxVal *= 1;
+        maxVal = maxVal.split("-").join("")), maxVal *= 1;
         let obj = {
-            result: value <= maxVal
+            result: (value *= 1) <= maxVal
         };
         return obj.result || (obj.errors = {
             max: !0
         }), obj;
     },
-    maxlength: function(fieldEl) {
+    maxlength: function(value, fieldEl) {
         const obj = {
-            result: fieldEl.value.length <= 1 * fieldEl.maxLength
+            result: value.length <= 1 * fieldEl.maxLength
         };
         return obj.result || (obj.errors = {
             maxlength: !0
         }), obj;
     },
-    min: function(fieldEl) {
-        let value = fieldEl.value, minVal = fieldEl.min, dateFormat = fieldEl.getAttribute("data-date-format");
+    min: function(value, fieldEl) {
+        let minVal = fieldEl.min, dateFormat = fieldEl.getAttribute("data-date-format");
         ("date" === fieldEl.type || fieldEl.getAttribute("data-date-format")) && (value = getDateAsNumber(value, dateFormat), 
-        minVal = minVal.split("-").join("")), value *= 1, minVal *= 1;
+        minVal = minVal.split("-").join("")), minVal *= 1;
         let obj = {
-            result: value >= minVal
+            result: (value *= 1) >= minVal
         };
         return obj.result || (obj.errors = {
             min: !0
         }), obj;
     },
-    minlength: function(fieldEl) {
+    minlength: function(value, fieldEl) {
         const obj = {
-            result: fieldEl.value.length >= 1 * fieldEl.minLength
+            result: value.length >= 1 * fieldEl.minLength
         };
         return obj.result || (obj.errors = {
             minlength: !0
         }), obj;
     },
-    pattern: function(fieldEl) {
+    pattern: function(value, fieldEl) {
         let fieldPattern = fieldEl.pattern, obj = {
-            result: new RegExp(fieldPattern).test(fieldEl.value)
+            result: new RegExp(fieldPattern).test(value)
         };
         return obj.result || (obj.errors = {
             pattern: !0
         }), obj;
     },
-    radio: function(fieldEl) {
+    radio: function(value, fieldEl) {
         let fieldChecked = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"]:checked');
         return {
             result: null !== fieldChecked && fieldChecked.value.trim().length > 0
-        };
-    },
-    requiredFrom: function(fieldEl) {
-        return {
-            result: fieldEl.value.trim().length > 0
         };
     }
 };
@@ -195,30 +187,27 @@ function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationEr
         let dataObj = data.pop();
         return new Promise(resolve => {
             needsValidation || (dataObj.result = !0), resolve(needsValidation ? function(fieldEl, fieldOptions, validationRules, validationErrors) {
-                const fieldType = fieldEl.matches("[data-subtype]") ? toCamelCase(fieldEl.getAttribute("data-subtype")) : fieldEl.type, fieldValue = fieldEl.value, isValidValue = fieldValue.trim().length > 0;
-                let attrValidationsResult, obj = getValidateFieldDefault({
-                    result: isValidValue,
+                const fieldValue = fieldEl.value;
+                let obj = getValidateFieldDefault({
+                    result: fieldValue.trim().length > 0,
                     fieldEl: fieldEl
                 });
-                return obj.result ? new Promise(resolve => {
-                    attrValidationsResult = Array.from(fieldEl.attributes).reduce((valResult, attr) => {
-                        const attrName = toCamelCase(attr.name.replace("data-", "")), attrValue = attr.value, isAttrValueWithFn = "type" === attrName && "function" == typeof validationRulesAttributes[attrValue], isAttrNameWithFn = "function" == typeof validationRulesAttributes[attrName];
-                        if (isAttrValueWithFn || isAttrNameWithFn) {
-                            const extraVal = validationRulesAttributes[isAttrValueWithFn ? attrValue : attrName](fieldEl, fieldOptions);
-                            if (!extraVal.result) return obj = mergeObjects({}, obj, extraVal), !1;
-                        }
-                        return valResult;
-                    }, isValidValue), "function" == typeof validationRules[fieldType] ? resolve(validationRules[fieldType](fieldValue, fieldEl)) : resolve(obj);
-                }).then(data => {
-                    if (obj = mergeObjects({}, obj, data), obj.result = obj.result && attrValidationsResult, 
-                    !obj.result) {
-                        const fieldErrors = "function" == typeof validationErrors[fieldType] ? validationErrors[fieldType](fieldValue, fieldEl) : {};
-                        obj.errors = mergeObjects({}, obj.errors || {}, fieldErrors), obj.errors.rule = !0;
-                    }
-                    return obj;
-                }) : (obj.errors = {
+                if (!obj.result) return obj.errors = {
                     empty: !0
-                }, Promise.resolve(obj));
+                }, Promise.resolve(obj);
+                const validationMethods = Array.from(fieldEl.attributes).reduce((accList, attr) => {
+                    const attrName = toCamelCase(attr.name.replace("data-", "")), attrValue = toCamelCase(attr.value), isAttrValueWithFn = ("type" === attrName || "subtype" === attrName) && validationRules[attrValue], isAttrNameWithFn = validationRules[attrName];
+                    return (isAttrValueWithFn || isAttrNameWithFn) && accList.push(isAttrValueWithFn ? attrValue : attrName), 
+                    accList;
+                }, []);
+                return new Promise(resolve => {
+                    resolve(validationMethods.reduce((accPromise, methodName) => accPromise.then(accObj => new Promise(resolveVal => {
+                        resolveVal(validationRules[methodName](fieldValue, fieldEl, fieldOptions));
+                    }).then(valObj => (valObj = valObj.result ? {} : valObj, mergeObjects(accObj, valObj)))), Promise.resolve(obj)));
+                }).then(data => (data.result || (data.errors = validationMethods.reduce((accObj, methodName) => {
+                    const errors = validationErrors[methodName] && validationErrors[methodName](fieldValue, fieldEl, fieldOptions) || {};
+                    return mergeObjects(accObj, errors);
+                }, data.errors), data.errors.rule = !0), data));
             }(fieldEl, fieldOptions, validationRules, validationErrors) : dataObj);
         });
     });

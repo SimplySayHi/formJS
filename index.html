@@ -204,10 +204,27 @@
                                 When valdiating a filed with method validateField and it's valid, the automatic form validation ( if "onValidationCheckAll" is set to true ) will skip this field
                             </li>
                             <li>
+                                Now all validation rules and errors can be overridden
+                            </li>
+                            <li>
                                 To improve consistency, now validations don't throw custom errors ( via new Error(...) in try/catch blocks ) anymore but default ones.
                             </li>
                             <li>
                                 Internal improvements
+                            </li>
+                            <li>
+                                Deprecated features:
+                                <ul>
+                                    <li>
+                                        fieldOptions.handleValidation
+                                    </li>
+                                    <li>
+                                        fieldOptions.maxFileSize
+                                    </li>
+                                    <li>
+                                        Key "rule" in object "errors" ( see "Built-in Errors" section in API )
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>

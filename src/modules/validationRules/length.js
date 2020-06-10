@@ -1,6 +1,6 @@
 
-export const length = function( fieldEl ){
-    let valueL = fieldEl.value.length,
+export const length = function( value, fieldEl ){
+    let valueL = value.length,
         attrValue = JSON.parse( fieldEl.getAttribute('data-length') ),
         isMinlengthOk = valueL >= attrValue[0],
         isMaxlengthOk = valueL <= attrValue[1],

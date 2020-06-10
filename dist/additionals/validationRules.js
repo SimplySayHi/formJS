@@ -155,12 +155,12 @@ var validationRules = {
     },
 
     username: function( string, fieldEl ){
-        // USERNAME WITH LETTERS/NUMBERS/UNDERSCORE AND . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
-        // /^[\w\.\-\@]{3,24}$/.test( string );
+        // MUST START WITH A LETTER/NUMBER/UNDERSCORE
+        // CAN ALSO CONTAIN . - @
+        // MIN LENGTH 3 AND MAX LENGTH 24
 
         var instance = fieldEl.closest('form').formjs;
         var obj = {
-            // USERNAME MUST START WITH A LETTER/NUMBER/UNDERSCORE AND CAN ALSO CONTAIN . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
             result: /^(?=\w)(?=[\-\.\@]?)[\w\-\.\@]{3,24}$/.test( string )
         };
 
