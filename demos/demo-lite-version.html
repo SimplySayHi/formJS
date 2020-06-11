@@ -150,33 +150,47 @@
                             </div>
                             <div class="card-body p-0">
                                 <pre class="m-0">
-<code class="language-js">const formEl = document.querySelector('form');
-const formInstance = new Form( formEl );
-
-function fieldValidationCallback(event){
-    const fieldEl = event.target;
+<code class="language-js">function checkDirtyField(fieldEl){
     const containerEl = fieldEl.closest('[data-formjs-question]');
-
+    containerEl.classList.remove('is-dirty');
     if( fieldEl.value ){
         containerEl.classList.add('is-dirty');
-    } else {
-        containerEl.classList.remove('is-dirty');
     }
+}
 
-    formInstance.validateField(fieldEl).then(obj => {
-        const className = obj.result ? 'is-valid' : 'has-error';
+function applyFeedbackOnUI(fieldObj){
+    const containerEl = fieldObj.fieldEl.closest('[data-formjs-question]');
+    const className = fieldObj.result ? 'is-valid' : 'has-error';
         containerEl.classList.remove('is-valid');
         containerEl.classList.remove('has-error');
         containerEl.classList.add( className );
-    });
 }
 
+function validateField(event){
+    const fieldEl = event.target;
+    if( !fieldEl.matches('input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea') ){
+        return;
+    }
+    const containerEl = fieldEl.closest('[data-formjs-question]');
+    formInstance.validateField(fieldEl).then(applyFeedbackOnUI);
+}
+
+const formEl = document.querySelector('form');
+const options = {
+    fieldOptions: {
+        beforeValidation: function(fieldObj){
+            checkDirtyField(fieldObj.fieldEl);
+        }
+    }
+};
+const formInstance = new Form( formEl, options );
+
 /* VALIDATE FIELDS WITH EVENT DELAGATION */
-formEl.addEventListener('blur', fieldValidationCallback, true);
+formEl.addEventListener('blur', validateField, true);
 
 /* VALIDATE FIELDS DIRECTLY */
 Array.from(document.querySelectorAll('[type="checkbox"], [type="radio"]')).forEach(fieldEl => {
-    fieldEl.addEventListener('change', fieldValidationCallback, false);
+    fieldEl.addEventListener('change', validateField, false);
 });
 
 formEl.addEventListener('submit', event => {
@@ -185,7 +199,8 @@ formEl.addEventListener('submit', event => {
         const formValidity = obj.result ? 'valid' : 'not valid';
         alert('Form is '+formValidity);
         obj.fields.forEach(fieldObj => {
-            fieldValidationCallback({target: fieldObj.fieldEl});
+            checkDirtyField(fieldObj.fieldEl);
+            applyFeedbackOnUI(fieldObj);
         });
     });
 });
@@ -286,33 +301,47 @@ formEl.addEventListener('submit', event => {
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise"></script>
     <script src="../dist/lite/formjs.min.js"></script>
     <script>
-        var formEl = document.querySelector('form');
-        var formInstance = new Form( formEl );
-
-        function fieldValidationCallback(event){
-            var fieldEl = event.target;
+        function checkDirtyField(fieldEl){
             var containerEl = fieldEl.closest('[data-formjs-question]');
-
+            containerEl.classList.remove('is-dirty');
             if( fieldEl.value ){
                 containerEl.classList.add('is-dirty');
-            } else {
-                containerEl.classList.remove('is-dirty');
             }
+        }
 
-            formInstance.validateField(fieldEl).then(function(obj){
-                var className = obj.result ? 'is-valid' : 'has-error';
+        function applyFeedbackOnUI(fieldObj){
+            var containerEl = fieldObj.fieldEl.closest('[data-formjs-question]');
+            var className = fieldObj.result ? 'is-valid' : 'has-error';
                 containerEl.classList.remove('is-valid');
                 containerEl.classList.remove('has-error');
                 containerEl.classList.add( className );
-            });
         }
 
+        function validateField(event){
+            var fieldEl = event.target;
+            if( !fieldEl.matches('input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea') ){
+                return;
+            }
+            var containerEl = fieldEl.closest('[data-formjs-question]');
+            formInstance.validateField(fieldEl).then(applyFeedbackOnUI);
+        }
+
+        var formEl = document.querySelector('form');
+        var options = {
+            fieldOptions: {
+                beforeValidation: function(fieldObj){
+                    checkDirtyField(fieldObj.fieldEl);
+                }
+            }
+        };
+        var formInstance = new Form( formEl, options );
+
         /* VALIDATE FIELDS WITH EVENT DELAGATION */
-        formEl.addEventListener('blur', fieldValidationCallback, true);
+        formEl.addEventListener('blur', validateField, true);
 
         /* VALIDATE FIELDS DIRECTLY */
         Array.from(document.querySelectorAll('[type="checkbox"], [type="radio"]')).forEach(function(fieldEl){
-            fieldEl.addEventListener('change', fieldValidationCallback, false);
+            fieldEl.addEventListener('change', validateField, false);
         });
 
         formEl.addEventListener('submit', function(event){
@@ -321,7 +350,8 @@ formEl.addEventListener('submit', event => {
                 var formValidity = obj.result ? 'valid' : 'not valid';
                 alert('Form is '+formValidity);
                 obj.fields.forEach(function(fieldObj){
-                    fieldValidationCallback({target: fieldObj.fieldEl});
+                    checkDirtyField(fieldObj.fieldEl);
+                    applyFeedbackOnUI(fieldObj);
                 });
             });
         });
