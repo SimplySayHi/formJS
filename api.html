@@ -1018,7 +1018,7 @@
                                 </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">newErrors</span>: JS object containing the new validation error(s) to add ( see example below ).
+                                        <span class="text-green">newErrors</span>: JS object containing the new validation error method(s) to add ( see example below ).
                                     </li>
                                 </ul>
                                 <p>
@@ -1033,10 +1033,16 @@
                                         value: a function with these arguments:
                                         <ul>
                                             <li>
-                                                string: the string the user put in the field
+                                                fieldValue: the string the user put in the field
+                                            </li>
+                                            <li>
+                                                fieldEl: the evaluated field
+                                            </li>
+                                            <li>
+                                                fieldOptions: fieldOptions of the form instance
                                             </li>
                                         </ul>
-                                        It must return a JS object with all the specific errors.
+                                        The function must return an object with all the specific errors.
                                     </li>
                                 </ul>
                             </div>
@@ -1075,16 +1081,19 @@
                                         value: a function with these arguments:
                                         <ul>
                                             <li>
-                                                string: the string the user put in the field
+                                                fieldValue: the string the user put in the field
                                             </li>
                                             <li>
-                                                fiedlEl: the JS node element of the field
+                                                fieldEl: the evaluated field
+                                            </li>
+                                            <li>
+                                                fieldOptions: fieldOptions of the form instance
                                             </li>
                                         </ul>
-                                        It must return a JS object ( at least ) like:
+                                        The function must return an object ( at least ) like:
                                         <pre>
 <code class="language-js">{
-    result: true
+    result: true // or false
 }</code></pre>
                                         In case of invalid field you can add the "errors" key to return the specific errors.
                                     </li>
@@ -1129,7 +1138,7 @@
                         </p>
                         <pre>
 <code class="language-js">Form.addValidationErrors({
-    username: function ( string ) {
+    username: function ( fieldValue, fieldEl, fieldOptions ) {
         var obj = {};
         var strLength = string.length;
         if( strLength &lt; 3 ){ obj.minlength = true; }
@@ -1141,7 +1150,7 @@
 });
 
 Form.addValidationRules({
-    myPassword: function( string, fieldEl ){
+    myPassword: function( fieldValue, fieldEl, fieldOptions ){
         var obj = {
             result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
         };
@@ -1162,10 +1171,10 @@ Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
                     </p>
                     <pre>
 <code class="language-js">// ADD/OVERRIDE A VALIDATION ERROR METHOD
-Form.prototype.validationErrors.email = function( string ){ ... }
+Form.prototype.validationErrors.email = function( fieldValue, fieldEl, fieldOptions ){ ... }
 
 // ADD/OVERRIDE A VALIDATION METHOD
-Form.prototype.validationRules.myPassword = function( string, fieldEl ){ ... }
+Form.prototype.validationRules.myPassword = function( fieldValue, fieldEl, fieldOptions ){ ... }
 
 // OVERRIDE AN OPTION
 Form.prototype.options.fieldOptions.maxFileSize = 100;
@@ -1217,8 +1226,8 @@ formInstance.options.fieldOptions.maxFileSize = 50;
 <pre>
 <code class="language-js">{
     fieldEl: fieldEl,
-    result: true,
-    errors: {}
+    result: false,
+    errors: {...}
 }
 </code></pre>
                             <ul>
