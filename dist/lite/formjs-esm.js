@@ -205,7 +205,7 @@ function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationEr
                         resolveVal(validationRules[methodName](fieldValue, fieldEl, fieldOptions));
                     }).then(valObj => (valObj = valObj.result ? {} : valObj, mergeObjects(accObj, valObj)))), Promise.resolve(obj)));
                 }).then(data => (data.result || (data.errors = validationMethods.reduce((accObj, methodName) => {
-                    const errors = validationErrors[methodName] && validationErrors[methodName](fieldValue, fieldEl, fieldOptions) || {};
+                    const errors = validationErrors[methodName] && validationErrors[methodName](fieldValue, fieldEl) || {};
                     return mergeObjects(accObj, errors);
                 }, data.errors), data.errors.rule = !0), data));
             }(fieldEl, fieldOptions, validationRules, validationErrors) : dataObj);

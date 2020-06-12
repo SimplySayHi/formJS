@@ -679,7 +679,7 @@ System.register([], function () {
                 }, Promise.resolve(obj)));
               }).then(function (data) {
                 return data.result || (data.errors = validationMethods.reduce(function (accObj, methodName) {
-                  var errors = validationErrors[methodName] && validationErrors[methodName](fieldValue, fieldEl, fieldOptions) || {};
+                  var errors = validationErrors[methodName] && validationErrors[methodName](fieldValue, fieldEl) || {};
                   return mergeObjects(accObj, errors);
                 }, data.errors), data.errors.rule = !0), data;
               });
