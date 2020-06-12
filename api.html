@@ -1041,9 +1041,6 @@
                                             <li>
                                                 fieldEl: the evaluated field
                                             </li>
-                                            <li>
-                                                fieldOptions: fieldOptions of the form instance
-                                            </li>
                                         </ul>
                                         The function must return an object with all the specific errors.
                                     </li>
@@ -1090,7 +1087,7 @@
                                                 fieldEl: the evaluated field
                                             </li>
                                             <li>
-                                                fieldOptions: fieldOptions of the form instance
+                                                fieldOptions: ( <span class="text-red">DEPRECATED</span> ) fieldOptions of the form instance
                                             </li>
                                         </ul>
                                         The function must return an object ( at least ) like:
@@ -1141,7 +1138,7 @@
                         </p>
                         <pre>
 <code class="language-js">Form.addValidationErrors({
-    username: function ( fieldValue, fieldEl, fieldOptions ) {
+    username: function ( fieldValue, fieldEl ) {
         var obj = {};
         var strLength = string.length;
         if( strLength &lt; 3 ){ obj.minlength = true; }
@@ -1153,7 +1150,7 @@
 });
 
 Form.addValidationRules({
-    myPassword: function( fieldValue, fieldEl, fieldOptions ){
+    myPassword: function( fieldValue, fieldEl ){
         var obj = {
             result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
         };
@@ -2169,6 +2166,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Email
                                 <div>( email )</div>
+                                <p>
+                                    <span class="text-red">DEPRECATED</span>
+                                </p>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
