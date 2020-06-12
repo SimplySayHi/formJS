@@ -49,7 +49,7 @@ export function isValid( fieldEl, fieldOptions, validationRules, validationError
         // GET ERRORS
         if( !data.result ){
             data.errors = validationMethods.reduce((accObj, methodName) => {
-                const errors = (validationErrors[methodName] && validationErrors[methodName](fieldValue, fieldEl, fieldOptions)) || {};
+                const errors = (validationErrors[methodName] && validationErrors[methodName](fieldValue, fieldEl)) || {};
                 return mergeObjects(accObj, errors);
             }, data.errors);
             data.errors.rule = true;
