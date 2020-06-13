@@ -1,6 +1,6 @@
 
-import { addClass, customEvents, dispatchCustomEvent, getValidateFormDefault, removeClass, runFunctionsSequence } from './helpers';
-import { ajaxCall } from './ajaxCall';
+import { addClass, customEvents, dispatchCustomEvent, getValidateFormDefault, removeClass, runFunctionsSequence } from '../helpers';
+import { ajaxCall } from '../ajaxCall';
 
 export function submit( event ){
 

@@ -1,6 +1,6 @@
 
 import { customEvents } from './helpers';
-import { listenerCallbacks } from './listenerCallbacks';
+import { keypressMaxlength, dataTypeNumber, pastePrevent, submit, validation, validationEnd } from './listenerCallbacks';
 
 export function formStartup( formEl, options ){
 
@@ -17,33 +17,33 @@ export function formStartup( formEl, options ){
             
             // maxlength
             // MAXLENGTH IS BUGGY IN ANDROID BROWSERS
-            formEl.addEventListener('keypress', listenerCallbacks.keypressMaxlength, false);
+            formEl.addEventListener('keypress', keypressMaxlength, false);
 
             // data-type="number"
             // SINCE VALIDATING type="number" WITH NON NUMERIC CHARS WILL RETURN EMPTY STRING IN SOME BROWSERS ( EG: FIREFOX )
-            formEl.addEventListener('input', listenerCallbacks.dataTypeNumber, false);
+            formEl.addEventListener('input', dataTypeNumber, false);
             
         }
         
         if( fieldOptions.preventPasteFields && formEl.querySelectorAll( fieldOptions.preventPasteFields ).length ){
             // INIT EVENT LISTENER FOR "PASTE" EVENT TO PREVENT IT ON SPECIFIED FIELDS
-            formEl.addEventListener('paste', listenerCallbacks.pastePrevent, false);
+            formEl.addEventListener('paste', pastePrevent, false);
         }
 
         // INIT EVENTS LISTENER ( AS IN fieldOptions )
         fieldOptions.validateOnEvents.split(' ').forEach(function( eventName ){
             let useCapturing = (eventName === 'blur' ? true : false);
-            formEl.addEventListener(eventName, listenerCallbacks.validation, useCapturing);
+            formEl.addEventListener(eventName, validation, useCapturing);
         });
 
-        formEl.addEventListener(customEvents.field.validation, listenerCallbacks.validationEnd, false);
+        formEl.addEventListener(customEvents.field.validation, validationEnd, false);
 
     }
     
     // HANDLE FORM SUBMIT
     if( formOptions.handleSubmit ){
         // INIT FORM SUBMIT ( DEFAULT AND AJAX )
-        formEl.addEventListener('submit', listenerCallbacks.submit);
+        formEl.addEventListener('submit', submit);
 
         if( formOptions.ajaxSubmit ){
             if( formEl.getAttribute('enctype') ){

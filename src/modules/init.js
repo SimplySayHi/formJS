@@ -1,6 +1,6 @@
 
 import { getFilledFields, isFieldForChangeEvent } from './helpers';
-import { listenerCallbacks } from './listenerCallbacks';
+import { validation } from './listenerCallbacks';
 
 export const init = function( formEl ){
 
@@ -12,7 +12,7 @@ export const init = function( formEl ){
 
         const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl);
         const fakeEventObj = { target: fieldEl, type: (isFieldForChangeEventBoolean ? 'change': '') };
-        return listenerCallbacks.validation( fakeEventObj );
+        return validation( fakeEventObj );
 
     }) ).then(fields => {
         instance.isInitialized = true;

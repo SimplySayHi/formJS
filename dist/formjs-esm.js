@@ -278,6 +278,26 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
             result: null !== fieldChecked && fieldChecked.value.trim().length > 0
         };
     }
+}, dataTypeNumber = function(event) {
+    const fieldEl = event.target;
+    if (fieldEl.matches('[data-type="number"]')) {
+        let fieldValue = fieldEl.value;
+        if (/[^\d.,+\-]/.test(fieldValue)) {
+            event.stopImmediatePropagation();
+            let valueReplaced = fieldValue.replace(/[^\d.,+\-]/g, "");
+            fieldEl.value = valueReplaced;
+        }
+    }
+}, keypressMaxlength = function(event) {
+    const fieldEl = event.target;
+    if (fieldEl.matches("[maxlength]")) {
+        const maxLength = 1 * fieldEl.maxLength, keyPressed = event.which || event.keyCode, allowedKeys = [ 8, 37, 38, 39, 46 ];
+        if (fieldEl.value.length >= maxLength && -1 === allowedKeys.indexOf(keyPressed)) return !1;
+    }
+}, pastePrevent = function(event) {
+    const fieldEl = event.target;
+    let fieldOptions = fieldEl.closest("form").formjs.options.fieldOptions;
+    fieldEl.matches(fieldOptions.preventPasteFields) && event.preventDefault();
 };
 
 function submit(event) {
@@ -349,29 +369,7 @@ function submit(event) {
     });
 }
 
-const listenerCallbacks_dataTypeNumber = function(event) {
-    const fieldEl = event.target;
-    if (fieldEl.matches('[data-type="number"]')) {
-        let fieldValue = fieldEl.value;
-        if (/[^\d.,+\-]/.test(fieldValue)) {
-            event.stopImmediatePropagation();
-            let valueReplaced = fieldValue.replace(/[^\d.,+\-]/g, "");
-            fieldEl.value = valueReplaced;
-        }
-    }
-}, listenerCallbacks_keypressMaxlength = function(event) {
-    const fieldEl = event.target;
-    if (fieldEl.matches("[maxlength]")) {
-        const maxLength = 1 * fieldEl.maxLength, keyPressed = event.which || event.keyCode, allowedKeys = [ 8, 37, 38, 39, 46 ];
-        if (fieldEl.value.length >= maxLength && -1 === allowedKeys.indexOf(keyPressed)) return !1;
-    }
-}, listenerCallbacks_pastePrevent = function(event) {
-    const fieldEl = event.target;
-    let fieldOptions = fieldEl.closest("form").formjs.options.fieldOptions;
-    fieldEl.matches(fieldOptions.preventPasteFields) && event.preventDefault();
-}, listenerCallbacks_submit = function(event) {
-    submit(event);
-}, listenerCallbacks_validation = function(event) {
+const validation = function(event) {
     const isChangeEvent = "change" === event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs;
     if (fieldEl.matches(fieldsStringSelector)) {
         const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl);
@@ -380,7 +378,7 @@ const listenerCallbacks_dataTypeNumber = function(event) {
             return (obj.fieldEl.required || obj.fieldEl.matches("[data-validate-if-filled]")) && "checkbox" !== type && "radio" !== type && realtedFieldEqualTo && "" !== realtedFieldEqualTo.value.trim() ? self.validateField(realtedFieldEqualTo) : obj;
         });
     }
-}, listenerCallbacks_validationEnd = function(event) {
+}, validationEnd = function(event) {
     const fieldsArray = event.data.fieldEl ? [ event.data ] : event.data.fields, options = fieldsArray[0].fieldEl.closest("form").formjs.options.fieldOptions;
     fieldsArray.forEach((function(obj) {
         let fieldEl = obj.fieldEl;
@@ -405,14 +403,13 @@ const listenerCallbacks_dataTypeNumber = function(event) {
 function formStartup(formEl, options) {
     formEl.noValidate = !0;
     let fieldOptions = options.fieldOptions, formOptions = options.formOptions;
-    fieldOptions.handleValidation && (fieldOptions.strictHtmlValidation && (formEl.addEventListener("keypress", listenerCallbacks_keypressMaxlength, !1), 
-    formEl.addEventListener("input", listenerCallbacks_dataTypeNumber, !1)), fieldOptions.preventPasteFields && formEl.querySelectorAll(fieldOptions.preventPasteFields).length && formEl.addEventListener("paste", listenerCallbacks_pastePrevent, !1), 
+    fieldOptions.handleValidation && (fieldOptions.strictHtmlValidation && (formEl.addEventListener("keypress", keypressMaxlength, !1), 
+    formEl.addEventListener("input", dataTypeNumber, !1)), fieldOptions.preventPasteFields && formEl.querySelectorAll(fieldOptions.preventPasteFields).length && formEl.addEventListener("paste", pastePrevent, !1), 
     fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
         let useCapturing = "blur" === eventName;
-        formEl.addEventListener(eventName, listenerCallbacks_validation, useCapturing);
-    })), formEl.addEventListener(customEvents_field.validation, listenerCallbacks_validationEnd, !1)), 
-    formOptions.handleSubmit && (formEl.addEventListener("submit", listenerCallbacks_submit), 
-    formOptions.ajaxSubmit && (formEl.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = formEl.getAttribute("enctype")), 
+        formEl.addEventListener(eventName, validation, useCapturing);
+    })), formEl.addEventListener(customEvents_field.validation, validationEnd, !1)), 
+    formOptions.handleSubmit && (formEl.addEventListener("submit", submit), formOptions.ajaxSubmit && (formEl.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = formEl.getAttribute("enctype")), 
     formEl.getAttribute("method") && (formOptions.ajaxOptions.method = formEl.getAttribute("method").toUpperCase()), 
     formEl.getAttribute("action") && (formOptions.ajaxOptions.url = formEl.getAttribute("action"))));
 }
@@ -424,7 +421,7 @@ const init = function(formEl) {
     }).filter(fieldEl => null !== fieldEl))(formEl);
     return Promise.all(formFields.map(fieldEl => {
         const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl);
-        return listenerCallbacks_validation({
+        return validation({
             target: fieldEl,
             type: isFieldForChangeEventBoolean ? "change" : ""
         });
@@ -524,13 +521,13 @@ class Form {
     }
     destroy() {
         !function(formEl, options) {
-            options.fieldOptions.strictHtmlValidation && (formEl.removeEventListener("keypress", listenerCallbacks_keypressMaxlength, !1), 
-            formEl.removeEventListener("input", listenerCallbacks_dataTypeNumber, !1)), options.fieldOptions.preventPasteFields && formEl.removeEventListener("paste", listenerCallbacks_pastePrevent, !1), 
-            options.formOptions.handleSubmit && formEl.removeEventListener("submit", listenerCallbacks_submit), 
+            options.fieldOptions.strictHtmlValidation && (formEl.removeEventListener("keypress", keypressMaxlength, !1), 
+            formEl.removeEventListener("input", dataTypeNumber, !1)), options.fieldOptions.preventPasteFields && formEl.removeEventListener("paste", pastePrevent, !1), 
+            options.formOptions.handleSubmit && formEl.removeEventListener("submit", submit), 
             options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                 let useCapturing = "blur" === eventName;
-                formEl.removeEventListener(eventName, listenerCallbacks_validation, useCapturing);
-            })), formEl.removeEventListener(customEvents_field.validation, listenerCallbacks_validationEnd, !1), 
+                formEl.removeEventListener(eventName, validation, useCapturing);
+            })), formEl.removeEventListener(customEvents_field.validation, validationEnd, !1), 
             delete formEl.formjs;
         }(this.formEl, this.options);
     }
@@ -564,7 +561,7 @@ class Form {
         return checkFormValidity(formEl, fieldOptions, this.validationRules, this.validationErrors).then(data => {
             const clMethodName = data.result ? "add" : "remove";
             return formEl.classList[clMethodName](this.options.formOptions.cssClasses.valid), 
-            listenerCallbacks_validationEnd({
+            validationEnd({
                 data: data
             }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
         });

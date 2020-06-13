@@ -4,7 +4,7 @@ import { customEvents, dispatchCustomEvent, excludeSelector, mergeObjects, remov
 import { options }              from './modules/options';
 import { validationRules }      from './modules/validationRules';
 import { validationErrors }     from './modules/validationErrors';
-import { listenerCallbacks }    from './modules/listenerCallbacks';
+import { validationEnd }        from './modules/listenerCallbacks';
 import { constructorFn }        from './modules/constructor';
 import { destroy }              from './modules/destroy';
 import { init }                 from './modules/init';
@@ -72,7 +72,7 @@ class Form {
             .then(data => {
                 const clMethodName = data.result ? 'add' : 'remove';
                 formEl.classList[clMethodName]( this.options.formOptions.cssClasses.valid );
-                listenerCallbacks.validationEnd( {data} );
+                validationEnd( {data} );
                 dispatchCustomEvent( formEl, customEvents.form.validation, data );
                 return data;
             });
