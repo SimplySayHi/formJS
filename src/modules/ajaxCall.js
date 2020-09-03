@@ -18,8 +18,7 @@ const getFetchMethod = (response, options) => {
 export function ajaxCall( formEl, formDataObj, options ){
 
     let timeoutTimer;
-    const btnEl = formEl.querySelector('[type="submit"]'),
-          ajaxOptions = mergeObjects( {}, options.formOptions.ajaxOptions ),
+    const ajaxOptions = mergeObjects( {}, options.formOptions.ajaxOptions ),
           isMultipart = ajaxOptions.headers['Content-Type'] === 'multipart/form-data';
 
     ajaxOptions.body = formDataObj;
@@ -94,7 +93,7 @@ export function ajaxCall( formEl, formDataObj, options ){
             }
             removeClass( formEl, options.formOptions.cssClasses.submit + ' ' + options.formOptions.cssClasses.ajaxPending );
             addClass( formEl, options.formOptions.cssClasses.ajaxComplete );
-            btnEl.disabled = false;
+            formEl.querySelector('[type="submit"]').disabled = false;
         });
 
 }

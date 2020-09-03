@@ -20,7 +20,7 @@ export function checkFormValidity( formEl, fieldOptions, validationRules, valida
 
     }) ).then(list => {
 
-        let areAllFieldsValid = list.filter(fieldObj => !fieldObj.result).length === 0;
+        const areAllFieldsValid = list.filter(fieldObj => !fieldObj.result).length === 0;
         obj.result = areAllFieldsValid;
         obj.fields = list;
 

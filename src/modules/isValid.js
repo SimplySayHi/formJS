@@ -5,7 +5,7 @@ export function isValid( fieldEl, fieldOptions, validationRules, validationError
 
     const fieldValue = fieldEl.value;
 
-    let obj = getValidateFieldDefault({result: fieldValue.trim().length > 0, fieldEl});
+    const obj = getValidateFieldDefault({result: fieldValue.trim().length > 0, fieldEl});
 
     if( !obj.result ){
         obj.errors = { empty: true };
