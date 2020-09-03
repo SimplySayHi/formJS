@@ -41,7 +41,7 @@ System.register([], function () {
         return Constructor;
       }
 
-      /* formJS v4.1.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+      /* formJS v5.0.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
       var addClass = function addClass(element, cssClasses) {
         cssClasses.split(" ").forEach(function (className) {
           element.classList.add(className);
@@ -132,12 +132,6 @@ System.register([], function () {
         return mergeObjects({}, {
           result: !1,
           fieldEl: null
-        }, obj);
-      },
-          getValidateFormDefault = function getValidateFormDefault(obj) {
-        return mergeObjects({}, {
-          result: !0,
-          fields: []
         }, obj);
       },
           isFieldForChangeEvent = function isFieldForChangeEvent(fieldEl) {
@@ -244,8 +238,6 @@ System.register([], function () {
           },
           focusOnRelated: !0,
           handleFileUpload: !0,
-          handleValidation: !0,
-          maxFileSize: 10,
           onValidationCheckAll: !0,
           preventPasteFields: '[type="password"], [data-equal-to]',
           questionContainer: "[data-formjs-question]",
@@ -315,12 +307,9 @@ System.register([], function () {
           };
         },
         equalTo: function equalTo(value, fieldEl) {
-          var obj = {
+          return {
             result: value === fieldEl.closest("form").querySelector('[name="' + fieldEl.getAttribute("data-equal-to") + '"]').value
           };
-          return obj.result || (obj.errors = {
-            equalTo: !0
-          }), obj;
         },
         exactLength: function exactLength(value, fieldEl) {
           var valueLength = value.length,
@@ -328,12 +317,10 @@ System.register([], function () {
               obj = {
             result: valueLength === exactLength
           };
-          return obj.result || (obj.errors = {
-            exactLength: !0
-          }, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), obj;
+          return obj.result || (obj.errors = {}, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), obj;
         },
-        file: function file(value, fieldEl, fieldOptions) {
-          var maxFileSize = 1 * (fieldEl.getAttribute("data-max-file-size") || fieldOptions.maxFileSize),
+        file: function file(value, fieldEl) {
+          var maxFileSize = 1 * (fieldEl.getAttribute("data-max-file-size") || 0),
               MIMEtype = fieldEl.accept ? new RegExp(fieldEl.accept.replace("*", "[^\\/,]+")) : null,
               filesList = Array.from(fieldEl.files),
               obj = {
@@ -342,7 +329,7 @@ System.register([], function () {
           return filesList.forEach(function (file) {
             var exceedMaxFileSize = maxFileSize > 0 && file.size / 1024 / 1024 > maxFileSize,
                 isAcceptedFileType = null === MIMEtype || MIMEtype.test(file.type);
-            !exceedMaxFileSize && isAcceptedFileType || (obj.result = !1, void 0 === obj.errors && (obj.errors = {}), obj.errors.file = !0, exceedMaxFileSize && (obj.errors.maxFileSize = !0), isAcceptedFileType || (obj.errors.acceptedFileType = !0));
+            !exceedMaxFileSize && isAcceptedFileType || (obj.result = !1, void 0 === obj.errors && (obj.errors = {}), exceedMaxFileSize && (obj.errors.maxFileSize = !0), isAcceptedFileType || (obj.errors.acceptedFileType = !0));
           }), obj;
         },
         length: function length(value, fieldEl) {
@@ -353,56 +340,36 @@ System.register([], function () {
               obj = {
             result: isMinlengthOk && isMaxlengthOk
           };
-          return obj.result || (obj.errors = {
-            stringLength: !0
-          }, isMinlengthOk || (obj.errors.minlength = !0), isMaxlengthOk || (obj.errors.maxlength = !0)), obj;
+          return obj.result || (obj.errors = {}, isMinlengthOk || (obj.errors.minlength = !0), isMaxlengthOk || (obj.errors.maxlength = !0)), obj;
         },
         max: function max(value, fieldEl) {
-          var maxVal = fieldEl.max,
-              dateFormat = fieldEl.getAttribute("data-date-format");
-          ("date" === fieldEl.type || dateFormat) && (value = getDateAsNumber(value, dateFormat), maxVal = maxVal.split("-").join("")), maxVal *= 1;
-          var obj = {
+          var maxVal = fieldEl.max;
+          var dateFormat = fieldEl.getAttribute("data-date-format");
+          return ("date" === fieldEl.type || dateFormat) && (value = getDateAsNumber(value, dateFormat), maxVal = maxVal.split("-").join("")), maxVal *= 1, {
             result: (value *= 1) <= maxVal
           };
-          return obj.result || (obj.errors = {
-            max: !0
-          }), obj;
         },
         maxlength: function maxlength(value, fieldEl) {
-          var obj = {
+          return {
             result: value.length <= 1 * fieldEl.maxLength
           };
-          return obj.result || (obj.errors = {
-            maxlength: !0
-          }), obj;
         },
         min: function min(value, fieldEl) {
-          var minVal = fieldEl.min,
-              dateFormat = fieldEl.getAttribute("data-date-format");
-          ("date" === fieldEl.type || fieldEl.getAttribute("data-date-format")) && (value = getDateAsNumber(value, dateFormat), minVal = minVal.split("-").join("")), minVal *= 1;
-          var obj = {
+          var minVal = fieldEl.min;
+          var dateFormat = fieldEl.getAttribute("data-date-format");
+          return ("date" === fieldEl.type || fieldEl.getAttribute("data-date-format")) && (value = getDateAsNumber(value, dateFormat), minVal = minVal.split("-").join("")), minVal *= 1, {
             result: (value *= 1) >= minVal
           };
-          return obj.result || (obj.errors = {
-            min: !0
-          }), obj;
         },
         minlength: function minlength(value, fieldEl) {
-          var obj = {
+          return {
             result: value.length >= 1 * fieldEl.minLength
           };
-          return obj.result || (obj.errors = {
-            minlength: !0
-          }), obj;
         },
         pattern: function pattern(value, fieldEl) {
-          var fieldPattern = fieldEl.pattern,
-              obj = {
-            result: new RegExp(fieldPattern).test(value)
+          return {
+            result: new RegExp(fieldEl.pattern).test(value)
           };
-          return obj.result || (obj.errors = {
-            pattern: !0
-          }), obj;
         },
         radio: function radio(value, fieldEl) {
           var fieldChecked = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"]:checked');
@@ -435,8 +402,8 @@ System.register([], function () {
         }
       },
           pastePrevent = function pastePrevent(event) {
-        var fieldEl = event.target;
-        var fieldOptions = fieldEl.closest("form").formjs.options.fieldOptions;
+        var fieldEl = event.target,
+            fieldOptions = fieldEl.closest("form").formjs.options.fieldOptions;
         fieldEl.matches(fieldOptions.preventPasteFields) && event.preventDefault();
       };
 
@@ -457,7 +424,7 @@ System.register([], function () {
           btnEl.disabled = !0;
         }
 
-        removeClass(formEl, formCssClasses.ajaxComplete + " " + formCssClasses.ajaxError + " " + formCssClasses.ajaxSuccess), addClass(formEl, formCssClasses.submit), (options.fieldOptions.handleValidation ? instance.validateForm() : Promise.resolve(getValidateFormDefault())).then(function (formValidation) {
+        removeClass(formEl, formCssClasses.ajaxComplete + " " + formCssClasses.ajaxError + " " + formCssClasses.ajaxSuccess), addClass(formEl, formCssClasses.submit), instance.validateForm().then(function (formValidation) {
           var beforeSendData = {
             stopExecution: !1,
             formData: {}
@@ -480,9 +447,8 @@ System.register([], function () {
           if (isAjaxForm) {
             var formData = dataList.pop().formData;
             addClass(formEl, formCssClasses.ajaxPending), dispatchCustomEvent(formEl, customEvents_form.submit, function (formEl, formDataObj, options) {
-              var timeoutTimer,
-                  btnEl = formEl.querySelector('[type="submit"]'),
-                  ajaxOptions = mergeObjects({}, options.formOptions.ajaxOptions),
+              var timeoutTimer;
+              var ajaxOptions = mergeObjects({}, options.formOptions.ajaxOptions),
                   isMultipart = "multipart/form-data" === ajaxOptions.headers["Content-Type"];
 
               if (ajaxOptions.body = formDataObj, isMultipart && options.fieldOptions.handleFileUpload) {
@@ -524,7 +490,7 @@ System.register([], function () {
               })["catch"](function (error) {
                 return addClass(formEl, options.formOptions.cssClasses.ajaxError), Promise.reject(error);
               })["finally"](function () {
-                timeoutTimer && window.clearTimeout(timeoutTimer), removeClass(formEl, options.formOptions.cssClasses.submit + " " + options.formOptions.cssClasses.ajaxPending), addClass(formEl, options.formOptions.cssClasses.ajaxComplete), btnEl.disabled = !1;
+                timeoutTimer && window.clearTimeout(timeoutTimer), removeClass(formEl, options.formOptions.cssClasses.submit + " " + options.formOptions.cssClasses.ajaxPending), addClass(formEl, options.formOptions.cssClasses.ajaxComplete), formEl.querySelector('[type="submit"]').disabled = !1;
               });
             }(formEl, formData, options));
           }
@@ -561,8 +527,8 @@ System.register([], function () {
                 removeClass(containerEl, errorClasses), addClass(containerEl, options.cssClasses.valid);
               }
             } else {
-              var extraErrorClass = options.cssClasses.errorRule,
-                  isChecks = fieldEl.matches("[data-checks]"),
+              var extraErrorClass = options.cssClasses.errorRule;
+              var isChecks = fieldEl.matches("[data-checks]"),
                   checkedElLength = isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0;
               (!isChecks && obj.errors && obj.errors.empty || isChecks && 0 === checkedElLength) && (extraErrorClass = options.cssClasses.errorEmpty);
 
@@ -579,10 +545,10 @@ System.register([], function () {
         formEl.noValidate = !0;
         var fieldOptions = options.fieldOptions,
             formOptions = options.formOptions;
-        fieldOptions.handleValidation && (fieldOptions.strictHtmlValidation && (formEl.addEventListener("keypress", keypressMaxlength, !1), formEl.addEventListener("input", dataTypeNumber, !1)), fieldOptions.preventPasteFields && formEl.querySelectorAll(fieldOptions.preventPasteFields).length && formEl.addEventListener("paste", pastePrevent, !1), fieldOptions.validateOnEvents.split(" ").forEach(function (eventName) {
+        fieldOptions.strictHtmlValidation && (formEl.addEventListener("keypress", keypressMaxlength, !1), formEl.addEventListener("input", dataTypeNumber, !1)), fieldOptions.preventPasteFields && formEl.querySelectorAll(fieldOptions.preventPasteFields).length && formEl.addEventListener("paste", pastePrevent, !1), fieldOptions.validateOnEvents.split(" ").forEach(function (eventName) {
           var useCapturing = "blur" === eventName;
           formEl.addEventListener(eventName, validation, useCapturing);
-        }), formEl.addEventListener(customEvents_field.validation, validationEnd, !1)), formOptions.handleSubmit && (formEl.addEventListener("submit", submit), formOptions.ajaxSubmit && (formEl.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = formEl.getAttribute("enctype")), formEl.getAttribute("method") && (formOptions.ajaxOptions.method = formEl.getAttribute("method").toUpperCase()), formEl.getAttribute("action") && (formOptions.ajaxOptions.url = formEl.getAttribute("action"))));
+        }), formEl.addEventListener(customEvents_field.validation, validationEnd, !1), formOptions.handleSubmit && (formEl.addEventListener("submit", submit), formOptions.ajaxSubmit && (formEl.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = formEl.getAttribute("enctype")), formEl.getAttribute("method") && (formOptions.ajaxOptions.method = formEl.getAttribute("method").toUpperCase()), formEl.getAttribute("action") && (formOptions.ajaxOptions.url = formEl.getAttribute("action"))));
       }
 
       var _init = function init(formEl) {
@@ -648,9 +614,9 @@ System.register([], function () {
         }).then(function (data) {
           var dataObj = data.pop();
           return new Promise(function (resolve) {
-            needsValidation || (dataObj.result = !0), resolve(needsValidation ? function (fieldEl, fieldOptions, validationRules, validationErrors) {
-              var fieldValue = fieldEl.value;
-              var obj = getValidateFieldDefault({
+            needsValidation || (dataObj.result = !0), resolve(needsValidation ? function (fieldEl, validationRules, validationErrors) {
+              var fieldValue = fieldEl.value,
+                  obj = getValidateFieldDefault({
                 result: fieldValue.trim().length > 0,
                 fieldEl: fieldEl
               });
@@ -668,8 +634,13 @@ System.register([], function () {
                 resolve(validationMethods.reduce(function (accPromise, methodName) {
                   return accPromise.then(function (accObj) {
                     return new Promise(function (resolveVal) {
-                      resolveVal(validationRules[methodName](fieldValue, fieldEl, fieldOptions));
+                      resolveVal(validationRules[methodName](fieldValue, fieldEl));
                     }).then(function (valObj) {
+                      if (!valObj.result) {
+                        var errorObj = {};
+                        void 0 !== valObj.errors && void 0 !== valObj.errors[methodName] || (errorObj[methodName] = !0), valObj.errors = mergeObjects({}, valObj.errors, errorObj);
+                      }
+
                       return valObj = valObj.result ? {} : valObj, mergeObjects(accObj, valObj);
                     });
                   });
@@ -678,9 +649,9 @@ System.register([], function () {
                 return data.result || (data.errors = validationMethods.reduce(function (accObj, methodName) {
                   var errors = validationErrors[methodName] && validationErrors[methodName](fieldValue, fieldEl) || {};
                   return mergeObjects(accObj, errors);
-                }, data.errors), data.errors.rule = !0), data;
+                }, data.errors)), data;
               });
-            }(fieldEl, fieldOptions, validationRules, validationErrors) : dataObj);
+            }(fieldEl, validationRules, validationErrors) : dataObj);
           });
         });
       }
@@ -690,8 +661,15 @@ System.register([], function () {
         fieldOptions = mergeObjects({}, fieldOptions, {
           focusOnRelated: !1
         });
-        var obj = getValidateFormDefault(),
+
+        var obj = function (obj) {
+          return mergeObjects({}, {
+            result: !0,
+            fields: []
+          }, obj);
+        }(),
             fieldsList = getUniqueFields(formEl.querySelectorAll(fieldsStringSelector));
+
         return Promise.all(fieldsList.map(function (fieldEl) {
           if (fieldToSkip && fieldEl === fieldToSkip) {
             var obj2 = getValidateFieldDefault({
@@ -723,8 +701,8 @@ System.register([], function () {
             self.formEl = checkFormElem.element, self.formEl.formjs = self, self.options = mergeObjects({}, self.constructor.prototype.options, optionsObj);
             var cbList = ["beforeValidation", "beforeSend", "getFormData"];
             cbList.forEach(function (cbName) {
-              var optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions",
-                  cbOpt = self.options[optionType][cbName];
+              var optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions";
+              var cbOpt = self.options[optionType][cbName];
               cbOpt && (self.options[optionType][cbName] = Array.isArray(cbOpt) ? cbOpt.map(function (cbFn) {
                 return cbFn.bind(self);
               }) : cbOpt.bind(self));
@@ -809,19 +787,7 @@ System.register([], function () {
         return Form;
       }();
 
-      Form.prototype.isInitialized = !1, Form.prototype.options = options, Form.prototype.validationErrors = {
-        email: function email(string) {
-          var obj = {};
-          if (-1 === string.indexOf("@")) obj.missingAtChar = !0;else {
-            var splitAt_at = string.split("@");
-            if (0 === splitAt_at[0].length && (obj.missingUserName = !0), 0 === splitAt_at[1].length) obj.missingDomain = !0, obj.missingExtensionDot = !0, obj.missingExtension = !0;else if (-1 === splitAt_at[1].indexOf(".")) obj.missingExtensionDot = !0, obj.missingExtension = !0;else {
-              var extLength = splitAt_at[1].split(".")[1].length;
-              0 === extLength ? obj.missingExtension = !0 : extLength < 2 && (obj.minlengthExtension = !0);
-            }
-          }
-          return obj;
-        }
-      }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.1.0";
+      Form.prototype.isInitialized = !1, Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, Form.prototype.version = "5.0.0";
 
       var formEl = document.querySelector('form');
       var formInstance = new Form(formEl);

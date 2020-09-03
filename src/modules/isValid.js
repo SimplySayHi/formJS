@@ -36,6 +36,14 @@ export function isValid( fieldEl, validationRules, validationErrors ){
                     // RUN VALIDATION INSIDE A PROMISE IS USEFUL FOR ASYNC VALIDATIONS
                     resolveVal( validationRules[methodName](fieldValue, fieldEl) );
                 }).then(valObj => {
+                    // ADD CUSTOM ERROR-KEY FOR EACH VALIDATION RULE
+                    if( !valObj.result ){
+                        const errorObj = {};
+                        if( typeof valObj.errors === 'undefined' || typeof valObj.errors[methodName] === 'undefined' ){
+                            errorObj[methodName] = true;
+                        }
+                        valObj.errors = mergeObjects({}, valObj.errors, errorObj);
+                    }
                     valObj = valObj.result ? {} : valObj;
                     return mergeObjects(accObj, valObj);
                 });
@@ -52,7 +60,6 @@ export function isValid( fieldEl, validationRules, validationErrors ){
                 const errors = (validationErrors[methodName] && validationErrors[methodName](fieldValue, fieldEl)) || {};
                 return mergeObjects(accObj, errors);
             }, data.errors);
-            data.errors.rule = true;
         }
         return data;
 

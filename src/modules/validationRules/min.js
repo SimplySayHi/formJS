@@ -12,12 +12,6 @@ export const min = function( value, fieldEl ){
 
     value = value * 1;
     minVal = minVal * 1;
-
-    const obj = { result: value >= minVal };
-
-    if( !obj.result ){
-        obj.errors = { min: true };
-    }
     
-    return obj;
+    return { result: value >= minVal };
 }

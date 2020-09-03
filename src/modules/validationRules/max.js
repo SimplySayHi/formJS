@@ -12,12 +12,6 @@ export const max = function( value, fieldEl ){
 
     value = value * 1;
     maxVal = maxVal * 1;
-
-    const obj = { result: value <= maxVal };
-
-    if( !obj.result ){
-        obj.errors = { max: true };
-    }
     
-    return obj;
+    return { result: value <= maxVal };
 }

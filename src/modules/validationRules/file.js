@@ -14,7 +14,6 @@ export const file = function( value, fieldEl ){
             if( typeof obj.errors === 'undefined' ){
                 obj.errors = {};
             }
-            obj.errors.file = true;
             if( exceedMaxFileSize ){ obj.errors.maxFileSize = true; }
             if( !isAcceptedFileType ){ obj.errors.acceptedFileType = true; }
 

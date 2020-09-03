@@ -5,7 +5,7 @@ export const exactLength = function( value, fieldEl ){
           obj = { result: valueLength === exactLength };
 
     if( !obj.result ){
-        obj.errors = { exactLength: true };
+        obj.errors = {};
         if( valueLength < exactLength ){ obj.errors.minlength = true; }
         else { obj.errors.maxlength = true; }
     }

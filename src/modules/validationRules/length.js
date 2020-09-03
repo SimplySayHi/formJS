@@ -7,7 +7,7 @@ export const length = function( value, fieldEl ){
           obj = { result: isMinlengthOk && isMaxlengthOk };
 
     if( !obj.result ){
-        obj.errors = { stringLength: true };
+        obj.errors = {};
         if( !isMinlengthOk ){ obj.errors.minlength = true; }
         if( !isMaxlengthOk ){ obj.errors.maxlength = true; }
     }
