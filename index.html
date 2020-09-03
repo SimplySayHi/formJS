@@ -201,48 +201,22 @@
                     <div class="media-body pl-2">
                         <ul>
                             <li>
-                                Added "questionContainer" in fieldOptions
+                                Custom error key(s) are now dynamically added for each valdiation-rule based on validation-rule name
                             </li>
                             <li>
-                                Added "data-date-format" in combination with "min" and "max" attributes for custom date validation
+                                Removed "handleValidation" and "handleValidation" in fieldOptions
                             </li>
                             <li>
-                                Added Lite version of formJS
+                                Removed fieldOptions parameter in validation-rule methods
                             </li>
                             <li>
-                                Added Jest tests
+                                Moved email validation-error method from core to additionals (external)
                             </li>
                             <li>
-                                When valdiating a filed with method validateField and it's valid, the automatic form validation ( if "onValidationCheckAll" is set to true ) will skip this field
+                                Switched usage of JS Event with CustomEvent
                             </li>
                             <li>
-                                Now all validation rules and errors can be overridden
-                            </li>
-                            <li>
-                                To improve consistency, now validations don't throw custom errors ( via new Error(...) in try/catch blocks ) anymore but default ones.
-                            </li>
-                            <li>
-                                Internal improvements
-                            </li>
-                            <li>
-                                <span class="text-red">DEPRECATED</span> features:
-                                <ul>
-                                    <li>
-                                        fieldOptions.handleValidation
-                                    </li>
-                                    <li>
-                                        fieldOptions.maxFileSize
-                                    </li>
-                                    <li>
-                                        Email validation-error method
-                                    </li>
-                                    <li>
-                                        Key "rule" in built-in errors
-                                    </li>
-                                    <li>
-                                        "fieldOptions" parameter for validation rules
-                                    </li>
-                                </ul>
+                                Minor improvements
                             </li>
                         </ul>
                     </div>
@@ -257,6 +231,57 @@
                 <div class="toggable-content">
                     <ul class="p-0">
 
+                        <li class="media my-3">
+                            <div class="version-num text-red">4.1.0</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Added "questionContainer" in fieldOptions
+                                    </li>
+                                    <li>
+                                        Added "data-date-format" in combination with "min" and "max" attributes for custom date validation
+                                    </li>
+                                    <li>
+                                        Added Lite version of formJS
+                                    </li>
+                                    <li>
+                                        Added Jest tests
+                                    </li>
+                                    <li>
+                                        When valdiating a filed with method validateField and it's valid, the automatic form validation ( if "onValidationCheckAll" is set to true ) will skip this field
+                                    </li>
+                                    <li>
+                                        Now all validation rules and errors can be overridden
+                                    </li>
+                                    <li>
+                                        To improve consistency, now validations don't throw custom errors ( via new Error(...) in try/catch blocks ) anymore but default ones.
+                                    </li>
+                                    <li>
+                                        Internal improvements
+                                    </li>
+                                    <li>
+                                        <span class="text-red">DEPRECATED</span> features:
+                                        <ul>
+                                            <li>
+                                                fieldOptions.handleValidation
+                                            </li>
+                                            <li>
+                                                fieldOptions.maxFileSize
+                                            </li>
+                                            <li>
+                                                Email validation-error method
+                                            </li>
+                                            <li>
+                                                Key "rule" in built-in errors
+                                            </li>
+                                            <li>
+                                                "fieldOptions" parameter for validation rules
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="media my-3">
                             <div class="version-num text-red">4.0.1</div>
                             <div class="media-body pl-2">

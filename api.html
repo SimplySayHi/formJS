@@ -91,9 +91,6 @@
                                 <li>
                                     focusOnRelated
                                 </li>
-                                <li>
-                                    maxFileSize
-                                </li>
                             </ul>
                         </div>
                         <div class="col-sm-6 col-md-3">
@@ -279,49 +276,6 @@
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
-                                <pre class="text-green">handleValidation</pre>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-lg-4 col-xl-3">
-                                boolean
-                                <br /><br />
-                            </div>
-                            <div class="col-lg-8 col-xl-5">
-                                <p>
-                                    Whether or not the plugin must handle the fields validation via event listener(s) and on form submit.
-                                </p>
-                                <p>
-                                    <span class="text-red">DEPRECATED</span><br />
-                                    Use Lite version to manually validate fields.
-                                    <br />This option will be removed soon.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-4">
-                                <pre class="text-green">maxFileSize</pre>
-                                <span class="badge badge-pill badge-yellow">Lite</span>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-lg-4 col-xl-3">
-                                number
-                                <br /><br />
-                            </div>
-                            <div class="col-lg-8 col-xl-5">
-                                <p>
-                                    Size limit ( in MB ) for each file to upload.<br />
-                                    Set to 0 ( zero ) if you want to disable the size check.<br />
-                                    Can also be set on the specific field via attribute <code>data-max-file-size</code> to set a custom limit.
-                                </p>
-                                <p>
-                                    <span class="text-red">DEPRECATED</span><br />
-                                    Use attribute <code>data-max-file-size</code> on the input field.
-                                    <br />This option will be removed soon.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">onValidationCheckAll</pre>
                             </div>
                             <div class="w-100 d-xl-none"></div>
@@ -435,8 +389,6 @@
                                     <span class="text-green">Tip</span>: always add "change" to the events in order to properly validate checkbox, radio, file inputs and selects.
                                     <br />
                                     For example: "change input" or "change blur".
-                                    <br /><br />
-                                    <span class="small">( NOT used if <code>handleValidation: false</code> )</span>
                                 </p>
                             </div>
                         </div>
@@ -458,9 +410,7 @@
     },
     focusOnRelated:         true,
     handleFileUpload:       true,
-    handleValidation:       true,
-    maxFileSize:            10,
-    onValidationCheckAll:   true,
+    onValidationCheckAll:   false,
     preventPasteFields:     '[type="password"], [data-equal-to]',
     questionContainer:      '[data-formjs-question]',
     skipUIfeedback:         false,
@@ -1162,7 +1112,7 @@ Form.addValidationRules({
     }
 });
 
-Form.setOptions( { fieldOptions: {maxFileSize: 100} } );
+Form.setOptions( { fieldOptions: {onValidationCheckAll: true} } );
 
 </code></pre>
                     <br />
@@ -1177,7 +1127,7 @@ Form.prototype.validationErrors.email = function( fieldValue, fieldEl, fieldOpti
 Form.prototype.validationRules.myPassword = function( fieldValue, fieldEl, fieldOptions ){ ... }
 
 // OVERRIDE AN OPTION
-Form.prototype.options.fieldOptions.maxFileSize = 100;
+Form.prototype.options.fieldOptions.onValidationCheckAll = true;
 </code></pre>
                     <br />
                     <p>
@@ -1185,7 +1135,7 @@ Form.prototype.options.fieldOptions.maxFileSize = 100;
                     </p>
                     <pre>
 <code class="language-js">// OVERRIDE AN OPTION
-formInstance.options.fieldOptions.maxFileSize = 50;
+formInstance.options.fieldOptions.onValidationCheckAll = true;
 </code></pre>
                 </div>
             </div>
@@ -2068,8 +2018,8 @@ formInstance.options.fieldOptions.maxFileSize = 50;
             <div class="row">
                 <div class="col-12 col-sm-6">
                     <p>
-                In case of empty field value, "errors" object will return only the "empty" error like:
-            </p>
+                        In case of empty field value, "errors" object will return only the "empty" error like:
+                    </p>
             <pre>
 <code class="language-js">{
     empty: true
@@ -2077,16 +2027,11 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                 </div>
                 <div class="col-12 col-sm-6">
                     <p>
-                        In case of invalid field value ( not compliant with validation rule ), "errors" object will return "rule" error and more specific errors as described below:
-                    </p>
-                    <p>
-                        <span class="text-red">DEPRECATED</span><br>
-                        Key "rule" is deprecated, check if error <code>empty</code> is not present, instead.
-                        <br>Key "rule" will be removed soon.
+                        In case of invalid field value ( not compliant with validation rule ), "errors" object will contain a key with the same name as the validation method, below an example:
                     </p>
             <pre>
 <code class="language-js">{
-    rule: true,
+    email: true,
     ...
 }</code></pre>
                 </div>
@@ -2132,6 +2077,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                                 <pre>
 <code class="language-js">{
+    cap: true,
     maxlength: true,
     minlength: true,
     invalidChars: true
@@ -2157,6 +2103,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 <pre>
 <code class="language-js">{
     checks: true,
+    checkbox: true,
     maxChecks: true,
     minChecks: true
 }</code></pre>
@@ -2166,9 +2113,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Email
                                 <div>( email )</div>
-                                <p>
-                                    <span class="text-red">DEPRECATED</span>
-                                </p>
+                                <div class="text-red">[ add. ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2181,6 +2126,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                                 <pre>
 <code class="language-js">{
+    email: true,
     missingAtChar: true,
     missingUserName: true,
     missingDomain: true,
@@ -2266,7 +2212,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                                 <pre>
 <code class="language-js">{
-    stringLength: true,
+    length: true,
     maxlength: true,
     minlength: true
 }</code></pre>
@@ -2371,6 +2317,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                                 <pre>
 <code class="language-js">{
+    password: true,
     minlength: true,
     missingNumber: true,
     missingLowercase: true,
@@ -2414,6 +2361,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                                 <pre>
 <code class="language-js">{
+    username: true,
     minlength: true,
     maxlength: true,
     invalidChars: true,
@@ -2437,6 +2385,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                                 <pre>
 <code class="language-js">{
+    vatNumber: true,
     minlength: true,
     maxlength: true
 }</code></pre>
