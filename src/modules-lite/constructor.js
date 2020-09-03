@@ -1,10 +1,10 @@
 
-import { checkFormEl, isNodeList, mergeObjects }   from '../modules/helpers';
+import { checkFormEl, isNodeList, mergeObjects } from '../modules/helpers';
 
 export function constructorFn( self, formEl, optionsObj ){
 
-    let argsL = arguments.length,
-        checkFormElem = checkFormEl(formEl);
+    const argsL = arguments.length,
+          checkFormElem = checkFormEl(formEl);
 
     if( argsL === 0 || (argsL > 0 && !formEl) ){
         throw new Error('First argument "formEl" is missing or falsy!');
