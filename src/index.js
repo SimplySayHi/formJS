@@ -39,8 +39,8 @@ class Form {
             .then(obj => {
                 return new Promise(resolve => {
                     if( obj.fieldEl ){
-                        dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, obj, { bubbles: false } );
-                        dispatchCustomEvent( formEl, customEvents.field.validation, obj );
+                        dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, { bubbles: false, detail: obj } );
+                        dispatchCustomEvent( formEl, customEvents.field.validation, { detail: obj } );
                         if( fieldOptions.onValidationCheckAll && obj.result ){
                             // FORCE skipUIfeedback TO true
                             fieldOptions.skipUIfeedback = true;
@@ -49,7 +49,7 @@ class Form {
                                     .then(dataForm => {
                                         const clMethodName = dataForm.result ? 'add' : 'remove';
                                         formEl.classList[clMethodName]( this.options.formOptions.cssClasses.valid );
-                                        dispatchCustomEvent( formEl, customEvents.form.validation, dataForm );
+                                        dispatchCustomEvent( formEl, customEvents.form.validation, { detail: dataForm } );
                                         // RESTORE skipUIfeedback TO THE ORIGINAL VALUE
                                         fieldOptions.skipUIfeedback = skipUIfeedback;
                                         return obj;
@@ -71,8 +71,8 @@ class Form {
             .then(data => {
                 const clMethodName = data.result ? 'add' : 'remove';
                 formEl.classList[clMethodName]( this.options.formOptions.cssClasses.valid );
-                validationEnd( {data} );
-                dispatchCustomEvent( formEl, customEvents.form.validation, data );
+                validationEnd( {detail:data} );
+                dispatchCustomEvent( formEl, customEvents.form.validation, { detail: data } );
                 return data;
             });
 

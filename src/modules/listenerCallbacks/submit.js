@@ -66,7 +66,7 @@ export function submit( event ){
 
             const formData = dataList.pop().formData;
             addClass( formEl, formCssClasses.ajaxPending );
-            dispatchCustomEvent( formEl, customEvents.form.submit, ajaxCall( formEl, formData, options ) );
+            dispatchCustomEvent( formEl, customEvents.form.submit, { detail: ajaxCall( formEl, formData, options ) } );
             
         }
 

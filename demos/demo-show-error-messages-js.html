@@ -192,11 +192,11 @@ const formEl = document.querySelector('form');
 const formInstance = new Form( formEl );
 
 formEl.addEventListener('fjs.field:validation', function(event){
-    onValidationDemoErrorsJs( [event.data], this.formjs.options );
+    onValidationDemoErrorsJs( [event.detail], this.formjs.options );
 });
 
 formEl.addEventListener('fjs.form:validation', function(event){
-    onValidationDemoErrorsJs( event.data.fields, this.formjs.options );
+    onValidationDemoErrorsJs( event.detail.fields, this.formjs.options );
 });
 
 // INITIALIZATION ( OPTIONAL )
@@ -298,6 +298,7 @@ formInstance.init().then(obj => {
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
     <script src="../dist/formjs.min.js"></script>
+    <script src="../dist/additionals/validationErrors.js"></script>
     <script>
         function onValidationDemoErrorsJs ( fieldsArray, options ){
             fieldsArray.forEach(function( obj ){
@@ -343,11 +344,11 @@ formInstance.init().then(obj => {
         var formInstance = new Form( formEl );
 
         formEl.addEventListener('fjs.field:validation', function(event){
-            onValidationDemoErrorsJs( [event.data], this.formjs.options );
+            onValidationDemoErrorsJs( [event.detail], this.formjs.options );
         });
 
         formEl.addEventListener('fjs.form:validation', function(event){
-            onValidationDemoErrorsJs( event.data.fields, this.formjs.options );
+            onValidationDemoErrorsJs( event.detail.fields, this.formjs.options );
         });
 
         // INITIALIZATION ( OPTIONAL )

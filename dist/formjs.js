@@ -47,13 +47,12 @@ var Form = function() {
             }
         }
         return out;
-    }, dispatchCustomEvent = function(elem, eventName) {
-        var data = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : {}, eventOptions = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : {};
+    }, dispatchCustomEvent = function(elem, eventName, eventOptions) {
         eventOptions = mergeObjects({}, {
             bubbles: !0
         }, eventOptions);
-        var eventObj = new Event(eventName, eventOptions);
-        eventObj.data = data, elem.dispatchEvent(eventObj);
+        var eventObj = new CustomEvent(eventName, eventOptions);
+        elem.dispatchEvent(eventObj);
     }, fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', formatMap = {
         "YYYY-MM-DD": function(dateArray) {
             return dateArray;
@@ -168,7 +167,7 @@ var Form = function() {
             },
             focusOnRelated: !0,
             handleFileUpload: !0,
-            onValidationCheckAll: !0,
+            onValidationCheckAll: !1,
             preventPasteFields: '[type="password"], [data-equal-to]',
             questionContainer: "[data-formjs-question]",
             skipUIfeedback: !1,
@@ -316,6 +315,42 @@ var Form = function() {
         var fieldEl = event.target, fieldOptions = fieldEl.closest("form").formjs.options.fieldOptions;
         fieldEl.matches(fieldOptions.preventPasteFields) && event.preventDefault();
     };
+    function ajaxCall(formEl, formDataObj, options) {
+        var timeoutTimer, ajaxOptions = mergeObjects({}, options.formOptions.ajaxOptions), isMultipart = "multipart/form-data" === ajaxOptions.headers["Content-Type"];
+        if (ajaxOptions.body = formDataObj, isMultipart && options.fieldOptions.handleFileUpload) {
+            var formDataMultipart = new FormData;
+            for (var key in ajaxOptions.body) formDataMultipart.append(key, ajaxOptions.body[key]);
+            Array.from(formEl.querySelectorAll('[type="file"]')).forEach((function(field) {
+                Array.from(field.files).forEach((function(file, idx) {
+                    var name = field.name + "[" + idx + "]";
+                    formDataMultipart.append(name, file, file.name);
+                }));
+            })), ajaxOptions.body = formDataMultipart;
+        }
+        if ("GET" === ajaxOptions.method ? (ajaxOptions.url += (/\?/.test(ajaxOptions.url) ? "&" : "?") + serializeObject(ajaxOptions.body), 
+        delete ajaxOptions.body) : ajaxOptions.headers["Content-Type"].indexOf("application/x-www-form-urlencoded") > -1 ? ajaxOptions.body = serializeObject(ajaxOptions.body) : isMultipart || (ajaxOptions.body = JSON.stringify(ajaxOptions.body)), 
+        ajaxOptions.headers = new Headers(ajaxOptions.headers), ajaxOptions.timeout > 0) {
+            var controller = new AbortController, signal = controller.signal;
+            ajaxOptions.signal = signal, timeoutTimer = window.setTimeout((function() {
+                controller.abort();
+            }), ajaxOptions.timeout);
+        }
+        return fetch(ajaxOptions.url, ajaxOptions).then((function(response) {
+            if (!response.ok) return Promise.reject(response);
+            var fetchMethod = function(response, options) {
+                var accept = options.headers.get("Accept"), contentType = response.headers.get("Content-Type"), headerOpt = accept || contentType || "";
+                return headerOpt.indexOf("application/json") > -1 || "" === headerOpt ? "json" : headerOpt.indexOf("text/") > -1 ? "text" : "blob";
+            }(response, ajaxOptions);
+            return response[fetchMethod]();
+        })).then((function(data) {
+            return addClass(formEl, options.formOptions.cssClasses.ajaxSuccess), data;
+        })).catch((function(error) {
+            return addClass(formEl, options.formOptions.cssClasses.ajaxError), Promise.reject(error);
+        })).finally((function() {
+            timeoutTimer && window.clearTimeout(timeoutTimer), removeClass(formEl, options.formOptions.cssClasses.submit + " " + options.formOptions.cssClasses.ajaxPending), 
+            addClass(formEl, options.formOptions.cssClasses.ajaxComplete), formEl.querySelector('[type="submit"]').disabled = !1;
+        }));
+    }
     function submit(event) {
         var formEl = event.target, instance = formEl.formjs, options = instance.options, formCssClasses = options.formOptions.cssClasses, isAjaxForm = options.formOptions.ajaxSubmit, btnEl = formEl.querySelector('[type="submit"]'), eventPreventDefault = function() {
             var enableBtn = !(arguments.length > 0 && void 0 !== arguments[0]) || arguments[0];
@@ -347,42 +382,9 @@ var Form = function() {
             })).length > 0) return eventPreventDefault(), !1;
             if (isAjaxForm) {
                 var formData = dataList.pop().formData;
-                addClass(formEl, formCssClasses.ajaxPending), dispatchCustomEvent(formEl, customEvents_form.submit, function(formEl, formDataObj, options) {
-                    var timeoutTimer, ajaxOptions = mergeObjects({}, options.formOptions.ajaxOptions), isMultipart = "multipart/form-data" === ajaxOptions.headers["Content-Type"];
-                    if (ajaxOptions.body = formDataObj, isMultipart && options.fieldOptions.handleFileUpload) {
-                        var formDataMultipart = new FormData;
-                        for (var key in ajaxOptions.body) formDataMultipart.append(key, ajaxOptions.body[key]);
-                        Array.from(formEl.querySelectorAll('[type="file"]')).forEach((function(field) {
-                            Array.from(field.files).forEach((function(file, idx) {
-                                var name = field.name + "[" + idx + "]";
-                                formDataMultipart.append(name, file, file.name);
-                            }));
-                        })), ajaxOptions.body = formDataMultipart;
-                    }
-                    if ("GET" === ajaxOptions.method ? (ajaxOptions.url += (/\?/.test(ajaxOptions.url) ? "&" : "?") + serializeObject(ajaxOptions.body), 
-                    delete ajaxOptions.body) : ajaxOptions.headers["Content-Type"].indexOf("application/x-www-form-urlencoded") > -1 ? ajaxOptions.body = serializeObject(ajaxOptions.body) : isMultipart || (ajaxOptions.body = JSON.stringify(ajaxOptions.body)), 
-                    ajaxOptions.headers = new Headers(ajaxOptions.headers), ajaxOptions.timeout > 0) {
-                        var controller = new AbortController, signal = controller.signal;
-                        ajaxOptions.signal = signal, timeoutTimer = window.setTimeout((function() {
-                            controller.abort();
-                        }), ajaxOptions.timeout);
-                    }
-                    return fetch(ajaxOptions.url, ajaxOptions).then((function(response) {
-                        if (!response.ok) return Promise.reject(response);
-                        var fetchMethod = function(response, options) {
-                            var accept = options.headers.get("Accept"), contentType = response.headers.get("Content-Type"), headerOpt = accept || contentType || "";
-                            return headerOpt.indexOf("application/json") > -1 || "" === headerOpt ? "json" : headerOpt.indexOf("text/") > -1 ? "text" : "blob";
-                        }(response, ajaxOptions);
-                        return response[fetchMethod]();
-                    })).then((function(data) {
-                        return addClass(formEl, options.formOptions.cssClasses.ajaxSuccess), data;
-                    })).catch((function(error) {
-                        return addClass(formEl, options.formOptions.cssClasses.ajaxError), Promise.reject(error);
-                    })).finally((function() {
-                        timeoutTimer && window.clearTimeout(timeoutTimer), removeClass(formEl, options.formOptions.cssClasses.submit + " " + options.formOptions.cssClasses.ajaxPending), 
-                        addClass(formEl, options.formOptions.cssClasses.ajaxComplete), formEl.querySelector('[type="submit"]').disabled = !1;
-                    }));
-                }(formEl, formData, options));
+                addClass(formEl, formCssClasses.ajaxPending), dispatchCustomEvent(formEl, customEvents_form.submit, {
+                    detail: ajaxCall(formEl, formData, options)
+                });
             }
         }));
     }
@@ -396,7 +398,7 @@ var Form = function() {
             }));
         }
     }, validationEnd = function(event) {
-        var fieldsArray = event.data.fieldEl ? [ event.data ] : event.data.fields, options = fieldsArray[0].fieldEl.closest("form").formjs.options.fieldOptions;
+        var fieldsArray = event.detail.fieldEl ? [ event.detail ] : event.detail.fields, options = fieldsArray[0].fieldEl.closest("form").formjs.options.fieldOptions;
         fieldsArray.forEach((function(obj) {
             var fieldEl = obj.fieldEl;
             if (fieldEl.matches(fieldsStringSelector)) {
@@ -608,14 +610,18 @@ var Form = function() {
                 var formEl = this.formEl, skipUIfeedback = this.options.fieldOptions.skipUIfeedback;
                 return checkFieldValidity(fieldEl, fieldOptions, this.validationRules, this.validationErrors).then((function(obj) {
                     return new Promise((function(resolve) {
-                        obj.fieldEl && (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
-                            bubbles: !1
-                        }), dispatchCustomEvent(formEl, customEvents_field.validation, obj), fieldOptions.onValidationCheckAll && obj.result ? (fieldOptions.skipUIfeedback = !0, 
+                        obj.fieldEl && (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, {
+                            bubbles: !1,
+                            detail: obj
+                        }), dispatchCustomEvent(formEl, customEvents_field.validation, {
+                            detail: obj
+                        }), fieldOptions.onValidationCheckAll && obj.result ? (fieldOptions.skipUIfeedback = !0, 
                         resolve(checkFormValidity(formEl, fieldOptions, _this.validationRules, _this.validationErrors, obj.fieldEl).then((function(dataForm) {
                             var clMethodName = dataForm.result ? "add" : "remove";
                             return formEl.classList[clMethodName](_this.options.formOptions.cssClasses.valid), 
-                            dispatchCustomEvent(formEl, customEvents_form.validation, dataForm), fieldOptions.skipUIfeedback = skipUIfeedback, 
-                            obj;
+                            dispatchCustomEvent(formEl, customEvents_form.validation, {
+                                detail: dataForm
+                            }), fieldOptions.skipUIfeedback = skipUIfeedback, obj;
                         })))) : obj.result || removeClass(formEl, _this.options.formOptions.cssClasses.valid)), 
                         resolve(obj);
                     }));
@@ -631,8 +637,10 @@ var Form = function() {
                     var clMethodName = data.result ? "add" : "remove";
                     return formEl.classList[clMethodName](_this2.options.formOptions.cssClasses.valid), 
                     validationEnd({
-                        data: data
-                    }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
+                        detail: data
+                    }), dispatchCustomEvent(formEl, customEvents_form.validation, {
+                        detail: data
+                    }), data;
                 }));
             }
         } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 

@@ -175,8 +175,8 @@ var formEl = document.querySelector('form');
 var formInstance = new Form( formEl );
 
 formEl.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(event){
-    if( Object.keys(event.data.errors).length > 0 ){
-        console.log('EMAIL CUSTOM ERRORS', event.data.errors);
+    if( Object.keys(event.detail.errors).length > 0 ){
+        console.log('EMAIL CUSTOM ERRORS', event.detail.errors);
     }
 });
 

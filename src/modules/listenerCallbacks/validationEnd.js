@@ -3,7 +3,7 @@ import { addClass, fieldsStringSelector, removeClass } from '../helpers';
 
 export const validationEnd = function( event ){
 
-    const fieldsArray = event.data.fieldEl ? [event.data] : event.data.fields,
+    const fieldsArray = event.detail.fieldEl ? [event.detail] : event.detail.fields,
           options = fieldsArray[0].fieldEl.closest('form').formjs.options.fieldOptions;
 
     fieldsArray.forEach(obj => {
@@ -35,14 +35,14 @@ export const validationEnd = function( event ){
 
                     // HANDLE CASE OF FIELD data-checks
                     const isChecks = fieldEl.matches('[data-checks]'),
-                        checkedElLength = (isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0);
+                          checkedElLength = (isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0);
 
                     if( (!isChecks && (obj.errors && obj.errors.empty)) || (isChecks && checkedElLength === 0) ){
                         extraErrorClass = options.cssClasses.errorEmpty;
                     }
 
                     const errorClasses = options.cssClasses.error + ' ' + extraErrorClass,
-                        errorClassToRemove = options.cssClasses.errorEmpty + ' ' + options.cssClasses.errorRule;
+                          errorClassToRemove = options.cssClasses.errorEmpty + ' ' + options.cssClasses.errorRule;
                     removeClass( containerEl, options.cssClasses.valid + ' ' + errorClassToRemove );
                     addClass( containerEl, errorClasses );
 

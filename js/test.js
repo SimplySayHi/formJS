@@ -71,16 +71,16 @@ Array.from(formsList).forEach(function(formEl, idx){
     window[fNum] = new Form( formEl, options );
 
     formEl.addEventListener('fjs.field:validation', function(event){
-        console.log(event.type, event.data);
-        console.log( 'field "' + event.data.fieldEl.name + '" is valid? ', event.data.result );
-        if( event.data.errors ){
-            console.log('field errors:', event.data.errors);
+        console.log(event.type, event.detail);
+        console.log( 'field "' + event.detail.fieldEl.name + '" is valid? ', event.detail.result );
+        if( event.detail.errors ){
+            console.log('field errors:', event.detail.errors);
         }
     });
 
     formEl.addEventListener('fjs.form:validation', function(event){
-        console.log(event.type, event.data);
-        event.data.fields.forEach(function(obj){
+        console.log(event.type, event.detail);
+        event.detail.fields.forEach(function(obj){
             console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
             if( obj.errors ){
                 console.log('field errors:', obj.errors);
@@ -89,8 +89,8 @@ Array.from(formsList).forEach(function(formEl, idx){
     });
 
     formEl.addEventListener('fjs.form:submit', function(e){
-        console.log(e.type, e.data);
-        e.data
+        console.log(e.type, e.detail);
+        e.detail
             .then(function(data){
                 console.log(e.type, 'then', data);
                 var formEl = e.target;

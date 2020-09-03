@@ -27,12 +27,12 @@ const addClass = (element, cssClasses) => {
         }
     }
     return out;
-}, dispatchCustomEvent = (elem, eventName, data = {}, eventOptions = {}) => {
+}, dispatchCustomEvent = (elem, eventName, eventOptions) => {
     eventOptions = mergeObjects({}, {
         bubbles: !0
     }, eventOptions);
-    const eventObj = new Event(eventName, eventOptions);
-    eventObj.data = data, elem.dispatchEvent(eventObj);
+    const eventObj = new CustomEvent(eventName, eventOptions);
+    elem.dispatchEvent(eventObj);
 }, fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', formatMap = {
     "YYYY-MM-DD": function(dateArray) {
         return dateArray;
@@ -121,7 +121,7 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
         },
         focusOnRelated: !0,
         handleFileUpload: !0,
-        onValidationCheckAll: !0,
+        onValidationCheckAll: !1,
         preventPasteFields: '[type="password"], [data-equal-to]',
         questionContainer: "[data-formjs-question]",
         skipUIfeedback: !1,
@@ -272,6 +272,41 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
     fieldEl.matches(fieldOptions.preventPasteFields) && event.preventDefault();
 };
 
+function ajaxCall(formEl, formDataObj, options) {
+    let timeoutTimer;
+    const ajaxOptions = mergeObjects({}, options.formOptions.ajaxOptions), isMultipart = "multipart/form-data" === ajaxOptions.headers["Content-Type"];
+    if (ajaxOptions.body = formDataObj, isMultipart && options.fieldOptions.handleFileUpload) {
+        let formDataMultipart = new FormData;
+        for (let key in ajaxOptions.body) formDataMultipart.append(key, ajaxOptions.body[key]);
+        Array.from(formEl.querySelectorAll('[type="file"]')).forEach(field => {
+            Array.from(field.files).forEach((file, idx) => {
+                const name = field.name + "[" + idx + "]";
+                formDataMultipart.append(name, file, file.name);
+            });
+        }), ajaxOptions.body = formDataMultipart;
+    }
+    if ("GET" === ajaxOptions.method ? (ajaxOptions.url += (/\?/.test(ajaxOptions.url) ? "&" : "?") + serializeObject(ajaxOptions.body), 
+    delete ajaxOptions.body) : ajaxOptions.headers["Content-Type"].indexOf("application/x-www-form-urlencoded") > -1 ? ajaxOptions.body = serializeObject(ajaxOptions.body) : isMultipart || (ajaxOptions.body = JSON.stringify(ajaxOptions.body)), 
+    ajaxOptions.headers = new Headers(ajaxOptions.headers), ajaxOptions.timeout > 0) {
+        const controller = new AbortController, signal = controller.signal;
+        ajaxOptions.signal = signal, timeoutTimer = window.setTimeout(() => {
+            controller.abort();
+        }, ajaxOptions.timeout);
+    }
+    return fetch(ajaxOptions.url, ajaxOptions).then(response => {
+        if (!response.ok) return Promise.reject(response);
+        const fetchMethod = ((response, options) => {
+            const accept = options.headers.get("Accept"), contentType = response.headers.get("Content-Type"), headerOpt = accept || contentType || "";
+            return headerOpt.indexOf("application/json") > -1 || "" === headerOpt ? "json" : headerOpt.indexOf("text/") > -1 ? "text" : "blob";
+        })(response, ajaxOptions);
+        return response[fetchMethod]();
+    }).then(data => (addClass(formEl, options.formOptions.cssClasses.ajaxSuccess), data)).catch(error => (addClass(formEl, options.formOptions.cssClasses.ajaxError), 
+    Promise.reject(error))).finally(() => {
+        timeoutTimer && window.clearTimeout(timeoutTimer), removeClass(formEl, options.formOptions.cssClasses.submit + " " + options.formOptions.cssClasses.ajaxPending), 
+        addClass(formEl, options.formOptions.cssClasses.ajaxComplete), formEl.querySelector('[type="submit"]').disabled = !1;
+    });
+}
+
 function submit(event) {
     const formEl = event.target, instance = formEl.formjs, options = instance.options, formCssClasses = options.formOptions.cssClasses, isAjaxForm = options.formOptions.ajaxSubmit, btnEl = formEl.querySelector('[type="submit"]'), eventPreventDefault = (enableBtn = !0) => {
         btnEl && enableBtn && (btnEl.disabled = !1), event && event.preventDefault();
@@ -301,40 +336,9 @@ function submit(event) {
         !1;
         if (isAjaxForm) {
             const formData = dataList.pop().formData;
-            addClass(formEl, formCssClasses.ajaxPending), dispatchCustomEvent(formEl, customEvents_form.submit, function(formEl, formDataObj, options) {
-                let timeoutTimer;
-                const ajaxOptions = mergeObjects({}, options.formOptions.ajaxOptions), isMultipart = "multipart/form-data" === ajaxOptions.headers["Content-Type"];
-                if (ajaxOptions.body = formDataObj, isMultipart && options.fieldOptions.handleFileUpload) {
-                    let formDataMultipart = new FormData;
-                    for (let key in ajaxOptions.body) formDataMultipart.append(key, ajaxOptions.body[key]);
-                    Array.from(formEl.querySelectorAll('[type="file"]')).forEach(field => {
-                        Array.from(field.files).forEach((file, idx) => {
-                            const name = field.name + "[" + idx + "]";
-                            formDataMultipart.append(name, file, file.name);
-                        });
-                    }), ajaxOptions.body = formDataMultipart;
-                }
-                if ("GET" === ajaxOptions.method ? (ajaxOptions.url += (/\?/.test(ajaxOptions.url) ? "&" : "?") + serializeObject(ajaxOptions.body), 
-                delete ajaxOptions.body) : ajaxOptions.headers["Content-Type"].indexOf("application/x-www-form-urlencoded") > -1 ? ajaxOptions.body = serializeObject(ajaxOptions.body) : isMultipart || (ajaxOptions.body = JSON.stringify(ajaxOptions.body)), 
-                ajaxOptions.headers = new Headers(ajaxOptions.headers), ajaxOptions.timeout > 0) {
-                    const controller = new AbortController, signal = controller.signal;
-                    ajaxOptions.signal = signal, timeoutTimer = window.setTimeout(() => {
-                        controller.abort();
-                    }, ajaxOptions.timeout);
-                }
-                return fetch(ajaxOptions.url, ajaxOptions).then(response => {
-                    if (!response.ok) return Promise.reject(response);
-                    const fetchMethod = ((response, options) => {
-                        const accept = options.headers.get("Accept"), contentType = response.headers.get("Content-Type"), headerOpt = accept || contentType || "";
-                        return headerOpt.indexOf("application/json") > -1 || "" === headerOpt ? "json" : headerOpt.indexOf("text/") > -1 ? "text" : "blob";
-                    })(response, ajaxOptions);
-                    return response[fetchMethod]();
-                }).then(data => (addClass(formEl, options.formOptions.cssClasses.ajaxSuccess), data)).catch(error => (addClass(formEl, options.formOptions.cssClasses.ajaxError), 
-                Promise.reject(error))).finally(() => {
-                    timeoutTimer && window.clearTimeout(timeoutTimer), removeClass(formEl, options.formOptions.cssClasses.submit + " " + options.formOptions.cssClasses.ajaxPending), 
-                    addClass(formEl, options.formOptions.cssClasses.ajaxComplete), formEl.querySelector('[type="submit"]').disabled = !1;
-                });
-            }(formEl, formData, options));
+            addClass(formEl, formCssClasses.ajaxPending), dispatchCustomEvent(formEl, customEvents_form.submit, {
+                detail: ajaxCall(formEl, formData, options)
+            });
         }
     });
 }
@@ -349,7 +353,7 @@ const validation = function(event) {
         });
     }
 }, validationEnd = function(event) {
-    const fieldsArray = event.data.fieldEl ? [ event.data ] : event.data.fields, options = fieldsArray[0].fieldEl.closest("form").formjs.options.fieldOptions;
+    const fieldsArray = event.detail.fieldEl ? [ event.detail ] : event.detail.fields, options = fieldsArray[0].fieldEl.closest("form").formjs.options.fieldOptions;
     fieldsArray.forEach(obj => {
         const fieldEl = obj.fieldEl;
         if (fieldEl.matches(fieldsStringSelector)) {
@@ -524,14 +528,18 @@ class Form {
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
         const formEl = this.formEl, skipUIfeedback = this.options.fieldOptions.skipUIfeedback;
         return checkFieldValidity(fieldEl, fieldOptions, this.validationRules, this.validationErrors).then(obj => new Promise(resolve => {
-            obj.fieldEl && (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
-                bubbles: !1
-            }), dispatchCustomEvent(formEl, customEvents_field.validation, obj), fieldOptions.onValidationCheckAll && obj.result ? (fieldOptions.skipUIfeedback = !0, 
+            obj.fieldEl && (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, {
+                bubbles: !1,
+                detail: obj
+            }), dispatchCustomEvent(formEl, customEvents_field.validation, {
+                detail: obj
+            }), fieldOptions.onValidationCheckAll && obj.result ? (fieldOptions.skipUIfeedback = !0, 
             resolve(checkFormValidity(formEl, fieldOptions, this.validationRules, this.validationErrors, obj.fieldEl).then(dataForm => {
                 const clMethodName = dataForm.result ? "add" : "remove";
                 return formEl.classList[clMethodName](this.options.formOptions.cssClasses.valid), 
-                dispatchCustomEvent(formEl, customEvents_form.validation, dataForm), fieldOptions.skipUIfeedback = skipUIfeedback, 
-                obj;
+                dispatchCustomEvent(formEl, customEvents_form.validation, {
+                    detail: dataForm
+                }), fieldOptions.skipUIfeedback = skipUIfeedback, obj;
             }))) : obj.result || removeClass(formEl, this.options.formOptions.cssClasses.valid)), 
             resolve(obj);
         }));
@@ -543,8 +551,10 @@ class Form {
             const clMethodName = data.result ? "add" : "remove";
             return formEl.classList[clMethodName](this.options.formOptions.cssClasses.valid), 
             validationEnd({
-                data: data
-            }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
+                detail: data
+            }), dispatchCustomEvent(formEl, customEvents_form.validation, {
+                detail: data
+            }), data;
         });
     }
     static addValidationErrors(errorsObj) {

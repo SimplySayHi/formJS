@@ -253,24 +253,24 @@
 
         formEl.addEventListener('fjs.field:validation', function(e){
             console.log('--- GENERAL FIELD VALIDATION', this);
-            console.log(e.type, e.data);
-            console.log('--- FIELD IS ' + (e.data.result ? '' : 'NOT ') + 'VALID');
+            console.log(e.type, e.detail);
+            console.log('--- FIELD IS ' + (e.detail.result ? '' : 'NOT ') + 'VALID');
         }, false);
 
         formEl.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(e){
             console.log('--- SPECIFIC FIELD VALIDATION ( EMAIL )', this);
-            console.log(e.type, e.data);
-            console.log('--- FIELD IS ' + (e.data.result ? '' : 'NOT ') + 'VALID');
+            console.log(e.type, e.detail);
+            console.log('--- FIELD IS ' + (e.detail.result ? '' : 'NOT ') + 'VALID');
         }, false);
 
         formEl.addEventListener('fjs.form:validation', function(e){
-            console.log(e.type, e.data);
-            console.log('--- FORM IS ' + (e.data.result ? '' : 'NOT ') + 'VALID');
+            console.log(e.type, e.detail);
+            console.log('--- FORM IS ' + (e.detail.result ? '' : 'NOT ') + 'VALID');
         }, false);
 
         formEl.addEventListener('fjs.form:submit', function(e){
-            console.log(e.type, e.data);
-            e.data
+            console.log(e.type, e.detail);
+            e.detail
                 .then(function(response){
                     console.log(e.type, 'then', response);
                 })
