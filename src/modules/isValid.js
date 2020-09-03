@@ -1,7 +1,7 @@
 
 import { getValidateFieldDefault, mergeObjects, toCamelCase } from './helpers';
 
-export function isValid( fieldEl, fieldOptions, validationRules, validationErrors ){
+export function isValid( fieldEl, validationRules, validationErrors ){
 
     const fieldValue = fieldEl.value;
 
@@ -34,7 +34,7 @@ export function isValid( fieldEl, fieldOptions, validationRules, validationError
             return accPromise.then(accObj => {
                 return new Promise(resolveVal => {
                     // RUN VALIDATION INSIDE A PROMISE IS USEFUL FOR ASYNC VALIDATIONS
-                    resolveVal( validationRules[methodName](fieldValue, fieldEl, fieldOptions) );
+                    resolveVal( validationRules[methodName](fieldValue, fieldEl) );
                 }).then(valObj => {
                     valObj = valObj.result ? {} : valObj;
                     return mergeObjects(accObj, valObj);

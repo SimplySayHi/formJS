@@ -48,7 +48,7 @@ export function checkFieldValidity( fieldEl, fieldOptions, validationRules, vali
                 if( !needsValidation ){
                     dataObj.result = true;
                 }
-                resolve( needsValidation ? isValid(fieldEl, fieldOptions, validationRules, validationErrors) : dataObj );
+                resolve( needsValidation ? isValid(fieldEl, validationRules, validationErrors) : dataObj );
             });
         });
 
