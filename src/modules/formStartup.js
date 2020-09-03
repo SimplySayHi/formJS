@@ -6,39 +6,34 @@ export function formStartup( formEl, options ){
 
     formEl.noValidate = true;
 
-    let fieldOptions = options.fieldOptions,
-        formOptions = options.formOptions;
-
-    // HANDLE FIELD VALIDATION
-    if( fieldOptions.handleValidation ){
+    const fieldOptions = options.fieldOptions,
+          formOptions = options.formOptions;
         
-        // VALIDATION WITH ATTRIBUTES LIKE HTML ONES ( ALSO FOR BUG FIXING, EG: maxlength IN ANDROID )
-        if( fieldOptions.strictHtmlValidation ){
-            
-            // maxlength
-            // MAXLENGTH IS BUGGY IN ANDROID BROWSERS
-            formEl.addEventListener('keypress', keypressMaxlength, false);
-
-            // data-type="number"
-            // SINCE VALIDATING type="number" WITH NON NUMERIC CHARS WILL RETURN EMPTY STRING IN SOME BROWSERS ( EG: FIREFOX )
-            formEl.addEventListener('input', dataTypeNumber, false);
-            
-        }
+    // VALIDATION WITH ATTRIBUTES LIKE HTML ONES ( ALSO FOR BUG FIXING, EG: maxlength IN ANDROID )
+    if( fieldOptions.strictHtmlValidation ){
         
-        if( fieldOptions.preventPasteFields && formEl.querySelectorAll( fieldOptions.preventPasteFields ).length ){
-            // INIT EVENT LISTENER FOR "PASTE" EVENT TO PREVENT IT ON SPECIFIED FIELDS
-            formEl.addEventListener('paste', pastePrevent, false);
-        }
+        // maxlength
+        // MAXLENGTH IS BUGGY IN ANDROID BROWSERS
+        formEl.addEventListener('keypress', keypressMaxlength, false);
 
-        // INIT EVENTS LISTENER ( AS IN fieldOptions )
-        fieldOptions.validateOnEvents.split(' ').forEach(function( eventName ){
-            let useCapturing = (eventName === 'blur' ? true : false);
-            formEl.addEventListener(eventName, validation, useCapturing);
-        });
-
-        formEl.addEventListener(customEvents.field.validation, validationEnd, false);
-
+        // data-type="number"
+        // SINCE VALIDATING type="number" WITH NON NUMERIC CHARS WILL RETURN EMPTY STRING IN SOME BROWSERS ( EG: FIREFOX )
+        formEl.addEventListener('input', dataTypeNumber, false);
+        
     }
+    
+    if( fieldOptions.preventPasteFields && formEl.querySelectorAll( fieldOptions.preventPasteFields ).length ){
+        // INIT EVENT LISTENER FOR "PASTE" EVENT TO PREVENT IT ON SPECIFIED FIELDS
+        formEl.addEventListener('paste', pastePrevent, false);
+    }
+
+    // INIT EVENTS LISTENER ( AS IN fieldOptions )
+    fieldOptions.validateOnEvents.split(' ').forEach(eventName => {
+        const useCapturing = eventName === 'blur' ? true : false;
+        formEl.addEventListener(eventName, validation, useCapturing);
+    });
+
+    formEl.addEventListener(customEvents.field.validation, validationEnd, false);
     
     // HANDLE FORM SUBMIT
     if( formOptions.handleSubmit ){

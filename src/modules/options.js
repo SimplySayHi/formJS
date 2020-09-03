@@ -15,7 +15,6 @@ export const options = {
         },
         focusOnRelated:         true,
         handleFileUpload:       true,
-        handleValidation:       true,
         onValidationCheckAll:   true,
         preventPasteFields:     '[type="password"], [data-equal-to]',
         questionContainer:      '[data-formjs-question]',
