@@ -1,8 +1,8 @@
 
 export const exactLength = function( value, fieldEl ){
-    let valueLength = value.length,
-        exactLength = fieldEl.getAttribute('data-exact-length') * 1,
-        obj = { result: valueLength === exactLength };
+    const valueLength = value.length,
+          exactLength = fieldEl.getAttribute('data-exact-length') * 1,
+          obj = { result: valueLength === exactLength };
 
     if( !obj.result ){
         obj.errors = { exactLength: true };

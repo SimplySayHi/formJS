@@ -5,7 +5,7 @@
 */
 
 export const number = function( string ){
-    let obj = {
+    const obj = {
         result: /[+-]?([0-9]*[.])?[0-9]+/.test( string )
     };
 

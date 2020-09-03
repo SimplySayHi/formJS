@@ -35,7 +35,7 @@ export function submit( event ){
 
     formValidationPromise.then(formValidation => {
 
-        let beforeSendData = { stopExecution: false, formData: {} };
+        const beforeSendData = { stopExecution: false, formData: {} };
 
         if( !formValidation.result ){
             eventPreventDefault();
@@ -44,7 +44,7 @@ export function submit( event ){
             return [beforeSendData];
         }
         
-        let formDataObj = (isAjaxForm ? instance.getFormData() : null),
+        const formDataObj = (isAjaxForm ? instance.getFormData() : null),
             callbacksBeforeSend = options.formOptions.beforeSend;
 
         if( formDataObj ){

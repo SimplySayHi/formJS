@@ -2,9 +2,9 @@
 import { addClass, mergeObjects, removeClass, serializeObject } from './helpers';
 
 const getFetchMethod = (response, options) => {
-    const accept = options.headers.get('Accept');
-    const contentType = response.headers.get('Content-Type');
-    const headerOpt = accept || contentType || '';
+    const accept = options.headers.get('Accept'),
+          contentType = response.headers.get('Content-Type'),
+          headerOpt = accept || contentType || '';
 
     if( headerOpt.indexOf('application/json') > -1 || headerOpt === '' ){
         return 'json';
@@ -17,10 +17,10 @@ const getFetchMethod = (response, options) => {
 
 export function ajaxCall( formEl, formDataObj, options ){
 
-    let btnEl = formEl.querySelector('[type="submit"]'),
-        timeoutTimer,
-        ajaxOptions = mergeObjects( {}, options.formOptions.ajaxOptions ),
-        isMultipart = ajaxOptions.headers['Content-Type'] === 'multipart/form-data';
+    let timeoutTimer;
+    const btnEl = formEl.querySelector('[type="submit"]'),
+          ajaxOptions = mergeObjects( {}, options.formOptions.ajaxOptions ),
+          isMultipart = ajaxOptions.headers['Content-Type'] === 'multipart/form-data';
 
     ajaxOptions.body = formDataObj;
     
@@ -32,9 +32,9 @@ export function ajaxCall( formEl, formDataObj, options ){
             formDataMultipart.append( key, ajaxOptions.body[key] );
         }
         
-        Array.from( formEl.querySelectorAll('[type="file"]') ).forEach(function( field ){
-            Array.from(field.files).forEach(function( file, idx ){
-                let name = field.name+'['+ idx +']';
+        Array.from( formEl.querySelectorAll('[type="file"]') ).forEach(field => {
+            Array.from(field.files).forEach((file, idx) => {
+                const name = field.name+'['+ idx +']';
                 formDataMultipart.append( name, file, file.name );
             });
         });
@@ -63,35 +63,32 @@ export function ajaxCall( formEl, formDataObj, options ){
     ajaxOptions.headers = new Headers( ajaxOptions.headers );
 
     if ( ajaxOptions.timeout > 0 ) {
-        const controller = new AbortController();
-        const signal = controller.signal;
+        const controller = new AbortController(),
+              signal = controller.signal;
 
         ajaxOptions.signal = signal;
-
-        timeoutTimer = window.setTimeout(function() {
+        timeoutTimer = window.setTimeout(() => {
             controller.abort();
         }, ajaxOptions.timeout);
     }
 
     return fetch(ajaxOptions.url, ajaxOptions)
-        .then(function( response ){
+        .then(response => {
             if( !response.ok ){
                 return Promise.reject(response);
             }
-
-            let fetchMethod = getFetchMethod(response, ajaxOptions);
-
+            const fetchMethod = getFetchMethod(response, ajaxOptions);
             return response[fetchMethod]();
         })
-        .then(function( data ){
+        .then(data => {
             addClass( formEl, options.formOptions.cssClasses.ajaxSuccess );
             return data;
         })
-        .catch(function( error ){
+        .catch(error => {
             addClass( formEl, options.formOptions.cssClasses.ajaxError );
             return Promise.reject(error);
         })
-        .finally(function(){
+        .finally(() => {
             if( timeoutTimer ){
                 window.clearTimeout( timeoutTimer );
             }
