@@ -18,7 +18,7 @@
     <script defer src="js/prism.js"></script>
 
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
-    <script defer src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
+    <script defer src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,CustomEvent"></script>
     <script defer src="dist/additionals/utils.js"></script>
     <script defer src="dist/formjs.min.js"></script>
     <script defer src="dist/additionals/validationRules.js"></script>
@@ -179,10 +179,10 @@
             <hr />
             <p>
                 <span class="text-yellow">*</span> for compatibility with IE 10/11, old versions of Edge and/or other old browsers you need to load some JS polyfills ( from <a href="https://polyfill.io" target="_blank">polyfill.io</a> or else ):<br />
-                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>AbortController</code> <code>fetch</code> <code>Event</code>
+                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>AbortController</code> <code>fetch</code> <code>CustomEvent</code>
             </p>
             <pre>
-<code class="language-html">&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"&gt;&lt;/script&gt;</code></pre>
+<code class="language-html">&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,CustomEvent"&gt;&lt;/script&gt;</code></pre>
 
             <div class="mt-3">
                 <p>
