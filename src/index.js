@@ -3,7 +3,6 @@ import { version }              from './modules/version';
 import { customEvents, dispatchCustomEvent, excludeSelector, mergeObjects, removeClass } from './modules/helpers';
 import { options }              from './modules/options';
 import { validationRules }      from './modules/validationRules';
-import { validationErrors }     from './modules/validationErrors';
 import { validationEnd }        from './modules/listenerCallbacks';
 import { constructorFn }        from './modules/constructor';
 import { destroy }              from './modules/destroy';
@@ -95,7 +94,7 @@ class Form {
 
 Form.prototype.isInitialized = false;
 Form.prototype.options = options;
-Form.prototype.validationErrors = validationErrors;
+Form.prototype.validationErrors = {};
 Form.prototype.validationRules = validationRules;
 Form.prototype.version = version;
 
