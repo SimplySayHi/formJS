@@ -30,46 +30,38 @@ export function submit( event ){
     removeClass( formEl, (formCssClasses.ajaxComplete + ' ' + formCssClasses.ajaxError + ' ' + formCssClasses.ajaxSuccess) );
     addClass( formEl, formCssClasses.submit );
 
-    instance.validateForm().then(formValidation => {
+    instance.validateForm()
+        .then(fields => {
 
-        const beforeSendData = { stopExecution: false, formData: {} };
+            const beforeSendData = {
+                stopExecution: false,
+                formData: isAjaxForm ? instance.getFormData() : null
+            };
 
-        if( !formValidation.result ){
+            const rfsObject = {
+                  functionsList: options.formOptions.beforeSend,
+                  data: beforeSendData,
+                  stopConditionFn: function(data){ return data.stopExecution; }
+            };
+            return runFunctionsSequence(rfsObject);
+
+        }).then(dataList => {
+
+            if( dataList.filter(data => data.stopExecution).length > 0 ){
+                eventPreventDefault();
+                return false;
+            }
+            
+            if( isAjaxForm ){
+                const formData = dataList.pop().formData;
+                addClass( formEl, formCssClasses.ajaxPending );
+                dispatchCustomEvent( formEl, customEvents.form.submit, { detail: ajaxCall( formEl, formData, options ) } );
+            }
+
+        })
+        .catch(fields => {
             eventPreventDefault();
             removeClass( formEl, formCssClasses.submit );
-            beforeSendData.stopExecution = true;
-            return [beforeSendData];
-        }
-        
-        const formDataObj = (isAjaxForm ? instance.getFormData() : null),
-            callbacksBeforeSend = options.formOptions.beforeSend;
-
-        if( formDataObj ){
-            beforeSendData.formData = formDataObj;
-        }
-
-        const rfsObject = {
-            functionsList: callbacksBeforeSend,
-            data: beforeSendData,
-            stopConditionFn: function(data){ return data.stopExecution; }
-        };
-        return runFunctionsSequence(rfsObject);
-
-    }).then(dataList => {
-
-        if( dataList.filter(data => data.stopExecution).length > 0 ){
-            eventPreventDefault();
-            return false;
-        }
-        
-        if( isAjaxForm ){
-
-            const formData = dataList.pop().formData;
-            addClass( formEl, formCssClasses.ajaxPending );
-            dispatchCustomEvent( formEl, customEvents.form.submit, { detail: ajaxCall( formEl, formData, options ) } );
-            
-        }
-
-    });
+        });
     
 }

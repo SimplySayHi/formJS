@@ -239,6 +239,13 @@ formInstance.init().then(obj => {
                                     <div class="field-error-message small"></div>
                                 </div>
                                 <div data-formjs-question class="form-group">
+                                    <div class="answers-box label-move-up">
+                                        <input name="email-confirm" type="email" data-equal-to="email" class="form-control" required />
+                                        <label>Email Confirm</label>
+                                    </div>
+                                    <div class="field-error-message small"></div>
+                                </div>
+                                <div data-formjs-question class="form-group">
                                     <p class="mb-2 small">Select your contact preferences <br />( 2 answers max )</p>
                                     <div class="answers-box">
                                         <div class="form-check">
@@ -344,10 +351,12 @@ formInstance.init().then(obj => {
         var formInstance = new Form( formEl );
 
         formEl.addEventListener('fjs.field:validation', function(event){
+            console.log('fjs.field:validation', event.detail);
             onValidationDemoErrorsJs( [event.detail], this.formjs.options );
         });
 
         formEl.addEventListener('fjs.form:validation', function(event){
+            console.log('fjs.form:validation', event.detail);
             onValidationDemoErrorsJs( event.detail.fields, this.formjs.options );
         });
 

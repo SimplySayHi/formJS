@@ -1,6 +1,6 @@
 
 import { version }              from './modules/version';
-import { customEvents, dispatchCustomEvent, excludeSelector, mergeObjects, removeClass } from './modules/helpers';
+import { customEvents, dispatchCustomEvent, excludeSelector, finalizeFieldPromise, finalizeFormPromise, mergeObjects, removeClass } from './modules/helpers';
 import { options }              from './modules/options';
 import { validationRules }      from './modules/validationRules';
 import { validationEnd }        from './modules/listenerCallbacks';
@@ -61,7 +61,8 @@ class Form {
                     }
                     resolve( obj );
                 });
-            });
+            })
+            .then(finalizeFieldPromise);
     }
 
     validateForm( fieldOptions ){
@@ -74,8 +75,8 @@ class Form {
                 validationEnd( {detail:data} );
                 dispatchCustomEvent( formEl, customEvents.form.validation, { detail: data } );
                 return data;
-            });
-
+            })
+            .then(finalizeFormPromise);
     }
     
     static addValidationErrors( errorsObj ){

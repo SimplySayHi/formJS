@@ -1,6 +1,6 @@
 
 import { version }              from './modules/version';
-import { mergeObjects }         from './modules/helpers';
+import { finalizeFieldPromise, finalizeFormPromise, mergeObjects } from './modules/helpers';
 import { options }              from './modules-lite/options';
 import { validationRules }      from './modules/validationRules';
 import { constructorFn }        from './modules-lite/constructor';
@@ -20,12 +20,14 @@ class Form {
     validateField( fieldEl, fieldOptions ){
         fieldEl = (typeof fieldEl === 'string' ? this.formEl.querySelector(fieldEl) : fieldEl);
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-        return checkFieldValidity(fieldEl, fieldOptions, this.validationRules, this.validationErrors);
+        return checkFieldValidity(fieldEl, fieldOptions, this.validationRules, this.validationErrors)
+            .then(finalizeFieldPromise);
     }
 
     validateForm( fieldOptions ){
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-        return checkFormValidity(this.formEl, fieldOptions, this.validationRules, this.validationErrors);
+        return checkFormValidity(this.formEl, fieldOptions, this.validationRules, this.validationErrors)
+            .then(finalizeFormPromise);
     }
     
     static addValidationErrors( errorsObj ){

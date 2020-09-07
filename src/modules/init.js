@@ -14,9 +14,8 @@ export const init = function( formEl ){
         const fakeEventObj = { target: fieldEl, type: (isFieldForChangeEventBoolean ? 'change': '') };
         return validation( fakeEventObj );
 
-    }) ).then(fields => {
-        instance.isInitialized = true;
-        return { instance, fields };
-    });;
+    }) )
+    .then(fields => ({instance, fields}))
+    .catch(fields => ({instance, fields}));
 
 }

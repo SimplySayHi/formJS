@@ -96,6 +96,12 @@ System.register([], function () {
         elem.dispatchEvent(eventObj);
       },
           fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea',
+          finalizeFieldPromise = function finalizeFieldPromise(obj) {
+        return obj.result ? Promise.resolve() : Promise.reject(obj.errors);
+      },
+          finalizeFormPromise = function finalizeFormPromise(obj) {
+        return obj.result ? Promise.resolve(obj.fields) : Promise.reject(obj.fields);
+      },
           formatMap = {
         "YYYY-MM-DD": function YYYYMMDD(dateArray) {
           return dateArray;
@@ -126,7 +132,7 @@ System.register([], function () {
           return (name !== currentFieldName || type !== currentFieldType) && (fieldEl.matches("[data-required-from]") || (currentFieldName = name, currentFieldType = type), !0);
         });
       },
-          getValidateFieldDefault = function getValidateFieldDefault(obj) {
+          mergeValidateFieldDefault = function mergeValidateFieldDefault(obj) {
         return mergeObjects({}, {
           result: !1,
           fieldEl: null
@@ -470,21 +476,19 @@ System.register([], function () {
           btnEl.disabled = !0;
         }
 
-        removeClass(formEl, formCssClasses.ajaxComplete + " " + formCssClasses.ajaxError + " " + formCssClasses.ajaxSuccess), addClass(formEl, formCssClasses.submit), instance.validateForm().then(function (formValidation) {
+        removeClass(formEl, formCssClasses.ajaxComplete + " " + formCssClasses.ajaxError + " " + formCssClasses.ajaxSuccess), addClass(formEl, formCssClasses.submit), instance.validateForm().then(function (fields) {
           var beforeSendData = {
             stopExecution: !1,
-            formData: {}
-          };
-          if (!formValidation.result) return eventPreventDefault(), removeClass(formEl, formCssClasses.submit), beforeSendData.stopExecution = !0, [beforeSendData];
-          var formDataObj = isAjaxForm ? instance.getFormData() : null,
-              callbacksBeforeSend = options.formOptions.beforeSend;
-          return formDataObj && (beforeSendData.formData = formDataObj), runFunctionsSequence({
-            functionsList: callbacksBeforeSend,
+            formData: isAjaxForm ? instance.getFormData() : null
+          },
+              rfsObject = {
+            functionsList: options.formOptions.beforeSend,
             data: beforeSendData,
             stopConditionFn: function stopConditionFn(data) {
               return data.stopExecution;
             }
-          });
+          };
+          return runFunctionsSequence(rfsObject);
         }).then(function (dataList) {
           if (dataList.filter(function (data) {
             return data.stopExecution;
@@ -496,6 +500,8 @@ System.register([], function () {
               detail: ajaxCall(formEl, formData, options)
             });
           }
+        })["catch"](function (fields) {
+          eventPreventDefault(), removeClass(formEl, formCssClasses.submit);
         });
       }
 
@@ -506,10 +512,18 @@ System.register([], function () {
 
         if (fieldEl.matches(fieldsStringSelector)) {
           var isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl);
-          if (isFieldForChangeEventBoolean && isChangeEvent || !isFieldForChangeEventBoolean && !isChangeEvent) return self.validateField(fieldEl).then(function (obj) {
-            var type = obj.fieldEl.type,
-                realtedFieldEqualTo = obj.fieldEl.closest("form").querySelector('[data-equal-to="' + obj.fieldEl.name + '"]');
-            return (obj.fieldEl.required || obj.fieldEl.matches("[data-validate-if-filled]")) && "checkbox" !== type && "radio" !== type && realtedFieldEqualTo && "" !== realtedFieldEqualTo.value.trim() ? self.validateField(realtedFieldEqualTo) : obj;
+          if (isFieldForChangeEventBoolean && isChangeEvent || !isFieldForChangeEventBoolean && !isChangeEvent) return self.validateField(fieldEl).then(function () {
+            var type = fieldEl.type,
+                realtedFieldEqualTo = fieldEl.closest("form").querySelector('[data-equal-to="' + fieldEl.name + '"]');
+            return (fieldEl.required || fieldEl.matches("[data-validate-if-filled]")) && "checkbox" !== type && "radio" !== type && realtedFieldEqualTo && "" !== realtedFieldEqualTo.value.trim() && self.validateField(realtedFieldEqualTo)["catch"](function (errors) {}), mergeValidateFieldDefault({
+              result: !0,
+              fieldEl: fieldEl
+            });
+          })["catch"](function (errors) {
+            return mergeValidateFieldDefault({
+              fieldEl: fieldEl,
+              errors: errors
+            });
           });
         }
       },
@@ -576,7 +590,12 @@ System.register([], function () {
             type: isFieldForChangeEventBoolean ? "change" : ""
           });
         })).then(function (fields) {
-          return instance.isInitialized = !0, {
+          return {
+            instance: instance,
+            fields: fields
+          };
+        })["catch"](function (fields) {
+          return {
             instance: instance,
             fields: fields
           };
@@ -585,7 +604,7 @@ System.register([], function () {
 
       function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationErrors) {
         if (!isDOMNode(fieldEl)) {
-          var obj = getValidateFieldDefault({
+          var obj = mergeValidateFieldDefault({
             fieldEl: fieldEl
           });
           return Promise.resolve(obj);
@@ -618,11 +637,13 @@ System.register([], function () {
           return new Promise(function (resolve) {
             needsValidation || (dataObj.result = !0), resolve(needsValidation ? function (fieldEl, validationRules, validationErrors) {
               var fieldValue = fieldEl.value,
-                  obj = getValidateFieldDefault({
+                  obj = mergeValidateFieldDefault({
                 result: fieldValue.trim().length > 0,
                 fieldEl: fieldEl
-              });
-              if (!obj.result) return obj.errors = {
+              }),
+                  isRadioOrCheckbox = /^(radio|checkbox)$/.test(fieldEl.type),
+                  hasSelectedInput = fieldEl.closest("form").querySelectorAll('[name="' + fieldEl.name + '"]:checked').length > 0;
+              if (!isRadioOrCheckbox && !obj.result || isRadioOrCheckbox && !hasSelectedInput) return obj.result = !1, obj.errors = {
                 empty: !0
               }, Promise.resolve(obj);
               var validationMethods = Array.from(fieldEl.attributes).reduce(function (accList, attr) {
@@ -663,30 +684,28 @@ System.register([], function () {
         fieldOptions = mergeObjects({}, fieldOptions, {
           focusOnRelated: !1
         });
-
-        var obj = function (obj) {
-          return mergeObjects({}, {
-            result: !0,
-            fields: []
-          }, obj);
-        }(),
-            fieldsList = getUniqueFields(formEl.querySelectorAll(fieldsStringSelector));
-
+        var fieldsList = getUniqueFields(formEl.querySelectorAll(fieldsStringSelector));
         return Promise.all(fieldsList.map(function (fieldEl) {
           if (fieldToSkip && fieldEl === fieldToSkip) {
-            var obj2 = getValidateFieldDefault({
+            var obj = mergeValidateFieldDefault({
               fieldEl: fieldEl,
               result: !0
             });
-            return Promise.resolve(obj2);
+            return Promise.resolve(obj);
           }
 
           return checkFieldValidity(fieldEl, fieldOptions, validationRules, validationErrors);
-        })).then(function (list) {
-          var areAllFieldsValid = 0 === list.filter(function (fieldObj) {
+        })).then(function (fields) {
+          var areAllFieldsValid = 0 === fields.filter(function (fieldObj) {
             return !fieldObj.result;
           }).length;
-          return obj.result = areAllFieldsValid, obj.fields = list, obj;
+          return mergeObjects({}, {
+            result: !0,
+            fields: []
+          }, {
+            result: areAllFieldsValid,
+            fields: fields
+          });
         });
       }
 
@@ -758,7 +777,7 @@ System.register([], function () {
                   }), fieldOptions.skipUIfeedback = skipUIfeedback, obj;
                 }))) : obj.result || removeClass(formEl, _this.options.formOptions.cssClasses.valid)), resolve(obj);
               });
-            });
+            }).then(finalizeFieldPromise);
           }
         }, {
           key: "validateForm",
@@ -774,7 +793,7 @@ System.register([], function () {
               }), dispatchCustomEvent(formEl, customEvents_form.validation, {
                 detail: data
               }), data;
-            });
+            }).then(finalizeFormPromise);
           }
         }], [{
           key: "addValidationErrors",

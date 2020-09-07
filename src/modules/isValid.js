@@ -1,13 +1,15 @@
 
-import { getValidateFieldDefault, mergeObjects, toCamelCase } from './helpers';
+import { mergeValidateFieldDefault, mergeObjects, toCamelCase } from './helpers';
 
 export function isValid( fieldEl, validationRules, validationErrors ){
 
-    const fieldValue = fieldEl.value;
+    const fieldValue = fieldEl.value,
+          obj = mergeValidateFieldDefault({result: fieldValue.trim().length > 0, fieldEl}),
+          isRadioOrCheckbox = /^(radio|checkbox)$/.test(fieldEl.type),
+          hasSelectedInput = fieldEl.closest('form').querySelectorAll('[name="'+ fieldEl.name +'"]:checked').length > 0;
 
-    const obj = getValidateFieldDefault({result: fieldValue.trim().length > 0, fieldEl});
-
-    if( !obj.result ){
+    if( (!isRadioOrCheckbox && !obj.result) || (isRadioOrCheckbox && !hasSelectedInput) ){
+        obj.result = false;
         obj.errors = { empty: true };
         return Promise.resolve(obj);
     }
@@ -21,9 +23,7 @@ export function isValid( fieldEl, validationRules, validationErrors ){
 
         if( isAttrValueWithFn || isAttrNameWithFn ){
             accList.push( isAttrValueWithFn ? attrValue : attrName );
-
         }
-
         return accList;
     }, []);
 
@@ -49,7 +49,6 @@ export function isValid( fieldEl, validationRules, validationErrors ){
                 });
             });
         }, Promise.resolve(obj));
-        
         resolve(validationsResult);
 
     }).then(data => {

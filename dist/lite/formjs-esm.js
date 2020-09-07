@@ -14,7 +14,7 @@ const isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), isDOM
         }
     }
     return out;
-}, formatMap = {
+}, finalizeFieldPromise = obj => obj.result ? Promise.resolve() : Promise.reject(obj.errors), finalizeFormPromise = obj => obj.result ? Promise.resolve(obj.fields) : Promise.reject(obj.fields), formatMap = {
     "YYYY-MM-DD": function(dateArray) {
         return dateArray;
     },
@@ -32,7 +32,7 @@ const isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), isDOM
     })(dateString);
     if (!(dateFormat.indexOf(splitChar) < 0)) return dateFormat = dateFormat.replace(/[^YMD]/g, "-"), 
     dateString = dateString.split(splitChar), dateString = formatMap[dateFormat](dateString).join("");
-}, getValidateFieldDefault = obj => mergeObjects({}, {
+}, mergeValidateFieldDefault = obj => mergeObjects({}, {
     result: !1,
     fieldEl: null
 }, obj), toCamelCase = string => string.replace(/-([a-z])/gi, (all, letter) => letter.toUpperCase()), validationRules = {
@@ -135,7 +135,7 @@ const isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), isDOM
 
 function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationErrors) {
     if (!isDOMNode(fieldEl)) {
-        const obj = getValidateFieldDefault({
+        const obj = mergeValidateFieldDefault({
             fieldEl: fieldEl
         });
         return Promise.resolve(obj);
@@ -165,11 +165,12 @@ function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationEr
         const dataObj = data.pop();
         return new Promise(resolve => {
             needsValidation || (dataObj.result = !0), resolve(needsValidation ? function(fieldEl, validationRules, validationErrors) {
-                const fieldValue = fieldEl.value, obj = getValidateFieldDefault({
+                const fieldValue = fieldEl.value, obj = mergeValidateFieldDefault({
                     result: fieldValue.trim().length > 0,
                     fieldEl: fieldEl
-                });
-                if (!obj.result) return obj.errors = {
+                }), isRadioOrCheckbox = /^(radio|checkbox)$/.test(fieldEl.type), hasSelectedInput = fieldEl.closest("form").querySelectorAll('[name="' + fieldEl.name + '"]:checked').length > 0;
+                if (!isRadioOrCheckbox && !obj.result || isRadioOrCheckbox && !hasSelectedInput) return obj.result = !1, 
+                obj.errors = {
                     empty: !0
                 }, Promise.resolve(obj);
                 const validationMethods = Array.from(fieldEl.attributes).reduce((accList, attr) => {
@@ -201,10 +202,7 @@ function checkFormValidity(formEl, fieldOptions, validationRules, validationErro
     fieldOptions = mergeObjects({}, fieldOptions, {
         focusOnRelated: !1
     });
-    const obj = (obj => mergeObjects({}, {
-        result: !0,
-        fields: []
-    }, obj))(), fieldsList = (nodeList => {
+    const fieldsList = (nodeList => {
         let currentFieldName = "", currentFieldType = "";
         return Array.from(nodeList).filter(fieldEl => {
             const name = fieldEl.name, type = fieldEl.type;
@@ -214,16 +212,22 @@ function checkFormValidity(formEl, fieldOptions, validationRules, validationErro
     })(formEl.querySelectorAll('input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea'));
     return Promise.all(fieldsList.map(fieldEl => {
         if (fieldToSkip && fieldEl === fieldToSkip) {
-            const obj2 = getValidateFieldDefault({
+            const obj = mergeValidateFieldDefault({
                 fieldEl: fieldEl,
                 result: !0
             });
-            return Promise.resolve(obj2);
+            return Promise.resolve(obj);
         }
         return checkFieldValidity(fieldEl, fieldOptions, validationRules, validationErrors);
-    })).then(list => {
-        const areAllFieldsValid = 0 === list.filter(fieldObj => !fieldObj.result).length;
-        return obj.result = areAllFieldsValid, obj.fields = list, obj;
+    })).then(fields => {
+        const areAllFieldsValid = 0 === fields.filter(fieldObj => !fieldObj.result).length;
+        return mergeObjects({}, {
+            result: !0,
+            fields: []
+        }, {
+            result: areAllFieldsValid,
+            fields: fields
+        });
     });
 }
 
@@ -243,11 +247,11 @@ class Form {
         delete this.formEl.formjs;
     }
     validateField(fieldEl, fieldOptions) {
-        return checkFieldValidity(fieldEl = "string" == typeof fieldEl ? this.formEl.querySelector(fieldEl) : fieldEl, fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), this.validationRules, this.validationErrors);
+        return checkFieldValidity(fieldEl = "string" == typeof fieldEl ? this.formEl.querySelector(fieldEl) : fieldEl, fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), this.validationRules, this.validationErrors).then(finalizeFieldPromise);
     }
     validateForm(fieldOptions) {
         return fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), 
-        checkFormValidity(this.formEl, fieldOptions, this.validationRules, this.validationErrors);
+        checkFormValidity(this.formEl, fieldOptions, this.validationRules, this.validationErrors).then(finalizeFormPromise);
     }
     static addValidationErrors(errorsObj) {
         this.prototype.validationErrors = mergeObjects({}, this.prototype.validationErrors, errorsObj);

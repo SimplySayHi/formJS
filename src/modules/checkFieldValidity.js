@@ -1,19 +1,19 @@
 
-import { getValidateFieldDefault, isDOMNode, runFunctionsSequence } from './helpers';
+import { mergeValidateFieldDefault, isDOMNode, runFunctionsSequence } from './helpers';
 import { isValid } from './isValid';
 
 export function checkFieldValidity( fieldEl, fieldOptions, validationRules, validationErrors ){
 
     if( !isDOMNode(fieldEl) ){
-        const obj = getValidateFieldDefault({fieldEl});
+        const obj = mergeValidateFieldDefault({fieldEl});
         return Promise.resolve(obj);
     }
 
     const formEl = fieldEl.closest('form'),
           isValidValue = fieldEl.value.trim().length > 0;
 
-     // HANDLE FIELDS radio/data-require-more
-     if( fieldEl.type === 'radio' ){
+    // HANDLE FIELD data-required-from WHEN CHANGING ITS RELATED RADIO
+    if( fieldEl.type === 'radio' ){
         const checkedEl = fieldEl.checked ? fieldEl : formEl.querySelector('[name="'+ fieldEl.name +'"]:checked'),
               reqMoreIsChecked = checkedEl && checkedEl.matches('[data-require-more]'),
               findReqMoreEl = reqMoreIsChecked ? checkedEl : formEl.querySelector('[data-require-more][name="'+ fieldEl.name +'"]'),
@@ -29,7 +29,7 @@ export function checkFieldValidity( fieldEl, fieldOptions, validationRules, vali
         }
     }
 
-    // HANDLE FIELDS data-required-from
+    // HANDLE FIELD data-require-more & data-required-from WHEN *-from IT'S FILLED
     if( fieldEl.matches('[data-required-from]') && isValidValue ){
         const reqMoreEl = formEl.querySelector( fieldEl.getAttribute('data-required-from') );
         reqMoreEl.checked = true;
