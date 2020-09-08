@@ -33,6 +33,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "email": true,
         "missingAtChar": true,
         "rule": true,
       },
@@ -50,6 +51,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "email": true,
         "missingDomain": true,
         "missingExtension": true,
         "missingExtensionDot": true,
@@ -69,6 +71,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "email": true,
         "missingExtension": true,
         "missingExtensionDot": true,
         "rule": true,
@@ -87,6 +90,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "email": true,
         "minlengthExtension": true,
         "rule": true,
       },
@@ -135,6 +139,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "email": true,
         "missingAtChar": true,
         "rule": true,
       },
@@ -173,17 +178,9 @@ Object {
     },
     Object {
       "errors": Object {
-        "rule": true,
+        "empty": true,
       },
-      "fieldEl": Object {
-        Symbol(SameObject caches): Object {
-          "attributes": NamedNodeMap {
-            "name": "field-15",
-            "required": "",
-            "type": "checkbox",
-          },
-        },
-      },
+      "fieldEl": Object {},
       "result": false,
     },
     Object {
@@ -205,21 +202,9 @@ Object {
     },
     Object {
       "errors": Object {
-        "checks": true,
-        "minChecks": true,
-        "rule": true,
+        "empty": true,
       },
-      "fieldEl": Object {
-        Symbol(SameObject caches): Object {
-          "attributes": NamedNodeMap {
-            "data-checks": "[1,2]",
-            "name": "field-18",
-            "required": "",
-            "type": "checkbox",
-            "value": "sms",
-          },
-        },
-      },
+      "fieldEl": Object {},
       "result": false,
     },
     Object {
@@ -239,6 +224,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "checkbox": true,
         "checks": true,
         "maxChecks": true,
         "rule": true,
@@ -452,6 +438,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "length": true,
         "minlength": true,
         "rule": true,
         "stringLength": true,
@@ -471,6 +458,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "length": true,
         "maxlength": true,
         "rule": true,
         "stringLength": true,
@@ -805,6 +793,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "radio": true,
         "rule": true,
       },
       "fieldEl": Object {
@@ -821,18 +810,9 @@ Object {
     },
     Object {
       "errors": Object {
-        "rule": true,
+        "empty": true,
       },
-      "fieldEl": Object {
-        Symbol(SameObject caches): Object {
-          "attributes": NamedNodeMap {
-            "name": "field-68",
-            "required": "",
-            "type": "radio",
-            "value": "accepted",
-          },
-        },
-      },
+      "fieldEl": Object {},
       "result": false,
     },
     Object {
@@ -902,18 +882,9 @@ Object {
     },
     Object {
       "errors": Object {
-        "rule": true,
+        "empty": true,
       },
-      "fieldEl": Object {
-        Symbol(SameObject caches): Object {
-          "attributes": NamedNodeMap {
-            "name": "field-72",
-            "required": "",
-            "type": "radio",
-            "value": "1",
-          },
-        },
-      },
+      "fieldEl": Object {},
       "result": false,
     },
     Object {
@@ -935,6 +906,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "email": true,
         "missingAtChar": true,
         "rule": true,
       },
@@ -980,6 +952,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "email": true,
         "missingAtChar": true,
         "rule": true,
       },
@@ -997,6 +970,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "email": true,
         "missingDomain": true,
         "missingExtension": true,
         "missingExtensionDot": true,
@@ -1016,6 +990,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "email": true,
         "missingExtension": true,
         "missingExtensionDot": true,
         "rule": true,
@@ -1034,6 +1009,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "email": true,
         "minlengthExtension": true,
         "rule": true,
       },
@@ -1082,6 +1058,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "email": true,
         "missingAtChar": true,
         "rule": true,
       },
@@ -1120,17 +1097,9 @@ Object {
     },
     Object {
       "errors": Object {
-        "rule": true,
+        "empty": true,
       },
-      "fieldEl": Object {
-        Symbol(SameObject caches): Object {
-          "attributes": NamedNodeMap {
-            "name": "field-15",
-            "required": "",
-            "type": "checkbox",
-          },
-        },
-      },
+      "fieldEl": Object {},
       "result": false,
     },
     Object {
@@ -1152,21 +1121,9 @@ Object {
     },
     Object {
       "errors": Object {
-        "checks": true,
-        "minChecks": true,
-        "rule": true,
+        "empty": true,
       },
-      "fieldEl": Object {
-        Symbol(SameObject caches): Object {
-          "attributes": NamedNodeMap {
-            "data-checks": "[1,2]",
-            "name": "field-18",
-            "required": "",
-            "type": "checkbox",
-            "value": "sms",
-          },
-        },
-      },
+      "fieldEl": Object {},
       "result": false,
     },
     Object {
@@ -1186,6 +1143,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "checkbox": true,
         "checks": true,
         "maxChecks": true,
         "rule": true,
@@ -1399,6 +1357,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "length": true,
         "minlength": true,
         "rule": true,
         "stringLength": true,
@@ -1418,6 +1377,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "length": true,
         "maxlength": true,
         "rule": true,
         "stringLength": true,
@@ -1752,6 +1712,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "radio": true,
         "rule": true,
       },
       "fieldEl": Object {
@@ -1768,18 +1729,9 @@ Object {
     },
     Object {
       "errors": Object {
-        "rule": true,
+        "empty": true,
       },
-      "fieldEl": Object {
-        Symbol(SameObject caches): Object {
-          "attributes": NamedNodeMap {
-            "name": "field-68",
-            "required": "",
-            "type": "radio",
-            "value": "accepted",
-          },
-        },
-      },
+      "fieldEl": Object {},
       "result": false,
     },
     Object {
@@ -1849,18 +1801,9 @@ Object {
     },
     Object {
       "errors": Object {
-        "rule": true,
+        "empty": true,
       },
-      "fieldEl": Object {
-        Symbol(SameObject caches): Object {
-          "attributes": NamedNodeMap {
-            "name": "field-72",
-            "required": "",
-            "type": "radio",
-            "value": "1",
-          },
-        },
-      },
+      "fieldEl": Object {},
       "result": false,
     },
     Object {
@@ -1882,6 +1825,7 @@ Object {
     },
     Object {
       "errors": Object {
+        "email": true,
         "missingAtChar": true,
         "rule": true,
       },

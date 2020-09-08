@@ -311,6 +311,7 @@ describe( 'checkFormValidity', () => {
     test( 'checkFormValidity -> form not valid', () => {
         const returnObj1 = {
             fields: [
+                // FIELD TO SKIP
                 { fieldEl: $('00'), result: true },
 
                 // NOT REQUIRED
@@ -319,29 +320,29 @@ describe( 'checkFormValidity', () => {
 
                 // REQUIRED
                 { fieldEl: $('03'), result: false, errors:{empty:true} },
-                { fieldEl: $('04'), result: false, errors:{rule:true, missingAtChar:true} },
-                { fieldEl: $('05'), result: false, errors:{rule:true, missingDomain:true, missingExtensionDot:true, missingExtension:true} },
-                { fieldEl: $('06'), result: false, errors:{rule:true, missingExtensionDot:true, missingExtension:true} },
-                { fieldEl: $('07'), result: false, errors:{rule:true, minlengthExtension:true} },
+                { fieldEl: $('04'), result: false, errors:{rule:true, email:true, missingAtChar:true} },
+                { fieldEl: $('05'), result: false, errors:{rule:true, email:true, missingDomain:true, missingExtensionDot:true, missingExtension:true} },
+                { fieldEl: $('06'), result: false, errors:{rule:true, email:true, missingExtensionDot:true, missingExtension:true} },
+                { fieldEl: $('07'), result: false, errors:{rule:true, email:true, minlengthExtension:true} },
                 { fieldEl: $('08'), result: true },
                 { fieldEl: $('09'), result: true },
 
                 // DATA-VALIDATE-IF-FILLED
                 { fieldEl: $('10'), result: true },
-                { fieldEl: $('11'), result: false, errors:{rule:true, missingAtChar:true} },
+                { fieldEl: $('11'), result: false, errors:{rule:true, email:true, missingAtChar:true} },
                 { fieldEl: $('12'), result: true },
 
                 // CHECKBOX
                 { fieldEl: $('13'), result: true },
                 { fieldEl: $('14'), result: true },
-                { fieldEl: $('15'), result: false, errors:{rule:true} },
+                { fieldEl: $('15'), result: false, errors:{empty:true} },
                 { fieldEl: $('16'), result: true },
 
                 // DATA-CHECKS
                 { fieldEl: $('17'), result: true },
-                { fieldEl: $('18'), result: false, errors:{rule:true, checks:true, minChecks:true} },
+                { fieldEl: $('18'), result: false, errors:{empty:true} },
                 { fieldEl: $('19'), result: true },
-                { fieldEl: $('20'), result: false, errors:{rule:true, checks:true, maxChecks:true} },
+                { fieldEl: $('20'), result: false, errors:{rule:true, checkbox:true, checks:true, maxChecks:true} },
 
                 // DATE
                 { fieldEl: $('21'), result: true },
@@ -369,8 +370,8 @@ describe( 'checkFormValidity', () => {
                 // DATA-LENGTH
                 { fieldEl: $('33'), result: true },
                 { fieldEl: $('34'), result: true },
-                { fieldEl: $('35'), result: false, errors:{rule:true, stringLength:true, minlength:true} },
-                { fieldEl: $('36'), result: false, errors:{rule:true, stringLength:true, maxlength:true} },
+                { fieldEl: $('35'), result: false, errors:{rule:true, length:true, stringLength:true, minlength:true} },
+                { fieldEl: $('36'), result: false, errors:{rule:true, length:true, stringLength:true, maxlength:true} },
                 // { fieldEl: $('37') }, // JS ERROR BECAUSE "data-length" IS NOT A VALID JSON ARRAY
 
                 // MAX
@@ -415,8 +416,8 @@ describe( 'checkFormValidity', () => {
                 // RADIO
                 { fieldEl: $('65'), result: true },
                 { fieldEl: $('66'), result: true },
-                { fieldEl: $('67'), result: false, errors:{rule:true} },
-                { fieldEl: $('68'), result: false, errors:{rule:true} },
+                { fieldEl: $('67'), result: false, errors:{rule:true, radio:true} },
+                { fieldEl: $('68'), result: false, errors:{empty:true} },
 
                 // REQ-MORE/FROM
                 { fieldEl: $('69'), result: true },
@@ -428,7 +429,7 @@ describe( 'checkFormValidity', () => {
                 { fieldEl: $('71'), result: true },
                 { fieldEl: $('71-more'), result: true },
                 
-                { fieldEl: $('72'), result: false, errors:{rule:true} },
+                { fieldEl: $('72'), result: false, errors:{empty:true} },
                 { fieldEl: $('72-more'), result: true },
 
                 { fieldEl: $('73'), result: true },
@@ -453,29 +454,29 @@ describe( 'checkFormValidity', () => {
 
                 // REQUIRED
                 { fieldEl: $('03'), result: false, errors:{empty:true} },
-                { fieldEl: $('04'), result: false, errors:{rule:true, missingAtChar:true} },
-                { fieldEl: $('05'), result: false, errors:{rule:true, missingDomain:true, missingExtensionDot:true, missingExtension:true} },
-                { fieldEl: $('06'), result: false, errors:{rule:true, missingExtensionDot:true, missingExtension:true} },
-                { fieldEl: $('07'), result: false, errors:{rule:true, minlengthExtension:true} },
+                { fieldEl: $('04'), result: false, errors:{rule:true, email:true, missingAtChar:true} },
+                { fieldEl: $('05'), result: false, errors:{rule:true, email:true, missingDomain:true, missingExtensionDot:true, missingExtension:true} },
+                { fieldEl: $('06'), result: false, errors:{rule:true, email:true, missingExtensionDot:true, missingExtension:true} },
+                { fieldEl: $('07'), result: false, errors:{rule:true, email:true, minlengthExtension:true} },
                 { fieldEl: $('08'), result: true },
                 { fieldEl: $('09'), result: true },
 
                 // DATA-VALIDATE-IF-FILLED
                 { fieldEl: $('10'), result: true },
-                { fieldEl: $('11'), result: false, errors:{rule:true, missingAtChar:true} },
+                { fieldEl: $('11'), result: false, errors:{rule:true, email:true, missingAtChar:true} },
                 { fieldEl: $('12'), result: true },
 
                 // CHECKBOX
                 { fieldEl: $('13'), result: true },
                 { fieldEl: $('14'), result: true },
-                { fieldEl: $('15'), result: false, errors:{rule:true} },
+                { fieldEl: $('15'), result: false, errors:{empty:true} },
                 { fieldEl: $('16'), result: true },
 
                 // DATA-CHECKS
                 { fieldEl: $('17'), result: true },
-                { fieldEl: $('18'), result: false, errors:{rule:true, checks:true, minChecks:true} },
+                { fieldEl: $('18'), result: false, errors:{empty:true} },
                 { fieldEl: $('19'), result: true },
-                { fieldEl: $('20'), result: false, errors:{rule:true, checks:true, maxChecks:true} },
+                { fieldEl: $('20'), result: false, errors:{rule:true, checks:true, checkbox:true, maxChecks:true} },
 
                 // DATE
                 { fieldEl: $('21'), result: true },
@@ -503,8 +504,8 @@ describe( 'checkFormValidity', () => {
                 // DATA-LENGTH
                 { fieldEl: $('33'), result: true },
                 { fieldEl: $('34'), result: true },
-                { fieldEl: $('35'), result: false, errors:{rule:true, stringLength:true, minlength:true} },
-                { fieldEl: $('36'), result: false, errors:{rule:true, stringLength:true, maxlength:true} },
+                { fieldEl: $('35'), result: false, errors:{rule:true, length:true, stringLength:true, minlength:true} },
+                { fieldEl: $('36'), result: false, errors:{rule:true, length:true, stringLength:true, maxlength:true} },
                 // { fieldEl: $('37') }, // JS ERROR BECAUSE "data-length" IS NOT A VALID JSON ARRAY
 
                 // MAX
@@ -549,8 +550,8 @@ describe( 'checkFormValidity', () => {
                 // RADIO
                 { fieldEl: $('65'), result: true },
                 { fieldEl: $('66'), result: true },
-                { fieldEl: $('67'), result: false, errors:{rule:true} },
-                { fieldEl: $('68'), result: false, errors:{rule:true} },
+                { fieldEl: $('67'), result: false, errors:{rule:true, radio:true} },
+                { fieldEl: $('68'), result: false, errors:{empty:true} },
 
                 // REQ-MORE/FROM
                 { fieldEl: $('69'), result: true },
@@ -562,11 +563,11 @@ describe( 'checkFormValidity', () => {
                 { fieldEl: $('71'), result: true },
                 { fieldEl: $('71-more'), result: true },
                 
-                { fieldEl: $('72'), result: false, errors:{rule:true} },
+                { fieldEl: $('72'), result: false, errors:{empty:true} },
                 { fieldEl: $('72-more'), result: true },
 
                 { fieldEl: $('73'), result: true },
-                { fieldEl: $('73-more'), result: false, errors:{rule:true} }
+                { fieldEl: $('73-more'), result: false, errors:{rule:true, email:true} }
 
             ],
             result: false
