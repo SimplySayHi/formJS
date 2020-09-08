@@ -41,7 +41,7 @@ System.register([], function () {
         return Constructor;
       }
 
-      /* formJS v4.1.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+      /* formJS v4.2.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
       var addClass = function addClass(element, cssClasses) {
         cssClasses.split(" ").forEach(function (className) {
           element.classList.add(className);
@@ -315,12 +315,9 @@ System.register([], function () {
           };
         },
         equalTo: function equalTo(value, fieldEl) {
-          var obj = {
+          return {
             result: value === fieldEl.closest("form").querySelector('[name="' + fieldEl.getAttribute("data-equal-to") + '"]').value
           };
-          return obj.result || (obj.errors = {
-            equalTo: !0
-          }), obj;
         },
         exactLength: function exactLength(value, fieldEl) {
           var valueLength = value.length,
@@ -328,11 +325,9 @@ System.register([], function () {
               obj = {
             result: valueLength === exactLength
           };
-          return obj.result || (obj.errors = {
-            exactLength: !0
-          }, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), obj;
+          return obj.result || (obj.errors = {}, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), obj;
         },
-        file: function file(value, fieldEl, fieldOptions) {
+        file: function file(value, fieldEl) {
           var maxFileSize = 1 * (fieldEl.getAttribute("data-max-file-size") || fieldOptions.maxFileSize),
               MIMEtype = fieldEl.accept ? new RegExp(fieldEl.accept.replace("*", "[^\\/,]+")) : null,
               filesList = Array.from(fieldEl.files),
@@ -342,7 +337,7 @@ System.register([], function () {
           return filesList.forEach(function (file) {
             var exceedMaxFileSize = maxFileSize > 0 && file.size / 1024 / 1024 > maxFileSize,
                 isAcceptedFileType = null === MIMEtype || MIMEtype.test(file.type);
-            !exceedMaxFileSize && isAcceptedFileType || (obj.result = !1, void 0 === obj.errors && (obj.errors = {}), obj.errors.file = !0, exceedMaxFileSize && (obj.errors.maxFileSize = !0), isAcceptedFileType || (obj.errors.acceptedFileType = !0));
+            !exceedMaxFileSize && isAcceptedFileType || (obj.result = !1, void 0 === obj.errors && (obj.errors = {}), exceedMaxFileSize && (obj.errors.maxFileSize = !0), isAcceptedFileType || (obj.errors.acceptedFileType = !0));
           }), obj;
         },
         length: function length(value, fieldEl) {
@@ -358,51 +353,33 @@ System.register([], function () {
           }, isMinlengthOk || (obj.errors.minlength = !0), isMaxlengthOk || (obj.errors.maxlength = !0)), obj;
         },
         max: function max(value, fieldEl) {
-          var maxVal = fieldEl.max,
-              dateFormat = fieldEl.getAttribute("data-date-format");
-          ("date" === fieldEl.type || dateFormat) && (value = getDateAsNumber(value, dateFormat), maxVal = maxVal.split("-").join("")), maxVal *= 1;
-          var obj = {
+          var maxVal = fieldEl.max;
+          var dateFormat = fieldEl.getAttribute("data-date-format");
+          return ("date" === fieldEl.type || dateFormat) && (value = getDateAsNumber(value, dateFormat), maxVal = maxVal.split("-").join("")), maxVal *= 1, {
             result: (value *= 1) <= maxVal
           };
-          return obj.result || (obj.errors = {
-            max: !0
-          }), obj;
         },
         maxlength: function maxlength(value, fieldEl) {
-          var obj = {
+          return {
             result: value.length <= 1 * fieldEl.maxLength
           };
-          return obj.result || (obj.errors = {
-            maxlength: !0
-          }), obj;
         },
         min: function min(value, fieldEl) {
-          var minVal = fieldEl.min,
-              dateFormat = fieldEl.getAttribute("data-date-format");
-          ("date" === fieldEl.type || fieldEl.getAttribute("data-date-format")) && (value = getDateAsNumber(value, dateFormat), minVal = minVal.split("-").join("")), minVal *= 1;
-          var obj = {
+          var minVal = fieldEl.min;
+          var dateFormat = fieldEl.getAttribute("data-date-format");
+          return ("date" === fieldEl.type || fieldEl.getAttribute("data-date-format")) && (value = getDateAsNumber(value, dateFormat), minVal = minVal.split("-").join("")), minVal *= 1, {
             result: (value *= 1) >= minVal
           };
-          return obj.result || (obj.errors = {
-            min: !0
-          }), obj;
         },
         minlength: function minlength(value, fieldEl) {
-          var obj = {
+          return {
             result: value.length >= 1 * fieldEl.minLength
           };
-          return obj.result || (obj.errors = {
-            minlength: !0
-          }), obj;
         },
         pattern: function pattern(value, fieldEl) {
-          var fieldPattern = fieldEl.pattern,
-              obj = {
-            result: new RegExp(fieldPattern).test(value)
+          return {
+            result: new RegExp(fieldEl.pattern).test(value)
           };
-          return obj.result || (obj.errors = {
-            pattern: !0
-          }), obj;
         },
         radio: function radio(value, fieldEl) {
           var fieldChecked = fieldEl.closest("form").querySelector('[name="' + fieldEl.name + '"]:checked');
@@ -435,8 +412,8 @@ System.register([], function () {
         }
       },
           pastePrevent = function pastePrevent(event) {
-        var fieldEl = event.target;
-        var fieldOptions = fieldEl.closest("form").formjs.options.fieldOptions;
+        var fieldEl = event.target,
+            fieldOptions = fieldEl.closest("form").formjs.options.fieldOptions;
         fieldEl.matches(fieldOptions.preventPasteFields) && event.preventDefault();
       };
 
@@ -541,7 +518,7 @@ System.register([], function () {
           if (isFieldForChangeEventBoolean && isChangeEvent || !isFieldForChangeEventBoolean && !isChangeEvent) return self.validateField(fieldEl).then(function (obj) {
             var type = obj.fieldEl.type,
                 realtedFieldEqualTo = obj.fieldEl.closest("form").querySelector('[data-equal-to="' + obj.fieldEl.name + '"]');
-            return (obj.fieldEl.required || obj.fieldEl.matches("[data-validate-if-filled]")) && "checkbox" !== type && "radio" !== type && realtedFieldEqualTo && "" !== realtedFieldEqualTo.value.trim() ? self.validateField(realtedFieldEqualTo) : obj;
+            return (obj.fieldEl.required || obj.fieldEl.matches("[data-validate-if-filled]")) && "checkbox" !== type && "radio" !== type && realtedFieldEqualTo && "" !== realtedFieldEqualTo.value.trim() && self.validateField(realtedFieldEqualTo), obj;
           });
         }
       },
@@ -561,8 +538,8 @@ System.register([], function () {
                 removeClass(containerEl, errorClasses), addClass(containerEl, options.cssClasses.valid);
               }
             } else {
-              var extraErrorClass = options.cssClasses.errorRule,
-                  isChecks = fieldEl.matches("[data-checks]"),
+              var extraErrorClass = options.cssClasses.errorRule;
+              var isChecks = fieldEl.matches("[data-checks]"),
                   checkedElLength = isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0;
               (!isChecks && obj.errors && obj.errors.empty || isChecks && 0 === checkedElLength) && (extraErrorClass = options.cssClasses.errorEmpty);
 
@@ -649,12 +626,14 @@ System.register([], function () {
           var dataObj = data.pop();
           return new Promise(function (resolve) {
             needsValidation || (dataObj.result = !0), resolve(needsValidation ? function (fieldEl, fieldOptions, validationRules, validationErrors) {
-              var fieldValue = fieldEl.value;
-              var obj = getValidateFieldDefault({
+              var fieldValue = fieldEl.value,
+                  obj = getValidateFieldDefault({
                 result: fieldValue.trim().length > 0,
                 fieldEl: fieldEl
-              });
-              if (!obj.result) return obj.errors = {
+              }),
+                  isRadioOrCheckbox = /^(radio|checkbox)$/.test(fieldEl.type),
+                  hasSelectedInput = fieldEl.closest("form").querySelectorAll('[name="' + fieldEl.name + '"]:checked').length > 0;
+              if (!isRadioOrCheckbox && !obj.result || isRadioOrCheckbox && !hasSelectedInput) return obj.result = !1, obj.errors = {
                 empty: !0
               }, Promise.resolve(obj);
               var validationMethods = Array.from(fieldEl.attributes).reduce(function (accList, attr) {
@@ -670,6 +649,11 @@ System.register([], function () {
                     return new Promise(function (resolveVal) {
                       resolveVal(validationRules[methodName](fieldValue, fieldEl, fieldOptions));
                     }).then(function (valObj) {
+                      if (!valObj.result) {
+                        var errorObj = {};
+                        void 0 !== valObj.errors && void 0 !== valObj.errors[methodName] || (errorObj[methodName] = !0), valObj.errors = mergeObjects({}, valObj.errors, errorObj);
+                      }
+
                       return valObj = valObj.result ? {} : valObj, mergeObjects(accObj, valObj);
                     });
                   });
@@ -690,23 +674,25 @@ System.register([], function () {
         fieldOptions = mergeObjects({}, fieldOptions, {
           focusOnRelated: !1
         });
-        var obj = getValidateFormDefault(),
-            fieldsList = getUniqueFields(formEl.querySelectorAll(fieldsStringSelector));
+        var fieldsList = getUniqueFields(formEl.querySelectorAll(fieldsStringSelector));
         return Promise.all(fieldsList.map(function (fieldEl) {
           if (fieldToSkip && fieldEl === fieldToSkip) {
-            var obj2 = getValidateFieldDefault({
+            var obj = getValidateFieldDefault({
               fieldEl: fieldEl,
               result: !0
             });
-            return Promise.resolve(obj2);
+            return Promise.resolve(obj);
           }
 
           return checkFieldValidity(fieldEl, fieldOptions, validationRules, validationErrors);
-        })).then(function (list) {
-          var areAllFieldsValid = 0 === list.filter(function (fieldObj) {
+        })).then(function (fields) {
+          var areAllFieldsValid = 0 === fields.filter(function (fieldObj) {
             return !fieldObj.result;
           }).length;
-          return obj.result = areAllFieldsValid, obj.fields = list, obj;
+          return getValidateFormDefault({
+            result: areAllFieldsValid,
+            fields: fields
+          });
         });
       }
 
@@ -821,7 +807,7 @@ System.register([], function () {
           }
           return obj;
         }
-      }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.1.0";
+      }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.2.0";
 
       var formEl = document.querySelector('form');
       var formInstance = new Form(formEl);

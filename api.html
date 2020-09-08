@@ -2077,16 +2077,12 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                 </div>
                 <div class="col-12 col-sm-6">
                     <p>
-                        In case of invalid field value ( not compliant with validation rule ), "errors" object will return "rule" error and more specific errors as described below:
-                    </p>
-                    <p>
-                        <span class="text-red">DEPRECATED</span><br>
-                        Key "rule" is deprecated, check if error <code>empty</code> is not present, instead.
-                        <br>Key "rule" will be removed soon.
+                        In case of invalid field value ( not compliant with validation rule ), "errors" object will contain a key with the same name as the validation method and error "rule" ( <span class="text-red">key "rule" is deprecated</span> ), below an example:
                     </p>
             <pre>
 <code class="language-js">{
     rule: true,
+    email: true,
     ...
 }</code></pre>
                 </div>
@@ -2132,6 +2128,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                                 <pre>
 <code class="language-js">{
+    cap: true,
     maxlength: true,
     minlength: true,
     invalidChars: true
@@ -2157,6 +2154,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 <pre>
 <code class="language-js">{
     checks: true,
+    checkbox: true,
     maxChecks: true,
     minChecks: true
 }</code></pre>
@@ -2181,6 +2179,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                                 <pre>
 <code class="language-js">{
+    email: true,
+
+    // DEPRECATED
     missingAtChar: true,
     missingUserName: true,
     missingDomain: true,
@@ -2192,7 +2193,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
-                                Equal To <span class="text-yellow">*</span>
+                                Equal To
                                 <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
@@ -2266,15 +2267,19 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                                 <pre>
 <code class="language-js">{
-    stringLength: true,
+    length: true,
+    stringLength: true, // DEPRECATED
     maxlength: true,
     minlength: true
 }</code></pre>
+                                <p class="text-red">
+                                    Key "stringLength" is deprecated.
+                                </p>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
-                                Max <span class="text-yellow">*</span>
+                                Max
                                 <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
@@ -2296,7 +2301,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
-                                Maxlength <span class="text-yellow">*</span>
+                                Maxlength
                                 <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
@@ -2315,15 +2320,15 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
-                                Min <span class="text-yellow">*</span>
+                                Min
                                 <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
                                 <p class="small mb-1">With Numbers</p>
-                                <div><code>max="7"</code></div>
+                                <div><code>min="7"</code></div>
                                 <p class="small mt-5 mb-1">With Dates</p>
-                                <div><code>max="1900-01-01"</code></div>
+                                <div><code>min="1900-01-01"</code></div>
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
@@ -2337,7 +2342,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
-                                Minlength <span class="text-yellow">*</span>
+                                Minlength
                                 <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
@@ -2371,6 +2376,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                                 <pre>
 <code class="language-js">{
+    password: true,
     minlength: true,
     missingNumber: true,
     missingLowercase: true,
@@ -2381,7 +2387,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
-                                Pattern <span class="text-yellow">*</span>
+                                Pattern
                                 <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
@@ -2395,6 +2401,25 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 <pre>
 <code class="language-js">{
     pattern: true
+}</code></pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                            <div class="col-lg-auto col-xl-3 text-green">
+                                Radio
+                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
+                            </div>
+                            <div class="w-100 d-xl-none"></div>
+                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
+                                <div><code>type="radio"</code></div>
+                            </div>
+                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
+                                <p>
+                                    "errors" object can contain these specific errors:
+                                </p>
+                                <pre>
+<code class="language-js">{
+    radio: true
 }</code></pre>
                             </div>
                         </div>
@@ -2414,6 +2439,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                                 <pre>
 <code class="language-js">{
+    username: true,
     minlength: true,
     maxlength: true,
     invalidChars: true,
@@ -2437,6 +2463,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 </p>
                                 <pre>
 <code class="language-js">{
+    vatNumber: true,
     minlength: true,
     maxlength: true
 }</code></pre>
