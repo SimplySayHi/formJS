@@ -92,6 +92,22 @@
                                 <div class="field-error-message small"></div>
                             </div>
                             <div data-formjs-question class="form-group">
+                                <select name="guests" class="form-control" required>
+                                    <option value=""># people</option>
+                                    <option value="1">1 person</option>
+                                    <option value="2">2 people</option>
+                                    <option value="3">3 people</option>
+                                    <option value="4">4 people</option>
+                                </select>
+                                <div class="field-error-message small">how many guests?</div>
+                            </div>
+                            <div data-formjs-question class="form-group">
+                                <div class="answers-box label-move-up">
+                                    <textarea name="char-count-message" class="form-control" rows="3" maxlength="100" required></textarea>
+                                    <label>Message</label>
+                                </div>
+                            </div>
+                            <div data-formjs-question class="form-group">
                                 <p class="mb-2 small">Select your contact preferences <br />(2 answers max)</p>
                                 <div class="answers-box">
                                     <div class="form-check">
