@@ -567,9 +567,8 @@ System.register([], function () {
         }), formEl.addEventListener(customEvents_field.validation, validationEnd, !1), formOptions.handleSubmit && (formEl.addEventListener("submit", submit), formOptions.ajaxSubmit && (formEl.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = formEl.getAttribute("enctype")), formEl.getAttribute("method") && (formOptions.ajaxOptions.method = formEl.getAttribute("method").toUpperCase()), formEl.getAttribute("action") && (formOptions.ajaxOptions.url = formEl.getAttribute("action"))));
       }
 
-      var _init = function init(formEl) {
-        var instance = formEl.formjs,
-            formFields = function (formEl) {
+      var checkFilledFields = function checkFilledFields(formEl) {
+        var formFields = function (formEl) {
           return getUniqueFields(formEl.querySelectorAll(fieldsStringSelector)).map(function (fieldEl) {
             var name = fieldEl.name,
                 type = fieldEl.type,
@@ -590,15 +589,9 @@ System.register([], function () {
             type: isFieldForChangeEventBoolean ? "change" : ""
           });
         })).then(function (fields) {
-          return {
-            instance: instance,
-            fields: fields
-          };
+          return fields;
         })["catch"](function (fields) {
-          return {
-            instance: instance,
-            fields: fields
-          };
+          return fields;
         });
       };
 
@@ -751,11 +744,6 @@ System.register([], function () {
             return this.options.formOptions.getFormData(filteredFields);
           }
         }, {
-          key: "init",
-          value: function init() {
-            return _init(this.formEl);
-          }
-        }, {
           key: "validateField",
           value: function validateField(fieldEl, fieldOptions) {
             var _this = this;
@@ -778,6 +766,11 @@ System.register([], function () {
                 }))) : obj.result || removeClass(formEl, _this.options.formOptions.cssClasses.valid)), resolve(obj);
               });
             }).then(finalizeFieldPromise);
+          }
+        }, {
+          key: "validateFilledFields",
+          value: function validateFilledFields() {
+            return checkFilledFields(this.formEl);
           }
         }, {
           key: "validateForm",
@@ -815,13 +808,13 @@ System.register([], function () {
         return Form;
       }();
 
-      Form.prototype.isInitialized = !1, Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, Form.prototype.version = "5.0.0";
+      Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, Form.prototype.version = "5.0.0";
 
       var formEl = document.querySelector('form');
-      var formInstance = new Form(formEl);
-      formInstance.init().then(function (obj) {
-        console.log('formInstance obj.instance', obj.instance);
-        console.log('formInstance obj.fields', obj.fields);
+      var formInstance = new Form(formEl); // OPTIONAL STEP
+
+      formInstance.validateFilledFields().then(function (fields) {
+        console.log('validated fields', fields);
       });
 
     }

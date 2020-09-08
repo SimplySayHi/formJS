@@ -356,6 +356,7 @@ formEl.addEventListener('submit', event => {
             formInstance.validateForm()
                 .then(function(fields){
                     alert('Form is valid');
+                    console.log(fields);
                     fields.forEach(function(obj){
                         checkDirtyField(obj.fieldEl);
                         setFieldValid.call(obj.fieldEl);

@@ -165,10 +165,9 @@ const options = {
 };
 const formInstance = new Form( formEl, options );
 
-// INITIALIZATION ( OPTIONAL )
-formInstance.init().then(obj => {
-    console.log('instance', obj.instance);
-    console.log('validated fields', obj.fields);
+// OPTIONAL STEP
+formInstance.validateFilledFields().then(fields => {
+    console.log('validated fields', fields);
 });
 </code></pre>
                             </div>
@@ -283,10 +282,9 @@ formInstance.init().then(obj => {
         };
         var formInstance = new Form( formEl, options );
 
-        // INITIALIZATION ( OPTIONAL )
-        formInstance.init().then(function(obj){
-            console.log('instance', obj.instance);
-            console.log('validated fields', obj.fields);
+        // OPTIONAL STEP
+        formInstance.validateFilledFields().then(function( fields ){
+            console.log('validated fields', fields);
         });
     </script>
 

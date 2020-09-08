@@ -6,7 +6,7 @@ import { validationRules }      from './modules/validationRules';
 import { validationEnd }        from './modules/listenerCallbacks';
 import { constructorFn }        from './modules/constructor';
 import { destroy }              from './modules/destroy';
-import { init }                 from './modules/init';
+import { checkFilledFields }    from './modules/checkFilledFields';
 import { checkFieldValidity }   from './modules/checkFieldValidity';
 import { checkFormValidity }    from './modules/checkFormValidity';
 
@@ -24,10 +24,6 @@ class Form {
         const formFieldsEl = this.formEl.querySelectorAll('input, select, textarea'),
               filteredFields = Array.from( formFieldsEl ).filter( elem => elem.matches(excludeSelector) );
         return this.options.formOptions.getFormData(filteredFields);
-    }
-
-    init(){
-        return init(this.formEl);
     }
 
     validateField( fieldEl, fieldOptions ){
@@ -65,6 +61,10 @@ class Form {
             .then(finalizeFieldPromise);
     }
 
+    validateFilledFields(){
+        return checkFilledFields(this.formEl);
+    }
+
     validateForm( fieldOptions ){
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
         const formEl = this.formEl;
@@ -93,7 +93,6 @@ class Form {
 
 }
 
-Form.prototype.isInitialized = false;
 Form.prototype.options = options;
 Form.prototype.validationErrors = {};
 Form.prototype.validationRules = validationRules;

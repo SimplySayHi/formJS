@@ -2,11 +2,9 @@
 import { getFilledFields, isFieldForChangeEvent } from './helpers';
 import { validation } from './listenerCallbacks';
 
-export const init = function( formEl ){
+export const checkFilledFields = formEl => {
 
-    const instance = formEl.formjs;
     const formFields = getFilledFields( formEl );
-
     // VALIDATE ALL FILLED FIELDS
     return Promise.all( formFields.map(fieldEl => {
 
@@ -15,7 +13,7 @@ export const init = function( formEl ){
         return validation( fakeEventObj );
 
     }) )
-    .then(fields => ({instance, fields}))
-    .catch(fields => ({instance, fields}));
+    .then(fields => fields)
+    .catch(fields => fields);
 
 }

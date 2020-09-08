@@ -162,9 +162,9 @@
     System.import('Form').then(({default:Form}) => {
             const formEl = document.querySelector('form');
             const formInstance = new Form( formEl );
-            formInstance.init().then(function( obj ){
-                console.log('formInstance obj.instance', obj.instance);
-                console.log('formInstance obj.fields', obj.fields);
+            // OPTIONAL STEP
+            formInstance.validateFilledFields().then(fields => {
+                console.log('validated fields', fields);
             });
         })
         .catch(function(e) {
@@ -279,9 +279,9 @@
                 var Form = mod.default;
                 var formEl = document.querySelector('form');
                 var formInstance = new Form( formEl );
-                formInstance.init().then(function( obj ){
-                    console.log('formInstance obj.instance', obj.instance);
-                    console.log('formInstance obj.fields', obj.fields);
+                // OPTIONAL STEP
+                formInstance.validateFilledFields().then(function( fields ){
+                    console.log('validated fields', fields);
                 });
             })
             .catch(function(e) {

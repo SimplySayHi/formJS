@@ -199,10 +199,9 @@ formEl.addEventListener('fjs.form:validation', function(event){
     onValidationDemoErrorsJs( event.detail.fields, this.formjs.options );
 });
 
-// INITIALIZATION ( OPTIONAL )
-formInstance.init().then(obj => {
-    console.log('instance', obj.instance);
-    console.log('validated fields', obj.fields);
+// OPTIONAL STEP
+formInstance.validateFilledFields().then(fields => {
+    console.log('validated fields', fields);
 });
 </code></pre>
                             </div>
@@ -360,10 +359,9 @@ formInstance.init().then(obj => {
             onValidationDemoErrorsJs( event.detail.fields, this.formjs.options );
         });
 
-        // INITIALIZATION ( OPTIONAL )
-        formInstance.init().then(function(obj){
-            console.log('instance', obj.instance);
-            console.log('validated fields', obj.fields);
+        // OPTIONAL STEP
+        formInstance.validateFilledFields().then(function( fields ){
+            console.log('validated fields', fields);
         });
     </script>
 

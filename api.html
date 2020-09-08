@@ -768,43 +768,6 @@
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
-                                <pre class="text-green">init()</pre>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-lg-7 col-xl-5">
-                                <p class="d-lg-none m-0">
-                                    Description:
-                                </p>
-                                <p>
-                                    Run a first validation for fields that already have a value set.<br />
-                                    Useful to call after constructor function but not mandatory.
-                                </p>
-                            </div>
-                            <div class="col-lg-5 col-xl-3">
-                                <p class="d-lg-none m-0">
-                                    Return value:
-                                </p>
-                                <p>
-                                    A Promise to which will be passed an object like:
-                                </p>
-<pre>
-<code class="language-js">{
-    instance:   formInstance,
-    fields:     [{...}]
-}
-</code></pre>
-                                <ul>
-                                    <li>
-                                        <span class="text-green">instance</span>: ( Form instance )
-                                    </li>
-                                    <li>
-                                        <span class="text-green">fields</span>: ( Array ) list of validated fields ( with value already set when init method is called )
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">validateField( field[, fieldOptions] )</pre>
                                 <span class="badge badge-pill badge-yellow">Lite</span>
                             </div>
@@ -856,25 +819,59 @@
                                     Return value:
                                 </p>
                                 <p>
-                                    A Promise to which will be passed an object like:
+                                    A Promise that will:
                                 </p>
-                                <pre>
-<code class="language-js">{
-    fieldEl: element,
-    result:  false,
-    errors:  {...}
-}</code></pre>
                                 <ul>
                                     <li>
-                                        <span class="text-green">fieldEl</span>: JS node element
+                                        Resolve in <code>.then(() => {})</code> if the field is valid.
                                     </li>
                                     <li>
-                                        <span class="text-green">result</span>: ( Boolean ) if the field is valid or not
-                                    </li>
-                                    <li>
-                                        <span class="text-green">errors</span>: ( Object ) only in case of invalid field
+                                        Reject in <code>.catch(errors => {})</code> if the field is NOT valid.<br />
+                                        In this case an object with all errors will be passed to the catch function.
                                     </li>
                                 </ul>
+                                <p>
+                                    Example of returned object <code>errors</code>:
+                                </p>
+<pre><code class="language-js">{
+    email: true,
+    missingAtChar: true
+}
+</code></pre>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                            <div class="col-lg-auto col-xl-4">
+                                <pre class="text-green">validateFilledFields()</pre>
+                            </div>
+                            <div class="w-100 d-xl-none"></div>
+                            <div class="col-lg-7 col-xl-5">
+                                <p class="d-lg-none m-0">
+                                    Description:
+                                </p>
+                                <p>
+                                    Runs validation for fields that already have a value set.<br />
+                                    Useful to call after constructor function but not mandatory.
+                                </p>
+                            </div>
+                            <div class="col-lg-5 col-xl-3">
+                                <p class="d-lg-none m-0">
+                                    Return value:
+                                </p>
+                                <p>
+                                    A Promise to which will be passed the list of validated fields:
+                                </p>
+<pre>
+<code class="language-js">[
+    {
+        fieldEl: element,
+        result:  false,
+        errors:  {
+            email: true
+        }
+    }
+]
+</code></pre>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -915,21 +912,29 @@
                                     Return value:
                                 </p>
                                 <p>
-                                    A Promise to which will be passed an object like:
+                                    A Promise that will:
                                 </p>
-                                <pre>
-<code class="language-js">{
-    fields: [{...}],
-    result: false
-}</code></pre>
                                 <ul>
                                     <li>
-                                        <span class="text-green">fields</span>: ( Array of Objects ) a list of the form fields as returned by "validateField" method
+                                        Resolve in <code>.then(fields => {})</code> if all fields are valid.
                                     </li>
                                     <li>
-                                        <span class="text-green">result</span>: ( Boolean ) check for the form, if it is valid or not
+                                        Reject in <code>.catch(fields => {})</code> if one or more fields are NOT valid.
                                     </li>
                                 </ul>
+                                <p>
+                                    Example of returned array <code>fields</code>:
+                                </p>
+                                <pre>
+<code class="language-js">[
+    {
+        fieldEl: element,
+        result:  false,
+        errors:  {
+            email: true
+        }
+    }
+]</code></pre>
                             </div>
                         </div>
                     </div>
@@ -1145,7 +1150,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
         <div id="builtin-events">
             <h3 class="sticky-title">Built-in Events</h3>
             <p>
-                Each built-in event has the object <code>event.detail</code> as defined in "additional event data" column ( eg. <code>event.detail.result</code> ).
+                Each built-in event has the object <code>event.detail</code> as defined in column "event detail object".
             </p>
             <div class="panel panel-default panel-transparent no-bg">
                 <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
@@ -1154,7 +1159,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             name, description
                         </div>
                         <div class="col-lg-6">
-                            additional event data
+                            event detail object
                         </div>
                     </div>
                 </div>

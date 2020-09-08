@@ -290,9 +290,8 @@
             });
         }); */
 
-        formInstance.init().then(function( obj ){
-            console.log('formInstance obj.instance', obj.instance);
-            console.log('formInstance obj.fields', obj.fields);
+        formInstance.validateFilledFields().then(function( fields ){
+            console.log('validated fields', fields);
         });
     </script>
     <script src="dist/additionals/utils.js"></script>

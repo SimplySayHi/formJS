@@ -209,9 +209,8 @@ const options = {...};
 const formInstance = new Form( formEl, options );
 
 // STEP 2 ( OPTIONAL )
-formInstance.init().then(obj => {
-    console.log('instance', obj.instance);
-    console.log('validated fields', obj.fields);
+formInstance.validateFilledFields().then(fields => {
+    console.log('validated fields', fields);
 });
 </code></pre>
                     </div>
@@ -226,12 +225,9 @@ formInstance.init().then(obj => {
                         </ul>
                         <hr />
                         <p>
-                            formJS has some more properties:
+                            formJS has this additional property:
                         </p>
                         <ul>
-                            <li>
-                                <code>isInitialized</code> whether or not the init method was called on the Form instance.
-                            </li>
                             <li>
                                 <code>version</code> the version number.
                             </li>
@@ -242,7 +238,7 @@ formInstance.init().then(obj => {
                         </p>
                         <hr />
                         <p>
-                            Method <code>init</code> is not included in <span class="badge badge-pill badge-yellow">Lite</span> version.<br />
+                            Method <code>validateFilledFields</code> is not included in <span class="badge badge-pill badge-yellow">Lite</span> version.<br />
                             Check <a href="api.html">API page</a> for details.
                         </p>
                 </div>

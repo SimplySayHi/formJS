@@ -188,12 +188,17 @@
             }
         }
 
-        function applyFeedbackOnUI(fieldObj){
-            var containerEl = fieldObj.fieldEl.closest('[data-formjs-question]');
-            var className = fieldObj.result ? 'is-valid' : 'has-error';
-                containerEl.classList.remove('is-valid');
+        function setFieldValid(){
+            var containerEl = this.closest('[data-formjs-question]');
                 containerEl.classList.remove('has-error');
-                containerEl.classList.add( className );
+                containerEl.classList.add('is-valid');
+        }
+
+        function showErrorMessage(errors){
+            console.log(this, errors);
+            var containerEl = this.closest('[data-formjs-question]');
+                containerEl.classList.remove('is-valid');
+                containerEl.classList.add('has-error');
         }
 
         function validateField(event){
@@ -202,7 +207,9 @@
                 return;
             }
             var containerEl = fieldEl.closest('[data-formjs-question]');
-            formInstance.validateField(fieldEl).then(applyFeedbackOnUI);
+            formInstance.validateField(fieldEl)
+                .then(setFieldValid.bind(fieldEl))
+                .catch(showErrorMessage.bind(fieldEl));
         }
 
         document.querySelector('.card-header').click();
@@ -243,14 +250,23 @@
 
         formEl.addEventListener('submit', function(event){
             event.preventDefault();
-            formInstance.validateForm().then(function(obj){
-                var formValidity = obj.result ? 'valid' : 'not valid';
-                console.log('Form is ' + formValidity);
-                obj.fields.forEach(function(fieldObj){
-                    checkDirtyField(fieldObj.fieldEl);
-                    applyFeedbackOnUI(fieldObj);
+            formInstance.validateForm()
+                .then(function(obj){
+                    console.log('Form is valid');
+                    fields.forEach(function(obj){
+                        checkDirtyField(obj.fieldEl);
+                        setFieldValid.call(obj.fieldEl);
+                    });
+                })
+                .catch(function(fields){
+                    console.log('Form is NOT valid');
+                    fields.forEach(function(obj){
+                        checkDirtyField(obj.fieldEl);
+                        if( !obj.result ){
+                            showErrorMessage.call(obj.fieldEl, obj.errors);
+                        }
+                    });
                 });
-            });
         });
     </script>
     <script src="dist/additionals/utils.js"></script>

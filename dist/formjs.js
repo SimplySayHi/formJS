@@ -443,8 +443,8 @@ var Form = function() {
         formEl.getAttribute("method") && (formOptions.ajaxOptions.method = formEl.getAttribute("method").toUpperCase()), 
         formEl.getAttribute("action") && (formOptions.ajaxOptions.url = formEl.getAttribute("action"))));
     }
-    var init = function(formEl) {
-        var instance = formEl.formjs, formFields = function(formEl) {
+    var checkFilledFields = function(formEl) {
+        var formFields = function(formEl) {
             return getUniqueFields(formEl.querySelectorAll(fieldsStringSelector)).map((function(fieldEl) {
                 var name = fieldEl.name, type = fieldEl.type, isCheckboxOrRadio = "checkbox" === type || "radio" === type, fieldChecked = formEl.querySelector('[name="' + name + '"]:checked'), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isReqFrom ? formEl.querySelector(fieldEl.getAttribute("data-required-from")) : null;
                 return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && reqMoreEl.checked || !isReqFrom && fieldEl.value ? fieldEl : null;
@@ -459,15 +459,9 @@ var Form = function() {
                 type: isFieldForChangeEventBoolean ? "change" : ""
             });
         }))).then((function(fields) {
-            return {
-                instance: instance,
-                fields: fields
-            };
+            return fields;
         })).catch((function(fields) {
-            return {
-                instance: instance,
-                fields: fields
-            };
+            return fields;
         }));
     };
     function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationErrors) {
@@ -618,11 +612,6 @@ var Form = function() {
                 return this.options.formOptions.getFormData(filteredFields);
             }
         }, {
-            key: "init",
-            value: function() {
-                return init(this.formEl);
-            }
-        }, {
             key: "validateField",
             value: function(fieldEl, fieldOptions) {
                 var _this = this;
@@ -649,6 +638,11 @@ var Form = function() {
                 })).then(finalizeFieldPromise);
             }
         }, {
+            key: "validateFilledFields",
+            value: function() {
+                return checkFilledFields(this.formEl);
+            }
+        }, {
             key: "validateForm",
             value: function(fieldOptions) {
                 var _this2 = this;
@@ -667,7 +661,6 @@ var Form = function() {
         } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
         Form;
     }();
-    return Form.prototype.isInitialized = !1, Form.prototype.options = options, Form.prototype.validationErrors = {}, 
-    Form.prototype.validationRules = validationRules, Form.prototype.version = "5.0.0", 
-    Form;
+    return Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
+    Form.prototype.version = "5.0.0", Form;
 }();

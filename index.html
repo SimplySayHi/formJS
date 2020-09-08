@@ -201,13 +201,13 @@
                     <div class="media-body pl-2">
                         <ul>
                             <li>
-                                Custom error key(s) are now dynamically added for each valdiation-rule based on validation-rule name
-                            </li>
-                            <li>
                                 Removed "handleValidation" and "handleValidation" in fieldOptions
                             </li>
                             <li>
                                 Removed fieldOptions parameter in validation-rule methods
+                            </li>
+                            <li>
+                                Changed name for method "init" with more appropriate "validateFilledFields" and it will return only validated fields ( instance object is removed from returned data )
                             </li>
                             <li>
                                 Moved email validation-error method from core to additionals (external)

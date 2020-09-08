@@ -395,8 +395,8 @@ function formStartup(formEl, options) {
     formEl.getAttribute("action") && (formOptions.ajaxOptions.url = formEl.getAttribute("action"))));
 }
 
-const init = function(formEl) {
-    const instance = formEl.formjs, formFields = (formEl => getUniqueFields(formEl.querySelectorAll(fieldsStringSelector)).map(fieldEl => {
+const checkFilledFields = formEl => {
+    const formFields = (formEl => getUniqueFields(formEl.querySelectorAll(fieldsStringSelector)).map(fieldEl => {
         const name = fieldEl.name, type = fieldEl.type, isCheckboxOrRadio = "checkbox" === type || "radio" === type, fieldChecked = formEl.querySelector('[name="' + name + '"]:checked'), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isReqFrom ? formEl.querySelector(fieldEl.getAttribute("data-required-from")) : null;
         return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && reqMoreEl.checked || !isReqFrom && fieldEl.value ? fieldEl : null;
     }).filter(fieldEl => null !== fieldEl))(formEl);
@@ -406,13 +406,7 @@ const init = function(formEl) {
             target: fieldEl,
             type: isFieldForChangeEventBoolean ? "change" : ""
         });
-    })).then(fields => ({
-        instance: instance,
-        fields: fields
-    })).catch(fields => ({
-        instance: instance,
-        fields: fields
-    }));
+    })).then(fields => fields).catch(fields => fields);
 };
 
 function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationErrors) {
@@ -533,9 +527,6 @@ class Form {
         const formFieldsEl = this.formEl.querySelectorAll("input, select, textarea"), filteredFields = Array.from(formFieldsEl).filter(elem => elem.matches(':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])'));
         return this.options.formOptions.getFormData(filteredFields);
     }
-    init() {
-        return init(this.formEl);
-    }
     validateField(fieldEl, fieldOptions) {
         fieldEl = "string" == typeof fieldEl ? this.formEl.querySelector(fieldEl) : fieldEl, 
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
@@ -556,6 +547,9 @@ class Form {
             }))) : obj.result || removeClass(formEl, this.options.formOptions.cssClasses.valid)), 
             resolve(obj);
         })).then(finalizeFieldPromise);
+    }
+    validateFilledFields() {
+        return checkFilledFields(this.formEl);
     }
     validateForm(fieldOptions) {
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
@@ -581,7 +575,7 @@ class Form {
     }
 }
 
-Form.prototype.isInitialized = !1, Form.prototype.options = options, Form.prototype.validationErrors = {}, 
-Form.prototype.validationRules = validationRules, Form.prototype.version = "5.0.0";
+Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
+Form.prototype.version = "5.0.0";
 
 export default Form;

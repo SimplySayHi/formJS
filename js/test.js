@@ -118,8 +118,8 @@ Array.from(formsList).forEach(function(formEl, idx){
             });
     }, false);
 
-    window[fNum].init().then(function( obj ){
-        console.log('formJsInstance '+ fNum +' obj.instance', obj.instance);
-        console.log('formJsInstance '+ fNum +' obj.fields', obj.fields);
+    // OPTIONAL STEP
+    window[fNum].validateFilledFields().then(function( fields ){
+        console.log('formJsInstance '+ fNum +' => validated fields', fields);
     });
 });
