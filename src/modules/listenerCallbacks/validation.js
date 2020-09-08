@@ -25,10 +25,10 @@ export const validation = function( event ){
                     !(type === 'checkbox' || type === 'radio') && 
                     realtedFieldEqualTo && realtedFieldEqualTo.value.trim() !== ''
                 ){
-                    return self.validateField( realtedFieldEqualTo );
-                } else {
-                    return obj;
+                    self.validateField( realtedFieldEqualTo );
                 }
+
+                return obj;
             });
 
         }
