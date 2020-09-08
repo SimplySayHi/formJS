@@ -3,11 +3,13 @@ import { getValidateFieldDefault, mergeObjects, toCamelCase } from './helpers';
 
 export function isValid( fieldEl, fieldOptions, validationRules, validationErrors ){
 
-    const fieldValue = fieldEl.value;
+    const fieldValue = fieldEl.value,
+          obj = getValidateFieldDefault({result: fieldValue.trim().length > 0, fieldEl}),
+          isRadioOrCheckbox = /^(radio|checkbox)$/.test(fieldEl.type),
+          hasSelectedInput = fieldEl.closest('form').querySelectorAll('[name="'+ fieldEl.name +'"]:checked').length > 0;
 
-    let obj = getValidateFieldDefault({result: fieldValue.trim().length > 0, fieldEl});
-
-    if( !obj.result ){
+    if( (!isRadioOrCheckbox && !obj.result) || (isRadioOrCheckbox && !hasSelectedInput) ){
+        obj.result = false;
         obj.errors = { empty: true };
         return Promise.resolve(obj);
     }
@@ -21,9 +23,7 @@ export function isValid( fieldEl, fieldOptions, validationRules, validationError
 
         if( isAttrValueWithFn || isAttrNameWithFn ){
             accList.push( isAttrValueWithFn ? attrValue : attrName );
-
         }
-
         return accList;
     }, []);
 
@@ -36,12 +36,19 @@ export function isValid( fieldEl, fieldOptions, validationRules, validationError
                     // RUN VALIDATION INSIDE A PROMISE IS USEFUL FOR ASYNC VALIDATIONS
                     resolveVal( validationRules[methodName](fieldValue, fieldEl, fieldOptions) );
                 }).then(valObj => {
+                    // ADD CUSTOM ERROR-KEY FOR EACH VALIDATION RULE
+                    if( !valObj.result ){
+                        const errorObj = {};
+                        if( typeof valObj.errors === 'undefined' || typeof valObj.errors[methodName] === 'undefined' ){
+                            errorObj[methodName] = true;
+                        }
+                        valObj.errors = mergeObjects({}, valObj.errors, errorObj);
+                    }
                     valObj = valObj.result ? {} : valObj;
                     return mergeObjects(accObj, valObj);
                 });
             });
         }, Promise.resolve(obj));
-        
         resolve(validationsResult);
 
     }).then(data => {
