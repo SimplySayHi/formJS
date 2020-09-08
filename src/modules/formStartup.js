@@ -6,8 +6,8 @@ export function formStartup( formEl, options ){
 
     formEl.noValidate = true;
 
-    let fieldOptions = options.fieldOptions,
-        formOptions = options.formOptions;
+    const fieldOptions = options.fieldOptions,
+          formOptions = options.formOptions;
 
     // HANDLE FIELD VALIDATION
     if( fieldOptions.handleValidation ){
@@ -32,7 +32,7 @@ export function formStartup( formEl, options ){
 
         // INIT EVENTS LISTENER ( AS IN fieldOptions )
         fieldOptions.validateOnEvents.split(' ').forEach(function( eventName ){
-            let useCapturing = (eventName === 'blur' ? true : false);
+            const useCapturing = (eventName === 'blur' ? true : false);
             formEl.addEventListener(eventName, validation, useCapturing);
         });
 

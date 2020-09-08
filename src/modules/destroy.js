@@ -19,7 +19,7 @@ export function destroy( formEl, options ){
     }
 
     options.fieldOptions.validateOnEvents.split(' ').forEach(function( eventName ){
-        let useCapturing = (eventName === 'blur' ? true : false);
+        const useCapturing = (eventName === 'blur' ? true : false);
         formEl.removeEventListener(eventName, validation, useCapturing);
     });
 

@@ -34,7 +34,7 @@ export function ajaxCall( formEl, formDataObj, options ){
         
         Array.from( formEl.querySelectorAll('[type="file"]') ).forEach(function( field ){
             Array.from(field.files).forEach(function( file, idx ){
-                let name = field.name+'['+ idx +']';
+                const name = field.name+'['+ idx +']';
                 formDataMultipart.append( name, file, file.name );
             });
         });
@@ -79,7 +79,7 @@ export function ajaxCall( formEl, formDataObj, options ){
                 return Promise.reject(response);
             }
 
-            let fetchMethod = getFetchMethod(response, ajaxOptions);
+            const fetchMethod = getFetchMethod(response, ajaxOptions);
 
             return response[fetchMethod]();
         })

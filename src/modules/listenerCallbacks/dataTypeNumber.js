@@ -9,7 +9,7 @@ export const dataTypeNumber = function( event ){
         
         if( hasInvalidChars ){
             event.stopImmediatePropagation();
-            let valueReplaced = fieldValue.replace(/[^\d.,+\-]/g, '');
+            const valueReplaced = fieldValue.replace(/[^\d.,+\-]/g, '');
             fieldEl.value = valueReplaced;
         }
     }

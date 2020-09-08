@@ -11,7 +11,7 @@ export const validationErrors = {
 
         } else {
 
-            let splitAt_at = string.split('@');
+            const splitAt_at = string.split('@');
             if( splitAt_at[0].length === 0 ){
 
                 // USER NAME IS MISSING
@@ -35,8 +35,8 @@ export const validationErrors = {
             } else {
 
                 // EXTENSION MISSING OR NOT LONG ENOUGH
-                let splitAt_dot = splitAt_at[1].split('.'),
-                    extLength = splitAt_dot[1].length;
+                const splitAt_dot = splitAt_at[1].split('.'),
+                      extLength = splitAt_dot[1].length;
                 if( extLength === 0 ) {
                     obj.missingExtension = true;
                 } else if( extLength < 2 ){

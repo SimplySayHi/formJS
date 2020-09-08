@@ -33,11 +33,11 @@ export const defaultCallbacksInOptions = {
                 if( isCheckbox ) {
                     
                     value = fieldEl.checked;
-                    let checkboxes = Array.from( formEl.querySelectorAll('[name="'+ name +'"]') );
+                    const checkboxes = Array.from( formEl.querySelectorAll('[name="'+ name +'"]') );
                     if( checkboxes.length > 1 ){
 
                         value = [];
-                        let checkedElems = checkboxes.filter(field => field.checked);
+                        const checkedElems = checkboxes.filter(field => field.checked);
                         checkedElems.forEach(fieldEl => {
                             value.push( fieldEl.value );
                         });
@@ -46,12 +46,12 @@ export const defaultCallbacksInOptions = {
                         
                 } else if( isRadio ){
                     
-                    let checkedRadio = formEl.querySelector('[name="'+ name +'"]:checked');
+                    const checkedRadio = formEl.querySelector('[name="'+ name +'"]:checked');
                     value = (checkedRadio === null ? null : checkedRadio.value);
                     
                 } else if( isSelect ){
 
-                    let selectedOpts = Array.from( fieldEl.options ).filter(option => option.selected);
+                    const selectedOpts = Array.from( fieldEl.options ).filter(option => option.selected);
                     if( selectedOpts.length > 1 ){
 
                         value = [];

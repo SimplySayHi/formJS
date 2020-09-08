@@ -4,8 +4,8 @@ import { formStartup }                             from './formStartup';
 
 export function constructorFn( self, formEl, optionsObj ){
 
-    let argsL = arguments.length,
-        checkFormElem = checkFormEl(formEl);
+    const argsL = arguments.length,
+          checkFormElem = checkFormEl(formEl);
 
     if( argsL === 0 || (argsL > 0 && !formEl) ){
         throw new Error('First argument "formEl" is missing or falsy!');
@@ -30,8 +30,8 @@ export function constructorFn( self, formEl, optionsObj ){
         'getFormData'
     ];
     cbList.forEach(cbName => {
-        let optionType = self.options.formOptions[cbName] ? 'formOptions' : 'fieldOptions',
-            cbOpt = self.options[optionType][cbName];
+        const optionType = self.options.formOptions[cbName] ? 'formOptions' : 'fieldOptions',
+              cbOpt = self.options[optionType][cbName];
 
         if( cbOpt ){
             self.options[optionType][cbName] = ( Array.isArray(cbOpt) ? cbOpt.map(cbFn => cbFn.bind(self)) : cbOpt.bind(self) );

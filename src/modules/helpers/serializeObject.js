@@ -1,6 +1,6 @@
 
 export const serializeObject = obj => {
-    var objToString = (
+    const objToString = (
             (obj && typeof obj === 'object' && obj.constructor === Object) ? 
             Object.keys(obj)
                 .reduce((a,k) => {

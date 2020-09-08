@@ -1,10 +1,10 @@
 
 export const length = function( value, fieldEl ){
-    let valueL = value.length,
-        attrValue = JSON.parse( fieldEl.getAttribute('data-length') ),
-        isMinlengthOk = valueL >= attrValue[0],
-        isMaxlengthOk = valueL <= attrValue[1],
-        obj = { result: isMinlengthOk && isMaxlengthOk };
+    const valueL = value.length,
+          attrValue = JSON.parse( fieldEl.getAttribute('data-length') ),
+          isMinlengthOk = valueL >= attrValue[0],
+          isMaxlengthOk = valueL <= attrValue[1],
+          obj = { result: isMinlengthOk && isMaxlengthOk };
 
     if( !obj.result ){
         obj.errors = { stringLength: true };

@@ -43,7 +43,7 @@ export function checkFieldValidity( fieldEl, fieldOptions, validationRules, vali
             data: {fieldEl}
         })
         .then(data => {
-            let dataObj = data.pop();
+            const dataObj = data.pop();
             return new Promise(resolve => {
                 if( !needsValidation ){
                     dataObj.result = true;
