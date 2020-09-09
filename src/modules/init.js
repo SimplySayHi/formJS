@@ -17,6 +17,6 @@ export const init = function( formEl ){
     }) ).then(fields => {
         instance.isInitialized = true;
         return { instance, fields };
-    });;
+    });
 
 }
