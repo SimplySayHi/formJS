@@ -2,7 +2,7 @@
 import { checkFieldValidity } from '../src/modules/checkFieldValidity';
 import { options } from '../src/modules/options';
 import { validationRules } from '../src/modules/validationRules';
-import { validationErrors } from '../src/modules/validationErrors';
+import { validationErrors } from '../js/test-modules/validationErrors';
 
 describe( 'checkFieldValidity', () => {
 
@@ -23,7 +23,7 @@ describe( 'checkFieldValidity', () => {
         </form>`;
     } );
 
-    test( 'checkFieldValidity - all agrs - fieldEl is fake 1', () => {
+    test( 'checkFieldValidity - all agrs - fieldEl obj is fake 1', () => {
         const el = document.querySelector('[name="aaa"]');
         const returnObj = {
             fieldEl: el,
@@ -33,7 +33,7 @@ describe( 'checkFieldValidity', () => {
         return expect( promiseRun ).resolves.toEqual( returnObj );
     } );
 
-    test( 'checkFieldValidity - all agrs - fieldEl is fake 2', () => {
+    test( 'checkFieldValidity - all agrs - fieldEl string is fake 2', () => {
         const el = '[name="aaa"]';
         const returnObj = {
             fieldEl: '[name="aaa"]',

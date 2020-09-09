@@ -26,6 +26,7 @@ module.exports = {
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: [
     "/node_modules/",
+    "<rootDir>/js/",
     "<rootDir>/src/modules/helpers",
     "<rootDir>/src/modules/options.js",
     "<rootDir>/src/modules/optionsUtils.js",
