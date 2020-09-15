@@ -5,15 +5,12 @@ const isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), isDOM
         result: isDOMNode(formEl) || isFormSelector,
         element: "string" === isString ? document.querySelector(formEl) : formEl
     };
-}, mergeObjects = function(out = {}) {
-    for (let i = 1; i < arguments.length; i++) {
-        let obj = arguments[i];
-        if (obj) for (let key in obj) {
-            let isArray = "[object Array]" === Object.prototype.toString.call(obj[key]), isObject = "[object Object]" === Object.prototype.toString.call(obj[key]);
-            obj.hasOwnProperty(key) && (isArray ? (void 0 === out[key] && (out[key] = []), out[key] = out[key].concat(obj[key].slice(0))) : isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
-        }
-    }
-    return out;
+}, isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
+    return Array.from(arguments).slice(1).filter(arg => !!arg).forEach(arg => {
+        Object.keys(arg).forEach(key => {
+            Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
+        });
+    }), out;
 }, finalizeFieldPromise = obj => obj.result ? Promise.resolve() : Promise.reject(obj.errors), finalizeFormPromise = obj => obj.result ? Promise.resolve(obj.fields) : Promise.reject(obj.fields), formatMap = {
     "YYYY-MM-DD": function(dateArray) {
         return dateArray;

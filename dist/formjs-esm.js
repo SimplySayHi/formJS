@@ -18,15 +18,12 @@ const addClass = (element, cssClasses) => {
 }, customEvents_form = {
     submit: "fjs.form:submit",
     validation: "fjs.form:validation"
-}, mergeObjects = function(out = {}) {
-    for (let i = 1; i < arguments.length; i++) {
-        let obj = arguments[i];
-        if (obj) for (let key in obj) {
-            let isArray = "[object Array]" === Object.prototype.toString.call(obj[key]), isObject = "[object Object]" === Object.prototype.toString.call(obj[key]);
-            obj.hasOwnProperty(key) && (isArray ? (void 0 === out[key] && (out[key] = []), out[key] = out[key].concat(obj[key].slice(0))) : isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
-        }
-    }
-    return out;
+}, isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
+    return Array.from(arguments).slice(1).filter(arg => !!arg).forEach(arg => {
+        Object.keys(arg).forEach(key => {
+            Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
+        });
+    }), out;
 }, dispatchCustomEvent = (elem, eventName, eventOptions) => {
     eventOptions = mergeObjects({}, {
         bubbles: !0

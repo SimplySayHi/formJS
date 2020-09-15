@@ -27,7 +27,7 @@ class Form {
     }
 
     validateField( fieldEl, fieldOptions ){
-        fieldEl = (typeof fieldEl === 'string' ? this.formEl.querySelector(fieldEl) : fieldEl);
+        fieldEl = typeof fieldEl === 'string' ? this.formEl.querySelector(fieldEl) : fieldEl;
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
         const formEl = this.formEl;
         const skipUIfeedback = this.options.fieldOptions.skipUIfeedback;

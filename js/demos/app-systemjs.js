@@ -74,19 +74,18 @@ System.register([], function () {
         submit: "fjs.form:submit",
         validation: "fjs.form:validation"
       },
+          isPlainObject = function isPlainObject(object) {
+        return "[object Object]" === Object.prototype.toString.call(object);
+      },
           mergeObjects = function mergeObjects() {
         var out = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-        for (var i = 1; i < arguments.length; i++) {
-          var obj = arguments[i];
-          if (obj) for (var key in obj) {
-            var isArray = "[object Array]" === Object.prototype.toString.call(obj[key]),
-                isObject = "[object Object]" === Object.prototype.toString.call(obj[key]);
-            obj.hasOwnProperty(key) && (isArray ? (void 0 === out[key] && (out[key] = []), out[key] = out[key].concat(obj[key].slice(0))) : isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
-          }
-        }
-
-        return out;
+        return Array.from(arguments).slice(1).filter(function (arg) {
+          return !!arg;
+        }).forEach(function (arg) {
+          Object.keys(arg).forEach(function (key) {
+            Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
+          });
+        }), out;
       },
           dispatchCustomEvent = function dispatchCustomEvent(elem, eventName, eventOptions) {
         eventOptions = mergeObjects({}, {
