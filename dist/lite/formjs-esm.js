@@ -1,11 +1,5 @@
 /* formJS Lite v5.0.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
-const isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), isDOMNode = node => Element.prototype.isPrototypeOf(node), checkFormEl = formEl => {
-    let isString = typeof formEl, isFormSelector = "string" === isString && isDOMNode(document.querySelector(formEl)) && "form" === document.querySelector(formEl).tagName.toLowerCase();
-    return {
-        result: isDOMNode(formEl) || isFormSelector,
-        element: "string" === isString ? document.querySelector(formEl) : formEl
-    };
-}, isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
+const isDOMNode = node => Element.prototype.isPrototypeOf(node), isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
     return Array.from(arguments).slice(1).filter(arg => !!arg).forEach(arg => {
         Object.keys(arg).forEach(key => {
             Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
@@ -230,15 +224,20 @@ function checkFormValidity(formEl, fieldOptions, validationRules, validationErro
 
 class Form {
     constructor(formEl, optionsObj) {
-        !function(self, formEl, optionsObj) {
-            const argsL = arguments.length, checkFormElem = checkFormEl(formEl);
-            if (0 === argsL || argsL > 0 && !formEl) throw new Error('First argument "formEl" is missing or falsy!');
-            if (isNodeList(formEl)) throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
-            if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
-            self.formEl = checkFormElem.element, self.formEl.formjs = self, self.options = mergeObjects({}, self.constructor.prototype.options, optionsObj), 
-            self.options.fieldOptions.beforeValidation = self.options.fieldOptions.beforeValidation.map(cbFn => cbFn.bind(self)), 
-            self.formEl.noValidate = !0;
-        }(this, formEl, optionsObj);
+        const argsL = arguments.length, checkFormElem = (formEl => {
+            let isString = typeof formEl, isFormSelector = "string" === isString && isDOMNode(document.querySelector(formEl)) && "form" === document.querySelector(formEl).tagName.toLowerCase();
+            return {
+                result: isDOMNode(formEl) || isFormSelector,
+                element: "string" === isString ? document.querySelector(formEl) : formEl
+            };
+        })(formEl);
+        if (0 === argsL || argsL > 0 && !formEl) throw new Error('First argument "formEl" is missing or falsy!');
+        if (nodeList = formEl, NodeList.prototype.isPrototypeOf(nodeList)) throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
+        var nodeList;
+        if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
+        this.formEl = checkFormElem.element, this.formEl.formjs = this, this.options = mergeObjects({}, Form.prototype.options, optionsObj), 
+        this.options.fieldOptions.beforeValidation = this.options.fieldOptions.beforeValidation.map(cbFn => cbFn.bind(this)), 
+        this.formEl.noValidate = !0;
     }
     destroy() {
         delete this.formEl.formjs;
@@ -251,13 +250,13 @@ class Form {
         checkFormValidity(this.formEl, fieldOptions, this.validationRules, this.validationErrors).then(finalizeFormPromise);
     }
     static addValidationErrors(errorsObj) {
-        this.prototype.validationErrors = mergeObjects({}, this.prototype.validationErrors, errorsObj);
+        Form.prototype.validationErrors = mergeObjects({}, Form.prototype.validationErrors, errorsObj);
     }
     static addValidationRules(rulesObj) {
-        this.prototype.validationRules = mergeObjects({}, this.prototype.validationRules, rulesObj);
+        Form.prototype.validationRules = mergeObjects({}, Form.prototype.validationRules, rulesObj);
     }
     static setOptions(optionsObj) {
-        this.prototype.options = mergeObjects({}, this.prototype.options, optionsObj);
+        Form.prototype.options = mergeObjects({}, Form.prototype.options, optionsObj);
     }
 }
 

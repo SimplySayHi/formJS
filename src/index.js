@@ -1,10 +1,10 @@
 
 import { version }              from './modules/version';
-import { customEvents, dispatchCustomEvent, excludeSelector, finalizeFieldPromise, finalizeFormPromise, mergeObjects, removeClass } from './modules/helpers';
+import { checkFormEl, customEvents, dispatchCustomEvent, excludeSelector, finalizeFieldPromise, finalizeFormPromise, isNodeList, mergeObjects, removeClass } from './modules/helpers';
 import { options }              from './modules/options';
 import { validationRules }      from './modules/validationRules';
 import { validationEnd }        from './modules/listenerCallbacks';
-import { constructorFn }        from './modules/constructor';
+import { formStartup }          from './modules/formStartup';
 import { destroy }              from './modules/destroy';
 import { checkFilledFields }    from './modules/checkFilledFields';
 import { checkFieldValidity }   from './modules/checkFieldValidity';
@@ -13,7 +13,41 @@ import { checkFormValidity }    from './modules/checkFormValidity';
 class Form {
 
     constructor( formEl, optionsObj ){
-        constructorFn(this, formEl, optionsObj);
+        const argsL = arguments.length,
+              checkFormElem = checkFormEl(formEl);
+
+        if( argsL === 0 || (argsL > 0 && !formEl) ){
+            throw new Error('First argument "formEl" is missing or falsy!');
+        }
+        if( isNodeList(formEl) ){
+            throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
+        }
+        if( !checkFormElem.result ){
+            throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
+        }
+
+        this.formEl = checkFormElem.element;
+        this.formEl.formjs = this;
+        this.options = mergeObjects({}, Form.prototype.options, optionsObj);
+
+        // BINDING CONTEXT FOR FUTURE EXECUTION
+        const cbList = [
+            // IN fieldOptions
+            'beforeValidation',
+            // IN formOptions
+            'beforeSend',
+            'getFormData'
+        ];
+        cbList.forEach(cbName => {
+            const optionType = this.options.formOptions[cbName] ? 'formOptions' : 'fieldOptions';
+            let cbOpt = this.options[optionType][cbName];
+
+            if( cbOpt ){
+                this.options[optionType][cbName] = ( Array.isArray(cbOpt) ? cbOpt.map(cbFn => cbFn.bind(this)) : cbOpt.bind(this) );
+            }
+        });
+
+        formStartup( this.formEl, this.options );
     }
 
     destroy(){
@@ -80,15 +114,15 @@ class Form {
     }
     
     static addValidationErrors( errorsObj ){
-        this.prototype.validationErrors = mergeObjects({}, this.prototype.validationErrors, errorsObj);
+        Form.prototype.validationErrors = mergeObjects({}, Form.prototype.validationErrors, errorsObj);
     }
 
     static addValidationRules( rulesObj ){
-        this.prototype.validationRules = mergeObjects({}, this.prototype.validationRules, rulesObj);
+        Form.prototype.validationRules = mergeObjects({}, Form.prototype.validationRules, rulesObj);
     }
     
     static setOptions( optionsObj ){
-        this.prototype.options = mergeObjects({}, this.prototype.options, optionsObj);
+        Form.prototype.options = mergeObjects({}, Form.prototype.options, optionsObj);
     }
 
 }

@@ -1,6 +1,7 @@
 
 import { checkFormEl, isNodeList, mergeObjects }   from './helpers';
 import { formStartup }                             from './formStartup';
+import Form                                        from '../index';
 
 export function constructorFn( self, formEl, optionsObj ){
 
@@ -19,7 +20,7 @@ export function constructorFn( self, formEl, optionsObj ){
 
     self.formEl = checkFormElem.element;
     self.formEl.formjs = self;
-    self.options = mergeObjects({}, self.constructor.prototype.options, optionsObj);
+    self.options = mergeObjects({}, Form.prototype.options, optionsObj);
 
     // BINDING CONTEXT FOR FUTURE EXECUTION
     const cbList = [

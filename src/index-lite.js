@@ -1,16 +1,35 @@
 
 import { version }              from './modules/version';
-import { finalizeFieldPromise, finalizeFormPromise, mergeObjects } from './modules/helpers';
+import { checkFormEl, finalizeFieldPromise, finalizeFormPromise, isNodeList, mergeObjects } from './modules/helpers';
 import { options }              from './modules-lite/options';
 import { validationRules }      from './modules/validationRules';
-import { constructorFn }        from './modules-lite/constructor';
 import { checkFieldValidity }   from './modules/checkFieldValidity';
 import { checkFormValidity }    from './modules/checkFormValidity';
 
 class Form {
 
     constructor( formEl, optionsObj ){
-        constructorFn(this, formEl, optionsObj);
+        const argsL = arguments.length,
+              checkFormElem = checkFormEl(formEl);
+
+        if( argsL === 0 || (argsL > 0 && !formEl) ){
+            throw new Error('First argument "formEl" is missing or falsy!');
+        }
+        if( isNodeList(formEl) ){
+            throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
+        }
+        if( !checkFormElem.result ){
+            throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
+        }
+
+        this.formEl = checkFormElem.element;
+        this.formEl.formjs = this;
+        this.options = mergeObjects({}, Form.prototype.options, optionsObj);
+
+        // BINDING CONTEXT FOR FUTURE EXECUTION
+        this.options.fieldOptions.beforeValidation = this.options.fieldOptions.beforeValidation.map(cbFn => cbFn.bind(this));
+
+        this.formEl.noValidate = true;
     }
 
     destroy(){
@@ -31,15 +50,15 @@ class Form {
     }
     
     static addValidationErrors( errorsObj ){
-        this.prototype.validationErrors = mergeObjects({}, this.prototype.validationErrors, errorsObj);
+        Form.prototype.validationErrors = mergeObjects({}, Form.prototype.validationErrors, errorsObj);
     }
 
     static addValidationRules( rulesObj ){
-        this.prototype.validationRules = mergeObjects({}, this.prototype.validationRules, rulesObj);
+        Form.prototype.validationRules = mergeObjects({}, Form.prototype.validationRules, rulesObj);
     }
     
     static setOptions( optionsObj ){
-        this.prototype.options = mergeObjects({}, this.prototype.options, optionsObj);
+        Form.prototype.options = mergeObjects({}, Form.prototype.options, optionsObj);
     }
 
 }
