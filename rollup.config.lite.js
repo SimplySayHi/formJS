@@ -1,6 +1,6 @@
 
 import resolve from '@rollup/plugin-node-resolve';
-import babel from 'rollup-plugin-babel';
+import babel from '@rollup/plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import myPackage from './package.json';
 
@@ -19,10 +19,10 @@ optionsESM = {
         {
             file: `dist/lite/${libraryFileName}-esm.js`,
             format: 'es',
+            sourcemap: false,
             plugins: [
                 terser({
                     mangle: false,
-                    sourcemap: false,
                     output: {
                         beautify: true,
                         preamble: initialComment
@@ -35,6 +35,7 @@ optionsESM = {
         {
             file: `dist/lite/${libraryFileName}-esm.min.js`,
             format: 'es',
+            sourcemap: true,
             plugins: [
                 terser({
                     output: {
@@ -42,8 +43,7 @@ optionsESM = {
                         preamble: initialComment
                     }
                 })
-            ],
-            sourcemap: true
+            ]
         }
 
     ]
@@ -57,10 +57,10 @@ optionsSYS = {
         {
             file: `dist/lite/${libraryFileName}-systemjs.js`,
             format: 'system',
+            sourcemap: false,
             plugins: [
                 terser({
                     mangle: false,
-                    sourcemap: false,
                     output: {
                         beautify: true,
                         preamble: initialComment
@@ -73,6 +73,7 @@ optionsSYS = {
         {
             file: `dist/lite/${libraryFileName}-systemjs.min.js`,
             format: 'system',
+            sourcemap: true,
             plugins: [
                 terser({
                     output: {
@@ -80,12 +81,11 @@ optionsSYS = {
                         preamble: initialComment
                     }
                 })
-            ],
-            sourcemap: true
+            ]
         }
 
     ],
-    plugins: [ resolve(), babel() ]
+    plugins: [ resolve(), babel({babelHelpers: 'bundled'}) ]
 },
 
 optionsIIFE = {
@@ -97,10 +97,10 @@ optionsIIFE = {
             file: `dist/lite/${libraryFileName}.js`,
             format: 'iife',
             name: libraryNamespace,
+            sourcemap: false,
             plugins: [
                 terser({
                     mangle: false,
-                    sourcemap: false,
                     output: {
                         beautify: true,
                         preamble: initialComment
@@ -114,6 +114,7 @@ optionsIIFE = {
             file: `dist/lite/${libraryFileName}.min.js`,
             format: 'iife',
             name: libraryNamespace,
+            sourcemap: true,
             plugins: [
                 terser({
                     output: {
@@ -121,12 +122,11 @@ optionsIIFE = {
                         preamble: initialComment
                     }
                 })
-            ],
-            sourcemap: true
+            ]
         }
 
     ],
-    plugins: [ resolve(), babel() ]
+    plugins: [ resolve(), babel({babelHelpers: 'bundled'}) ]
 }
 
 ;
