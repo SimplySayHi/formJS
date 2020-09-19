@@ -1,4 +1,4 @@
-/* formJS Lite v4.2.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS Lite v4.2.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 System.register([], (function(exports) {
     "use strict";
     return {
@@ -9,6 +9,9 @@ System.register([], (function(exports) {
                 } : function(obj) {
                     return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
                 })(obj);
+            }
+            function _classCallCheck(instance, Constructor) {
+                if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
             }
             function _defineProperties(target, props) {
                 for (var i = 0; i < props.length; i++) {
@@ -27,15 +30,17 @@ System.register([], (function(exports) {
                     result: isDOMNode(formEl) || isFormSelector,
                     element: "string" === isString ? document.querySelector(formEl) : formEl
                 };
+            }, isPlainObject = function(object) {
+                return "[object Object]" === Object.prototype.toString.call(object);
             }, mergeObjects = function mergeObjects() {
-                for (var out = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}, i = 1; i < arguments.length; i++) {
-                    var obj = arguments[i];
-                    if (obj) for (var key in obj) {
-                        var isArray = "[object Array]" === Object.prototype.toString.call(obj[key]), isObject = "[object Object]" === Object.prototype.toString.call(obj[key]);
-                        obj.hasOwnProperty(key) && (isArray ? (void 0 === out[key] && (out[key] = []), out[key] = out[key].concat(obj[key].slice(0))) : isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
-                    }
-                }
-                return out;
+                var out = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+                return Array.from(arguments).slice(1).filter((function(arg) {
+                    return !!arg;
+                })).forEach((function(arg) {
+                    Object.keys(arg).forEach((function(key) {
+                        Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
+                    }));
+                })), out;
             }, fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', formatMap = {
                 "YYYY-MM-DD": function(dateArray) {
                     return dateArray;
@@ -253,34 +258,32 @@ System.register([], (function(exports) {
             }
             var Form = exports("default", function() {
                 function Form(formEl, optionsObj) {
-                    !function(instance, Constructor) {
-                        if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
-                    }(this, Form), function(self, formEl, optionsObj) {
-                        var argsL = arguments.length, checkFormElem = checkFormEl(formEl);
-                        if (0 === argsL || argsL > 0 && !formEl) throw new Error('First argument "formEl" is missing or falsy!');
-                        if (isNodeList(formEl)) throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
-                        if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
-                        self.formEl = checkFormElem.element, self.formEl.formjs = self, self.options = mergeObjects({}, self.constructor.prototype.options, optionsObj), 
-                        self.options.fieldOptions.beforeValidation = self.options.fieldOptions.beforeValidation.map((function(cbFn) {
-                            return cbFn.bind(self);
-                        })), self.formEl.noValidate = !0;
-                    }(this, formEl, optionsObj);
+                    var _this = this;
+                    _classCallCheck(this, Form);
+                    var argsL = arguments.length, checkFormElem = checkFormEl(formEl);
+                    if (0 === argsL || argsL > 0 && !formEl) throw new Error('First argument "formEl" is missing or falsy!');
+                    if (isNodeList(formEl)) throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
+                    if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
+                    this.formEl = checkFormElem.element, this.formEl.formjs = this, this.options = mergeObjects({}, Form.prototype.options, optionsObj), 
+                    this.options.fieldOptions.beforeValidation = this.options.fieldOptions.beforeValidation.map((function(cbFn) {
+                        return cbFn.bind(_this);
+                    })), this.formEl.noValidate = !0;
                 }
                 var Constructor, protoProps, staticProps;
                 return Constructor = Form, staticProps = [ {
                     key: "addValidationErrors",
                     value: function(errorsObj) {
-                        this.prototype.validationErrors = mergeObjects({}, this.prototype.validationErrors, errorsObj);
+                        Form.prototype.validationErrors = mergeObjects({}, Form.prototype.validationErrors, errorsObj);
                     }
                 }, {
                     key: "addValidationRules",
                     value: function(rulesObj) {
-                        this.prototype.validationRules = mergeObjects({}, this.prototype.validationRules, rulesObj);
+                        Form.prototype.validationRules = mergeObjects({}, Form.prototype.validationRules, rulesObj);
                     }
                 }, {
                     key: "setOptions",
                     value: function(optionsObj) {
-                        this.prototype.options = mergeObjects({}, this.prototype.options, optionsObj);
+                        Form.prototype.options = mergeObjects({}, Form.prototype.options, optionsObj);
                     }
                 } ], (protoProps = [ {
                     key: "destroy",
@@ -332,7 +335,7 @@ System.register([], (function(exports) {
                     maxFileSize: 10
                 }
             }, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-            Form.prototype.version = "4.2.0";
+            Form.prototype.version = "4.2.1";
         }
     };
 }));

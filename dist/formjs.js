@@ -1,4 +1,4 @@
-/* formJS v4.2.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v4.2.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 var Form = function() {
     "use strict";
     function _typeof(obj) {
@@ -7,6 +7,9 @@ var Form = function() {
         } : function(obj) {
             return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
         })(obj);
+    }
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
     }
     function _defineProperties(target, props) {
         for (var i = 0; i < props.length; i++) {
@@ -38,15 +41,17 @@ var Form = function() {
     }, customEvents_form = {
         submit: "fjs.form:submit",
         validation: "fjs.form:validation"
+    }, isPlainObject = function(object) {
+        return "[object Object]" === Object.prototype.toString.call(object);
     }, mergeObjects = function mergeObjects() {
-        for (var out = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}, i = 1; i < arguments.length; i++) {
-            var obj = arguments[i];
-            if (obj) for (var key in obj) {
-                var isArray = "[object Array]" === Object.prototype.toString.call(obj[key]), isObject = "[object Object]" === Object.prototype.toString.call(obj[key]);
-                obj.hasOwnProperty(key) && (isArray ? (void 0 === out[key] && (out[key] = []), out[key] = out[key].concat(obj[key].slice(0))) : isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
-            }
-        }
-        return out;
+        var out = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+        return Array.from(arguments).slice(1).filter((function(arg) {
+            return !!arg;
+        })).forEach((function(arg) {
+            Object.keys(arg).forEach((function(key) {
+                Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
+            }));
+        })), out;
     }, dispatchCustomEvent = function(elem, eventName) {
         var data = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : {}, eventOptions = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : {};
         eventOptions = mergeObjects({}, {
@@ -548,38 +553,36 @@ var Form = function() {
     }
     var Form = function() {
         function Form(formEl, optionsObj) {
-            !function(instance, Constructor) {
-                if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
-            }(this, Form), function(self, formEl, optionsObj) {
-                var argsL = arguments.length, checkFormElem = checkFormEl(formEl);
-                if (0 === argsL || argsL > 0 && !formEl) throw new Error('First argument "formEl" is missing or falsy!');
-                if (isNodeList(formEl)) throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
-                if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
-                self.formEl = checkFormElem.element, self.formEl.formjs = self, self.options = mergeObjects({}, self.constructor.prototype.options, optionsObj);
-                var cbList = [ "beforeValidation", "beforeSend", "getFormData" ];
-                cbList.forEach((function(cbName) {
-                    var optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions", cbOpt = self.options[optionType][cbName];
-                    cbOpt && (self.options[optionType][cbName] = Array.isArray(cbOpt) ? cbOpt.map((function(cbFn) {
-                        return cbFn.bind(self);
-                    })) : cbOpt.bind(self));
-                })), formStartup(self.formEl, self.options);
-            }(this, formEl, optionsObj);
+            var _this = this;
+            _classCallCheck(this, Form);
+            var argsL = arguments.length, checkFormElem = checkFormEl(formEl);
+            if (0 === argsL || argsL > 0 && !formEl) throw new Error('First argument "formEl" is missing or falsy!');
+            if (isNodeList(formEl)) throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
+            if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
+            this.formEl = checkFormElem.element, this.formEl.formjs = this, this.options = mergeObjects({}, Form.prototype.options, optionsObj);
+            var cbList = [ "beforeValidation", "beforeSend", "getFormData" ];
+            cbList.forEach((function(cbName) {
+                var optionType = _this.options.formOptions[cbName] ? "formOptions" : "fieldOptions", cbOpt = _this.options[optionType][cbName];
+                cbOpt && (_this.options[optionType][cbName] = Array.isArray(cbOpt) ? cbOpt.map((function(cbFn) {
+                    return cbFn.bind(_this);
+                })) : cbOpt.bind(_this));
+            })), formStartup(this.formEl, this.options);
         }
         var Constructor, protoProps, staticProps;
         return Constructor = Form, staticProps = [ {
             key: "addValidationErrors",
             value: function(errorsObj) {
-                this.prototype.validationErrors = mergeObjects({}, this.prototype.validationErrors, errorsObj);
+                Form.prototype.validationErrors = mergeObjects({}, Form.prototype.validationErrors, errorsObj);
             }
         }, {
             key: "addValidationRules",
             value: function(rulesObj) {
-                this.prototype.validationRules = mergeObjects({}, this.prototype.validationRules, rulesObj);
+                Form.prototype.validationRules = mergeObjects({}, Form.prototype.validationRules, rulesObj);
             }
         }, {
             key: "setOptions",
             value: function(optionsObj) {
-                this.prototype.options = mergeObjects({}, this.prototype.options, optionsObj);
+                Form.prototype.options = mergeObjects({}, Form.prototype.options, optionsObj);
             }
         } ], (protoProps = [ {
             key: "destroy",
@@ -611,7 +614,7 @@ var Form = function() {
         }, {
             key: "validateField",
             value: function(fieldEl, fieldOptions) {
-                var _this = this;
+                var _this2 = this;
                 fieldEl = "string" == typeof fieldEl ? this.formEl.querySelector(fieldEl) : fieldEl, 
                 fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
                 var formEl = this.formEl, skipUIfeedback = this.options.fieldOptions.skipUIfeedback;
@@ -620,12 +623,12 @@ var Form = function() {
                         obj.fieldEl && (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
                             bubbles: !1
                         }), dispatchCustomEvent(formEl, customEvents_field.validation, obj), fieldOptions.onValidationCheckAll && obj.result ? (fieldOptions.skipUIfeedback = !0, 
-                        resolve(checkFormValidity(formEl, fieldOptions, _this.validationRules, _this.validationErrors, obj.fieldEl).then((function(dataForm) {
+                        resolve(checkFormValidity(formEl, fieldOptions, _this2.validationRules, _this2.validationErrors, obj.fieldEl).then((function(dataForm) {
                             var clMethodName = dataForm.result ? "add" : "remove";
-                            return formEl.classList[clMethodName](_this.options.formOptions.cssClasses.valid), 
+                            return formEl.classList[clMethodName](_this2.options.formOptions.cssClasses.valid), 
                             dispatchCustomEvent(formEl, customEvents_form.validation, dataForm), fieldOptions.skipUIfeedback = skipUIfeedback, 
                             obj;
-                        })))) : obj.result || removeClass(formEl, _this.options.formOptions.cssClasses.valid)), 
+                        })))) : obj.result || removeClass(formEl, _this2.options.formOptions.cssClasses.valid)), 
                         resolve(obj);
                     }));
                 }));
@@ -633,12 +636,12 @@ var Form = function() {
         }, {
             key: "validateForm",
             value: function(fieldOptions) {
-                var _this2 = this;
+                var _this3 = this;
                 fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
                 var formEl = this.formEl;
                 return checkFormValidity(formEl, fieldOptions, this.validationRules, this.validationErrors).then((function(data) {
                     var clMethodName = data.result ? "add" : "remove";
-                    return formEl.classList[clMethodName](_this2.options.formOptions.cssClasses.valid), 
+                    return formEl.classList[clMethodName](_this3.options.formOptions.cssClasses.valid), 
                     validationEnd({
                         data: data
                     }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
@@ -661,6 +664,6 @@ var Form = function() {
             }
             return obj;
         }
-    }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.2.0", 
+    }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.2.1", 
     Form;
 }();
