@@ -32,7 +32,7 @@ export function formStartup( formEl, options ){
 
         // INIT EVENTS LISTENER ( AS IN fieldOptions )
         fieldOptions.validateOnEvents.split(' ').forEach(function( eventName ){
-            const useCapturing = (eventName === 'blur' ? true : false);
+            const useCapturing = eventName === 'blur' ? true : false;
             formEl.addEventListener(eventName, validation, useCapturing);
         });
 

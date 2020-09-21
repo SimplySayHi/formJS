@@ -27,9 +27,11 @@ class Form {
             throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
         }
 
-        this.formEl = checkFormElem.element;
-        this.formEl.formjs = this;
-        this.options = mergeObjects({}, Form.prototype.options, optionsObj);
+        const self = this;
+
+        self.formEl = checkFormElem.element;
+        self.formEl.formjs = self;
+        self.options = mergeObjects({}, Form.prototype.options, optionsObj);
 
         // BINDING CONTEXT FOR FUTURE EXECUTION
         const cbList = [
@@ -40,15 +42,15 @@ class Form {
             'getFormData'
         ];
         cbList.forEach(cbName => {
-            const optionType = this.options.formOptions[cbName] ? 'formOptions' : 'fieldOptions';
-            let cbOpt = this.options[optionType][cbName];
+            const optionType = self.options.formOptions[cbName] ? 'formOptions' : 'fieldOptions';
+            let cbOpt = self.options[optionType][cbName];
 
             if( cbOpt ){
-                this.options[optionType][cbName] = ( Array.isArray(cbOpt) ? cbOpt.map(cbFn => cbFn.bind(this)) : cbOpt.bind(this) );
+                self.options[optionType][cbName] = ( Array.isArray(cbOpt) ? cbOpt.map(cbFn => cbFn.bind(self)) : cbOpt.bind(self) );
             }
         });
 
-        formStartup( this.formEl, this.options );
+        formStartup( self.formEl, self.options );
     }
 
     destroy(){
@@ -66,46 +68,38 @@ class Form {
     }
 
     validateField( fieldEl, fieldOptions ){
-        fieldEl = (typeof fieldEl === 'string' ? this.formEl.querySelector(fieldEl) : fieldEl);
-        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-        const formEl = this.formEl;
-        const skipUIfeedback = this.options.fieldOptions.skipUIfeedback;
-        return checkFieldValidity(fieldEl, fieldOptions, this.validationRules, this.validationErrors)
+        const self = this;
+        fieldEl = (typeof fieldEl === 'string' ? self.formEl.querySelector(fieldEl) : fieldEl);
+        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+        const formEl = self.formEl;
+        return checkFieldValidity(fieldEl, fieldOptions, self.validationRules, self.validationErrors)
             .then(obj => {
-                return new Promise(resolve => {
-                    if( obj.fieldEl ){
-                        dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, obj, { bubbles: false } );
-                        dispatchCustomEvent( formEl, customEvents.field.validation, obj );
-                        if( fieldOptions.onValidationCheckAll && obj.result ){
-                            // FORCE skipUIfeedback TO true
-                            fieldOptions.skipUIfeedback = true;
-                            resolve(
-                                checkFormValidity( formEl, fieldOptions, this.validationRules, this.validationErrors, obj.fieldEl )
-                                    .then(dataForm => {
-                                        const clMethodName = dataForm.result ? 'add' : 'remove';
-                                        formEl.classList[clMethodName]( this.options.formOptions.cssClasses.valid );
-                                        dispatchCustomEvent( formEl, customEvents.form.validation, dataForm );
-                                        // RESTORE skipUIfeedback TO THE ORIGINAL VALUE
-                                        fieldOptions.skipUIfeedback = skipUIfeedback;
-                                        return obj;
-                                    })
-                            );
-                        } else if( !obj.result ){
-                            removeClass( formEl, this.options.formOptions.cssClasses.valid );
-                        }
-                    }
-                    resolve( obj );
-                });
+                dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, obj, {bubbles: false} );
+                dispatchCustomEvent( formEl, customEvents.field.validation, obj );
+                if( obj.result && fieldOptions.onValidationCheckAll ){
+                    // FORCE skipUIfeedback TO BE TEMPORARY true
+                    fieldOptions.skipUIfeedback = true;
+                    checkFormValidity( formEl, fieldOptions, self.validationRules, self.validationErrors, obj.fieldEl )
+                        .then(dataForm => {
+                            const clMethodName = dataForm.result ? 'add' : 'remove';
+                            formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
+                            dispatchCustomEvent( formEl, customEvents.form.validation, dataForm );
+                        });
+                } else if( !obj.result ){
+                    removeClass( formEl, self.options.formOptions.cssClasses.valid );
+                }
+                return obj;
             });
     }
 
     validateForm( fieldOptions ){
-        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-        const formEl = this.formEl;
-        return checkFormValidity(formEl, fieldOptions, this.validationRules, this.validationErrors)
+        const self = this;
+        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+        const formEl = self.formEl;
+        return checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors)
             .then(data => {
                 const clMethodName = data.result ? 'add' : 'remove';
-                formEl.classList[clMethodName]( this.options.formOptions.cssClasses.valid );
+                formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
                 validationEnd( {data} );
                 dispatchCustomEvent( formEl, customEvents.form.validation, data );
                 return data;

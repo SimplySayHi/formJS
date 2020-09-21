@@ -1,4 +1,4 @@
-/* formJS v4.2.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v4.2.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 const addClass = (element, cssClasses) => {
     cssClasses.split(" ").forEach(className => {
         element.classList.add(className);
@@ -487,11 +487,12 @@ class Form {
         if (0 === argsL || argsL > 0 && !formEl) throw new Error('First argument "formEl" is missing or falsy!');
         if (isNodeList(formEl)) throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
         if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
-        this.formEl = checkFormElem.element, this.formEl.formjs = this, this.options = mergeObjects({}, Form.prototype.options, optionsObj);
+        const self = this;
+        self.formEl = checkFormElem.element, self.formEl.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj);
         [ "beforeValidation", "beforeSend", "getFormData" ].forEach(cbName => {
-            const optionType = this.options.formOptions[cbName] ? "formOptions" : "fieldOptions";
-            let cbOpt = this.options[optionType][cbName];
-            cbOpt && (this.options[optionType][cbName] = Array.isArray(cbOpt) ? cbOpt.map(cbFn => cbFn.bind(this)) : cbOpt.bind(this));
+            const optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions";
+            let cbOpt = self.options[optionType][cbName];
+            cbOpt && (self.options[optionType][cbName] = Array.isArray(cbOpt) ? cbOpt.map(cbFn => cbFn.bind(self)) : cbOpt.bind(self));
         }), function(formEl, options) {
             formEl.noValidate = !0;
             const fieldOptions = options.fieldOptions, formOptions = options.formOptions;
@@ -504,7 +505,7 @@ class Form {
             formOptions.handleSubmit && (formEl.addEventListener("submit", submit), formOptions.ajaxSubmit && (formEl.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = formEl.getAttribute("enctype")), 
             formEl.getAttribute("method") && (formOptions.ajaxOptions.method = formEl.getAttribute("method").toUpperCase()), 
             formEl.getAttribute("action") && (formOptions.ajaxOptions.url = formEl.getAttribute("action"))));
-        }(this.formEl, this.options);
+        }(self.formEl, self.options);
     }
     destroy() {
         !function(formEl, options) {
@@ -526,28 +527,26 @@ class Form {
         return init(this.formEl);
     }
     validateField(fieldEl, fieldOptions) {
-        fieldEl = "string" == typeof fieldEl ? this.formEl.querySelector(fieldEl) : fieldEl, 
-        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-        const formEl = this.formEl, skipUIfeedback = this.options.fieldOptions.skipUIfeedback;
-        return checkFieldValidity(fieldEl, fieldOptions, this.validationRules, this.validationErrors).then(obj => new Promise(resolve => {
-            obj.fieldEl && (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
-                bubbles: !1
-            }), dispatchCustomEvent(formEl, customEvents_field.validation, obj), fieldOptions.onValidationCheckAll && obj.result ? (fieldOptions.skipUIfeedback = !0, 
-            resolve(checkFormValidity(formEl, fieldOptions, this.validationRules, this.validationErrors, obj.fieldEl).then(dataForm => {
-                const clMethodName = dataForm.result ? "add" : "remove";
-                return formEl.classList[clMethodName](this.options.formOptions.cssClasses.valid), 
-                dispatchCustomEvent(formEl, customEvents_form.validation, dataForm), fieldOptions.skipUIfeedback = skipUIfeedback, 
-                obj;
-            }))) : obj.result || removeClass(formEl, this.options.formOptions.cssClasses.valid)), 
-            resolve(obj);
-        }));
+        const self = this;
+        fieldEl = "string" == typeof fieldEl ? self.formEl.querySelector(fieldEl) : fieldEl, 
+        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+        const formEl = self.formEl;
+        return checkFieldValidity(fieldEl, fieldOptions, self.validationRules, self.validationErrors).then(obj => (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
+            bubbles: !1
+        }), dispatchCustomEvent(formEl, customEvents_field.validation, obj), obj.result && fieldOptions.onValidationCheckAll ? (fieldOptions.skipUIfeedback = !0, 
+        checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors, obj.fieldEl).then(dataForm => {
+            const clMethodName = dataForm.result ? "add" : "remove";
+            formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid), dispatchCustomEvent(formEl, customEvents_form.validation, dataForm);
+        })) : obj.result || removeClass(formEl, self.options.formOptions.cssClasses.valid), 
+        obj));
     }
     validateForm(fieldOptions) {
-        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-        const formEl = this.formEl;
-        return checkFormValidity(formEl, fieldOptions, this.validationRules, this.validationErrors).then(data => {
+        const self = this;
+        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+        const formEl = self.formEl;
+        return checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors).then(data => {
             const clMethodName = data.result ? "add" : "remove";
-            return formEl.classList[clMethodName](this.options.formOptions.cssClasses.valid), 
+            return formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid), 
             validationEnd({
                 data: data
             }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
@@ -578,6 +577,6 @@ Form.prototype.isInitialized = !1, Form.prototype.options = options, Form.protot
         }
         return obj;
     }
-}, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.2.1";
+}, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.2.2";
 
 export default Form;

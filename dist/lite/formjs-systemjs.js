@@ -1,4 +1,4 @@
-/* formJS Lite v4.2.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS Lite v4.2.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 System.register([], (function(exports) {
     "use strict";
     return {
@@ -258,16 +258,16 @@ System.register([], (function(exports) {
             }
             var Form = exports("default", function() {
                 function Form(formEl, optionsObj) {
-                    var _this = this;
                     _classCallCheck(this, Form);
                     var argsL = arguments.length, checkFormElem = checkFormEl(formEl);
                     if (0 === argsL || argsL > 0 && !formEl) throw new Error('First argument "formEl" is missing or falsy!');
                     if (isNodeList(formEl)) throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
                     if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
-                    this.formEl = checkFormElem.element, this.formEl.formjs = this, this.options = mergeObjects({}, Form.prototype.options, optionsObj), 
-                    this.options.fieldOptions.beforeValidation = this.options.fieldOptions.beforeValidation.map((function(cbFn) {
-                        return cbFn.bind(_this);
-                    })), this.formEl.noValidate = !0;
+                    var self = this;
+                    self.formEl = checkFormElem.element, self.formEl.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj), 
+                    self.options.fieldOptions.beforeValidation = self.options.fieldOptions.beforeValidation.map((function(cbFn) {
+                        return cbFn.bind(self);
+                    })), self.formEl.noValidate = !0;
                 }
                 var Constructor, protoProps, staticProps;
                 return Constructor = Form, staticProps = [ {
@@ -335,7 +335,7 @@ System.register([], (function(exports) {
                     maxFileSize: 10
                 }
             }, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-            Form.prototype.version = "4.2.1";
+            Form.prototype.version = "4.2.2";
         }
     };
 }));

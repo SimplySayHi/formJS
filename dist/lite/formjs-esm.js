@@ -1,4 +1,4 @@
-/* formJS Lite v4.2.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS Lite v4.2.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 const isDOMNode = node => Element.prototype.isPrototypeOf(node), isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
     return Array.from(arguments).slice(1).filter(arg => !!arg).forEach(arg => {
         Object.keys(arg).forEach(key => {
@@ -237,9 +237,10 @@ class Form {
         if (nodeList = formEl, NodeList.prototype.isPrototypeOf(nodeList)) throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
         var nodeList;
         if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
-        this.formEl = checkFormElem.element, this.formEl.formjs = this, this.options = mergeObjects({}, Form.prototype.options, optionsObj), 
-        this.options.fieldOptions.beforeValidation = this.options.fieldOptions.beforeValidation.map(cbFn => cbFn.bind(this)), 
-        this.formEl.noValidate = !0;
+        const self = this;
+        self.formEl = checkFormElem.element, self.formEl.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj), 
+        self.options.fieldOptions.beforeValidation = self.options.fieldOptions.beforeValidation.map(cbFn => cbFn.bind(self)), 
+        self.formEl.noValidate = !0;
     }
     destroy() {
         delete this.formEl.formjs;
@@ -269,6 +270,6 @@ Form.prototype.options = {
         maxFileSize: 10
     }
 }, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-Form.prototype.version = "4.2.1";
+Form.prototype.version = "4.2.2";
 
 export default Form;
