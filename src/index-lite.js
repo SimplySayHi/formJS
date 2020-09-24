@@ -22,14 +22,16 @@ class Form {
             throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
         }
 
-        this.formEl = checkFormElem.element;
-        this.formEl.formjs = this;
-        this.options = mergeObjects({}, Form.prototype.options, optionsObj);
+        const self = this;
+
+        self.formEl = checkFormElem.element;
+        self.formEl.formjs = self;
+        self.options = mergeObjects({}, Form.prototype.options, optionsObj);
 
         // BINDING CONTEXT FOR FUTURE EXECUTION
-        this.options.fieldOptions.beforeValidation = this.options.fieldOptions.beforeValidation.map(cbFn => cbFn.bind(this));
+        self.options.fieldOptions.beforeValidation = self.options.fieldOptions.beforeValidation.map(cbFn => cbFn.bind(self));
 
-        this.formEl.noValidate = true;
+        self.formEl.noValidate = true;
     }
 
     destroy(){
@@ -37,15 +39,17 @@ class Form {
     }
 
     validateField( fieldEl, fieldOptions ){
-        fieldEl = (typeof fieldEl === 'string' ? this.formEl.querySelector(fieldEl) : fieldEl);
-        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-        return checkFieldValidity(fieldEl, fieldOptions, this.validationRules, this.validationErrors)
+        const self = this;
+        fieldEl = (typeof fieldEl === 'string' ? self.formEl.querySelector(fieldEl) : fieldEl);
+        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+        return checkFieldValidity(fieldEl, fieldOptions, self.validationRules, self.validationErrors)
             .then(finalizeFieldPromise);
     }
 
     validateForm( fieldOptions ){
-        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-        return checkFormValidity(this.formEl, fieldOptions, this.validationRules, this.validationErrors)
+        const self = this;
+        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+        return checkFormValidity(self.formEl, fieldOptions, self.validationRules, self.validationErrors)
             .then(finalizeFormPromise);
     }
     

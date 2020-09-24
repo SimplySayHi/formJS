@@ -202,16 +202,19 @@
                     <div class="media-body pl-2">
                         <ul>
                             <li>
+                                Changed name for method "init" with more appropriate "validateFilledFields"
+                            </li>
+                            <li>
+                                Changed Promise returned from methods "validateField" and "validateForm". Now if validation succeeds it will resolve with .then(), if validation fails it will reject with .catch()
+                            </li>
+                            <li>
                                 Removed "handleValidation" and "maxFileSize" in fieldOptions
                             </li>
                             <li>
                                 Removed fieldOptions parameter in validation-rule methods
                             </li>
                             <li>
-                                Changed name for method "init" with more appropriate "validateFilledFields" and it will return only validated fields
-                            </li>
-                            <li>
-                                Moved email validation-error method from core to additionals (external)
+                                Moved "email" validation-error method from core to additionals ( external )
                             </li>
                             <li>
                                 Switched usage of JS Event with CustomEvent
@@ -232,6 +235,29 @@
                 <div class="toggable-content">
                     <ul class="p-0">
 
+                        <li class="media my-3">
+                            <div class="version-num text-red">4.2.2</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Minor improvement after field validation when onValidationCheckAll is true
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="media my-3">
+                            <div class="version-num text-red">4.2.1</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Fixed bug on options merge when extending Form class
+                                    </li>
+                                    <li>
+                                        Updated dev dependencies
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="media my-3">
                             <div class="version-num text-red">4.2.0</div>
                             <div class="media-body pl-2">

@@ -235,9 +235,10 @@ class Form {
         if (nodeList = formEl, NodeList.prototype.isPrototypeOf(nodeList)) throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
         var nodeList;
         if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
-        this.formEl = checkFormElem.element, this.formEl.formjs = this, this.options = mergeObjects({}, Form.prototype.options, optionsObj), 
-        this.options.fieldOptions.beforeValidation = this.options.fieldOptions.beforeValidation.map(cbFn => cbFn.bind(this)), 
-        this.formEl.noValidate = !0;
+        const self = this;
+        self.formEl = checkFormElem.element, self.formEl.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj), 
+        self.options.fieldOptions.beforeValidation = self.options.fieldOptions.beforeValidation.map(cbFn => cbFn.bind(self)), 
+        self.formEl.noValidate = !0;
     }
     destroy() {
         delete this.formEl.formjs;

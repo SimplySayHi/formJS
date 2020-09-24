@@ -684,8 +684,6 @@ System.register([], function () {
 
       var Form = /*#__PURE__*/function () {
         function Form(formEl, optionsObj) {
-          var _this = this;
-
           _classCallCheck(this, Form);
 
           var argsL = arguments.length,
@@ -702,13 +700,14 @@ System.register([], function () {
           if (0 === argsL || argsL > 0 && !formEl) throw new Error('First argument "formEl" is missing or falsy!');
           if (isNodeList(formEl)) throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
           if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
-          this.formEl = checkFormElem.element, this.formEl.formjs = this, this.options = mergeObjects({}, Form.prototype.options, optionsObj);
+          var self = this;
+          self.formEl = checkFormElem.element, self.formEl.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj);
           ["beforeValidation", "beforeSend", "getFormData"].forEach(function (cbName) {
-            var optionType = _this.options.formOptions[cbName] ? "formOptions" : "fieldOptions";
-            var cbOpt = _this.options[optionType][cbName];
-            cbOpt && (_this.options[optionType][cbName] = Array.isArray(cbOpt) ? cbOpt.map(function (cbFn) {
-              return cbFn.bind(_this);
-            }) : cbOpt.bind(_this));
+            var optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions";
+            var cbOpt = self.options[optionType][cbName];
+            cbOpt && (self.options[optionType][cbName] = Array.isArray(cbOpt) ? cbOpt.map(function (cbFn) {
+              return cbFn.bind(self);
+            }) : cbOpt.bind(self));
           }), function (formEl, options) {
             formEl.noValidate = !0;
             var fieldOptions = options.fieldOptions,
@@ -717,7 +716,7 @@ System.register([], function () {
               var useCapturing = "blur" === eventName;
               formEl.addEventListener(eventName, validation, useCapturing);
             }), formEl.addEventListener(customEvents_field.validation, validationEnd, !1), formOptions.handleSubmit && (formEl.addEventListener("submit", submit), formOptions.ajaxSubmit && (formEl.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = formEl.getAttribute("enctype")), formEl.getAttribute("method") && (formOptions.ajaxOptions.method = formEl.getAttribute("method").toUpperCase()), formEl.getAttribute("action") && (formOptions.ajaxOptions.url = formEl.getAttribute("action"))));
-          }(this.formEl, this.options);
+          }(self.formEl, self.options);
         }
 
         _createClass(Form, [{
@@ -742,24 +741,22 @@ System.register([], function () {
         }, {
           key: "validateField",
           value: function validateField(fieldEl, fieldOptions) {
-            var _this2 = this;
-
+            var self = this;
             fieldEl = "string" == typeof fieldEl ? this.formEl.querySelector(fieldEl) : fieldEl, fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-            var formEl = this.formEl,
-                skipUIfeedback = this.options.fieldOptions.skipUIfeedback;
+            var formEl = this.formEl;
             return checkFieldValidity(fieldEl, fieldOptions, this.validationRules, this.validationErrors).then(function (obj) {
               return new Promise(function (resolve) {
-                obj.fieldEl && (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, {
+                return dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, {
                   bubbles: !1,
                   detail: obj
                 }), dispatchCustomEvent(formEl, customEvents_field.validation, {
                   detail: obj
-                }), fieldOptions.onValidationCheckAll && obj.result ? (fieldOptions.skipUIfeedback = !0, resolve(checkFormValidity(formEl, fieldOptions, _this2.validationRules, _this2.validationErrors, obj.fieldEl).then(function (dataForm) {
+                }), obj.result && fieldOptions.onValidationCheckAll ? (fieldOptions.skipUIfeedback = !0, checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors, obj.fieldEl).then(function (dataForm) {
                   var clMethodName = dataForm.result ? "add" : "remove";
-                  return formEl.classList[clMethodName](_this2.options.formOptions.cssClasses.valid), dispatchCustomEvent(formEl, customEvents_form.validation, {
+                  formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid), dispatchCustomEvent(formEl, customEvents_form.validation, {
                     detail: dataForm
-                  }), fieldOptions.skipUIfeedback = skipUIfeedback, obj;
-                }))) : obj.result || removeClass(formEl, _this2.options.formOptions.cssClasses.valid)), resolve(obj);
+                  });
+                })) : obj.result || removeClass(formEl, self.options.formOptions.cssClasses.valid), obj;
               });
             }).then(finalizeFieldPromise);
           }
@@ -771,13 +768,12 @@ System.register([], function () {
         }, {
           key: "validateForm",
           value: function validateForm(fieldOptions) {
-            var _this3 = this;
-
-            fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-            var formEl = this.formEl;
-            return checkFormValidity(formEl, fieldOptions, this.validationRules, this.validationErrors).then(function (data) {
+            var self = this;
+            fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+            var formEl = self.formEl;
+            return checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors).then(function (data) {
               var clMethodName = data.result ? "add" : "remove";
-              return formEl.classList[clMethodName](_this3.options.formOptions.cssClasses.valid), validationEnd({
+              return formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid), validationEnd({
                 detail: data
               }), dispatchCustomEvent(formEl, customEvents_form.validation, {
                 detail: data
