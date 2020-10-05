@@ -208,10 +208,19 @@
                                 Changed Promise returned from methods "validateField" and "validateForm". Now if validation succeeds it will resolve with .then(), if validation fails it will reject with .catch()
                             </li>
                             <li>
+                                Changed "fieldEl" with "$field" and "formEl" with "$form"
+                            </li>
+                            <li>
+                                Changed key "stringLength" in favor of "length" in built-in errors
+                            </li>
+                            <li>
                                 Removed "handleValidation" and "maxFileSize" in fieldOptions
                             </li>
                             <li>
                                 Removed fieldOptions parameter in validation-rule methods
+                            </li>
+                            <li>
+                                Removed "rule" in built-in errors
                             </li>
                             <li>
                                 Moved "email" validation-error method from core to additionals ( external )

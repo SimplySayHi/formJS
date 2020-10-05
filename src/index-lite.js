@@ -8,48 +8,48 @@ import { checkFormValidity }    from './modules/checkFormValidity';
 
 class Form {
 
-    constructor( formEl, optionsObj ){
+    constructor( form, optionsObj ){
         const argsL = arguments.length,
-              checkFormElem = checkFormEl(formEl);
+              checkFormElem = checkFormEl(form);
 
-        if( argsL === 0 || (argsL > 0 && !formEl) ){
-            throw new Error('First argument "formEl" is missing or falsy!');
+        if( argsL === 0 || (argsL > 0 && !form) ){
+            throw new Error('First argument "form" is missing or falsy!');
         }
-        if( isNodeList(formEl) ){
-            throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
+        if( isNodeList(form) ){
+            throw new Error('First argument "form" must be a single DOM node or a form CSS selector, not a NodeList!');
         }
         if( !checkFormElem.result ){
-            throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
+            throw new Error('First argument "form" is not a DOM node nor a form CSS selector!');
         }
 
         const self = this;
 
-        self.formEl = checkFormElem.element;
-        self.formEl.formjs = self;
+        self.$form = checkFormElem.$el;
+        self.$form.formjs = self;
         self.options = mergeObjects({}, Form.prototype.options, optionsObj);
 
         // BINDING CONTEXT FOR FUTURE EXECUTION
         self.options.fieldOptions.beforeValidation = self.options.fieldOptions.beforeValidation.map(cbFn => cbFn.bind(self));
 
-        self.formEl.noValidate = true;
+        self.$form.noValidate = true;
     }
 
     destroy(){
-        delete this.formEl.formjs;
+        delete this.$form.formjs;
     }
 
-    validateField( fieldEl, fieldOptions ){
+    validateField( field, fieldOptions ){
         const self = this;
-        fieldEl = (typeof fieldEl === 'string' ? self.formEl.querySelector(fieldEl) : fieldEl);
+        const $field = (typeof field === 'string' ? self.$form.querySelector(field) : field);
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
-        return checkFieldValidity(fieldEl, fieldOptions, self.validationRules, self.validationErrors)
+        return checkFieldValidity($field, fieldOptions, self.validationRules, self.validationErrors)
             .then(finalizeFieldPromise);
     }
 
     validateForm( fieldOptions ){
         const self = this;
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
-        return checkFormValidity(self.formEl, fieldOptions, self.validationRules, self.validationErrors)
+        return checkFormValidity(self.$form, fieldOptions, self.validationRules, self.validationErrors)
             .then(finalizeFormPromise);
     }
     

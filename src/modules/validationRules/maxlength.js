@@ -1,4 +1,4 @@
 
-export const maxlength = function( value, fieldEl ){
-    return { result: value.length <= fieldEl.maxLength * 1 };
+export const maxlength = function( value, $field ){
+    return { result: value.length <= $field.maxLength * 1 };
 }

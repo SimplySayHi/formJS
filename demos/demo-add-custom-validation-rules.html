@@ -155,7 +155,7 @@
                             <div class="card-body p-0">
                                 <pre class="m-0">
 <code class="language-js">Form.addValidationRules({
-    registrationCode: function( string, fieldEl ){
+    registrationCode: function( string, $field ){
         var obj = {
             result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
         };
@@ -171,10 +171,10 @@ Form.addValidationErrors({
     }
 });
 
-var formEl = document.querySelector('form');
-var formInstance = new Form( formEl );
+var $form = document.querySelector('form');
+var formInstance = new Form( $form );
 
-formEl.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(event){
+$form.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(event){
     if( Object.keys(event.detail.errors).length > 0 ){
         console.log('EMAIL CUSTOM ERRORS', event.detail.errors);
     }
@@ -282,7 +282,7 @@ formInstance.validateFilledFields().then(fields => {
     <script src="../dist/formjs.min.js"></script>
     <script>
         Form.addValidationRules({
-            registrationCode: function( string, fieldEl ){
+            registrationCode: function( string, $field ){
                 var obj = {
                     result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
                 };
@@ -298,8 +298,8 @@ formInstance.validateFilledFields().then(fields => {
             }
         });
 
-        var formEl = document.querySelector('form');
-        var formInstance = new Form( formEl );
+        var $form = document.querySelector('form');
+        var formInstance = new Form( $form );
 
         // OPTIONAL STEP
         formInstance.validateFilledFields().then(function( fields ){

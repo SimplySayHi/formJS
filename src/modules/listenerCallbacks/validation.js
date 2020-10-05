@@ -4,34 +4,34 @@ import { fieldsStringSelector, mergeValidateFieldDefault, isFieldForChangeEvent 
 export const validation = function( event ){
 
     const isChangeEvent = event.type === 'change',
-          fieldEl = event.target,
-          self = fieldEl.closest('form').formjs;
+          $field = event.target,
+          self = $field.closest('form').formjs;
 
-    if( fieldEl.matches( fieldsStringSelector ) ){
-        const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl);
+    if( $field.matches( fieldsStringSelector ) ){
+        const isFieldForChangeEventBoolean = isFieldForChangeEvent($field);
         
         if(
             (isFieldForChangeEventBoolean && isChangeEvent) ||
             (!isFieldForChangeEventBoolean && !isChangeEvent)
         ){
             
-            return self.validateField( fieldEl )
+            return self.validateField( $field )
                 .then(() => {
-                    const type = fieldEl.type,
-                          realtedFieldEqualTo = fieldEl.closest('form').querySelector('[data-equal-to="'+ fieldEl.name +'"]');
+                    const type = $field.type,
+                          $realtedEqualTo = $field.closest('form').querySelector('[data-equal-to="'+ $field.name +'"]');
 
                     if(
                         // FIELD IS ( required OR data-validate-if-filled ) AND RELATED FIELD data-equal-to HAS A VALUE
-                        (fieldEl.required || fieldEl.matches('[data-validate-if-filled]')) && 
+                        ($field.required || $field.matches('[data-validate-if-filled]')) && 
                         !(type === 'checkbox' || type === 'radio') && 
-                        realtedFieldEqualTo && realtedFieldEqualTo.value.trim() !== ''
+                        $realtedEqualTo && $realtedEqualTo.value.trim() !== ''
                     ){
-                        self.validateField( realtedFieldEqualTo ).catch(errors => {});
+                        self.validateField( $realtedEqualTo ).catch(errors => {});
                     }
 
-                    return mergeValidateFieldDefault({ result: true, fieldEl });
+                    return mergeValidateFieldDefault({ result: true, $field });
                 })
-                .catch(errors => mergeValidateFieldDefault({fieldEl, errors}));
+                .catch(errors => mergeValidateFieldDefault({$field, errors}));
 
         }
     }

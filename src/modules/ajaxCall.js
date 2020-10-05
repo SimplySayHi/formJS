@@ -15,7 +15,7 @@ const getFetchMethod = (response, options) => {
     }
 };
 
-export function ajaxCall( formEl, formDataObj, options ){
+export function ajaxCall( $form, formDataObj, options ){
 
     let timeoutTimer;
     const ajaxOptions = mergeObjects( {}, options.formOptions.ajaxOptions ),
@@ -31,9 +31,9 @@ export function ajaxCall( formEl, formDataObj, options ){
             formDataMultipart.append( key, ajaxOptions.body[key] );
         }
         
-        Array.from( formEl.querySelectorAll('[type="file"]') ).forEach(field => {
-            Array.from(field.files).forEach((file, idx) => {
-                const name = field.name+'['+ idx +']';
+        Array.from( $form.querySelectorAll('[type="file"]') ).forEach($field => {
+            Array.from($field.files).forEach((file, idx) => {
+                const name = $field.name+'['+ idx +']';
                 formDataMultipart.append( name, file, file.name );
             });
         });
@@ -80,20 +80,20 @@ export function ajaxCall( formEl, formDataObj, options ){
             return response[fetchMethod]();
         })
         .then(data => {
-            addClass( formEl, options.formOptions.cssClasses.ajaxSuccess );
+            addClass( $form, options.formOptions.cssClasses.ajaxSuccess );
             return data;
         })
         .catch(error => {
-            addClass( formEl, options.formOptions.cssClasses.ajaxError );
+            addClass( $form, options.formOptions.cssClasses.ajaxError );
             return Promise.reject(error);
         })
         .finally(() => {
             if( timeoutTimer ){
                 window.clearTimeout( timeoutTimer );
             }
-            removeClass( formEl, options.formOptions.cssClasses.submit + ' ' + options.formOptions.cssClasses.ajaxPending );
-            addClass( formEl, options.formOptions.cssClasses.ajaxComplete );
-            formEl.querySelector('[type="submit"]').disabled = false;
+            removeClass( $form, options.formOptions.cssClasses.submit + ' ' + options.formOptions.cssClasses.ajaxPending );
+            addClass( $form, options.formOptions.cssClasses.ajaxComplete );
+            $form.querySelector('[type="submit"]').disabled = false;
         });
 
 }

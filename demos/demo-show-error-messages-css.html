@@ -206,8 +206,8 @@ function removeClass ( element, cssClasses ){
 function onValidationDemoErrorsCss ( fieldsArray, options ){
     fieldsArray.forEach(function( obj ){
         let isValid = obj.result,
-            fieldEl = obj.fieldEl,
-            containerEl = fieldEl.closest('[data-formjs-question]');
+            $field = obj.$field,
+            containerEl = $field.closest('[data-formjs-question]');
 
         if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
             if( isValid ){
@@ -229,14 +229,14 @@ function onValidationDemoErrorsCss ( fieldsArray, options ){
     });
 }
 
-const formEl = document.querySelector('form');
-const formInstance = new Form( formEl );
+const $form = document.querySelector('form');
+const formInstance = new Form( $form );
 
-formEl.addEventListener('fjs.field:validation', function(event){
+$form.addEventListener('fjs.field:validation', function(event){
     onValidationDemoErrorsCss( [event.detail], this.formjs.options );
 });
 
-formEl.addEventListener('fjs.form:validation', function(event){
+$form.addEventListener('fjs.form:validation', function(event){
     onValidationDemoErrorsCss( event.detail.fields, this.formjs.options );
 });
 
@@ -398,8 +398,8 @@ formInstance.validateFilledFields().then(fields => {
         function onValidationDemoErrorsCss ( fieldsArray, options ){
             fieldsArray.forEach(function( obj ){
                 var isValid = obj.result,
-                    fieldEl = obj.fieldEl,
-                    containerEl = fieldEl.closest('[data-formjs-question]');
+                    $field = obj.$field,
+                    containerEl = $field.closest('[data-formjs-question]');
 
                 if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
                     if( isValid ){
@@ -421,14 +421,14 @@ formInstance.validateFilledFields().then(fields => {
             });
         }
         
-        var formEl = document.querySelector('form');
-        var formInstance = new Form( formEl );
+        var $form = document.querySelector('form');
+        var formInstance = new Form( $form );
 
-        formEl.addEventListener('fjs.field:validation', function(event){
+        $form.addEventListener('fjs.field:validation', function(event){
             onValidationDemoErrorsCss( [event.detail], this.formjs.options );
         });
 
-        formEl.addEventListener('fjs.form:validation', function(event){
+        $form.addEventListener('fjs.form:validation', function(event){
             onValidationDemoErrorsCss( event.detail.fields, this.formjs.options );
         });
 

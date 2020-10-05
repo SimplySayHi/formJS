@@ -150,13 +150,13 @@
                             </div>
                             <div class="card-body p-0">
                                 <pre class="m-0">
-<code class="language-js">const formEl = document.querySelector('form');
+<code class="language-js">const $form = document.querySelector('form');
 const options = {
     fieldOptions: {
         validateOnEvents: 'change blur'
     }
 };
-const formInstance = new Form( formEl, options );
+const formInstance = new Form( $form, options );
 
 // OPTIONAL STEP
 formInstance.validateFilledFields().then(fields => {
@@ -260,13 +260,13 @@ formInstance.validateFilledFields().then(fields => {
     <script src="../dist/formjs.min.js"></script>
     <script src="../dist/additionals/validationErrors.js"></script>
     <script>
-        var formEl = document.querySelector('form');
+        var $form = document.querySelector('form');
         var options = {
             fieldOptions: {
                 validateOnEvents: 'change blur'
             }
         };
-        var formInstance = new Form( formEl, options );
+        var formInstance = new Form( $form, options );
 
         // OPTIONAL STEP
         formInstance.validateFilledFields().then(function( fields ){

@@ -189,12 +189,12 @@
                                             fieldObj: ( Object )
 <pre>
 <code class="language-js">{
-    fieldEl: fieldEl
+    $field: $field
 }
 </code></pre>
                                             <ul>
                                                 <li>
-                                                    fieldEl: JS node element ( the field that will be validated )
+                                                    $field: JS node element ( the field that will be validated )
                                                 </li>
                                             </ul>
                                         </li>
@@ -588,7 +588,7 @@
                                     <code>type="file"</code>
                                     <code>data-exclude-data</code>
                                     <br />
-                                    If you want to select fields by yourself, you can access the form element through "this.formEl".
+                                    If you want to select fields by yourself, you can access the form element through <code>this.$form</code>.
                                 </p>
                                 <p>
                                     Additionally, the "this" keyword is bound to the Form instance.
@@ -855,7 +855,7 @@
 <pre>
 <code class="language-js">[
     {
-        fieldEl: element,
+        $field: element,
         result:  false,
         errors:  {
             email: true
@@ -919,7 +919,7 @@
                                 <pre>
 <code class="language-js">[
     {
-        fieldEl: element,
+        $field: element,
         result:  false,
         errors:  {
             email: true
@@ -985,7 +985,7 @@
                                                 fieldValue: the string the user put in the field
                                             </li>
                                             <li>
-                                                fieldEl: the evaluated field
+                                                $field: the evaluated field
                                             </li>
                                         </ul>
                                         The function must return an object with all the specific errors.
@@ -1030,7 +1030,7 @@
                                                 fieldValue: the string the user put in the field
                                             </li>
                                             <li>
-                                                fieldEl: the evaluated field
+                                                $field: the evaluated field
                                             </li>
                                             <li>
                                                 fieldOptions: ( <span class="text-red">DEPRECATED</span> ) fieldOptions of the form instance
@@ -1084,7 +1084,7 @@
                         </p>
                         <pre>
 <code class="language-js">Form.addValidationErrors({
-    username: function ( fieldValue, fieldEl ) {
+    username: function ( fieldValue, $field ) {
         var obj = {};
         var strLength = string.length;
         if( strLength &lt; 3 ){ obj.minlength = true; }
@@ -1096,7 +1096,7 @@
 });
 
 Form.addValidationRules({
-    myPassword: function( fieldValue, fieldEl ){
+    myPassword: function( fieldValue, $field ){
         var obj = {
             result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
         };
@@ -1117,10 +1117,10 @@ Form.setOptions( { fieldOptions: {onValidationCheckAll: true} } );
                     </p>
                     <pre>
 <code class="language-js">// ADD/OVERRIDE A VALIDATION ERROR METHOD
-Form.prototype.validationErrors.email = function( fieldValue, fieldEl, fieldOptions ){ ... }
+Form.prototype.validationErrors.email = function( fieldValue, $field, fieldOptions ){ ... }
 
 // ADD/OVERRIDE A VALIDATION METHOD
-Form.prototype.validationRules.myPassword = function( fieldValue, fieldEl, fieldOptions ){ ... }
+Form.prototype.validationRules.myPassword = function( fieldValue, $field, fieldOptions ){ ... }
 
 // OVERRIDE AN OPTION
 Form.prototype.options.fieldOptions.onValidationCheckAll = true;
@@ -1171,14 +1171,14 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             </p>
 <pre>
 <code class="language-js">{
-    fieldEl: fieldEl,
+    $field: $field,
     result: false,
     errors: {...}
 }
 </code></pre>
                             <ul>
                                 <li>
-                                    <span class="text-green">fieldEl</span>: JS node element
+                                    <span class="text-green">$field</span>: JS node element
                                 </li>
                                 <li>
                                     <span class="text-green">result</span>: Boolean

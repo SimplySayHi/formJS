@@ -28,9 +28,9 @@ var options = {
                 function beforeSendTest ( data ){
                     console.log('beforeSend data', data);
 
-                    var feedbackEl = this.formEl.querySelector('[data-formjs-global-feedback]');
-                    if( feedbackEl ){
-                        feedbackEl.classList.add( 'd-none' );
+                    var $feedback = this.$form.querySelector('[data-formjs-global-feedback]');
+                    if( $feedback ){
+                        $feedback.classList.add( 'd-none' );
                     }
 
                     return Promise.resolve(data);
@@ -43,11 +43,11 @@ var options = {
                 },
                 function beforeSendTest_3 (data){
                     console.log('beforeSend additional 2');
-                    return Promise.all( [1, 2, 3].map(function( fieldEl ){
+                    return Promise.all( [1, 2, 3].map(function( $field ){
                         return new Promise(resolve => {
                             setTimeout(function(){
-                                fieldEl = fieldEl + 1;
-                                resolve({fieldEl: fieldEl});
+                                $field = $field + 1;
+                                resolve({$field: $field});
                             }, 3000);
                         });
                     }) ).then(list => {
@@ -63,54 +63,54 @@ var options = {
 
 var formsList = document.querySelectorAll('form');
 
-Array.from(formsList).forEach(function(formEl, idx){
+Array.from(formsList).forEach(function($form, idx){
     var fNum = 'f'+(idx+1);
 
-    if( isLocalEnv ){ formEl.method = 'GET'; }
+    if( isLocalEnv ){ $form.method = 'GET'; }
 
-    window[fNum] = new Form( formEl, options );
+    window[fNum] = new Form( $form, options );
 
-    formEl.addEventListener('fjs.field:validation', function(event){
+    $form.addEventListener('fjs.field:validation', function(event){
         console.log(event.type, event.detail);
-        console.log( 'field "' + event.detail.fieldEl.name + '" is valid? ', event.detail.result );
+        console.log( 'field "' + event.detail.$field.name + '" is valid? ', event.detail.result );
         if( event.detail.errors ){
             console.log('field errors:', event.detail.errors);
         }
     });
 
-    formEl.addEventListener('fjs.form:validation', function(event){
+    $form.addEventListener('fjs.form:validation', function(event){
         console.log(event.type, event.detail);
         event.detail.fields.forEach(function(obj){
-            console.log( 'field "' + obj.fieldEl.name + '" is valid? ', obj.result );
+            console.log( 'field "' + obj.$field.name + '" is valid? ', obj.result );
             if( obj.errors ){
                 console.log('field errors:', obj.errors);
             }
         });
     });
 
-    formEl.addEventListener('fjs.form:submit', function(e){
+    $form.addEventListener('fjs.form:submit', function(e){
         console.log(e.type, e.detail);
         e.detail
             .then(function(data){
                 console.log(e.type, 'then', data);
-                var formEl = e.target;
-                if( formEl.formjs.options.formOptions.ajaxSubmit ){
-                    var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
-                    feedbackEl.classList.remove( 'alert-danger' );
-                    feedbackEl.classList.add( 'alert-success' );
-                    feedbackEl.classList.remove( 'd-none' );
-                    feedbackEl.innerHTML = 'Great! Your infos have been sent :D';
+                var $form = e.target;
+                if( $form.formjs.options.formOptions.ajaxSubmit ){
+                    var $feedback = $form.querySelector('[data-formjs-global-feedback]');
+                    $feedback.classList.remove( 'alert-danger' );
+                    $feedback.classList.add( 'alert-success' );
+                    $feedback.classList.remove( 'd-none' );
+                    $feedback.innerHTML = 'Great! Your infos have been sent :D';
                 }
             })
             .catch(function(error){
                 console.log(e.type, 'catch', error);
-                var formEl = e.target;
-                if( formEl.formjs.options.formOptions.ajaxSubmit ){
-                    var feedbackEl = formEl.querySelector('[data-formjs-global-feedback]');
-                    feedbackEl.classList.remove( 'alert-success' );
-                    feedbackEl.classList.add( 'alert-danger' );
-                    feedbackEl.classList.remove( 'd-none' );
-                    feedbackEl.innerHTML = 'Oh no, something went wrong! :( Retry';
+                var $form = e.target;
+                if( $form.formjs.options.formOptions.ajaxSubmit ){
+                    var $feedback = $form.querySelector('[data-formjs-global-feedback]');
+                    $feedback.classList.remove( 'alert-success' );
+                    $feedback.classList.add( 'alert-danger' );
+                    $feedback.classList.remove( 'd-none' );
+                    $feedback.innerHTML = 'Oh no, something went wrong! :( Retry';
                 }
             })
             .finally(function(){

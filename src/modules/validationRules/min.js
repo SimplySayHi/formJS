@@ -1,11 +1,11 @@
 
 import { getDateAsNumber } from '../helpers';
 
-export const min = function( value, fieldEl ){
-    let minVal = fieldEl.min;
-    const dateFormat = fieldEl.getAttribute('data-date-format');
+export const min = function( value, $field ){
+    let minVal = $field.min;
+    const dateFormat = $field.getAttribute('data-date-format');
     
-    if( fieldEl.type === 'date' || fieldEl.getAttribute('data-date-format') ){
+    if( $field.type === 'date' || $field.getAttribute('data-date-format') ){
         value = getDateAsNumber( value, dateFormat );
         minVal = minVal.split('-').join('');
     }

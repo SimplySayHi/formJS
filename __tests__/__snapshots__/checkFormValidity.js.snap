@@ -4,7 +4,7 @@ exports[`checkFormValidity checkFormValidity -> form not valid 1`] = `
 Object {
   "fields": Array [
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-00",
@@ -17,26 +17,22 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "errors": Object {
-        "email": true,
-        "missingAtChar": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-04",
@@ -46,16 +42,14 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "email": true,
+        "missingAtChar": true,
+      },
       "result": false,
     },
     Object {
-      "errors": Object {
-        "email": true,
-        "missingDomain": true,
-        "missingExtension": true,
-        "missingExtensionDot": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-05",
@@ -65,15 +59,16 @@ Object {
           },
         },
       },
-      "result": false,
-    },
-    Object {
       "errors": Object {
         "email": true,
+        "missingDomain": true,
         "missingExtension": true,
         "missingExtensionDot": true,
       },
-      "fieldEl": Object {
+      "result": false,
+    },
+    Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-06",
@@ -83,14 +78,15 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "email": true,
+        "missingExtension": true,
+        "missingExtensionDot": true,
+      },
       "result": false,
     },
     Object {
-      "errors": Object {
-        "email": true,
-        "minlengthExtension": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-07",
@@ -100,10 +96,14 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "email": true,
+        "minlengthExtension": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-08",
@@ -116,7 +116,7 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-subtype": "email",
@@ -130,15 +130,11 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "errors": Object {
-        "email": true,
-        "missingAtChar": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-validate-if-filled": "",
@@ -148,10 +144,14 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "email": true,
+        "missingAtChar": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-validate-if-filled": "",
@@ -164,22 +164,22 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "checked": "",
@@ -192,18 +192,18 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "checked": "",
@@ -218,12 +218,7 @@ Object {
       "result": true,
     },
     Object {
-      "errors": Object {
-        "checkbox": true,
-        "checks": true,
-        "maxChecks": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "checked": "",
@@ -235,10 +230,15 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "checkbox": true,
+        "checks": true,
+        "maxChecks": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-21",
@@ -251,14 +251,14 @@ Object {
       "result": true,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-subtype": "date",
@@ -272,15 +272,15 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-25",
@@ -293,7 +293,7 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-equal-to": "field-25",
@@ -307,7 +307,7 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-26",
@@ -320,10 +320,7 @@ Object {
       "result": true,
     },
     Object {
-      "errors": Object {
-        "equalTo": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-equal-to": "field-26",
@@ -334,14 +331,17 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "equalTo": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-exact-length": "5",
@@ -355,11 +355,7 @@ Object {
       "result": true,
     },
     Object {
-      "errors": Object {
-        "exactLength": true,
-        "maxlength": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-exact-length": "5",
@@ -370,14 +366,14 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "exactLength": true,
+        "maxlength": true,
+      },
       "result": false,
     },
     Object {
-      "errors": Object {
-        "exactLength": true,
-        "minlength": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-exact-length": "5",
@@ -388,14 +384,14 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "exactLength": true,
+        "minlength": true,
+      },
       "result": false,
     },
     Object {
-      "errors": Object {
-        "exactLength": true,
-        "maxlength": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-exact-length": "a",
@@ -406,14 +402,18 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "exactLength": true,
+        "maxlength": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-length": "[3,20]",
@@ -427,11 +427,7 @@ Object {
       "result": true,
     },
     Object {
-      "errors": Object {
-        "length": true,
-        "minlength": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-length": "[3,20]",
@@ -442,14 +438,14 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "length": true,
+        "minlength": true,
+      },
       "result": false,
     },
     Object {
-      "errors": Object {
-        "length": true,
-        "maxlength": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-length": "[3,20]",
@@ -460,14 +456,18 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "length": true,
+        "maxlength": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "max": "10",
@@ -481,14 +481,11 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "errors": Object {
-        "max": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "max": "10",
@@ -499,14 +496,17 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "max": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "max": "2012-12-12",
@@ -520,14 +520,11 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "errors": Object {
-        "max": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "max": "2012-12-12",
@@ -538,10 +535,13 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "max": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "maxlength": "10",
@@ -555,10 +555,7 @@ Object {
       "result": true,
     },
     Object {
-      "errors": Object {
-        "maxlength": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "maxlength": "10",
@@ -569,17 +566,17 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "maxlength": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "errors": Object {
-        "min": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "min": "10",
@@ -590,14 +587,17 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "min": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "min": "10",
@@ -611,14 +611,11 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "errors": Object {
-        "min": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "min": "2012-12-12",
@@ -629,14 +626,17 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "min": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "min": "2012-12-12",
@@ -650,7 +650,7 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "minlength": "10",
@@ -664,10 +664,7 @@ Object {
       "result": true,
     },
     Object {
-      "errors": Object {
-        "minlength": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "minlength": "10",
@@ -678,10 +675,13 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "minlength": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-58",
@@ -694,21 +694,21 @@ Object {
       "result": true,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-61",
@@ -722,10 +722,7 @@ Object {
       "result": true,
     },
     Object {
-      "errors": Object {
-        "pattern": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-62",
@@ -736,24 +733,27 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "pattern": true,
+      },
       "result": false,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "checked": "",
@@ -767,14 +767,11 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "errors": Object {
-        "radio": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-67",
@@ -784,17 +781,20 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "radio": true,
+      },
       "result": false,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-69",
@@ -807,7 +807,7 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-required-from": "#req-more-1",
@@ -821,7 +821,7 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-70",
@@ -834,14 +834,14 @@ Object {
       "result": true,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "checked": "",
@@ -855,22 +855,22 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-73",
@@ -883,11 +883,7 @@ Object {
       "result": true,
     },
     Object {
-      "errors": Object {
-        "email": true,
-        "missingAtChar": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-required-from": "#req-more-5",
@@ -897,6 +893,10 @@ Object {
             "value": "a",
           },
         },
+      },
+      "errors": Object {
+        "email": true,
+        "missingAtChar": true,
       },
       "result": false,
     },
@@ -909,30 +909,26 @@ exports[`checkFormValidity checkFormValidity -> form not valid with skip field 1
 Object {
   "fields": Array [
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "errors": Object {
-        "email": true,
-        "missingAtChar": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-04",
@@ -942,16 +938,14 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "email": true,
+        "missingAtChar": true,
+      },
       "result": false,
     },
     Object {
-      "errors": Object {
-        "email": true,
-        "missingDomain": true,
-        "missingExtension": true,
-        "missingExtensionDot": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-05",
@@ -961,15 +955,16 @@ Object {
           },
         },
       },
-      "result": false,
-    },
-    Object {
       "errors": Object {
         "email": true,
+        "missingDomain": true,
         "missingExtension": true,
         "missingExtensionDot": true,
       },
-      "fieldEl": Object {
+      "result": false,
+    },
+    Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-06",
@@ -979,14 +974,15 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "email": true,
+        "missingExtension": true,
+        "missingExtensionDot": true,
+      },
       "result": false,
     },
     Object {
-      "errors": Object {
-        "email": true,
-        "minlengthExtension": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-07",
@@ -996,10 +992,14 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "email": true,
+        "minlengthExtension": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-08",
@@ -1012,7 +1012,7 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-subtype": "email",
@@ -1026,15 +1026,11 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "errors": Object {
-        "email": true,
-        "missingAtChar": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-validate-if-filled": "",
@@ -1044,10 +1040,14 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "email": true,
+        "missingAtChar": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-validate-if-filled": "",
@@ -1060,22 +1060,22 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "checked": "",
@@ -1088,18 +1088,18 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "checked": "",
@@ -1114,12 +1114,7 @@ Object {
       "result": true,
     },
     Object {
-      "errors": Object {
-        "checkbox": true,
-        "checks": true,
-        "maxChecks": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "checked": "",
@@ -1131,10 +1126,15 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "checkbox": true,
+        "checks": true,
+        "maxChecks": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-21",
@@ -1147,14 +1147,14 @@ Object {
       "result": true,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-subtype": "date",
@@ -1168,15 +1168,15 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-25",
@@ -1189,7 +1189,7 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-equal-to": "field-25",
@@ -1203,7 +1203,7 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-26",
@@ -1216,10 +1216,7 @@ Object {
       "result": true,
     },
     Object {
-      "errors": Object {
-        "equalTo": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-equal-to": "field-26",
@@ -1230,14 +1227,17 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "equalTo": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-exact-length": "5",
@@ -1251,11 +1251,7 @@ Object {
       "result": true,
     },
     Object {
-      "errors": Object {
-        "exactLength": true,
-        "maxlength": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-exact-length": "5",
@@ -1266,14 +1262,14 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "exactLength": true,
+        "maxlength": true,
+      },
       "result": false,
     },
     Object {
-      "errors": Object {
-        "exactLength": true,
-        "minlength": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-exact-length": "5",
@@ -1284,14 +1280,14 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "exactLength": true,
+        "minlength": true,
+      },
       "result": false,
     },
     Object {
-      "errors": Object {
-        "exactLength": true,
-        "maxlength": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-exact-length": "a",
@@ -1302,14 +1298,18 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "exactLength": true,
+        "maxlength": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-length": "[3,20]",
@@ -1323,11 +1323,7 @@ Object {
       "result": true,
     },
     Object {
-      "errors": Object {
-        "length": true,
-        "minlength": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-length": "[3,20]",
@@ -1338,14 +1334,14 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "length": true,
+        "minlength": true,
+      },
       "result": false,
     },
     Object {
-      "errors": Object {
-        "length": true,
-        "maxlength": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-length": "[3,20]",
@@ -1356,14 +1352,18 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "length": true,
+        "maxlength": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "max": "10",
@@ -1377,14 +1377,11 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "errors": Object {
-        "max": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "max": "10",
@@ -1395,14 +1392,17 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "max": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "max": "2012-12-12",
@@ -1416,14 +1416,11 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "errors": Object {
-        "max": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "max": "2012-12-12",
@@ -1434,10 +1431,13 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "max": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "maxlength": "10",
@@ -1451,10 +1451,7 @@ Object {
       "result": true,
     },
     Object {
-      "errors": Object {
-        "maxlength": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "maxlength": "10",
@@ -1465,17 +1462,17 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "maxlength": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "errors": Object {
-        "min": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "min": "10",
@@ -1486,14 +1483,17 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "min": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "min": "10",
@@ -1507,14 +1507,11 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "errors": Object {
-        "min": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "min": "2012-12-12",
@@ -1525,14 +1522,17 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "min": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "min": "2012-12-12",
@@ -1546,7 +1546,7 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "minlength": "10",
@@ -1560,10 +1560,7 @@ Object {
       "result": true,
     },
     Object {
-      "errors": Object {
-        "minlength": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "minlength": "10",
@@ -1574,10 +1571,13 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "minlength": true,
+      },
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-58",
@@ -1590,21 +1590,21 @@ Object {
       "result": true,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-61",
@@ -1618,10 +1618,7 @@ Object {
       "result": true,
     },
     Object {
-      "errors": Object {
-        "pattern": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-62",
@@ -1632,24 +1629,27 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "pattern": true,
+      },
       "result": false,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "checked": "",
@@ -1663,14 +1663,11 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "errors": Object {
-        "radio": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-67",
@@ -1680,17 +1677,20 @@ Object {
           },
         },
       },
+      "errors": Object {
+        "radio": true,
+      },
       "result": false,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-69",
@@ -1703,7 +1703,7 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-required-from": "#req-more-1",
@@ -1717,7 +1717,7 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-70",
@@ -1730,14 +1730,14 @@ Object {
       "result": true,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "checked": "",
@@ -1751,22 +1751,22 @@ Object {
       "result": true,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
+      "$field": Object {},
       "errors": Object {
         "empty": true,
       },
-      "fieldEl": Object {},
       "result": false,
     },
     Object {
-      "fieldEl": Object {},
+      "$field": Object {},
       "result": true,
     },
     Object {
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "name": "field-73",
@@ -1779,11 +1779,7 @@ Object {
       "result": true,
     },
     Object {
-      "errors": Object {
-        "email": true,
-        "missingAtChar": true,
-      },
-      "fieldEl": Object {
+      "$field": Object {
         Symbol(SameObject caches): Object {
           "attributes": NamedNodeMap {
             "data-required-from": "#req-more-5",
@@ -1793,6 +1789,10 @@ Object {
             "value": "a",
           },
         },
+      },
+      "errors": Object {
+        "email": true,
+        "missingAtChar": true,
       },
       "result": false,
     },

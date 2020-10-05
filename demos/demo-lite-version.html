@@ -150,16 +150,16 @@
                             </div>
                             <div class="card-body p-0">
                                 <pre class="m-0">
-<code class="language-js">function checkDirtyField(fieldEl){
-    const containerEl = fieldEl.closest('[data-formjs-question]');
+<code class="language-js">function checkDirtyField($field){
+    const containerEl = $field.closest('[data-formjs-question]');
     containerEl.classList.remove('is-dirty');
-    if( fieldEl.value ){
+    if( $field.value ){
         containerEl.classList.add('is-dirty');
     }
 }
 
 function applyFeedbackOnUI(fieldObj){
-    const containerEl = fieldObj.fieldEl.closest('[data-formjs-question]');
+    const containerEl = fieldObj.$field.closest('[data-formjs-question]');
     const className = fieldObj.result ? 'is-valid' : 'has-error';
         containerEl.classList.remove('is-valid');
         containerEl.classList.remove('has-error');
@@ -167,39 +167,39 @@ function applyFeedbackOnUI(fieldObj){
 }
 
 function validateField(event){
-    const fieldEl = event.target;
-    if( !fieldEl.matches('input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea') ){
+    const $field = event.target;
+    if( !$field.matches('input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea') ){
         return;
     }
-    const containerEl = fieldEl.closest('[data-formjs-question]');
-    formInstance.validateField(fieldEl).then(applyFeedbackOnUI);
+    const containerEl = $field.closest('[data-formjs-question]');
+    formInstance.validateField($field).then(applyFeedbackOnUI);
 }
 
-const formEl = document.querySelector('form');
+const $form = document.querySelector('form');
 const options = {
     fieldOptions: {
         beforeValidation: function(fieldObj){
-            checkDirtyField(fieldObj.fieldEl);
+            checkDirtyField(fieldObj.$field);
         }
     }
 };
-const formInstance = new Form( formEl, options );
+const formInstance = new Form( $form, options );
 
 /* VALIDATE FIELDS WITH EVENT DELAGATION */
-formEl.addEventListener('blur', validateField, true);
+$form.addEventListener('blur', validateField, true);
 
 /* VALIDATE FIELDS DIRECTLY */
-Array.from(document.querySelectorAll('[type="checkbox"], [type="radio"]')).forEach(fieldEl => {
-    fieldEl.addEventListener('change', validateField, false);
+Array.from(document.querySelectorAll('[type="checkbox"], [type="radio"]')).forEach($field => {
+    $field.addEventListener('change', validateField, false);
 });
 
-formEl.addEventListener('submit', event => {
+$form.addEventListener('submit', event => {
     event.preventDefault();
     formInstance.validateForm().then(obj => {
         const formValidity = obj.result ? 'valid' : 'not valid';
         alert('Form is '+formValidity);
         obj.fields.forEach(fieldObj => {
-            checkDirtyField(fieldObj.fieldEl);
+            checkDirtyField(fieldObj.$field);
             applyFeedbackOnUI(fieldObj);
         });
     });
@@ -302,10 +302,10 @@ formEl.addEventListener('submit', event => {
     <script src="../dist/lite/formjs.min.js"></script>
     <script src="../dist/additionals/validationErrors.js"></script>
     <script>
-        function checkDirtyField(fieldEl){
-            var containerEl = fieldEl.closest('[data-formjs-question]');
+        function checkDirtyField($field){
+            var containerEl = $field.closest('[data-formjs-question]');
             containerEl.classList.remove('is-dirty');
-            if( fieldEl.value ){
+            if( $field.value ){
                 containerEl.classList.add('is-dirty');
             }
         }
@@ -324,51 +324,51 @@ formEl.addEventListener('submit', event => {
         }
 
         function validateField(event){
-            var fieldEl = event.target;
-            if( !fieldEl.matches('input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea') ){
+            var $field = event.target;
+            if( !$field.matches('input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea') ){
                 return;
             }
-            formInstance.validateField(fieldEl)
-                .then(setFieldValid.bind(fieldEl))
-                .catch(showErrorMessage.bind(fieldEl));
+            formInstance.validateField($field)
+                .then(setFieldValid.bind($field))
+                .catch(showErrorMessage.bind($field));
         }
 
-        var formEl = document.querySelector('form');
+        var $form = document.querySelector('form');
         var options = {
             fieldOptions: {
                 beforeValidation: function(fieldObj){
-                    checkDirtyField(fieldObj.fieldEl);
+                    checkDirtyField(fieldObj.$field);
                 }
             }
         };
-        var formInstance = new Form( formEl, options );
+        var formInstance = new Form( $form, options );
 
         /* VALIDATE FIELDS WITH EVENT DELAGATION */
-        formEl.addEventListener('blur', validateField, true);
+        $form.addEventListener('blur', validateField, true);
 
         /* VALIDATE FIELDS DIRECTLY */
-        Array.from(document.querySelectorAll('[type="checkbox"], [type="radio"]')).forEach(function(fieldEl){
-            fieldEl.addEventListener('change', validateField, false);
+        Array.from(document.querySelectorAll('[type="checkbox"], [type="radio"]')).forEach(function($field){
+            $field.addEventListener('change', validateField, false);
         });
 
-        formEl.addEventListener('submit', function(event){
+        $form.addEventListener('submit', function(event){
             event.preventDefault();
             formInstance.validateForm()
                 .then(function(fields){
                     alert('Form is valid');
                     console.log(fields);
                     fields.forEach(function(obj){
-                        checkDirtyField(obj.fieldEl);
-                        setFieldValid.call(obj.fieldEl);
+                        checkDirtyField(obj.$field);
+                        setFieldValid.call(obj.$field);
                     });
                 })
                 .catch(function(fields){
                     alert('Form is NOT valid');
                     console.log(fields);
                     fields.forEach(function(obj){
-                        checkDirtyField(obj.fieldEl);
+                        checkDirtyField(obj.$field);
                         if( !obj.result ){
-                            showErrorMessage.call(obj.fieldEl, obj.errors);
+                            showErrorMessage.call(obj.$field, obj.errors);
                         }
                     });
                 });

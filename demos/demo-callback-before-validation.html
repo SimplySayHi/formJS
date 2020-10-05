@@ -150,20 +150,20 @@
                             </div>
                             <div class="card-body p-0">
                                 <pre class="m-0">
-<code class="language-js">const formEl = document.querySelector('form');
+<code class="language-js">const $form = document.querySelector('form');
 const options = {
     fieldOptions: {
         beforeValidation: function( fieldObj ){
-            var fieldEl = fieldObj.fieldEl;
-            if( fieldEl.matches('[type="email"]') && fieldEl.value ){
+            var $field = fieldObj.$field;
+            if( $field.matches('[type="email"]') && $field.value ){
                 console.log('beforeValidation fieldObj', fieldObj);
                 console.log('TRANSFORM FIELD VALUE TO UPPERCASE');
-                fieldEl.value = fieldEl.value.toUpperCase();
+                $field.value = $field.value.toUpperCase();
             }
         }
     }
 };
-const formInstance = new Form( formEl, options );
+const formInstance = new Form( $form, options );
 
 // OPTIONAL STEP
 formInstance.validateFilledFields().then(fields => {
@@ -267,20 +267,20 @@ formInstance.validateFilledFields().then(fields => {
     <script src="../dist/formjs.min.js"></script>
     <script src="../dist/additionals/validationErrors.js"></script>
     <script>
-        var formEl = document.querySelector('form');
+        var $form = document.querySelector('form');
         var options = {
             fieldOptions: {
                 beforeValidation: function( fieldObj ){
-                    var fieldEl = fieldObj.fieldEl;
-                    if( fieldEl.matches('[type="email"]') && fieldEl.value ){
+                    var $field = fieldObj.$field;
+                    if( $field.matches('[type="email"]') && $field.value ){
                         console.log('beforeValidation fieldObj', fieldObj);
                         console.log('TRANSFORM FIELD VALUE TO UPPERCASE');
-                        fieldEl.value = fieldEl.value.toUpperCase();
+                        $field.value = $field.value.toUpperCase();
                     }
                 }
             }
         };
-        var formInstance = new Form( formEl, options );
+        var formInstance = new Form( $form, options );
 
         // OPTIONAL STEP
         formInstance.validateFilledFields().then(function( fields ){

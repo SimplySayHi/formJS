@@ -1,5 +1,5 @@
 
-export const equalTo = function( value, fieldEl ){
-    const checkFromEl = fieldEl.closest('form').querySelector( '[name="' + fieldEl.getAttribute('data-equal-to') + '"]' );
-    return { result: value === checkFromEl.value };
+export const equalTo = function( value, $field ){
+    const $checkFrom = $field.closest('form').querySelector( '[name="' + $field.getAttribute('data-equal-to') + '"]' );
+    return { result: value === $checkFrom.value };
 }

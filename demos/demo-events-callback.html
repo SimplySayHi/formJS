@@ -150,10 +150,10 @@
                             </div>
                             <div class="card-body p-0">
                                 <pre class="m-0">
-<code class="language-js">const formEl = document.querySelector('form');
-const formInstance = new Form( formEl );
+<code class="language-js">const $form = document.querySelector('form');
+const formInstance = new Form( $form );
 
-formEl.addEventListener('fjs.form:validation', function(event){
+$form.addEventListener('fjs.form:validation', function(event){
     if( event.detail.result ){
         alert('THE FORM IS VALID!');
     }
@@ -261,10 +261,10 @@ formInstance.validateFilledFields().then(fields => {
     <script src="../dist/formjs.min.js"></script>
     <script src="../dist/additionals/validationErrors.js"></script>
     <script>
-        var formEl = document.querySelector('form');
-        var formInstance = new Form( formEl );
+        var $form = document.querySelector('form');
+        var formInstance = new Form( $form );
 
-        formEl.addEventListener('fjs.form:validation', function(event){
+        $form.addEventListener('fjs.form:validation', function(event){
             if( event.detail.result ){
                 alert('THE FORM IS VALID!');
             }

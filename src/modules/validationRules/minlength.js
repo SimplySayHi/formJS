@@ -1,4 +1,4 @@
 
-export const minlength = function( value, fieldEl ){
-    return { result: value.length >= fieldEl.minLength * 1 };
+export const minlength = function( value, $field ){
+    return { result: value.length >= $field.minLength * 1 };
 }

@@ -1,9 +1,9 @@
 
-export const checks = function( fieldEl ){
-    const attrValue = JSON.parse( fieldEl.getAttribute('data-checks') ),
-          checkedElLength = fieldEl.closest('form').querySelectorAll('[name="' + fieldEl.name + '"]:checked').length,
-          isMinOk = checkedElLength >= attrValue[0],
-          isMaxOk = checkedElLength <= attrValue[1],
+export const checks = function( $field ){
+    const attrValue = JSON.parse( $field.getAttribute('data-checks') ),
+          checkedLength = $field.closest('form').querySelectorAll('[name="' + $field.name + '"]:checked').length,
+          isMinOk = checkedLength >= attrValue[0],
+          isMaxOk = checkedLength <= attrValue[1],
           obj = { result: isMinOk && isMaxOk };
 
     if( !obj.result ){

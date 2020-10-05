@@ -160,8 +160,8 @@
 &lt;/script&gt;
 &lt;script&gt;
     System.import('Form').then(({default:Form}) => {
-            const formEl = document.querySelector('form');
-            const formInstance = new Form( formEl );
+            const $form = document.querySelector('form');
+            const formInstance = new Form( $form );
             // OPTIONAL STEP
             formInstance.validateFilledFields().then(fields => {
                 console.log('validated fields', fields);
@@ -277,8 +277,8 @@
     <script>
         System.import('Form').then(function(mod){
                 var Form = mod.default;
-                var formEl = document.querySelector('form');
-                var formInstance = new Form( formEl );
+                var $form = document.querySelector('form');
+                var formInstance = new Form( $form );
                 // OPTIONAL STEP
                 formInstance.validateFilledFields().then(function( fields ){
                     console.log('validated fields', fields);

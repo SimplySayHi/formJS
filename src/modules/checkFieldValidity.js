@@ -2,45 +2,45 @@
 import { mergeValidateFieldDefault, isDOMNode, runFunctionsSequence } from './helpers';
 import { isValid } from './isValid';
 
-export function checkFieldValidity( fieldEl, fieldOptions, validationRules, validationErrors ){
+export function checkFieldValidity( $field, fieldOptions, validationRules, validationErrors ){
 
-    if( !isDOMNode(fieldEl) ){
-        const obj = mergeValidateFieldDefault({fieldEl});
+    if( !isDOMNode($field) ){
+        const obj = mergeValidateFieldDefault({$field});
         return Promise.resolve(obj);
     }
 
-    const formEl = fieldEl.closest('form'),
-          isValidValue = fieldEl.value.trim().length > 0;
+    const $form = $field.closest('form'),
+          isValidValue = $field.value.trim().length > 0;
 
     // HANDLE FIELD data-required-from WHEN CHANGING ITS RELATED RADIO
-    if( fieldEl.type === 'radio' ){
-        const checkedEl = fieldEl.checked ? fieldEl : formEl.querySelector('[name="'+ fieldEl.name +'"]:checked'),
-              reqMoreIsChecked = checkedEl && checkedEl.matches('[data-require-more]'),
-              findReqMoreEl = reqMoreIsChecked ? checkedEl : formEl.querySelector('[data-require-more][name="'+ fieldEl.name +'"]'),
-              findReqFromEl = findReqMoreEl ? formEl.querySelector('[data-required-from="#'+ findReqMoreEl.id +'"]') : null;
+    if( $field.type === 'radio' ){
+        const $checked = $field.checked ? $field : $form.querySelector('[name="'+ $field.name +'"]:checked'),
+              reqMoreIsChecked = $checked && $checked.matches('[data-require-more]'),
+              $findReqMore = reqMoreIsChecked ? $checked : $form.querySelector('[data-require-more][name="'+ $field.name +'"]'),
+              $findReqFrom = $findReqMore ? $form.querySelector('[data-required-from="#'+ $findReqMore.id +'"]') : null;
         
-        if( checkedEl && findReqFromEl ){
-            findReqFromEl.required = findReqMoreEl.required && findReqMoreEl.checked;
+        if( $checked && $findReqFrom ){
+            $findReqFrom.required = $findReqMore.required && $findReqMore.checked;
             if( !reqMoreIsChecked ){
-                findReqFromEl.value = '';
+                $findReqFrom.value = '';
             } else if( fieldOptions.focusOnRelated ) {
-                findReqFromEl.focus();
+                $findReqFrom.focus();
             }
         }
     }
 
     // HANDLE FIELD data-require-more & data-required-from WHEN *-from IT'S FILLED
-    if( fieldEl.matches('[data-required-from]') && isValidValue ){
-        const reqMoreEl = formEl.querySelector( fieldEl.getAttribute('data-required-from') );
-        reqMoreEl.checked = true;
-        fieldEl.required = reqMoreEl.required;
+    if( $field.matches('[data-required-from]') && isValidValue ){
+        const $reqMore = $form.querySelector( $field.getAttribute('data-required-from') );
+        $reqMore.checked = true;
+        $field.required = $reqMore.required;
     }
 
-    const needsValidation = fieldEl.required || (fieldEl.matches('[data-validate-if-filled]') && isValidValue);
+    const needsValidation = $field.required || ($field.matches('[data-validate-if-filled]') && isValidValue);
 
     return runFunctionsSequence({
             functionsList: fieldOptions.beforeValidation,
-            data: {fieldEl}
+            data: {$field}
         })
         .then(data => {
             const dataObj = data.pop();
@@ -48,7 +48,7 @@ export function checkFieldValidity( fieldEl, fieldOptions, validationRules, vali
                 if( !needsValidation ){
                     dataObj.result = true;
                 }
-                resolve( needsValidation ? isValid(fieldEl, validationRules, validationErrors) : dataObj );
+                resolve( needsValidation ? isValid($field, validationRules, validationErrors) : dataObj );
             });
         });
 

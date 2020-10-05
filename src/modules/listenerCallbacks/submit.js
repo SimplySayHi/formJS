@@ -4,14 +4,14 @@ import { ajaxCall } from '../ajaxCall';
 
 export function submit( event ){
 
-    const formEl = event.target,
-          instance = formEl.formjs,
+    const $form = event.target,
+          instance = $form.formjs,
           options = instance.options,
           formCssClasses = options.formOptions.cssClasses,
           isAjaxForm = options.formOptions.ajaxSubmit,
-          btnEl = formEl.querySelector('[type="submit"]'),
+          $btn = $form.querySelector('[type="submit"]'),
           eventPreventDefault = ( enableBtn = true ) => {
-              if( btnEl && enableBtn ){ btnEl.disabled = false; }
+              if( $btn && enableBtn ){ $btn.disabled = false; }
               if( event ){ event.preventDefault(); }
           };
 
@@ -19,16 +19,16 @@ export function submit( event ){
         eventPreventDefault(false);
     }
 
-    if( btnEl ){
-        if( btnEl.disabled ){
+    if( $btn ){
+        if( $btn.disabled ){
             eventPreventDefault(false);
             return false;
         }
-        btnEl.disabled = true;
+        $btn.disabled = true;
     }
 
-    removeClass( formEl, (formCssClasses.ajaxComplete + ' ' + formCssClasses.ajaxError + ' ' + formCssClasses.ajaxSuccess) );
-    addClass( formEl, formCssClasses.submit );
+    removeClass( $form, (formCssClasses.ajaxComplete + ' ' + formCssClasses.ajaxError + ' ' + formCssClasses.ajaxSuccess) );
+    addClass( $form, formCssClasses.submit );
 
     instance.validateForm()
         .then(fields => {
@@ -54,14 +54,14 @@ export function submit( event ){
             
             if( isAjaxForm ){
                 const formData = dataList.pop().formData;
-                addClass( formEl, formCssClasses.ajaxPending );
-                dispatchCustomEvent( formEl, customEvents.form.submit, { detail: ajaxCall( formEl, formData, options ) } );
+                addClass( $form, formCssClasses.ajaxPending );
+                dispatchCustomEvent( $form, customEvents.form.submit, { detail: ajaxCall( $form, formData, options ) } );
             }
 
         })
         .catch(fields => {
             eventPreventDefault();
-            removeClass( formEl, formCssClasses.submit );
+            removeClass( $form, formCssClasses.submit );
         });
     
 }

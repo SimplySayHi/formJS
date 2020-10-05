@@ -12,24 +12,24 @@ import { checkFormValidity }    from './modules/checkFormValidity';
 
 class Form {
 
-    constructor( formEl, optionsObj ){
+    constructor( form, optionsObj ){
         const argsL = arguments.length,
-              checkFormElem = checkFormEl(formEl);
+              checkFormElem = checkFormEl(form);
 
-        if( argsL === 0 || (argsL > 0 && !formEl) ){
-            throw new Error('First argument "formEl" is missing or falsy!');
+        if( argsL === 0 || (argsL > 0 && !form) ){
+            throw new Error('First argument "form" is missing or falsy!');
         }
-        if( isNodeList(formEl) ){
-            throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
+        if( isNodeList(form) ){
+            throw new Error('First argument "form" must be a single DOM node or a form CSS selector, not a NodeList!');
         }
         if( !checkFormElem.result ){
-            throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
+            throw new Error('First argument "form" is not a DOM node nor a form CSS selector!');
         }
 
         const self = this;
 
-        self.formEl = checkFormElem.element;
-        self.formEl.formjs = self;
+        self.$form = checkFormElem.$el;
+        self.$form.formjs = self;
         self.options = mergeObjects({}, Form.prototype.options, optionsObj);
 
         // BINDING CONTEXT FOR FUTURE EXECUTION
@@ -49,40 +49,40 @@ class Form {
             }
         });
 
-        formStartup( self.formEl, self.options );
+        formStartup( self.$form, self.options );
     }
 
     destroy(){
-        destroy(this.formEl, this.options);
+        destroy(this.$form, this.options);
     }
     
     getFormData(){
-        const formFieldsEl = this.formEl.querySelectorAll('input, select, textarea'),
-              filteredFields = Array.from( formFieldsEl ).filter( elem => elem.matches(excludeSelector) );
-        return this.options.formOptions.getFormData(filteredFields);
+        const $formFields = this.$form.querySelectorAll('input, select, textarea'),
+              $filteredFields = Array.from( $formFields ).filter( elem => elem.matches(excludeSelector) );
+        return this.options.formOptions.getFormData($filteredFields);
     }
 
-    validateField( fieldEl, fieldOptions ){
+    validateField( field, fieldOptions ){
         const self = this;
-        fieldEl = typeof fieldEl === 'string' ? this.formEl.querySelector(fieldEl) : fieldEl;
+        const $field = typeof field === 'string' ? this.$form.querySelector(field) : field;
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-        const formEl = this.formEl;
-        return checkFieldValidity(fieldEl, fieldOptions, this.validationRules, this.validationErrors)
+        const $form = this.$form;
+        return checkFieldValidity($field, fieldOptions, this.validationRules, this.validationErrors)
             .then(obj => {
                 return new Promise(resolve => {
-                    dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, { bubbles: false, detail: obj } );
-                    dispatchCustomEvent( formEl, customEvents.field.validation, { detail: obj } );
+                    dispatchCustomEvent( obj.$field, customEvents.field.validation, { bubbles: false, detail: obj } );
+                    dispatchCustomEvent( $form, customEvents.field.validation, { detail: obj } );
                     if( obj.result && fieldOptions.onValidationCheckAll ){
                         // FORCE skipUIfeedback TO BE TEMPORARY true
                         fieldOptions.skipUIfeedback = true;
-                        checkFormValidity( formEl, fieldOptions, self.validationRules, self.validationErrors, obj.fieldEl )
+                        checkFormValidity( $form, fieldOptions, self.validationRules, self.validationErrors, obj.$field )
                             .then(dataForm => {
                                 const clMethodName = dataForm.result ? 'add' : 'remove';
-                                formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
-                                dispatchCustomEvent( formEl, customEvents.form.validation, { detail: dataForm } );
+                                $form.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
+                                dispatchCustomEvent( $form, customEvents.form.validation, { detail: dataForm } );
                             });
                     } else if( !obj.result ){
-                        removeClass( formEl, self.options.formOptions.cssClasses.valid );
+                        removeClass( $form, self.options.formOptions.cssClasses.valid );
                     }
                     return obj;
                 });
@@ -91,19 +91,19 @@ class Form {
     }
 
     validateFilledFields(){
-        return checkFilledFields(this.formEl);
+        return checkFilledFields(this.$form);
     }
 
     validateForm( fieldOptions ){
         const self = this;
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
-        const formEl = self.formEl;
-        return checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors)
+        const $form = self.$form;
+        return checkFormValidity($form, fieldOptions, self.validationRules, self.validationErrors)
             .then(data => {
                 const clMethodName = data.result ? 'add' : 'remove';
-                formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
+                $form.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
                 validationEnd( {detail:data} );
-                dispatchCustomEvent( formEl, customEvents.form.validation, { detail: data } );
+                dispatchCustomEvent( $form, customEvents.form.validation, { detail: data } );
                 return data;
             })
             .then(finalizeFormPromise);

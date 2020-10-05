@@ -159,10 +159,10 @@
     }
 });
 
-var formEl = document.querySelector('form');
-var formInstance = new Form( formEl );
+var $form = document.querySelector('form');
+var formInstance = new Form( $form );
 
-formEl.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(event){
+$form.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(event){
     if( event.detail.errors && Object.keys(event.detail.errors).length > 0 ){
         console.log('EMAIL CUSTOM ERRORS', event.detail.errors);
     }
@@ -278,10 +278,10 @@ formInstance.validateFilledFields().then(fields => {
             }
         });
 
-        var formEl = document.querySelector('form');
-        var formInstance = new Form( formEl );
+        var $form = document.querySelector('form');
+        var formInstance = new Form( $form );
 
-        formEl.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(event){
+        $form.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(event){
             console.log(event.detail);
             if( event.detail.errors && Object.keys(event.detail.errors).length > 0 ){
                 console.log('EMAIL CUSTOM ERRORS', event.detail.errors);

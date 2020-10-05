@@ -204,9 +204,9 @@
                     <div class="col-lg-6">
                     <pre>
 <code class="language-js">// STEP 1
-const formEl = document.querySelector('form');
+const $form = document.querySelector('form');
 const options = {...};
-const formInstance = new Form( formEl, options );
+const formInstance = new Form( $form, options );
 
 // STEP 2 ( OPTIONAL )
 formInstance.validateFilledFields().then(fields => {
@@ -217,7 +217,7 @@ formInstance.validateFilledFields().then(fields => {
                     <div class="col-lg-6">
                         <ul>
                             <li>
-                                <code>formEl</code> ( required ) must be a <u>single form node</u> ( not a nodelist! ) or a <u>CSS string selector</u> <code>const formEl = '.my-container .my-form';</code>
+                                <code>$form</code> ( required ) must be a <u>single form node</u> ( not a nodelist! ) or a <u>CSS string selector</u> <code>const $form = '.my-container .my-form';</code>
                             </li>
                             <li>
                                 <code>options</code> ( optional ) a JS object with fieldOptions and formOptions ( see <a href="api.html#options-list">Options section</a> )
@@ -234,7 +234,7 @@ formInstance.validateFilledFields().then(fields => {
                         </ul>
                         <hr />
                         <p>
-                            Once the instance is created, you can also access the instance itself via <code>formEl.formjs</code>
+                            Once the instance is created, you can also access the instance itself via <code>$form.formjs</code>
                         </p>
                         <hr />
                         <p>

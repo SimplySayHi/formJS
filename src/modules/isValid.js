@@ -1,12 +1,12 @@
 
 import { mergeValidateFieldDefault, mergeObjects, toCamelCase } from './helpers';
 
-export function isValid( fieldEl, validationRules, validationErrors ){
+export function isValid( $field, validationRules, validationErrors ){
 
-    const fieldValue = fieldEl.value,
-          obj = mergeValidateFieldDefault({result: fieldValue.trim().length > 0, fieldEl}),
-          isRadioOrCheckbox = /^(radio|checkbox)$/.test(fieldEl.type),
-          hasSelectedInput = fieldEl.closest('form').querySelectorAll('[name="'+ fieldEl.name +'"]:checked').length > 0;
+    const fieldValue = $field.value,
+          obj = mergeValidateFieldDefault({result: fieldValue.trim().length > 0, $field}),
+          isRadioOrCheckbox = /^(radio|checkbox)$/.test($field.type),
+          hasSelectedInput = $field.closest('form').querySelectorAll('[name="'+ $field.name +'"]:checked').length > 0;
 
     if( (!isRadioOrCheckbox && !obj.result) || (isRadioOrCheckbox && !hasSelectedInput) ){
         obj.result = false;
@@ -15,7 +15,7 @@ export function isValid( fieldEl, validationRules, validationErrors ){
     }
 
     // COLLECT VALIDATION METHOD NAMES ( USED TO RUN VALIDATIONS AND GET ERRORS )
-    const validationMethods = Array.from(fieldEl.attributes).reduce((accList, attr) => {
+    const validationMethods = Array.from($field.attributes).reduce((accList, attr) => {
         const attrName = toCamelCase( attr.name.replace('data-', '') ),
               attrValue = toCamelCase( attr.value ),
               isAttrValueWithFn = (attrName === 'type' || attrName === 'subtype') && validationRules[attrValue],
@@ -34,7 +34,7 @@ export function isValid( fieldEl, validationRules, validationErrors ){
             return accPromise.then(accObj => {
                 return new Promise(resolveVal => {
                     // RUN VALIDATION INSIDE A PROMISE IS USEFUL FOR ASYNC VALIDATIONS
-                    resolveVal( validationRules[methodName](fieldValue, fieldEl) );
+                    resolveVal( validationRules[methodName](fieldValue, $field) );
                 }).then(valObj => {
                     // ADD CUSTOM ERROR-KEY FOR EACH VALIDATION RULE
                     if( !valObj.result ){
@@ -56,7 +56,7 @@ export function isValid( fieldEl, validationRules, validationErrors ){
         // GET ERRORS
         if( !data.result ){
             data.errors = validationMethods.reduce((accObj, methodName) => {
-                const errors = (validationErrors[methodName] && validationErrors[methodName](fieldValue, fieldEl)) || {};
+                const errors = (validationErrors[methodName] && validationErrors[methodName](fieldValue, $field)) || {};
                 return mergeObjects(accObj, errors);
             }, data.errors);
         }

@@ -2,14 +2,14 @@
 import { getFilledFields, isFieldForChangeEvent } from './helpers';
 import { validation } from './listenerCallbacks';
 
-export const checkFilledFields = formEl => {
+export const checkFilledFields = $form => {
 
-    const formFields = getFilledFields( formEl );
+    const formFields = getFilledFields( $form );
     // VALIDATE ALL FILLED FIELDS
-    return Promise.all( formFields.map(fieldEl => {
+    return Promise.all( formFields.map($field => {
 
-        const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl);
-        const fakeEventObj = { target: fieldEl, type: (isFieldForChangeEventBoolean ? 'change': '') };
+        const isFieldForChangeEventBoolean = isFieldForChangeEvent($field);
+        const fakeEventObj = { target: $field, type: (isFieldForChangeEventBoolean ? 'change': '') };
         return validation( fakeEventObj );
 
     }) )

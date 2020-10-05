@@ -1,4 +1,4 @@
 
-export const isFieldForChangeEvent = fieldEl => {
-    return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
+export const isFieldForChangeEvent = $field => {
+    return $field.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
 }

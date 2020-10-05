@@ -23,30 +23,30 @@ describe( 'checkFieldValidity', () => {
         </form>`;
     } );
 
-    test( 'checkFieldValidity - all agrs - fieldEl obj is fake 1', () => {
+    test( 'checkFieldValidity - all agrs - $field obj is fake 1', () => {
         const el = document.querySelector('[name="aaa"]');
         const returnObj = {
-            fieldEl: el,
+            $field: el,
             result: false
         };
         const promiseRun = checkFieldValidity( el, options.fieldOptions, validationRules, validationErrors );
         return expect( promiseRun ).resolves.toEqual( returnObj );
     } );
 
-    test( 'checkFieldValidity - all agrs - fieldEl string is fake 2', () => {
+    test( 'checkFieldValidity - all agrs - $field string is fake 2', () => {
         const el = '[name="aaa"]';
         const returnObj = {
-            fieldEl: '[name="aaa"]',
+            $field: '[name="aaa"]',
             result: false
         };
         const promiseRun = checkFieldValidity( el, options.fieldOptions, validationRules, validationErrors );
         return expect( promiseRun ).resolves.toEqual( returnObj );
     } );
 
-    test( 'checkFieldValidity - all agrs - fieldEl is req-more/from - to test focus', () => {
+    test( 'checkFieldValidity - all agrs - $field is req-more/from - to test focus', () => {
         const el = document.querySelector('[name="field-70"]');
         const returnObj = {
-            fieldEl: el,
+            $field: el,
             result: true
         };
         const promiseRun = checkFieldValidity( el, options.fieldOptions, validationRules, validationErrors );

@@ -151,8 +151,8 @@
 <code class="language-js">function onValidationDemoErrorsJs ( fieldsArray, options ){
     fieldsArray.forEach(function( obj ){
         var isValid = obj.result,
-            fieldEl = obj.fieldEl,
-            containerEl = fieldEl.closest('[data-formjs-question]');
+            $field = obj.$field,
+            containerEl = $field.closest('[data-formjs-question]');
 
         if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
             if( isValid ){
@@ -188,14 +188,14 @@
     });
 }
 
-const formEl = document.querySelector('form');
-const formInstance = new Form( formEl );
+const $form = document.querySelector('form');
+const formInstance = new Form( $form );
 
-formEl.addEventListener('fjs.field:validation', function(event){
+$form.addEventListener('fjs.field:validation', function(event){
     onValidationDemoErrorsJs( [event.detail], this.formjs.options );
 });
 
-formEl.addEventListener('fjs.form:validation', function(event){
+$form.addEventListener('fjs.form:validation', function(event){
     onValidationDemoErrorsJs( event.detail.fields, this.formjs.options );
 });
 
@@ -309,8 +309,8 @@ formInstance.validateFilledFields().then(fields => {
         function onValidationDemoErrorsJs ( fieldsArray, options ){
             fieldsArray.forEach(function( obj ){
                 var isValid = obj.result,
-                    fieldEl = obj.fieldEl,
-                    containerEl = fieldEl.closest('[data-formjs-question]');
+                    $field = obj.$field,
+                    containerEl = $field.closest('[data-formjs-question]');
 
                 if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
                     if( isValid ){
@@ -346,15 +346,15 @@ formInstance.validateFilledFields().then(fields => {
             });
         }
 
-        var formEl = document.querySelector('form');
-        var formInstance = new Form( formEl );
+        var $form = document.querySelector('form');
+        var formInstance = new Form( $form );
 
-        formEl.addEventListener('fjs.field:validation', function(event){
+        $form.addEventListener('fjs.field:validation', function(event){
             console.log('fjs.field:validation', event.detail);
             onValidationDemoErrorsJs( [event.detail], this.formjs.options );
         });
 
-        formEl.addEventListener('fjs.form:validation', function(event){
+        $form.addEventListener('fjs.form:validation', function(event){
             console.log('fjs.form:validation', event.detail);
             onValidationDemoErrorsJs( event.detail.fields, this.formjs.options );
         });

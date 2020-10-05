@@ -160,8 +160,8 @@
         }
     }
 });
-const formEl = document.querySelector('form');
-const formInstance = new Form( formEl );
+const $form = document.querySelector('form');
+const formInstance = new Form( $form );
 
 // OPTIONAL STEP
 formInstance.validateFilledFields().then(fields => {
@@ -276,8 +276,8 @@ formInstance.validateFilledFields().then(fields => {
             }
         });
 
-        var formEl = document.querySelector('form');
-        var formInstance = new Form( formEl );
+        var $form = document.querySelector('form');
+        var formInstance = new Form( $form );
 
         // OPTIONAL STEP
         formInstance.validateFilledFields().then(function( fields ){

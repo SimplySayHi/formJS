@@ -8,9 +8,9 @@ export const defaultCallbacksInOptions = {
 
             const fieldOptions = this.options.fieldOptions;
 
-            checkDirtyField( fieldObj.fieldEl, fieldOptions );
+            checkDirtyField( fieldObj.$field, fieldOptions );
             if( !fieldOptions.skipUIfeedback ){
-                addClass( fieldObj.fieldEl.closest( fieldOptions.questionContainer ), fieldOptions.cssClasses.pending );
+                addClass( fieldObj.$field.closest( fieldOptions.questionContainer ), fieldOptions.cssClasses.pending );
             }
 
         }
@@ -18,45 +18,45 @@ export const defaultCallbacksInOptions = {
     },
     formOptions: {
 
-        getFormData: function getFormDataDefault ( filteredFields ) {
+        getFormData: function getFormDataDefault ( $filteredFields ) {
 
             const formData = {},
-                  formEl = this.formEl;
+                  $form = this.$form;
 
-            filteredFields.forEach(fieldEl => {
-                const isCheckbox = fieldEl.type === 'checkbox',
-                      isRadio = fieldEl.type === 'radio',
-                      isSelect = fieldEl.matches('select'),
-                      name = fieldEl.name;
-                let value = fieldEl.value;
+            $filteredFields.forEach($field => {
+                const isCheckbox = $field.type === 'checkbox',
+                      isRadio = $field.type === 'radio',
+                      isSelect = $field.matches('select'),
+                      name = $field.name;
+                let value = $field.value;
                                 
                 if( isCheckbox ) {
                     
-                    value = fieldEl.checked;
-                    let checkboxes = Array.from( formEl.querySelectorAll('[name="'+ name +'"]') );
-                    if( checkboxes.length > 1 ){
+                    value = $field.checked;
+                    let $checkboxes = Array.from( $form.querySelectorAll('[name="'+ name +'"]') );
+                    if( $checkboxes.length > 1 ){
 
                         value = [];
-                        let checkedElems = checkboxes.filter(field => field.checked);
-                        checkedElems.forEach(fieldEl => {
-                            value.push( fieldEl.value );
+                        let $checked = $checkboxes.filter(field => field.checked);
+                        $checked.forEach($field => {
+                            value.push( $field.value );
                         });
 
                     }
                         
                 } else if( isRadio ){
                     
-                    const checkedRadio = formEl.querySelector('[name="'+ name +'"]:checked');
-                    value = (checkedRadio === null ? null : checkedRadio.value);
+                    const $checkedRadio = $form.querySelector('[name="'+ name +'"]:checked');
+                    value = ($checkedRadio === null ? null : $checkedRadio.value);
                     
                 } else if( isSelect ){
 
-                    const selectedOpts = Array.from( fieldEl.options ).filter(option => option.selected);
-                    if( selectedOpts.length > 1 ){
+                    const $selectedOpts = Array.from( $field.options ).filter(option => option.selected);
+                    if( $selectedOpts.length > 1 ){
 
                         value = [];
-                        selectedOpts.forEach(fieldEl => {
-                            value.push( fieldEl.value );
+                        $selectedOpts.forEach($field => {
+                            value.push( $field.value );
                         });
 
                     }

@@ -312,128 +312,128 @@ describe( 'checkFormValidity', () => {
         const returnObj1 = {
             fields: [
                 // FIELD TO SKIP
-                { fieldEl: $('00'), result: true },
+                { $field: $('00'), result: true },
 
                 // NOT REQUIRED
-                { fieldEl: $('01'), result: true },
-                { fieldEl: $('02'), result: true },
+                { $field: $('01'), result: true },
+                { $field: $('02'), result: true },
 
                 // REQUIRED
-                { fieldEl: $('03'), result: false, errors:{empty:true} },
-                { fieldEl: $('04'), result: false, errors:{email:true, missingAtChar:true} },
-                { fieldEl: $('05'), result: false, errors:{email:true, missingDomain:true, missingExtensionDot:true, missingExtension:true} },
-                { fieldEl: $('06'), result: false, errors:{email:true, missingExtensionDot:true, missingExtension:true} },
-                { fieldEl: $('07'), result: false, errors:{email:true, minlengthExtension:true} },
-                { fieldEl: $('08'), result: true },
-                { fieldEl: $('09'), result: true },
+                { $field: $('03'), result: false, errors:{empty:true} },
+                { $field: $('04'), result: false, errors:{email:true, missingAtChar:true} },
+                { $field: $('05'), result: false, errors:{email:true, missingDomain:true, missingExtensionDot:true, missingExtension:true} },
+                { $field: $('06'), result: false, errors:{email:true, missingExtensionDot:true, missingExtension:true} },
+                { $field: $('07'), result: false, errors:{email:true, minlengthExtension:true} },
+                { $field: $('08'), result: true },
+                { $field: $('09'), result: true },
 
                 // DATA-VALIDATE-IF-FILLED
-                { fieldEl: $('10'), result: true },
-                { fieldEl: $('11'), result: false, errors:{email:true, missingAtChar:true} },
-                { fieldEl: $('12'), result: true },
+                { $field: $('10'), result: true },
+                { $field: $('11'), result: false, errors:{email:true, missingAtChar:true} },
+                { $field: $('12'), result: true },
 
                 // CHECKBOX
-                { fieldEl: $('13'), result: true },
-                { fieldEl: $('14'), result: true },
-                { fieldEl: $('15'), result: false, errors:{empty:true} },
-                { fieldEl: $('16'), result: true },
+                { $field: $('13'), result: true },
+                { $field: $('14'), result: true },
+                { $field: $('15'), result: false, errors:{empty:true} },
+                { $field: $('16'), result: true },
 
                 // DATA-CHECKS
-                { fieldEl: $('17'), result: true },
-                { fieldEl: $('18'), result: false, errors:{empty:true} },
-                { fieldEl: $('19'), result: true },
-                { fieldEl: $('20'), result: false, errors:{checkbox:true, checks:true, maxChecks:true} },
+                { $field: $('17'), result: true },
+                { $field: $('18'), result: false, errors:{empty:true} },
+                { $field: $('19'), result: true },
+                { $field: $('20'), result: false, errors:{checkbox:true, checks:true, maxChecks:true} },
 
                 // DATE
-                { fieldEl: $('21'), result: true },
-                { fieldEl: $('22'), result: false, errors:{empty:true} }, // WITH TYPE DATE, 2012-99-12 IS SEEN AS EMPTY
-                { fieldEl: $('23'), result: true },
+                { $field: $('21'), result: true },
+                { $field: $('22'), result: false, errors:{empty:true} }, // WITH TYPE DATE, 2012-99-12 IS SEEN AS EMPTY
+                { $field: $('23'), result: true },
 
                 // DATA-EQUAL-TO
-                { fieldEl: $('24'), result: true },
-                { fieldEl: $('24-equalto'), result: true },
+                { $field: $('24'), result: true },
+                { $field: $('24-equalto'), result: true },
 
-                { fieldEl: $('25'), result: true },
-                { fieldEl: $('25-equalto'), result: true },
+                { $field: $('25'), result: true },
+                { $field: $('25-equalto'), result: true },
 
-                { fieldEl: $('26'), result: true },
-                { fieldEl: $('26-equalto'), result: false, errors:{equalTo:true} },
-                // { fieldEl: $('27') }, // JS ERROR BECAUSE "field-27-" IS NOT AN EXISTING FIELD NAME
+                { $field: $('26'), result: true },
+                { $field: $('26-equalto'), result: false, errors:{equalTo:true} },
+                // { $field: $('27') }, // JS ERROR BECAUSE "field-27-" IS NOT AN EXISTING FIELD NAME
 
                 // DATA-EXACT-LENGTH
-                { fieldEl: $('28'), result: true },
-                { fieldEl: $('29'), result: true },
-                { fieldEl: $('30'), result: false, errors:{exactLength:true, maxlength:true} },
-                { fieldEl: $('31'), result: false, errors:{exactLength:true, minlength:true} },
-                { fieldEl: $('32'), result: false, errors:{exactLength:true, maxlength:true} },
+                { $field: $('28'), result: true },
+                { $field: $('29'), result: true },
+                { $field: $('30'), result: false, errors:{exactLength:true, maxlength:true} },
+                { $field: $('31'), result: false, errors:{exactLength:true, minlength:true} },
+                { $field: $('32'), result: false, errors:{exactLength:true, maxlength:true} },
 
                 // DATA-LENGTH
-                { fieldEl: $('33'), result: true },
-                { fieldEl: $('34'), result: true },
-                { fieldEl: $('35'), result: false, errors:{length:true, minlength:true} },
-                { fieldEl: $('36'), result: false, errors:{length:true, maxlength:true} },
-                // { fieldEl: $('37') }, // JS ERROR BECAUSE "data-length" IS NOT A VALID JSON ARRAY
+                { $field: $('33'), result: true },
+                { $field: $('34'), result: true },
+                { $field: $('35'), result: false, errors:{length:true, minlength:true} },
+                { $field: $('36'), result: false, errors:{length:true, maxlength:true} },
+                // { $field: $('37') }, // JS ERROR BECAUSE "data-length" IS NOT A VALID JSON ARRAY
 
                 // MAX
-                { fieldEl: $('38'), result: true },
-                { fieldEl: $('39'), result: true },
-                { fieldEl: $('40'), result: true },
-                { fieldEl: $('41'), result: false, errors:{max:true} },
-                { fieldEl: $('42'), result: true },
-                { fieldEl: $('43'), result: true },
-                { fieldEl: $('44'), result: true },
-                { fieldEl: $('45'), result: false, errors:{max:true} },
+                { $field: $('38'), result: true },
+                { $field: $('39'), result: true },
+                { $field: $('40'), result: true },
+                { $field: $('41'), result: false, errors:{max:true} },
+                { $field: $('42'), result: true },
+                { $field: $('43'), result: true },
+                { $field: $('44'), result: true },
+                { $field: $('45'), result: false, errors:{max:true} },
 
                 // MAXLENGTH
-                { fieldEl: $('46'), result: true },
-                { fieldEl: $('47'), result: false, errors:{maxlength:true} },
+                { $field: $('46'), result: true },
+                { $field: $('47'), result: false, errors:{maxlength:true} },
 
                 // MIN
-                { fieldEl: $('48'), result: true },
-                { fieldEl: $('49'), result: false, errors:{min:true} },
-                { fieldEl: $('50'), result: true },
-                { fieldEl: $('51'), result: true },
-                { fieldEl: $('52'), result: true },
-                { fieldEl: $('53'), result: false, errors:{min:true} },
-                { fieldEl: $('54'), result: true },
-                { fieldEl: $('55'), result: true },
+                { $field: $('48'), result: true },
+                { $field: $('49'), result: false, errors:{min:true} },
+                { $field: $('50'), result: true },
+                { $field: $('51'), result: true },
+                { $field: $('52'), result: true },
+                { $field: $('53'), result: false, errors:{min:true} },
+                { $field: $('54'), result: true },
+                { $field: $('55'), result: true },
 
                 // MINLENGTH
-                { fieldEl: $('56'), result: true },
-                { fieldEl: $('57'), result: false, errors:{minlength:true} },
+                { $field: $('56'), result: true },
+                { $field: $('57'), result: false, errors:{minlength:true} },
 
                 // NUMBER
-                { fieldEl: $('58'), result: true },
-                { fieldEl: $('59'), result: false, errors:{empty:true} }, // WITH TYPE NUMBER, 'asd' IS SEEN AS EMPTY
-                { fieldEl: $('60'), result: false, errors:{empty:true} },
+                { $field: $('58'), result: true },
+                { $field: $('59'), result: false, errors:{empty:true} }, // WITH TYPE NUMBER, 'asd' IS SEEN AS EMPTY
+                { $field: $('60'), result: false, errors:{empty:true} },
 
                 // PATTERN
-                { fieldEl: $('61'), result: true },
-                { fieldEl: $('62'), result: false, errors:{pattern:true} },
-                { fieldEl: $('63'), result: false, errors:{empty:true} },
-                { fieldEl: $('64'), result: false, errors:{empty:true} },
+                { $field: $('61'), result: true },
+                { $field: $('62'), result: false, errors:{pattern:true} },
+                { $field: $('63'), result: false, errors:{empty:true} },
+                { $field: $('64'), result: false, errors:{empty:true} },
 
                 // RADIO
-                { fieldEl: $('65'), result: true },
-                { fieldEl: $('66'), result: true },
-                { fieldEl: $('67'), result: false, errors:{radio:true} },
-                { fieldEl: $('68'), result: false, errors:{empty:true} },
+                { $field: $('65'), result: true },
+                { $field: $('66'), result: true },
+                { $field: $('67'), result: false, errors:{radio:true} },
+                { $field: $('68'), result: false, errors:{empty:true} },
 
                 // REQ-MORE/FROM
-                { fieldEl: $('69'), result: true },
-                { fieldEl: $('69-more'), result: true },
+                { $field: $('69'), result: true },
+                { $field: $('69-more'), result: true },
 
-                { fieldEl: $('70'), result: true },
-                { fieldEl: $('70-more'), result: false, errors:{empty:true} },
+                { $field: $('70'), result: true },
+                { $field: $('70-more'), result: false, errors:{empty:true} },
                 
-                { fieldEl: $('71'), result: true },
-                { fieldEl: $('71-more'), result: true },
+                { $field: $('71'), result: true },
+                { $field: $('71-more'), result: true },
                 
-                { fieldEl: $('72'), result: false, errors:{empty:true} },
-                { fieldEl: $('72-more'), result: true },
+                { $field: $('72'), result: false, errors:{empty:true} },
+                { $field: $('72-more'), result: true },
 
-                { fieldEl: $('73'), result: true },
-                { fieldEl: $('73-more'), result: false, errors:{email:true} }
+                { $field: $('73'), result: true },
+                { $field: $('73-more'), result: false, errors:{email:true} }
 
             ],
             result: false
@@ -446,128 +446,128 @@ describe( 'checkFormValidity', () => {
     test( 'checkFormValidity -> form not valid with skip field', () => {
         const returnObj2 = {
             fields: [
-                { fieldEl: $('00'), result: true },
+                { $field: $('00'), result: true },
 
                 // NOT REQUIRED
-                { fieldEl: $('01'), result: true },
-                { fieldEl: $('02'), result: true },
+                { $field: $('01'), result: true },
+                { $field: $('02'), result: true },
 
                 // REQUIRED
-                { fieldEl: $('03'), result: false, errors:{empty:true} },
-                { fieldEl: $('04'), result: false, errors:{email:true, missingAtChar:true} },
-                { fieldEl: $('05'), result: false, errors:{email:true, missingDomain:true, missingExtensionDot:true, missingExtension:true} },
-                { fieldEl: $('06'), result: false, errors:{email:true, missingExtensionDot:true, missingExtension:true} },
-                { fieldEl: $('07'), result: false, errors:{email:true, minlengthExtension:true} },
-                { fieldEl: $('08'), result: true },
-                { fieldEl: $('09'), result: true },
+                { $field: $('03'), result: false, errors:{empty:true} },
+                { $field: $('04'), result: false, errors:{email:true, missingAtChar:true} },
+                { $field: $('05'), result: false, errors:{email:true, missingDomain:true, missingExtensionDot:true, missingExtension:true} },
+                { $field: $('06'), result: false, errors:{email:true, missingExtensionDot:true, missingExtension:true} },
+                { $field: $('07'), result: false, errors:{email:true, minlengthExtension:true} },
+                { $field: $('08'), result: true },
+                { $field: $('09'), result: true },
 
                 // DATA-VALIDATE-IF-FILLED
-                { fieldEl: $('10'), result: true },
-                { fieldEl: $('11'), result: false, errors:{email:true, missingAtChar:true} },
-                { fieldEl: $('12'), result: true },
+                { $field: $('10'), result: true },
+                { $field: $('11'), result: false, errors:{email:true, missingAtChar:true} },
+                { $field: $('12'), result: true },
 
                 // CHECKBOX
-                { fieldEl: $('13'), result: true },
-                { fieldEl: $('14'), result: true },
-                { fieldEl: $('15'), result: false, errors:{empty:true} },
-                { fieldEl: $('16'), result: true },
+                { $field: $('13'), result: true },
+                { $field: $('14'), result: true },
+                { $field: $('15'), result: false, errors:{empty:true} },
+                { $field: $('16'), result: true },
 
                 // DATA-CHECKS
-                { fieldEl: $('17'), result: true },
-                { fieldEl: $('18'), result: false, errors:{empty:true} },
-                { fieldEl: $('19'), result: true },
-                { fieldEl: $('20'), result: false, errors:{checks:true, checkbox:true, maxChecks:true} },
+                { $field: $('17'), result: true },
+                { $field: $('18'), result: false, errors:{empty:true} },
+                { $field: $('19'), result: true },
+                { $field: $('20'), result: false, errors:{checks:true, checkbox:true, maxChecks:true} },
 
                 // DATE
-                { fieldEl: $('21'), result: true },
-                { fieldEl: $('22'), result: false, errors:{empty:true} }, // WITH TYPE DATE, 2012-99-12 IS SEEN AS EMPTY
-                { fieldEl: $('23'), result: true },
+                { $field: $('21'), result: true },
+                { $field: $('22'), result: false, errors:{empty:true} }, // WITH TYPE DATE, 2012-99-12 IS SEEN AS EMPTY
+                { $field: $('23'), result: true },
 
                 // DATA-EQUAL-TO
-                { fieldEl: $('24'), result: true },
-                { fieldEl: $('24-equalto'), result: true },
+                { $field: $('24'), result: true },
+                { $field: $('24-equalto'), result: true },
 
-                { fieldEl: $('25'), result: true },
-                { fieldEl: $('25-equalto'), result: true },
+                { $field: $('25'), result: true },
+                { $field: $('25-equalto'), result: true },
 
-                { fieldEl: $('26'), result: true },
-                { fieldEl: $('26-equalto'), result: false, errors:{equalTo:true} },
-                // { fieldEl: $('27') }, // JS ERROR BECAUSE "field-27-" IS NOT AN EXISTING FIELD NAME
+                { $field: $('26'), result: true },
+                { $field: $('26-equalto'), result: false, errors:{equalTo:true} },
+                // { $field: $('27') }, // JS ERROR BECAUSE "field-27-" IS NOT AN EXISTING FIELD NAME
 
                 // DATA-EXACT-LENGTH
-                { fieldEl: $('28'), result: true },
-                { fieldEl: $('29'), result: true },
-                { fieldEl: $('30'), result: false, errors:{exactLength:true, maxlength:true} },
-                { fieldEl: $('31'), result: false, errors:{exactLength:true, minlength:true} },
-                { fieldEl: $('32'), result: false, errors:{exactLength:true, maxlength:true} },
+                { $field: $('28'), result: true },
+                { $field: $('29'), result: true },
+                { $field: $('30'), result: false, errors:{exactLength:true, maxlength:true} },
+                { $field: $('31'), result: false, errors:{exactLength:true, minlength:true} },
+                { $field: $('32'), result: false, errors:{exactLength:true, maxlength:true} },
 
                 // DATA-LENGTH
-                { fieldEl: $('33'), result: true },
-                { fieldEl: $('34'), result: true },
-                { fieldEl: $('35'), result: false, errors:{length:true, minlength:true} },
-                { fieldEl: $('36'), result: false, errors:{length:true, maxlength:true} },
-                // { fieldEl: $('37') }, // JS ERROR BECAUSE "data-length" IS NOT A VALID JSON ARRAY
+                { $field: $('33'), result: true },
+                { $field: $('34'), result: true },
+                { $field: $('35'), result: false, errors:{length:true, minlength:true} },
+                { $field: $('36'), result: false, errors:{length:true, maxlength:true} },
+                // { $field: $('37') }, // JS ERROR BECAUSE "data-length" IS NOT A VALID JSON ARRAY
 
                 // MAX
-                { fieldEl: $('38'), result: true },
-                { fieldEl: $('39'), result: true },
-                { fieldEl: $('40'), result: true },
-                { fieldEl: $('41'), result: false, errors:{max:true} },
-                { fieldEl: $('42'), result: true },
-                { fieldEl: $('43'), result: true },
-                { fieldEl: $('44'), result: true },
-                { fieldEl: $('45'), result: false, errors:{max:true} },
+                { $field: $('38'), result: true },
+                { $field: $('39'), result: true },
+                { $field: $('40'), result: true },
+                { $field: $('41'), result: false, errors:{max:true} },
+                { $field: $('42'), result: true },
+                { $field: $('43'), result: true },
+                { $field: $('44'), result: true },
+                { $field: $('45'), result: false, errors:{max:true} },
 
                 // MAXLENGTH
-                { fieldEl: $('46'), result: true },
-                { fieldEl: $('47'), result: false, errors:{maxlength:true} },
+                { $field: $('46'), result: true },
+                { $field: $('47'), result: false, errors:{maxlength:true} },
 
                 // MIN
-                { fieldEl: $('48'), result: true },
-                { fieldEl: $('49'), result: false, errors:{min:true} },
-                { fieldEl: $('50'), result: true },
-                { fieldEl: $('51'), result: true },
-                { fieldEl: $('52'), result: true },
-                { fieldEl: $('53'), result: false, errors:{min:true} },
-                { fieldEl: $('54'), result: true },
-                { fieldEl: $('55'), result: true },
+                { $field: $('48'), result: true },
+                { $field: $('49'), result: false, errors:{min:true} },
+                { $field: $('50'), result: true },
+                { $field: $('51'), result: true },
+                { $field: $('52'), result: true },
+                { $field: $('53'), result: false, errors:{min:true} },
+                { $field: $('54'), result: true },
+                { $field: $('55'), result: true },
 
                 // MINLENGTH
-                { fieldEl: $('56'), result: true },
-                { fieldEl: $('57'), result: false, errors:{minlength:true} },
+                { $field: $('56'), result: true },
+                { $field: $('57'), result: false, errors:{minlength:true} },
 
                 // NUMBER
-                { fieldEl: $('58'), result: true },
-                { fieldEl: $('59'), result: false, errors:{empty:true} }, // WITH TYPE NUMBER, 'asd' IS SEEN AS EMPTY
-                { fieldEl: $('60'), result: false, errors:{empty:true} },
+                { $field: $('58'), result: true },
+                { $field: $('59'), result: false, errors:{empty:true} }, // WITH TYPE NUMBER, 'asd' IS SEEN AS EMPTY
+                { $field: $('60'), result: false, errors:{empty:true} },
 
                 // PATTERN
-                { fieldEl: $('61'), result: true },
-                { fieldEl: $('62'), result: false, errors:{pattern:true} },
-                { fieldEl: $('63'), result: false, errors:{empty:true} },
-                { fieldEl: $('64'), result: false, errors:{empty:true} },
+                { $field: $('61'), result: true },
+                { $field: $('62'), result: false, errors:{pattern:true} },
+                { $field: $('63'), result: false, errors:{empty:true} },
+                { $field: $('64'), result: false, errors:{empty:true} },
 
                 // RADIO
-                { fieldEl: $('65'), result: true },
-                { fieldEl: $('66'), result: true },
-                { fieldEl: $('67'), result: false, errors:{radio:true} },
-                { fieldEl: $('68'), result: false, errors:{empty:true} },
+                { $field: $('65'), result: true },
+                { $field: $('66'), result: true },
+                { $field: $('67'), result: false, errors:{radio:true} },
+                { $field: $('68'), result: false, errors:{empty:true} },
 
                 // REQ-MORE/FROM
-                { fieldEl: $('69'), result: true },
-                { fieldEl: $('69-more'), result: true },
+                { $field: $('69'), result: true },
+                { $field: $('69-more'), result: true },
 
-                { fieldEl: $('70'), result: true },
-                { fieldEl: $('70-more'), result: false, errors:{empty:true} },
+                { $field: $('70'), result: true },
+                { $field: $('70-more'), result: false, errors:{empty:true} },
                 
-                { fieldEl: $('71'), result: true },
-                { fieldEl: $('71-more'), result: true },
+                { $field: $('71'), result: true },
+                { $field: $('71-more'), result: true },
                 
-                { fieldEl: $('72'), result: false, errors:{empty:true} },
-                { fieldEl: $('72-more'), result: true },
+                { $field: $('72'), result: false, errors:{empty:true} },
+                { $field: $('72-more'), result: true },
 
-                { fieldEl: $('73'), result: true },
-                { fieldEl: $('73-more'), result: false, errors:{email:true} }
+                { $field: $('73'), result: true },
+                { $field: $('73-more'), result: false, errors:{email:true} }
 
             ],
             result: false
