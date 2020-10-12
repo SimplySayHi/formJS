@@ -68,13 +68,12 @@ class Form {
 
     validateField( fieldEl, fieldOptions ){
         const self = this;
-        fieldEl = (typeof fieldEl === 'string' ? self.formEl.querySelector(fieldEl) : fieldEl);
+        fieldEl = typeof fieldEl === 'string' ? self.formEl.querySelector(fieldEl) : fieldEl;
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
         const formEl = self.formEl;
         return checkFieldValidity(fieldEl, fieldOptions, self.validationRules, self.validationErrors)
             .then(obj => {
-                dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, obj, {bubbles: false} );
-                dispatchCustomEvent( formEl, customEvents.field.validation, obj );
+                dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, obj );
                 if( obj.result && fieldOptions.onValidationCheckAll ){
                     // FORCE skipUIfeedback TO BE TEMPORARY true
                     fieldOptions.skipUIfeedback = true;
@@ -100,8 +99,7 @@ class Form {
                 const clMethodName = data.result ? 'add' : 'remove';
                 formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
                 data.fields.forEach(obj => {
-                    dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, obj, {bubbles: false} );
-                    dispatchCustomEvent( formEl, customEvents.field.validation, obj );
+                    dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, obj );
                 });
                 dispatchCustomEvent( formEl, customEvents.form.validation, data );
                 return data;

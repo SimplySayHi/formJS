@@ -525,9 +525,8 @@ class Form {
         fieldEl = "string" == typeof fieldEl ? self.formEl.querySelector(fieldEl) : fieldEl, 
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
         const formEl = self.formEl;
-        return checkFieldValidity(fieldEl, fieldOptions, self.validationRules, self.validationErrors).then(obj => (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
-            bubbles: !1
-        }), dispatchCustomEvent(formEl, customEvents_field.validation, obj), obj.result && fieldOptions.onValidationCheckAll ? (fieldOptions.skipUIfeedback = !0, 
+        return checkFieldValidity(fieldEl, fieldOptions, self.validationRules, self.validationErrors).then(obj => (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj), 
+        obj.result && fieldOptions.onValidationCheckAll ? (fieldOptions.skipUIfeedback = !0, 
         checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors, obj.fieldEl).then(dataForm => {
             const clMethodName = dataForm.result ? "add" : "remove";
             formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid), dispatchCustomEvent(formEl, customEvents_form.validation, dataForm);
@@ -542,9 +541,7 @@ class Form {
             const clMethodName = data.result ? "add" : "remove";
             return formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid), 
             data.fields.forEach(obj => {
-                dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
-                    bubbles: !1
-                }), dispatchCustomEvent(formEl, customEvents_field.validation, obj);
+                dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj);
             }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
         });
     }

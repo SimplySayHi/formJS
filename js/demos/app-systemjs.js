@@ -742,9 +742,7 @@ System.register([], function () {
             fieldEl = "string" == typeof fieldEl ? self.formEl.querySelector(fieldEl) : fieldEl, fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
             var formEl = self.formEl;
             return checkFieldValidity(fieldEl, fieldOptions, self.validationRules, self.validationErrors).then(function (obj) {
-              return dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
-                bubbles: !1
-              }), dispatchCustomEvent(formEl, customEvents_field.validation, obj), obj.result && fieldOptions.onValidationCheckAll ? (fieldOptions.skipUIfeedback = !0, checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors, obj.fieldEl).then(function (dataForm) {
+              return dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj), obj.result && fieldOptions.onValidationCheckAll ? (fieldOptions.skipUIfeedback = !0, checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors, obj.fieldEl).then(function (dataForm) {
                 var clMethodName = dataForm.result ? "add" : "remove";
                 formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid), dispatchCustomEvent(formEl, customEvents_form.validation, dataForm);
               })) : obj.result || removeClass(formEl, self.options.formOptions.cssClasses.valid), obj;
@@ -759,9 +757,7 @@ System.register([], function () {
             return checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors).then(function (data) {
               var clMethodName = data.result ? "add" : "remove";
               return formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid), data.fields.forEach(function (obj) {
-                dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
-                  bubbles: !1
-                }), dispatchCustomEvent(formEl, customEvents_field.validation, obj);
+                dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj);
               }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
             });
           }
