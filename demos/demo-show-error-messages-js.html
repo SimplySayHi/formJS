@@ -148,55 +148,49 @@
                             </div>
                             <div class="card-body p-0">
                                 <pre class="m-0">
-<code class="language-js">function onValidationDemoErrorsJs ( fieldsArray, options ){
-    fieldsArray.forEach(function( obj ){
-        var isValid = obj.result,
-            fieldEl = obj.fieldEl,
-            containerEl = fieldEl.closest('[data-formjs-question]');
+<code class="language-js">function onValidationDemoErrorsJs ( obj, options ){
+    const isValid = obj.result,
+          fieldEl = obj.fieldEl,
+          containerEl = fieldEl.closest('[data-formjs-question]');
 
-        if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
-            if( isValid ){
+    if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
+        if( isValid ){
 
-                // REMOVE ERRORS FROM PAGE
-                containerEl.querySelector('.field-error-message').innerHTML = '';
+            // REMOVE ERRORS FROM PAGE
+            containerEl.querySelector('.field-error-message').innerHTML = '';
 
-            } else {
+        } else {
 
-                // PRINT ERRORS AS FOR obj.errors
-                if( obj.errors ){
-                    var errorsHTML = '';
+            // PRINT ERRORS AS FOR obj.errors
+            if( obj.errors ){
+                let errorsHTML = '';
 
-                    if( obj.errors.empty ){
-                        errorsHTML += '&lt;p&gt;This field cannot be empty&lt;/p&gt;';
-                    } else {
-                        for(var errorName in obj.errors){
-                            if( errorName !== 'rule' ){
-                                var printError = errorName.replace(/([A-Z])/g, function(all, letter){
-                                        return ' ' + letter.toLowerCase();
-                                    });
-                                errorsHTML += '&lt;li&gt;Error: '+ printError +'&lt;/li&gt;';
-                            }
+                if( obj.errors.empty ){
+                    errorsHTML += '&lt;p&gt;This field cannot be empty&lt;/p&gt;';
+                } else {
+                    for(let errorName in obj.errors){
+                        if( errorName !== 'rule' ){
+                            const printError = errorName.replace(/([A-Z])/g, function(all, letter){
+                                    return ' ' + letter.toLowerCase();
+                                });
+                            errorsHTML += '&lt;li&gt;Error: '+ printError +'&lt;/li&gt;';
                         }
-                        errorsHTML = 'This field is not valid:&lt;ul&gt;' + errorsHTML + '&lt;/ul&gt;';
                     }
-
-                    containerEl.querySelector('.field-error-message').innerHTML = errorsHTML;
+                    errorsHTML = 'This field is not valid:&lt;ul&gt;' + errorsHTML + '&lt;/ul&gt;';
                 }
 
+                containerEl.querySelector('.field-error-message').innerHTML = errorsHTML;
             }
+
         }
-    });
+    }
 }
 
 const formEl = document.querySelector('form');
 const formInstance = new Form( formEl );
 
 formEl.addEventListener('fjs.field:validation', function(event){
-    onValidationDemoErrorsJs( [event.data], this.formjs.options );
-});
-
-formEl.addEventListener('fjs.form:validation', function(event){
-    onValidationDemoErrorsJs( event.data.fields, this.formjs.options );
+    onValidationDemoErrorsJs( event.data, this.formjs.options );
 });
 
 // INITIALIZATION ( OPTIONAL )
@@ -299,55 +293,49 @@ formInstance.init().then(obj => {
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
     <script src="../dist/formjs.min.js"></script>
     <script>
-        function onValidationDemoErrorsJs ( fieldsArray, options ){
-            fieldsArray.forEach(function( obj ){
-                var isValid = obj.result,
-                    fieldEl = obj.fieldEl,
-                    containerEl = fieldEl.closest('[data-formjs-question]');
+        function onValidationDemoErrorsJs ( obj, options ){
+            var isValid = obj.result,
+                fieldEl = obj.fieldEl,
+                containerEl = fieldEl.closest('[data-formjs-question]');
 
-                if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
-                    if( isValid ){
+            if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
+                if( isValid ){
 
-                        // REMOVE ERRORS FROM PAGE
-                        containerEl.querySelector('.field-error-message').innerHTML = '';
+                    // REMOVE ERRORS FROM PAGE
+                    containerEl.querySelector('.field-error-message').innerHTML = '';
 
-                    } else {
+                } else {
 
-                        // PRINT ERRORS AS FOR obj.errors
-                        if( obj.errors ){
-                            var errorsHTML = '';
+                    // PRINT ERRORS AS FOR obj.errors
+                    if( obj.errors ){
+                        var errorsHTML = '';
 
-                            if( obj.errors.empty ){
-                                errorsHTML += '<p>This field cannot be empty</p>';
-                            } else {
-                                for(var errorName in obj.errors){
-                                    if( errorName !== 'rule' ){
-                                        var printError = errorName.replace(/([A-Z])/g, function(all, letter){
-                                                return ' ' + letter.toLowerCase();
-                                            });
-                                        errorsHTML += '<li>Error: '+ printError +'</li>';
-                                    }
+                        if( obj.errors.empty ){
+                            errorsHTML += '<p>This field cannot be empty</p>';
+                        } else {
+                            for(var errorName in obj.errors){
+                                if( errorName !== 'rule' ){
+                                    var printError = errorName.replace(/([A-Z])/g, function(all, letter){
+                                            return ' ' + letter.toLowerCase();
+                                        });
+                                    errorsHTML += '<li>Error: '+ printError +'</li>';
                                 }
-                                errorsHTML = 'This field is not valid:<ul>' + errorsHTML + '</ul>';
                             }
-
-                            containerEl.querySelector('.field-error-message').innerHTML = errorsHTML;
+                            errorsHTML = 'This field is not valid:<ul>' + errorsHTML + '</ul>';
                         }
 
+                        containerEl.querySelector('.field-error-message').innerHTML = errorsHTML;
                     }
+
                 }
-            });
+            }
         }
 
         var formEl = document.querySelector('form');
         var formInstance = new Form( formEl );
 
         formEl.addEventListener('fjs.field:validation', function(event){
-            onValidationDemoErrorsJs( [event.data], this.formjs.options );
-        });
-
-        formEl.addEventListener('fjs.form:validation', function(event){
-            onValidationDemoErrorsJs( event.data.fields, this.formjs.options );
+            onValidationDemoErrorsJs( event.data, this.formjs.options );
         });
 
         // INITIALIZATION ( OPTIONAL )

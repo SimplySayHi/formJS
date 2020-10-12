@@ -154,7 +154,7 @@
 const options = {
     fieldOptions: {
         beforeValidation: function( fieldObj ){
-            var fieldEl = fieldObj.fieldEl;
+            const fieldEl = fieldObj.fieldEl;
             if( fieldEl.matches('[type="email"]') && fieldEl.value ){
                 console.log('beforeValidation fieldObj', fieldObj);
                 console.log('TRANSFORM FIELD VALUE TO UPPERCASE');
