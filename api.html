@@ -873,10 +873,10 @@
                                         Run feedback on UI ( basic feedback with css classes )
                                     </li>
                                     <li>
-                                        Emit event <code>fjs.field:validation</code> on the field and on the form
+                                        Emit event <code>fjs.field:validation</code>
                                     </li>
                                     <li>
-                                        If field is valid and <code>onValidationCheckAll</code> is set to <code>true</code>, form validation will run ( with <code>skipUIfeedback</code> set ot <code>true</code> ) and event <code>fjs.form:validation</code> will be emitted on the form
+                                        If field is valid and <code>onValidationCheckAll</code> is set to <code>true</code>, form validation will run ( with <code>skipUIfeedback</code> set ot <code>true</code> ) and event <code>fjs.form:validation</code> will be emitted
                                     </li>
                                 </ul>
                                 <hr />
@@ -938,7 +938,7 @@
                                         Emit event <code>fjs.field:validation</code> for each field
                                     </li>
                                     <li>
-                                        Emit event <code>fjs.form:validation</code> on the form
+                                        Emit event <code>fjs.form:validation</code>
                                     </li>
                                 </ul>
                                 <hr />
@@ -1186,7 +1186,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
         <div id="builtin-events">
             <h3 class="sticky-title">Built-in Events</h3>
             <p>
-                Each built-in event has the extra object <code>data</code> attahched to the event object as defined in "additional event data" ( eg. <code>event.data.result</code> ).
+                Each built-in event has the extra object <code>data</code> attahched to the event object as defined in "additional event data" ( eg. <code>event.data.result</code> ). By default all built-in events will bubble.
             </p>
             <div class="panel panel-default panel-transparent no-bg">
                 <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
@@ -1204,10 +1204,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                         <div class="col-lg-6">
                             <pre class="text-green">fjs.field:validation</pre>
                             <p>
-                                Fires just after a field has been validated.<br />
-                                ( If the field was evaluated as valid the entire form check is fired )
-                                <br /><br />
-                                <b class="text-green">NOTE</b>: This event can be attached to the form and/or a specific field. If both are specified, the event attached to the field is triggered first.
+                                Fires just after a field has been validated.
                             </p>
                         </div>
                         <div class="col-lg-6">
@@ -1238,7 +1235,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                         <div class="col-lg-6">
                             <pre class="text-green">fjs.form:submit</pre>
                             <p>
-                                Fires when the form has finished submitting the data and the AJAX call is finished.
+                                Fires when the form is submitted.
                             </p>
                         </div>
                         <div class="col-lg-6">
