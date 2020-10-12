@@ -4,7 +4,6 @@ import { checkFormEl, customEvents, dispatchCustomEvent, excludeSelector, isNode
 import { options }              from './modules/options';
 import { validationRules }      from './modules/validationRules';
 import { validationErrors }     from './modules/validationErrors';
-import { validationEnd }        from './modules/listenerCallbacks';
 import { formStartup }          from './modules/formStartup';
 import { destroy }              from './modules/destroy';
 import { init }                 from './modules/init';
@@ -100,11 +99,13 @@ class Form {
             .then(data => {
                 const clMethodName = data.result ? 'add' : 'remove';
                 formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
-                validationEnd( {data} );
+                data.fields.forEach(obj => {
+                    dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, obj, {bubbles: false} );
+                    dispatchCustomEvent( formEl, customEvents.field.validation, obj );
+                });
                 dispatchCustomEvent( formEl, customEvents.form.validation, data );
                 return data;
             });
-
     }
     
     static addValidationErrors( errorsObj ){

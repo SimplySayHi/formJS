@@ -1,4 +1,4 @@
-/* formJS v4.2.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v4.2.3 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 const addClass = (element, cssClasses) => {
     cssClasses.split(" ").forEach(className => {
         element.classList.add(className);
@@ -353,26 +353,20 @@ const validation = function(event) {
         });
     }
 }, validationEnd = function(event) {
-    const fieldsArray = event.data.fieldEl ? [ event.data ] : event.data.fields, options = fieldsArray[0].fieldEl.closest("form").formjs.options.fieldOptions;
-    fieldsArray.forEach((function(obj) {
-        const fieldEl = obj.fieldEl;
-        if (fieldEl.matches(fieldsStringSelector)) {
-            const containerEl = fieldEl.closest(options.questionContainer), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = document.querySelector(fieldEl.getAttribute("data-required-from"));
-            if (null !== containerEl && removeClass(containerEl, options.cssClasses.pending), 
-            null !== containerEl && !options.skipUIfeedback) if (obj.result) {
-                if (!isReqFrom || isReqFrom && reqMoreEl.checked) {
-                    const errorClasses = options.cssClasses.error + " " + options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
-                    removeClass(containerEl, errorClasses), addClass(containerEl, options.cssClasses.valid);
-                }
-            } else {
-                let extraErrorClass = options.cssClasses.errorRule;
-                const isChecks = fieldEl.matches("[data-checks]"), checkedElLength = isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0;
-                (!isChecks && obj.errors && obj.errors.empty || isChecks && 0 === checkedElLength) && (extraErrorClass = options.cssClasses.errorEmpty);
-                let errorClasses = options.cssClasses.error + " " + extraErrorClass, errorClassToRemove = options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
-                removeClass(containerEl, options.cssClasses.valid + " " + errorClassToRemove), addClass(containerEl, errorClasses);
-            }
+    const eventData = event.data, fieldEl = eventData.fieldEl, options = fieldEl.closest("form").formjs.options.fieldOptions, containerEl = fieldEl.closest(options.questionContainer), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = document.querySelector(fieldEl.getAttribute("data-required-from"));
+    if (null !== containerEl && removeClass(containerEl, options.cssClasses.pending), 
+    null !== containerEl && !options.skipUIfeedback) if (eventData.result) {
+        if (!isReqFrom || isReqFrom && reqMoreEl.checked) {
+            const errorClasses = options.cssClasses.error + " " + options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
+            removeClass(containerEl, errorClasses), addClass(containerEl, options.cssClasses.valid);
         }
-    }));
+    } else {
+        let extraErrorClass = options.cssClasses.errorRule;
+        const isChecks = fieldEl.matches("[data-checks]"), checkedElLength = isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0;
+        (!isChecks && eventData.errors && eventData.errors.empty || isChecks && 0 === checkedElLength) && (extraErrorClass = options.cssClasses.errorEmpty);
+        let errorClasses = options.cssClasses.error + " " + extraErrorClass, errorClassToRemove = options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
+        removeClass(containerEl, options.cssClasses.valid + " " + errorClassToRemove), addClass(containerEl, errorClasses);
+    }
 };
 
 const init = function(formEl) {
@@ -547,8 +541,10 @@ class Form {
         return checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors).then(data => {
             const clMethodName = data.result ? "add" : "remove";
             return formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid), 
-            validationEnd({
-                data: data
+            data.fields.forEach(obj => {
+                dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
+                    bubbles: !1
+                }), dispatchCustomEvent(formEl, customEvents_field.validation, obj);
             }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
         });
     }
@@ -577,6 +573,6 @@ Form.prototype.isInitialized = !1, Form.prototype.options = options, Form.protot
         }
         return obj;
     }
-}, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.2.2";
+}, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.2.3";
 
 export default Form;
