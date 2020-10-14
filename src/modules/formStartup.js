@@ -1,6 +1,6 @@
 
 import { customEvents } from './helpers';
-import { keypressMaxlength, dataTypeNumber, pastePrevent, submit, validation, validationEnd } from './listenerCallbacks';
+import { dataTypeNumber, formValidationEnd, keypressMaxlength, pastePrevent, submit, validation, validationEnd } from './listenerCallbacks';
 
 export function formStartup( formEl, options ){
 
@@ -37,6 +37,7 @@ export function formStartup( formEl, options ){
         });
 
         formEl.addEventListener(customEvents.field.validation, validationEnd, false);
+        formEl.addEventListener(customEvents.form.validation, formValidationEnd, false);
 
     }
     

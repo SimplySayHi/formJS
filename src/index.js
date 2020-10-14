@@ -75,12 +75,8 @@ class Form {
             .then(obj => {
                 dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, obj );
                 if( obj.result && fieldOptions.onValidationCheckAll ){
-                    // FORCE skipUIfeedback TO BE TEMPORARY true
-                    fieldOptions.skipUIfeedback = true;
                     checkFormValidity( formEl, fieldOptions, self.validationRules, self.validationErrors, obj.fieldEl )
                         .then(dataForm => {
-                            const clMethodName = dataForm.result ? 'add' : 'remove';
-                            formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
                             dispatchCustomEvent( formEl, customEvents.form.validation, dataForm );
                         });
                 } else if( !obj.result ){
@@ -96,8 +92,6 @@ class Form {
         const formEl = self.formEl;
         return checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors)
             .then(data => {
-                const clMethodName = data.result ? 'add' : 'remove';
-                formEl.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
                 data.fields.forEach(obj => {
                     dispatchCustomEvent( obj.fieldEl, customEvents.field.validation, obj );
                 });

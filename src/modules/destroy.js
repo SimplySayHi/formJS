@@ -1,6 +1,6 @@
 
 import { customEvents } from './helpers';
-import { keypressMaxlength, dataTypeNumber, pastePrevent, submit, validation, validationEnd } from './listenerCallbacks';
+import { dataTypeNumber, formValidationEnd, keypressMaxlength, pastePrevent, submit, validation, validationEnd } from './listenerCallbacks';
 
 
 export function destroy( formEl, options ){
@@ -24,6 +24,7 @@ export function destroy( formEl, options ){
     });
 
     formEl.removeEventListener(customEvents.field.validation, validationEnd, false);
+    formEl.removeEventListener(customEvents.form.validation, formValidationEnd, false);
 
     delete formEl.formjs;
     

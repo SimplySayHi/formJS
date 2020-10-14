@@ -260,6 +260,12 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
             fieldEl.value = valueReplaced;
         }
     }
+}, formValidationEnd = function(event) {
+    const formEl = event.target, options = formEl.formjs.options;
+    if (!options.fieldOptions.skipUIfeedback) {
+        const clMethodName = event.data.result ? "add" : "remove";
+        formEl.classList[clMethodName](options.formOptions.cssClasses.valid);
+    }
 }, keypressMaxlength = function(event) {
     const fieldEl = event.target;
     if (fieldEl.matches("[maxlength]")) {
@@ -495,8 +501,9 @@ class Form {
             fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                 const useCapturing = "blur" === eventName;
                 formEl.addEventListener(eventName, validation, useCapturing);
-            })), formEl.addEventListener(customEvents_field.validation, validationEnd, !1)), 
-            formOptions.handleSubmit && (formEl.addEventListener("submit", submit), formOptions.ajaxSubmit && (formEl.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = formEl.getAttribute("enctype")), 
+            })), formEl.addEventListener(customEvents_field.validation, validationEnd, !1), 
+            formEl.addEventListener(customEvents_form.validation, formValidationEnd, !1)), formOptions.handleSubmit && (formEl.addEventListener("submit", submit), 
+            formOptions.ajaxSubmit && (formEl.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = formEl.getAttribute("enctype")), 
             formEl.getAttribute("method") && (formOptions.ajaxOptions.method = formEl.getAttribute("method").toUpperCase()), 
             formEl.getAttribute("action") && (formOptions.ajaxOptions.url = formEl.getAttribute("action"))));
         }(self.formEl, self.options);
@@ -510,6 +517,7 @@ class Form {
                 const useCapturing = "blur" === eventName;
                 formEl.removeEventListener(eventName, validation, useCapturing);
             })), formEl.removeEventListener(customEvents_field.validation, validationEnd, !1), 
+            formEl.removeEventListener(customEvents_form.validation, formValidationEnd, !1), 
             delete formEl.formjs;
         }(this.formEl, this.options);
     }
@@ -526,24 +534,17 @@ class Form {
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
         const formEl = self.formEl;
         return checkFieldValidity(fieldEl, fieldOptions, self.validationRules, self.validationErrors).then(obj => (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj), 
-        obj.result && fieldOptions.onValidationCheckAll ? (fieldOptions.skipUIfeedback = !0, 
-        checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors, obj.fieldEl).then(dataForm => {
-            const clMethodName = dataForm.result ? "add" : "remove";
-            formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid), dispatchCustomEvent(formEl, customEvents_form.validation, dataForm);
-        })) : obj.result || removeClass(formEl, self.options.formOptions.cssClasses.valid), 
+        obj.result && fieldOptions.onValidationCheckAll ? checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors, obj.fieldEl).then(dataForm => {
+            dispatchCustomEvent(formEl, customEvents_form.validation, dataForm);
+        }) : obj.result || removeClass(formEl, self.options.formOptions.cssClasses.valid), 
         obj));
     }
     validateForm(fieldOptions) {
-        const self = this;
-        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
-        const formEl = self.formEl;
-        return checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors).then(data => {
-            const clMethodName = data.result ? "add" : "remove";
-            return formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid), 
-            data.fields.forEach(obj => {
-                dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj);
-            }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
-        });
+        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
+        const formEl = this.formEl;
+        return checkFormValidity(formEl, fieldOptions, this.validationRules, this.validationErrors).then(data => (data.fields.forEach(obj => {
+            dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj);
+        }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data));
     }
     static addValidationErrors(errorsObj) {
         Form.prototype.validationErrors = mergeObjects({}, Form.prototype.validationErrors, errorsObj);

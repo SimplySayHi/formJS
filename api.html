@@ -331,7 +331,8 @@
                             </div>
                             <div class="col-lg-8 col-xl-5">
                                 <p>
-                                    If set to <code>true</code>, when a field is valid, this will fire the whole form validation without feedback on the UI.
+                                    If set to <code>true</code>, when a field is valid, this will fire the whole form validation without feedback on the UI and will emit ONLY built-in event <code>fjs.form:validation</code>.<br />
+                                    This is useful to check if the form is valid on each field validation.
                                 </p>
                             </div>
                         </div>
@@ -870,13 +871,10 @@
                                 </p>
                                 <ul>
                                     <li>
-                                        Run feedback on UI ( basic feedback with css classes )
+                                        Emit event <code>fjs.field:validation</code> ( which runs basic feedback on UI - with CSS classes )
                                     </li>
                                     <li>
-                                        Emit event <code>fjs.field:validation</code>
-                                    </li>
-                                    <li>
-                                        If field is valid and <code>onValidationCheckAll</code> is set to <code>true</code>, form validation will run ( with <code>skipUIfeedback</code> set ot <code>true</code> ) and event <code>fjs.form:validation</code> will be emitted
+                                        If field is valid and <code>onValidationCheckAll</code> is set to <code>true</code>, form validation will run and ONLY event <code>fjs.form:validation</code> will be emitted ( it will not emit <code>fjs.field:validation</code> for each field )
                                     </li>
                                 </ul>
                                 <hr />
