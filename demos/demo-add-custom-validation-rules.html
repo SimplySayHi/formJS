@@ -156,7 +156,7 @@
                                 <pre class="m-0">
 <code class="language-js">Form.addValidationRules({
     registrationCode: function( string, $field ){
-        var obj = {
+        const obj = {
             result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
         };
         return obj;
@@ -165,14 +165,14 @@
 
 Form.addValidationErrors({
     registrationCode: function( string ){
-        var obj = {};
+        const obj = {};
         if( string.length < 8 ){ obj.minlength = true; }
         return obj;
     }
 });
 
-var $form = document.querySelector('form');
-var formInstance = new Form( $form );
+const $form = document.querySelector('form');
+const formInstance = new Form( $form );
 
 $form.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(event){
     if( Object.keys(event.detail.errors).length > 0 ){

@@ -203,41 +203,35 @@ function removeClass ( element, cssClasses ){
     }
 }
 
-function onValidationDemoErrorsCss ( fieldsArray, options ){
-    fieldsArray.forEach(function( obj ){
-        let isValid = obj.result,
-            $field = obj.$field,
-            containerEl = $field.closest('[data-formjs-question]');
+function onValidationDemoErrorsCss ( obj, options ){
+    const isValid = obj.result,
+          $field = obj.$field,
+          $container = $field.closest('[data-formjs-question]');
 
-        if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
-            if( isValid ){
+    if( $container !== null && !options.fieldOptions.skipUIfeedback ){
+        if( isValid ){
 
-                let errorClasses = getErrorRuleClassesFromContainer(containerEl);
-                if( errorClasses ){
-                    removeClass( containerEl, errorClasses );
-                }
-
-            } else {
-
-                let errorClasses = getErrorRuleClassesFromErrorsObj(obj.errors),
-                    errorClassToRemove = getErrorRuleClassesFromContainer(containerEl);
-                removeClass( containerEl, errorClassToRemove );
-                addClass( containerEl, errorClasses );
-
+            const errorClasses = getErrorRuleClassesFromContainer($container);
+            if( errorClasses ){
+                removeClass( $container, errorClasses );
             }
+
+        } else {
+
+            const errorClasses = getErrorRuleClassesFromErrorsObj(obj.errors),
+                errorClassToRemove = getErrorRuleClassesFromContainer($container);
+            removeClass( $container, errorClassToRemove );
+            addClass( $container, errorClasses );
+
         }
-    });
+    }
 }
 
 const $form = document.querySelector('form');
 const formInstance = new Form( $form );
 
 $form.addEventListener('fjs.field:validation', function(event){
-    onValidationDemoErrorsCss( [event.detail], this.formjs.options );
-});
-
-$form.addEventListener('fjs.form:validation', function(event){
-    onValidationDemoErrorsCss( event.detail.fields, this.formjs.options );
+    onValidationDemoErrorsCss( event.detail, this.formjs.options );
 });
 
 // OPTIONAL STEP
@@ -395,41 +389,35 @@ formInstance.validateFilledFields().then(fields => {
             }
         }
 
-        function onValidationDemoErrorsCss ( fieldsArray, options ){
-            fieldsArray.forEach(function( obj ){
-                var isValid = obj.result,
-                    $field = obj.$field,
-                    containerEl = $field.closest('[data-formjs-question]');
+        function onValidationDemoErrorsCss ( obj, options ){
+            var isValid = obj.result,
+                $field = obj.$field,
+                $container = $field.closest('[data-formjs-question]');
 
-                if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
-                    if( isValid ){
+            if( $container !== null && !options.fieldOptions.skipUIfeedback ){
+                if( isValid ){
 
-                        var errorClasses = getErrorRuleClassesFromContainer(containerEl);
-                        if( errorClasses ){
-                            removeClass( containerEl, errorClasses );
-                        }
-
-                    } else {
-
-                        var errorClasses = getErrorRuleClassesFromErrorsObj(obj.errors),
-                            errorClassToRemove = getErrorRuleClassesFromContainer(containerEl);
-                        removeClass( containerEl, errorClassToRemove );
-                        addClass( containerEl, errorClasses );
-
+                    var errorClasses = getErrorRuleClassesFromContainer($container);
+                    if( errorClasses ){
+                        removeClass( $container, errorClasses );
                     }
+
+                } else {
+
+                    var errorClasses = getErrorRuleClassesFromErrorsObj(obj.errors),
+                        errorClassToRemove = getErrorRuleClassesFromContainer($container);
+                    removeClass( $container, errorClassToRemove );
+                    addClass( $container, errorClasses );
+
                 }
-            });
+            }
         }
         
         var $form = document.querySelector('form');
         var formInstance = new Form( $form );
 
         $form.addEventListener('fjs.field:validation', function(event){
-            onValidationDemoErrorsCss( [event.detail], this.formjs.options );
-        });
-
-        $form.addEventListener('fjs.form:validation', function(event){
-            onValidationDemoErrorsCss( event.detail.fields, this.formjs.options );
+            onValidationDemoErrorsCss( event.detail, this.formjs.options );
         });
 
         // OPTIONAL STEP

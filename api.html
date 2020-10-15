@@ -285,7 +285,8 @@
                             </div>
                             <div class="col-lg-8 col-xl-5">
                                 <p>
-                                    If set to <code>true</code>, when a field is valid, this will fire the whole form validation without feedback on the UI.
+                                    If set to <code>true</code>, when a field is valid, this will fire the whole form validation without feedback on the UI and will emit ONLY built-in event <code>fjs.form:validation</code>.<br>
+                                    This is useful to check if the form is valid on each field validation.
                                 </p>
                             </div>
                         </div>
@@ -783,13 +784,10 @@
                                 </p>
                                 <ul>
                                     <li>
-                                        Run feedback on UI ( basic feedback with css classes )
+                                        Emit event <code>fjs.field:validation</code> ( which runs basic feedback on UI - with CSS classes )
                                     </li>
                                     <li>
-                                        Emit event <code>fjs.field:validation</code> on the field and on the form
-                                    </li>
-                                    <li>
-                                        If field is valid and <code>onValidationCheckAll</code> is set to <code>true</code>, form validation will run ( with <code>skipUIfeedback</code> set ot <code>true</code> )
+                                        If field is valid and <code>onValidationCheckAll</code> is set to <code>true</code>, form validation will run and ONLY event <code>fjs.form:validation</code> will be emitted ( it will not emit <code>fjs.field:validation</code> for each field )
                                     </li>
                                 </ul>
                                 <hr />
@@ -882,10 +880,10 @@
                                 </p>
                                 <ul>
                                     <li>
-                                        Run feedback on UI for each field ( basic feedback with css classes )
+                                        Emit event <code>fjs.field:validation</code> for each field
                                     </li>
                                     <li>
-                                        Emit event <code>fjs.form:validation</code> on the form
+                                        Emit event <code>fjs.form:validation</code>
                                     </li>
                                 </ul>
                                 <hr />
@@ -1141,7 +1139,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
         <div id="builtin-events">
             <h3 class="sticky-title">Built-in Events</h3>
             <p>
-                Each built-in event has the object <code>event.detail</code> as defined in column "event detail object".
+                Each built-in event has the object <code>event.detail</code> as defined in column "event detail object". By default all built-in events will bubble.
             </p>
             <div class="panel panel-default panel-transparent no-bg">
                 <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">

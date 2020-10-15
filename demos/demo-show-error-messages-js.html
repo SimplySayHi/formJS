@@ -148,55 +148,49 @@
                             </div>
                             <div class="card-body p-0">
                                 <pre class="m-0">
-<code class="language-js">function onValidationDemoErrorsJs ( fieldsArray, options ){
-    fieldsArray.forEach(function( obj ){
-        var isValid = obj.result,
-            $field = obj.$field,
-            containerEl = $field.closest('[data-formjs-question]');
+<code class="language-js">function onValidationDemoErrorsJs ( obj, options ){
+    const isValid = obj.result,
+          $field = obj.$field,
+          $container = $field.closest('[data-formjs-question]');
 
-        if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
-            if( isValid ){
+    if( $container !== null && !options.fieldOptions.skipUIfeedback ){
+        if( isValid ){
 
-                // REMOVE ERRORS FROM PAGE
-                containerEl.querySelector('.field-error-message').innerHTML = '';
+            // REMOVE ERRORS FROM PAGE
+            $container.querySelector('.field-error-message').innerHTML = '';
 
-            } else {
+        } else {
 
-                // PRINT ERRORS AS FOR obj.errors
-                if( obj.errors ){
-                    var errorsHTML = '';
+            // PRINT ERRORS AS FOR obj.errors
+            if( obj.errors ){
+                let errorsHTML = '';
 
-                    if( obj.errors.empty ){
-                        errorsHTML += '&lt;p&gt;This field cannot be empty&lt;/p&gt;';
-                    } else {
-                        for(var errorName in obj.errors){
-                            if( errorName !== 'rule' ){
-                                var printError = errorName.replace(/([A-Z])/g, function(all, letter){
-                                        return ' ' + letter.toLowerCase();
-                                    });
-                                errorsHTML += '&lt;li&gt;Error: '+ printError +'&lt;/li&gt;';
-                            }
+                if( obj.errors.empty ){
+                    errorsHTML += '&lt;p&gt;This field cannot be empty&lt;/p&gt;';
+                } else {
+                    for(let errorName in obj.errors){
+                        if( errorName !== 'rule' ){
+                            const printError = errorName.replace(/([A-Z])/g, function(all, letter){
+                                    return ' ' + letter.toLowerCase();
+                                });
+                            errorsHTML += '&lt;li&gt;Error: '+ printError +'&lt;/li&gt;';
                         }
-                        errorsHTML = 'This field is not valid:&lt;ul&gt;' + errorsHTML + '&lt;/ul&gt;';
                     }
-
-                    containerEl.querySelector('.field-error-message').innerHTML = errorsHTML;
+                    errorsHTML = 'This field is not valid:&lt;ul&gt;' + errorsHTML + '&lt;/ul&gt;';
                 }
 
+                $container.querySelector('.field-error-message').innerHTML = errorsHTML;
             }
+
         }
-    });
+    }
 }
 
 const $form = document.querySelector('form');
 const formInstance = new Form( $form );
 
 $form.addEventListener('fjs.field:validation', function(event){
-    onValidationDemoErrorsJs( [event.detail], this.formjs.options );
-});
-
-$form.addEventListener('fjs.form:validation', function(event){
-    onValidationDemoErrorsJs( event.detail.fields, this.formjs.options );
+    onValidationDemoErrorsJs( event.detail, this.formjs.options );
 });
 
 // OPTIONAL STEP
@@ -306,44 +300,42 @@ formInstance.validateFilledFields().then(fields => {
     <script src="../dist/formjs.min.js"></script>
     <script src="../dist/additionals/validationErrors.js"></script>
     <script>
-        function onValidationDemoErrorsJs ( fieldsArray, options ){
-            fieldsArray.forEach(function( obj ){
-                var isValid = obj.result,
-                    $field = obj.$field,
-                    containerEl = $field.closest('[data-formjs-question]');
+        function onValidationDemoErrorsJs ( obj, options ){
+            var isValid = obj.result,
+                $field = obj.$field,
+                $container = $field.closest('[data-formjs-question]');
 
-                if( containerEl !== null && !options.fieldOptions.skipUIfeedback ){
-                    if( isValid ){
+            if( $container !== null && !options.fieldOptions.skipUIfeedback ){
+                if( isValid ){
 
-                        // REMOVE ERRORS FROM PAGE
-                        containerEl.querySelector('.field-error-message').innerHTML = '';
+                    // REMOVE ERRORS FROM PAGE
+                    $container.querySelector('.field-error-message').innerHTML = '';
 
-                    } else {
+                } else {
 
-                        // PRINT ERRORS AS FOR obj.errors
-                        if( obj.errors ){
-                            var errorsHTML = '';
+                    // PRINT ERRORS AS FOR obj.errors
+                    if( obj.errors ){
+                        var errorsHTML = '';
 
-                            if( obj.errors.empty ){
-                                errorsHTML += '<p>This field cannot be empty</p>';
-                            } else {
-                                for(var errorName in obj.errors){
-                                    if( errorName !== 'rule' ){
-                                        var printError = errorName.replace(/([A-Z])/g, function(all, letter){
-                                                return ' ' + letter.toLowerCase();
-                                            });
-                                        errorsHTML += '<li>Error: '+ printError +'</li>';
-                                    }
+                        if( obj.errors.empty ){
+                            errorsHTML += '<p>This field cannot be empty</p>';
+                        } else {
+                            for(var errorName in obj.errors){
+                                if( errorName !== 'rule' ){
+                                    var printError = errorName.replace(/([A-Z])/g, function(all, letter){
+                                            return ' ' + letter.toLowerCase();
+                                        });
+                                    errorsHTML += '<li>Error: '+ printError +'</li>';
                                 }
-                                errorsHTML = 'This field is not valid:<ul>' + errorsHTML + '</ul>';
                             }
-
-                            containerEl.querySelector('.field-error-message').innerHTML = errorsHTML;
+                            errorsHTML = 'This field is not valid:<ul>' + errorsHTML + '</ul>';
                         }
 
+                        $container.querySelector('.field-error-message').innerHTML = errorsHTML;
                     }
+
                 }
-            });
+            }
         }
 
         var $form = document.querySelector('form');
@@ -351,12 +343,7 @@ formInstance.validateFilledFields().then(fields => {
 
         $form.addEventListener('fjs.field:validation', function(event){
             console.log('fjs.field:validation', event.detail);
-            onValidationDemoErrorsJs( [event.detail], this.formjs.options );
-        });
-
-        $form.addEventListener('fjs.form:validation', function(event){
-            console.log('fjs.form:validation', event.detail);
-            onValidationDemoErrorsJs( event.detail.fields, this.formjs.options );
+            onValidationDemoErrorsJs( event.detail, this.formjs.options );
         });
 
         // OPTIONAL STEP

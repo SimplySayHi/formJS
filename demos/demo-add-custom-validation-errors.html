@@ -152,15 +152,15 @@
                                 <pre class="m-0">
 <code class="language-js">Form.addValidationErrors({
     email: function( string ){
-        var obj = {};
+        const obj = {};
         if( string.indexOf('@') === -1 ){ obj.atChar = true; }
         else if( string.split('@').filter(function(i){ return !!i; }).length < 2 ){ obj.incomplete = true; }
         return obj;
     }
 });
 
-var $form = document.querySelector('form');
-var formInstance = new Form( $form );
+const $form = document.querySelector('form');
+const formInstance = new Form( $form );
 
 $form.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(event){
     if( event.detail.errors && Object.keys(event.detail.errors).length > 0 ){

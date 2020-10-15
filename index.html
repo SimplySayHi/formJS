@@ -94,7 +94,7 @@
                         <div class="dropdown d-inline-block ml-1">
                             <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button" data-print-current-version></button>
                             <span class="dropdown-menu w-100 py-1">
-                                <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/4.2.2/">4.2.2</a>
+                                <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/4.2.3/">4.2.3</a>
                                 <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/3.3.2/">3.3.2</a>
                                 <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/2.3.3/">2.3.3</a>
                                 <a class="dropdown-item px-2" target="_blank" href="https://valeriodipunzio.com/plugins/formJS/1.2.0/">1.2.0</a>
@@ -249,6 +249,27 @@
                 <div class="toggable-content">
                     <ul class="p-0">
 
+                        <li class="media my-3">
+                            <div class="version-num text-red">4.2.3</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Minor improvements for full version only:
+                                        <ul>
+                                            <li>
+                                                Improved code in validateField when "onValidationCheckAll" is set to true
+                                            </li>
+                                            <li>
+                                                Calling method validateForm() will emit event "fjs.field:validation" for each validated field
+                                            </li>
+                                            <li>
+                                                Removed additional event emitted on form while validating a field since event emitted on field will bubble
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="media my-3">
                             <div class="version-num text-red">4.2.2</div>
                             <div class="media-body pl-2">

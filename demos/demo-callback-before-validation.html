@@ -154,10 +154,8 @@
 const options = {
     fieldOptions: {
         beforeValidation: function( fieldObj ){
-            var $field = fieldObj.$field;
+            const $field = fieldObj.$field;
             if( $field.matches('[type="email"]') && $field.value ){
-                console.log('beforeValidation fieldObj', fieldObj);
-                console.log('TRANSFORM FIELD VALUE TO UPPERCASE');
                 $field.value = $field.value.toUpperCase();
             }
         }
