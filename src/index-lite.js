@@ -40,7 +40,7 @@ class Form {
 
     validateField( field, fieldOptions ){
         const self = this;
-        const $field = (typeof field === 'string' ? self.$form.querySelector(field) : field);
+        const $field = typeof field === 'string' ? self.$form.querySelector(field) : field;
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
         return checkFieldValidity($field, fieldOptions, self.validationRules, self.validationErrors)
             .then(finalizeFieldPromise);

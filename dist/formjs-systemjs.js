@@ -316,6 +316,12 @@ System.register([], (function(exports) {
                         $field.value = valueReplaced;
                     }
                 }
+            }, formValidationEnd = function(event) {
+                var formEl = event.target, options = formEl.formjs.options;
+                if (!options.fieldOptions.skipUIfeedback) {
+                    var clMethodName = event.detail.result ? "add" : "remove";
+                    formEl.classList[clMethodName](options.formOptions.cssClasses.valid);
+                }
             }, keypressMaxlength = function(event) {
                 var $field = event.target;
                 if ($field.matches("[maxlength]")) {
@@ -417,25 +423,19 @@ System.register([], (function(exports) {
                     }));
                 }
             }, validationEnd = function(event) {
-                var $fieldsArray = event.detail.$field ? [ event.detail ] : event.detail.fields, options = $fieldsArray[0].$field.closest("form").formjs.options.fieldOptions;
-                $fieldsArray.forEach((function(obj) {
-                    var $field = obj.$field;
-                    if ($field.matches(fieldsStringSelector)) {
-                        var $container = $field.closest(options.questionContainer), isReqFrom = $field.matches("[data-required-from]"), $reqMore = document.querySelector($field.getAttribute("data-required-from"));
-                        if (null !== $container && removeClass($container, options.cssClasses.pending), 
-                        null !== $container && !options.skipUIfeedback) if (obj.result) {
-                            if (!isReqFrom || isReqFrom && $reqMore.checked) {
-                                var errorClasses = options.cssClasses.error + " " + options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
-                                removeClass($container, errorClasses), addClass($container, options.cssClasses.valid);
-                            }
-                        } else {
-                            var extraErrorClass = options.cssClasses.errorRule, isChecks = $field.matches("[data-checks]"), checkedLength = isChecks ? $container.querySelectorAll('[name="' + $field.name + '"]:checked').length : 0;
-                            (!isChecks && obj.errors && obj.errors.empty || isChecks && 0 === checkedLength) && (extraErrorClass = options.cssClasses.errorEmpty);
-                            var _errorClasses = options.cssClasses.error + " " + extraErrorClass, errorClassToRemove = options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
-                            removeClass($container, options.cssClasses.valid + " " + errorClassToRemove), addClass($container, _errorClasses);
-                        }
+                var eventDetail = event.detail, $field = eventDetail.$field, options = $field.closest("form").formjs.options.fieldOptions, $container = $field.closest(options.questionContainer), isReqFrom = $field.matches("[data-required-from]"), $reqMore = document.querySelector($field.getAttribute("data-required-from"));
+                if (null !== $container && removeClass($container, options.cssClasses.pending), 
+                null !== $container && !options.skipUIfeedback) if (eventDetail.result) {
+                    if (!isReqFrom || isReqFrom && $reqMore.checked) {
+                        var errorClasses = options.cssClasses.error + " " + options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
+                        removeClass($container, errorClasses), addClass($container, options.cssClasses.valid);
                     }
-                }));
+                } else {
+                    var extraErrorClass = options.cssClasses.errorRule, isChecks = $field.matches("[data-checks]"), checkedElLength = isChecks ? $container.querySelectorAll('[name="' + $field.name + '"]:checked').length : 0;
+                    (!isChecks && eventDetail.errors && eventDetail.errors.empty || isChecks && 0 === checkedElLength) && (extraErrorClass = options.cssClasses.errorEmpty);
+                    var _errorClasses = options.cssClasses.error + " " + extraErrorClass, errorClassToRemove = options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
+                    removeClass($container, options.cssClasses.valid + " " + errorClassToRemove), addClass($container, _errorClasses);
+                }
             };
             function formStartup($form, options) {
                 $form.noValidate = !0;
@@ -445,8 +445,8 @@ System.register([], (function(exports) {
                 fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                     var useCapturing = "blur" === eventName;
                     $form.addEventListener(eventName, validation, useCapturing);
-                })), $form.addEventListener(customEvents_field.validation, validationEnd, !1), formOptions.handleSubmit && ($form.addEventListener("submit", submit), 
-                formOptions.ajaxSubmit && ($form.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = $form.getAttribute("enctype")), 
+                })), $form.addEventListener(customEvents_field.validation, validationEnd, !1), $form.addEventListener(customEvents_form.validation, formValidationEnd, !1), 
+                formOptions.handleSubmit && ($form.addEventListener("submit", submit), formOptions.ajaxSubmit && ($form.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = $form.getAttribute("enctype")), 
                 $form.getAttribute("method") && (formOptions.ajaxOptions.method = $form.getAttribute("method").toUpperCase()), 
                 $form.getAttribute("action") && (formOptions.ajaxOptions.url = $form.getAttribute("action"))));
             }
@@ -605,6 +605,7 @@ System.register([], (function(exports) {
                                 var useCapturing = "blur" === eventName;
                                 $form.removeEventListener(eventName, validation, useCapturing);
                             })), $form.removeEventListener(customEvents_field.validation, validationEnd, !1), 
+                            $form.removeEventListener(customEvents_form.validation, formValidationEnd, !1), 
                             delete $form.formjs;
                         }(this.$form, this.options);
                     }
@@ -623,21 +624,14 @@ System.register([], (function(exports) {
                         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
                         var $form = this.$form;
                         return checkFieldValidity($field, fieldOptions, this.validationRules, this.validationErrors).then((function(obj) {
-                            return new Promise((function(resolve) {
-                                return dispatchCustomEvent(obj.$field, customEvents_field.validation, {
-                                    bubbles: !1,
-                                    detail: obj
-                                }), dispatchCustomEvent($form, customEvents_field.validation, {
-                                    detail: obj
-                                }), obj.result && fieldOptions.onValidationCheckAll ? (fieldOptions.skipUIfeedback = !0, 
-                                checkFormValidity($form, fieldOptions, self.validationRules, self.validationErrors, obj.$field).then((function(dataForm) {
-                                    var clMethodName = dataForm.result ? "add" : "remove";
-                                    $form.classList[clMethodName](self.options.formOptions.cssClasses.valid), dispatchCustomEvent($form, customEvents_form.validation, {
-                                        detail: dataForm
-                                    });
-                                }))) : obj.result || removeClass($form, self.options.formOptions.cssClasses.valid), 
-                                obj;
-                            }));
+                            return dispatchCustomEvent(obj.$field, customEvents_field.validation, {
+                                detail: obj
+                            }), obj.result && fieldOptions.onValidationCheckAll ? checkFormValidity($form, fieldOptions, self.validationRules, self.validationErrors, obj.$field).then((function(dataForm) {
+                                dispatchCustomEvent($form, customEvents_form.validation, {
+                                    detail: dataForm
+                                });
+                            })) : obj.result || removeClass($form, self.options.formOptions.cssClasses.valid), 
+                            obj;
                         })).then(finalizeFieldPromise);
                     }
                 }, {
@@ -648,15 +642,14 @@ System.register([], (function(exports) {
                 }, {
                     key: "validateForm",
                     value: function(fieldOptions) {
-                        var self = this;
-                        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
-                        var $form = self.$form;
-                        return checkFormValidity($form, fieldOptions, self.validationRules, self.validationErrors).then((function(data) {
-                            var clMethodName = data.result ? "add" : "remove";
-                            return $form.classList[clMethodName](self.options.formOptions.cssClasses.valid), 
-                            validationEnd({
-                                detail: data
-                            }), dispatchCustomEvent($form, customEvents_form.validation, {
+                        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
+                        var $form = this.$form;
+                        return checkFormValidity($form, fieldOptions, this.validationRules, this.validationErrors).then((function(data) {
+                            return data.fields.forEach((function(obj) {
+                                dispatchCustomEvent(obj.$field, customEvents_field.validation, {
+                                    detail: obj
+                                });
+                            })), dispatchCustomEvent($form, customEvents_form.validation, {
                                 detail: data
                             }), data;
                         })).then(finalizeFormPromise);

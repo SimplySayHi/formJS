@@ -4,7 +4,7 @@
     "description": "JavaScript Form Validation. Made Easy",
     "version": "5.0.0",
     "main": "dist/formjs.min.js",
-    "module": "dist/formjs-esm.min.js",
+    "module": "dist/formjs-esm.js",
     "homepage": "https://valeriodipunzio.com/plugins/formJS/",
     "author": {
         "email": "sayhi@valeriodipunzio.com",

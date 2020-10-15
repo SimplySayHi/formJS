@@ -3,7 +3,6 @@ import { version }              from './modules/version';
 import { checkFormEl, customEvents, dispatchCustomEvent, excludeSelector, finalizeFieldPromise, finalizeFormPromise, isNodeList, mergeObjects, removeClass } from './modules/helpers';
 import { options }              from './modules/options';
 import { validationRules }      from './modules/validationRules';
-import { validationEnd }        from './modules/listenerCallbacks';
 import { formStartup }          from './modules/formStartup';
 import { destroy }              from './modules/destroy';
 import { checkFilledFields }    from './modules/checkFilledFields';
@@ -69,23 +68,16 @@ class Form {
         const $form = this.$form;
         return checkFieldValidity($field, fieldOptions, this.validationRules, this.validationErrors)
             .then(obj => {
-                return new Promise(resolve => {
-                    dispatchCustomEvent( obj.$field, customEvents.field.validation, { bubbles: false, detail: obj } );
-                    dispatchCustomEvent( $form, customEvents.field.validation, { detail: obj } );
-                    if( obj.result && fieldOptions.onValidationCheckAll ){
-                        // FORCE skipUIfeedback TO BE TEMPORARY true
-                        fieldOptions.skipUIfeedback = true;
-                        checkFormValidity( $form, fieldOptions, self.validationRules, self.validationErrors, obj.$field )
-                            .then(dataForm => {
-                                const clMethodName = dataForm.result ? 'add' : 'remove';
-                                $form.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
-                                dispatchCustomEvent( $form, customEvents.form.validation, { detail: dataForm } );
-                            });
-                    } else if( !obj.result ){
-                        removeClass( $form, self.options.formOptions.cssClasses.valid );
-                    }
-                    return obj;
-                });
+                dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } );
+                if( obj.result && fieldOptions.onValidationCheckAll ){
+                    checkFormValidity( $form, fieldOptions, self.validationRules, self.validationErrors, obj.$field )
+                        .then(dataForm => {
+                            dispatchCustomEvent( $form, customEvents.form.validation, { detail: dataForm } );
+                        });
+                } else if( !obj.result ){
+                    removeClass( $form, self.options.formOptions.cssClasses.valid );
+                }
+                return obj;
             })
             .then(finalizeFieldPromise);
     }
@@ -100,9 +92,9 @@ class Form {
         const $form = self.$form;
         return checkFormValidity($form, fieldOptions, self.validationRules, self.validationErrors)
             .then(data => {
-                const clMethodName = data.result ? 'add' : 'remove';
-                $form.classList[clMethodName]( self.options.formOptions.cssClasses.valid );
-                validationEnd( {detail:data} );
+                data.fields.forEach(obj => {
+                    dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } );
+                });
                 dispatchCustomEvent( $form, customEvents.form.validation, { detail: data } );
                 return data;
             })
