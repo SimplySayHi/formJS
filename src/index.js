@@ -83,7 +83,13 @@ class Form {
     }
 
     validateFilledFields(){
-        return checkFilledFields(this.$form);
+        const focusOnRelated = this.options.fieldOptions.focusOnRelated;
+        this.options.fieldOptions.focusOnRelated = false;
+        return checkFilledFields(this.$form)
+        .then(fields => {
+            this.options.fieldOptions.focusOnRelated = focusOnRelated;
+            return fields;
+        });
     }
 
     validateForm( fieldOptions ){

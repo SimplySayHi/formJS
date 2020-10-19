@@ -750,21 +750,24 @@ System.register([], function () {
             fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
             var $form = this.$form;
             return checkFieldValidity($field, fieldOptions, this.validationRules, this.validationErrors).then(function (obj) {
-              return new Promise(function (resolve) {
-                return dispatchCustomEvent(obj.$field, customEvents_field.validation, {
-                  detail: obj
-                }), obj.result && fieldOptions.onValidationCheckAll ? checkFormValidity($form, fieldOptions, self.validationRules, self.validationErrors, obj.$field).then(function (dataForm) {
-                  dispatchCustomEvent($form, customEvents_form.validation, {
-                    detail: dataForm
-                  });
-                }) : obj.result || removeClass($form, self.options.formOptions.cssClasses.valid), obj;
-              });
+              return dispatchCustomEvent(obj.$field, customEvents_field.validation, {
+                detail: obj
+              }), obj.result && fieldOptions.onValidationCheckAll ? checkFormValidity($form, fieldOptions, self.validationRules, self.validationErrors, obj.$field).then(function (dataForm) {
+                dispatchCustomEvent($form, customEvents_form.validation, {
+                  detail: dataForm
+                });
+              }) : obj.result || removeClass($form, self.options.formOptions.cssClasses.valid), obj;
             }).then(finalizeFieldPromise);
           }
         }, {
           key: "validateFilledFields",
           value: function validateFilledFields() {
-            return checkFilledFields(this.$form);
+            var _this = this;
+
+            var focusOnRelated = this.options.fieldOptions.focusOnRelated;
+            return this.options.fieldOptions.focusOnRelated = !1, checkFilledFields(this.$form).then(function (fields) {
+              return _this.options.fieldOptions.focusOnRelated = focusOnRelated, fields;
+            });
           }
         }, {
           key: "validateForm",

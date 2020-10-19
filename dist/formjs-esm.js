@@ -535,7 +535,9 @@ class Form {
         obj)).then(finalizeFieldPromise);
     }
     validateFilledFields() {
-        return checkFilledFields(this.$form);
+        const focusOnRelated = this.options.fieldOptions.focusOnRelated;
+        return this.options.fieldOptions.focusOnRelated = !1, checkFilledFields(this.$form).then(fields => (this.options.fieldOptions.focusOnRelated = focusOnRelated, 
+        fields));
     }
     validateForm(fieldOptions) {
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);

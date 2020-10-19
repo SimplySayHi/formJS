@@ -5,7 +5,6 @@ import { validation } from './listenerCallbacks';
 export const checkFilledFields = $form => {
 
     const formFields = getFilledFields( $form );
-    // VALIDATE ALL FILLED FIELDS
     return Promise.all( formFields.map($field => {
 
         const isFieldForChangeEventBoolean = isFieldForChangeEvent($field);

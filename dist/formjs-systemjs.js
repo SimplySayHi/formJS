@@ -637,7 +637,10 @@ System.register([], (function(exports) {
                 }, {
                     key: "validateFilledFields",
                     value: function() {
-                        return checkFilledFields(this.$form);
+                        var _this = this, focusOnRelated = this.options.fieldOptions.focusOnRelated;
+                        return this.options.fieldOptions.focusOnRelated = !1, checkFilledFields(this.$form).then((function(fields) {
+                            return _this.options.fieldOptions.focusOnRelated = focusOnRelated, fields;
+                        }));
                     }
                 }, {
                     key: "validateForm",
