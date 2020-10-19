@@ -526,7 +526,9 @@ class Form {
         return this.options.formOptions.getFormData(filteredFields);
     }
     init() {
-        return init(this.formEl);
+        const focusOnRelated = this.options.fieldOptions.focusOnRelated;
+        return this.options.fieldOptions.focusOnRelated = !1, init(this.formEl).then(initObj => (this.options.fieldOptions.focusOnRelated = focusOnRelated, 
+        initObj));
     }
     validateField(fieldEl, fieldOptions) {
         const self = this;

@@ -742,7 +742,12 @@ System.register([], function () {
         }, {
           key: "init",
           value: function init() {
-            return _init(this.formEl);
+            var _this = this;
+
+            var focusOnRelated = this.options.fieldOptions.focusOnRelated;
+            return this.options.fieldOptions.focusOnRelated = !1, _init(this.formEl).then(function (initObj) {
+              return _this.options.fieldOptions.focusOnRelated = focusOnRelated, initObj;
+            });
           }
         }, {
           key: "validateField",

@@ -613,7 +613,10 @@ System.register([], (function(exports) {
                 }, {
                     key: "init",
                     value: function() {
-                        return init(this.formEl);
+                        var _this = this, focusOnRelated = this.options.fieldOptions.focusOnRelated;
+                        return this.options.fieldOptions.focusOnRelated = !1, init(this.formEl).then((function(initObj) {
+                            return _this.options.fieldOptions.focusOnRelated = focusOnRelated, initObj;
+                        }));
                     }
                 }, {
                     key: "validateField",

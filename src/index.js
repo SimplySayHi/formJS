@@ -63,7 +63,13 @@ class Form {
     }
 
     init(){
-        return init(this.formEl);
+        const focusOnRelated = this.options.fieldOptions.focusOnRelated;
+        this.options.fieldOptions.focusOnRelated = false;
+        return init(this.formEl)
+            .then(initObj => {
+                this.options.fieldOptions.focusOnRelated = focusOnRelated;
+                return initObj;
+            });
     }
 
     validateField( fieldEl, fieldOptions ){
