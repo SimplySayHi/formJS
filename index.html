@@ -206,24 +206,7 @@
                     <div class="media-body pl-2">
                         <ul>
                             <li>
-                                Added ESM version for additional validations and errors in dist folder
-                            </li>
-                            <li>
-                                Minor improvements for full version only:
-                                <ul>
-                                    <li>
-                                        Improved code in validateField when "onValidationCheckAll" is set to true
-                                    </li>
-                                    <li>
-                                        Calling method validateForm() will emit event "fjs.field:validation" for each validated field
-                                    </li>
-                                    <li>
-                                        When calling method validateFilledFields(), to avoid focus on related fields, focusOnRelated is set to false and then restored
-                                    </li>
-                                    <li>
-                                        Removed additional event emitted on form while validating a field since event emitted on field will bubble
-                                    </li>
-                                </ul>
+                                Added "event.data.isCheckingForm = true" for event "fjs.field:validation" emitted on validateForm()
                             </li>
                         </ul>
                     </div>
@@ -238,6 +221,33 @@
                 <div class="toggable-content">
                     <ul class="p-0">
 
+                        <li class="media my-3">
+                            <div class="version-num text-red">4.2.3</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Added ESM version for additional validations and errors in dist folder
+                                    </li>
+                                    <li>
+                                        Minor improvements for full version only:
+                                        <ul>
+                                            <li>
+                                                Improved code in validateField when "onValidationCheckAll" is set to true
+                                            </li>
+                                            <li>
+                                                Calling method validateForm() will emit event "fjs.field:validation" for each validated field
+                                            </li>
+                                            <li>
+                                                When calling method validateFilledFields(), to avoid focus on related fields, focusOnRelated is set to false and then restored
+                                            </li>
+                                            <li>
+                                                Removed additional event emitted on form while validating a field since event emitted on field will bubble
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="media my-3">
                             <div class="version-num text-red">4.2.2</div>
                             <div class="media-body pl-2">

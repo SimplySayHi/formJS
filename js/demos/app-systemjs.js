@@ -41,7 +41,7 @@ System.register([], function () {
         return Constructor;
       }
 
-      /* formJS v4.2.3 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+      /* formJS v4.3.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
       var addClass = function addClass(element, cssClasses) {
         cssClasses.split(" ").forEach(function (className) {
           element.classList.add(className);
@@ -768,7 +768,7 @@ System.register([], function () {
             var formEl = this.formEl;
             return checkFormValidity(formEl, fieldOptions, this.validationRules, this.validationErrors).then(function (data) {
               return data.fields.forEach(function (obj) {
-                dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj);
+                obj.isCheckingForm = !0, dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj);
               }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
             });
           }
@@ -804,7 +804,7 @@ System.register([], function () {
           }
           return obj;
         }
-      }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.2.3";
+      }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.0";
 
       var formEl = document.querySelector('form');
       var formInstance = new Form(formEl);

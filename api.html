@@ -933,12 +933,15 @@
                                 </p>
                                 <ul>
                                     <li>
-                                        Emit event <code>fjs.field:validation</code> for each field
+                                        Emit event <code>fjs.field:validation</code> for each field <span class="text-yellow">*</span>
                                     </li>
                                     <li>
                                         Emit event <code>fjs.form:validation</code>
                                     </li>
                                 </ul>
+                                <p class="small">
+                                    <span class="text-yellow">*</span> <code>event.data</code> will contain the new key/value <code>isCheckingForm: true</code> useful if you want to execute ( or not ) some code when event is emitted by form validation or field validation ( <code>isCheckingForm</code> will not be present on event emitted by field validation ).
+                                </p>
                                 <hr />
                                 <p class="d-lg-none m-0">
                                     Parameters:
@@ -1202,7 +1205,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                         <div class="col-lg-6">
                             <pre class="text-green">fjs.field:validation</pre>
                             <p>
-                                Fires just after a field has been validated.
+                                Emitted just after a field has been validated.
                             </p>
                         </div>
                         <div class="col-lg-6">
@@ -1213,7 +1216,8 @@ formInstance.options.fieldOptions.maxFileSize = 50;
 <code class="language-js">{
     fieldEl: fieldEl,
     result: false,
-    errors: {...}
+    errors: {...},
+    isCheckingForm: true // ONLY ON validateForm()
 }
 </code></pre>
                             <ul>
@@ -1226,6 +1230,9 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                                 <li>
                                     <span class="text-green">errors</span>: Object ( only in case of invalid field )
                                 </li>
+                                <li>
+                                    <span class="text-green">isCheckingForm</span>: <code>true</code> present ONLY when event is emitted by method <code>validateForm()</code>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -1233,7 +1240,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                         <div class="col-lg-6">
                             <pre class="text-green">fjs.form:submit</pre>
                             <p>
-                                Fires when the form is submitted.
+                                Emitted when the form is submitted.
                             </p>
                         </div>
                         <div class="col-lg-6">
@@ -1249,7 +1256,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
                         <div class="col-lg-6">
                             <pre class="text-green">fjs.form:validation</pre>
                             <p>
-                                Fires just after the form has been validated.
+                                Emitted just after the form has been validated.
                             </p>
                         </div>
                         <div class="col-lg-6">
@@ -1264,7 +1271,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
 </code></pre>
                             <ul>
                                 <li>
-                                    <span class="text-green">fields</span>: Array of objects ( each object is like described in <code>fjs.field:validation</code> event )
+                                    <span class="text-green">fields</span>: Array of objects ( each object is like described in event <code>fjs.field:validation</code> but without <code>isCheckingForm</code> )
                                 </li>
                                 <li>
                                     <span class="text-green">result</span>: Boolean

@@ -1,4 +1,4 @@
-/* formJS v4.2.3 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v4.3.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 const addClass = (element, cssClasses) => {
     cssClasses.split(" ").forEach(className => {
         element.classList.add(className);
@@ -545,7 +545,7 @@ class Form {
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
         const formEl = this.formEl;
         return checkFormValidity(formEl, fieldOptions, this.validationRules, this.validationErrors).then(data => (data.fields.forEach(obj => {
-            dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj);
+            obj.isCheckingForm = !0, dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj);
         }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data));
     }
     static addValidationErrors(errorsObj) {
@@ -573,6 +573,6 @@ Form.prototype.isInitialized = !1, Form.prototype.options = options, Form.protot
         }
         return obj;
     }
-}, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.2.3";
+}, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.0";
 
 export default Form;

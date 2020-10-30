@@ -1,4 +1,4 @@
-/* formJS Lite v4.2.3 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS Lite v4.3.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 const isDOMNode = node => Element.prototype.isPrototypeOf(node), isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
     return Array.from(arguments).slice(1).filter(arg => !!arg).forEach(arg => {
         Object.keys(arg).forEach(key => {
@@ -270,6 +270,6 @@ Form.prototype.options = {
         maxFileSize: 10
     }
 }, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-Form.prototype.version = "4.2.3";
+Form.prototype.version = "4.3.0";
 
 export default Form;
