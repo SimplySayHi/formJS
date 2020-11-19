@@ -543,7 +543,7 @@ class Form {
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
         const $form = this.$form;
         return checkFormValidity($form, fieldOptions, this.validationRules, this.validationErrors).then(data => (data.fields.forEach(obj => {
-            dispatchCustomEvent(obj.$field, customEvents_field.validation, {
+            obj.isCheckingForm = !0, dispatchCustomEvent(obj.$field, customEvents_field.validation, {
                 detail: obj
             });
         }), dispatchCustomEvent($form, customEvents_form.validation, {

@@ -647,7 +647,7 @@ var Form = function() {
                 var $form = this.$form;
                 return checkFormValidity($form, fieldOptions, this.validationRules, this.validationErrors).then((function(data) {
                     return data.fields.forEach((function(obj) {
-                        dispatchCustomEvent(obj.$field, customEvents_field.validation, {
+                        obj.isCheckingForm = !0, dispatchCustomEvent(obj.$field, customEvents_field.validation, {
                             detail: obj
                         });
                     })), dispatchCustomEvent($form, customEvents_form.validation, {

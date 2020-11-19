@@ -99,6 +99,7 @@ class Form {
         return checkFormValidity($form, fieldOptions, self.validationRules, self.validationErrors)
             .then(data => {
                 data.fields.forEach(obj => {
+                    obj.isCheckingForm = true;
                     dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } );
                 });
                 dispatchCustomEvent( $form, customEvents.form.validation, { detail: data } );

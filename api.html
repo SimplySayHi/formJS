@@ -880,12 +880,15 @@
                                 </p>
                                 <ul>
                                     <li>
-                                        Emit event <code>fjs.field:validation</code> for each field
+                                        Emit event <code>fjs.field:validation</code> for each field <span class="text-yellow">*</span>
                                     </li>
                                     <li>
                                         Emit event <code>fjs.form:validation</code>
                                     </li>
                                 </ul>
+                                <p class="small">
+                                    <span class="text-yellow">*</span> <code>event.detail</code> will contain the new key/value <code>isCheckingForm: true</code> useful if you want to execute ( or not ) some code when event is emitted by form validation or field validation ( <code>isCheckingForm</code> will not be present on event emitted by field validation ).
+                                </p>
                                 <hr />
                                 <p class="d-lg-none m-0">
                                     Parameters:
@@ -921,7 +924,8 @@
         result:  false,
         errors:  {
             email: true
-        }
+        },
+        isCheckingForm: true
     }
 ]</code></pre>
                             </div>
@@ -1157,10 +1161,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                         <div class="col-lg-6">
                             <pre class="text-green">fjs.field:validation</pre>
                             <p>
-                                Fires just after a field has been validated.<br />
-                                ( If the field was evaluated as valid the entire form check can be fired - if <code>onValidationCheckAll: true</code> )
-                                <br /><br />
-                                <b class="text-green">NOTE</b>: This event can be attached to the form and/or a specific field. If both are specified, the event attached to the field is triggered first.
+                                Emitted just after a field has been validated.
                             </p>
                         </div>
                         <div class="col-lg-6">
@@ -1171,7 +1172,8 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
 <code class="language-js">{
     $field: $field,
     result: false,
-    errors: {...}
+    errors: {...},
+    isCheckingForm: true // ONLY ON validateForm()
 }
 </code></pre>
                             <ul>
@@ -1184,6 +1186,9 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                 <li>
                                     <span class="text-green">errors</span>: Object ( only in case of invalid field )
                                 </li>
+                                <li>
+                                    <span class="text-green">isCheckingForm</span>: <code>true</code> present ONLY when event is emitted by method <code>validateForm()</code>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -1191,7 +1196,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                         <div class="col-lg-6">
                             <pre class="text-green">fjs.form:submit</pre>
                             <p>
-                                Fires when the form has finished submitting the data and the AJAX call is finished.
+                                Emitted when the form is submitted.
                             </p>
                         </div>
                         <div class="col-lg-6">
@@ -1207,7 +1212,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                         <div class="col-lg-6">
                             <pre class="text-green">fjs.form:validation</pre>
                             <p>
-                                Fires just after the form has been validated.
+                                Emitted just after the form has been validated.
                             </p>
                         </div>
                         <div class="col-lg-6">
@@ -1222,7 +1227,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
 </code></pre>
                             <ul>
                                 <li>
-                                    <span class="text-green">fields</span>: Array of objects ( each object is like described in <code>fjs.field:validation</code> event )
+                                    <span class="text-green">fields</span>: Array of objects ( each object is like described in event <code>fjs.field:validation</code> but without <code>isCheckingForm</code> )
                                 </li>
                                 <li>
                                     <span class="text-green">result</span>: Boolean
