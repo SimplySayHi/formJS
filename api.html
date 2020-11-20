@@ -853,7 +853,7 @@
 <pre>
 <code class="language-js">[
     {
-        $field: element,
+        $field: $field,
         result:  false,
         errors:  {
             email: true
@@ -883,11 +883,11 @@
                                         Emit event <code>fjs.field:validation</code> for each field <span class="text-yellow">*</span>
                                     </li>
                                     <li>
-                                        Emit event <code>fjs.form:validation</code>
+                                        Emit event <code>fjs.form:validation</code> <span class="text-yellow">*</span>
                                     </li>
                                 </ul>
                                 <p class="small">
-                                    <span class="text-yellow">*</span> <code>event.detail</code> will contain the new key/value <code>isCheckingForm: true</code> useful if you want to execute ( or not ) some code when event is emitted by form validation or field validation ( <code>isCheckingForm</code> will not be present on event emitted by field validation ).
+                                    <span class="text-yellow">*</span> See <a href="#builtin-events">Events section</a> for details.
                                 </p>
                                 <hr />
                                 <p class="d-lg-none m-0">
@@ -920,7 +920,7 @@
                                 <pre>
 <code class="language-js">[
     {
-        $field: element,
+        $field: $field,
         result:  false,
         errors:  {
             email: true
@@ -1119,10 +1119,10 @@ Form.setOptions( { fieldOptions: {onValidationCheckAll: true} } );
                     </p>
                     <pre>
 <code class="language-js">// ADD/OVERRIDE A VALIDATION ERROR METHOD
-Form.prototype.validationErrors.email = function( fieldValue, $field, fieldOptions ){ ... }
+Form.prototype.validationErrors.email = function( fieldValue, $field ){ ... }
 
 // ADD/OVERRIDE A VALIDATION METHOD
-Form.prototype.validationRules.myPassword = function( fieldValue, $field, fieldOptions ){ ... }
+Form.prototype.validationRules.myPassword = function( fieldValue, $field ){ ... }
 
 // OVERRIDE AN OPTION
 Form.prototype.options.fieldOptions.onValidationCheckAll = true;
@@ -1173,7 +1173,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
     $field: $field,
     result: false,
     errors: {...},
-    isCheckingForm: true // ONLY ON validateForm()
+    isCheckingForm: true
 }
 </code></pre>
                             <ul>
@@ -1227,7 +1227,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
 </code></pre>
                             <ul>
                                 <li>
-                                    <span class="text-green">fields</span>: Array of objects ( each object is like described in event <code>fjs.field:validation</code> but without <code>isCheckingForm</code> )
+                                    <span class="text-green">fields</span>: Array of objects ( each object is like described in event <code>fjs.field:validation</code> )
                                 </li>
                                 <li>
                                     <span class="text-green">result</span>: Boolean
