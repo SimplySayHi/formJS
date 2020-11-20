@@ -936,11 +936,11 @@
                                         Emit event <code>fjs.field:validation</code> for each field <span class="text-yellow">*</span>
                                     </li>
                                     <li>
-                                        Emit event <code>fjs.form:validation</code>
+                                        Emit event <code>fjs.form:validation</code> <span class="text-yellow">*</span>
                                     </li>
                                 </ul>
                                 <p class="small">
-                                    <span class="text-yellow">*</span> <code>event.data</code> will contain the new key/value <code>isCheckingForm: true</code> useful if you want to execute ( or not ) some code when event is emitted by form validation or field validation ( <code>isCheckingForm</code> will not be present on event emitted by field validation ).
+                                    <span class="text-yellow">*</span> See <a href="#builtin-events">Events section</a> for details.
                                 </p>
                                 <hr />
                                 <p class="d-lg-none m-0">
@@ -1217,7 +1217,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
     fieldEl: fieldEl,
     result: false,
     errors: {...},
-    isCheckingForm: true // ONLY ON validateForm()
+    isCheckingForm: true
 }
 </code></pre>
                             <ul>
@@ -1271,7 +1271,7 @@ formInstance.options.fieldOptions.maxFileSize = 50;
 </code></pre>
                             <ul>
                                 <li>
-                                    <span class="text-green">fields</span>: Array of objects ( each object is like described in event <code>fjs.field:validation</code> but without <code>isCheckingForm</code> )
+                                    <span class="text-green">fields</span>: Array of objects ( each object is like described in event <code>fjs.field:validation</code> )
                                 </li>
                                 <li>
                                     <span class="text-green">result</span>: Boolean
