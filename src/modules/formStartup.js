@@ -29,8 +29,8 @@ export function formStartup( $form, options ){
 
     // INIT EVENTS LISTENER ( AS IN fieldOptions )
     fieldOptions.validateOnEvents.split(' ').forEach(eventName => {
-        const useCapturing = /^(blur|focus)$/.test(eventName) ? true : false;
-        $form.addEventListener(eventName, validation, useCapturing);
+        const useCapture = /^(blur|focus)$/.test(eventName);
+        $form.addEventListener(eventName, validation, useCapture);
     });
 
     $form.addEventListener(customEvents.field.validation, validationEnd, false);
