@@ -717,7 +717,7 @@ System.register([], function () {
             var fieldOptions = options.fieldOptions,
                 formOptions = options.formOptions;
             fieldOptions.strictHtmlValidation && ($form.addEventListener("keypress", keypressMaxlength, !1), $form.addEventListener("input", dataTypeNumber, !1)), fieldOptions.preventPasteFields && $form.querySelectorAll(fieldOptions.preventPasteFields).length && $form.addEventListener("paste", pastePrevent, !1), fieldOptions.validateOnEvents.split(" ").forEach(function (eventName) {
-              var useCapturing = "blur" === eventName;
+              var useCapturing = !!/^(blur|focus)$/.test(eventName);
               $form.addEventListener(eventName, validation, useCapturing);
             }), $form.addEventListener(customEvents_field.validation, validationEnd, !1), $form.addEventListener(customEvents_form.validation, formValidationEnd, !1), formOptions.handleSubmit && ($form.addEventListener("submit", submit), formOptions.ajaxSubmit && ($form.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = $form.getAttribute("enctype")), $form.getAttribute("method") && (formOptions.ajaxOptions.method = $form.getAttribute("method").toUpperCase()), $form.getAttribute("action") && (formOptions.ajaxOptions.url = $form.getAttribute("action"))));
           }(self.$form, self.options);
