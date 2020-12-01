@@ -1,4 +1,4 @@
-/* formJS v4.3.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v4.3.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 const addClass = (element, cssClasses) => {
     cssClasses.split(" ").forEach(className => {
         element.classList.add(className);
@@ -499,8 +499,8 @@ class Form {
             fieldOptions.handleValidation && (fieldOptions.strictHtmlValidation && (formEl.addEventListener("keypress", keypressMaxlength, !1), 
             formEl.addEventListener("input", dataTypeNumber, !1)), fieldOptions.preventPasteFields && formEl.querySelectorAll(fieldOptions.preventPasteFields).length && formEl.addEventListener("paste", pastePrevent, !1), 
             fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
-                const useCapturing = "blur" === eventName;
-                formEl.addEventListener(eventName, validation, useCapturing);
+                const useCapture = /^(blur|focus)$/.test(eventName);
+                formEl.addEventListener(eventName, validation, useCapture);
             })), formEl.addEventListener(customEvents_field.validation, validationEnd, !1), 
             formEl.addEventListener(customEvents_form.validation, formValidationEnd, !1)), formOptions.handleSubmit && (formEl.addEventListener("submit", submit), 
             formOptions.ajaxSubmit && (formEl.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = formEl.getAttribute("enctype")), 
@@ -573,6 +573,6 @@ Form.prototype.isInitialized = !1, Form.prototype.options = options, Form.protot
         }
         return obj;
     }
-}, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.0";
+}, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.1";
 
 export default Form;

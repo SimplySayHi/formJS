@@ -32,8 +32,8 @@ export function formStartup( formEl, options ){
 
         // INIT EVENTS LISTENER ( AS IN fieldOptions )
         fieldOptions.validateOnEvents.split(' ').forEach(function( eventName ){
-            const useCapturing = eventName === 'blur' ? true : false;
-            formEl.addEventListener(eventName, validation, useCapturing);
+            const useCapture = /^(blur|focus)$/.test(eventName);
+            formEl.addEventListener(eventName, validation, useCapture);
         });
 
         formEl.addEventListener(customEvents.field.validation, validationEnd, false);

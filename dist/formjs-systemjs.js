@@ -1,4 +1,4 @@
-/* formJS v4.3.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v4.3.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 System.register([], (function(exports) {
     "use strict";
     return {
@@ -434,8 +434,8 @@ System.register([], (function(exports) {
                 fieldOptions.handleValidation && (fieldOptions.strictHtmlValidation && (formEl.addEventListener("keypress", keypressMaxlength, !1), 
                 formEl.addEventListener("input", dataTypeNumber, !1)), fieldOptions.preventPasteFields && formEl.querySelectorAll(fieldOptions.preventPasteFields).length && formEl.addEventListener("paste", pastePrevent, !1), 
                 fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
-                    var useCapturing = "blur" === eventName;
-                    formEl.addEventListener(eventName, validation, useCapturing);
+                    var useCapture = /^(blur|focus)$/.test(eventName);
+                    formEl.addEventListener(eventName, validation, useCapture);
                 })), formEl.addEventListener(customEvents_field.validation, validationEnd, !1), 
                 formEl.addEventListener(customEvents_form.validation, formValidationEnd, !1)), formOptions.handleSubmit && (formEl.addEventListener("submit", submit), 
                 formOptions.ajaxSubmit && (formEl.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = formEl.getAttribute("enctype")), 
@@ -660,7 +660,7 @@ System.register([], (function(exports) {
                     }
                     return obj;
                 }
-            }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.0";
+            }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.1";
         }
     };
 }));
