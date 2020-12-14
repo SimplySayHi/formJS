@@ -14,7 +14,6 @@ export const options = {
             valid:              'is-valid'
         },
         focusOnRelated:         true,
-        handleFileUpload:       true,
         onValidationCheckAll:   false,
         preventPasteFields:     '[type="password"], [data-equal-to]',
         questionContainer:      '[data-formjs-question]',
@@ -48,6 +47,7 @@ export const options = {
             valid:              'is-valid'
         },
         getFormData:            defaultCallbacksInOptions.formOptions.getFormData,
+        handleFileUpload:       true,
         handleSubmit:           true
     }
     

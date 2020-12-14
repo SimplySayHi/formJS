@@ -231,7 +231,6 @@ System.register([], function () {
             valid: "is-valid"
           },
           focusOnRelated: !0,
-          handleFileUpload: !0,
           onValidationCheckAll: !1,
           preventPasteFields: '[type="password"], [data-equal-to]',
           questionContainer: "[data-formjs-question]",
@@ -264,6 +263,7 @@ System.register([], function () {
             valid: "is-valid"
           },
           getFormData: defaultCallbacksInOptions.formOptions.getFormData,
+          handleFileUpload: !0,
           handleSubmit: !0
         }
       },
@@ -415,7 +415,7 @@ System.register([], function () {
         var ajaxOptions = mergeObjects({}, options.formOptions.ajaxOptions),
             isMultipart = "multipart/form-data" === ajaxOptions.headers["Content-Type"];
 
-        if (ajaxOptions.body = formDataObj, isMultipart && options.fieldOptions.handleFileUpload) {
+        if (ajaxOptions.body = formDataObj, isMultipart && options.formOptions.handleFileUpload) {
           var formDataMultipart = new FormData();
 
           for (var key in ajaxOptions.body) {

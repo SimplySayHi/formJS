@@ -258,24 +258,6 @@
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
-                                <pre class="text-green">handleFileUpload</pre>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-lg-4 col-xl-3">
-                                boolean
-                                <br /><br />
-                            </div>
-                            <div class="col-lg-8 col-xl-5">
-                                <p>
-                                    Whether or not the plugin must handle the file upload. It is a simple file upload via ajax.<br />
-                                    You must also set the enctype="multipart/form-data" attribute to the form.
-                                    <br />
-                                    <span class="small">( NOT used if <code>ajaxSubmit: false</code> )</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">onValidationCheckAll</pre>
                             </div>
                             <div class="w-100 d-xl-none"></div>
@@ -410,7 +392,6 @@
         valid:              'is-valid'
     },
     focusOnRelated:         true,
-    handleFileUpload:       true,
     onValidationCheckAll:   false,
     preventPasteFields:     '[type="password"], [data-equal-to]',
     questionContainer:      '[data-formjs-question]',
@@ -606,6 +587,24 @@
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3">
+                                <pre class="text-green">handleFileUpload</pre>
+                                <p>( boolean )</p>
+                            </div>
+                            <div class="w-100 d-xl-none"></div>
+                            <div class="col-lg-6 col-xl-5">
+
+                            </div>
+                            <div class="col-lg-6 col-xl-4">
+                                <p>
+                                    Whether or not the plugin must handle the file upload. It is a simple file upload via ajax.<br />
+                                    You must also set the enctype="multipart/form-data" attribute to the form.
+                                    <br />
+                                    <span class="small">( NOT used if <code>ajaxSubmit: false</code> )</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                            <div class="col-lg-auto col-xl-3">
                                 <pre class="text-green">handleSubmit</pre>
                                 <p>( boolean )</p>
                             </div>
@@ -655,6 +654,7 @@
         valid:          'is-valid'
     },
     getFormData:        getFormDataDefault,
+    handleFileUpload:   true,
     handleSubmit:       true
 }
 

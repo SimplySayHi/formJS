@@ -24,7 +24,7 @@ export function ajaxCall( $form, formDataObj, options ){
     ajaxOptions.body = formDataObj;
     
     // POST A FormData OBJECT ( multipart )
-    if( isMultipart && options.fieldOptions.handleFileUpload ){
+    if( isMultipart && options.formOptions.handleFileUpload ){
         let formDataMultipart = new FormData();
         
         for(let key in ajaxOptions.body){
