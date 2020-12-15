@@ -233,11 +233,6 @@ const formInstance = new Form( $form );
 $form.addEventListener('fjs.field:validation', function(event){
     onValidationDemoErrorsCss( event.detail, this.formjs.options );
 });
-
-// OPTIONAL STEP
-formInstance.validateFilledFields().then(fields => {
-    console.log('validated fields', fields);
-});
 </code></pre>
                             </div>
                         </div>
@@ -418,11 +413,6 @@ formInstance.validateFilledFields().then(fields => {
 
         $form.addEventListener('fjs.field:validation', function(event){
             onValidationDemoErrorsCss( event.detail, this.formjs.options );
-        });
-
-        // OPTIONAL STEP
-        formInstance.validateFilledFields().then(function( fields ){
-            console.log('validated fields', fields);
         });
     </script>
 

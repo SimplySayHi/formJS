@@ -203,15 +203,9 @@
                 <div class="row">
                     <div class="col-lg-6">
                     <pre>
-<code class="language-js">// STEP 1
-const $form = document.querySelector('form');
+<code class="language-js">const $form = document.querySelector('form');
 const options = {...};
 const formInstance = new Form( $form, options );
-
-// STEP 2 ( OPTIONAL )
-formInstance.validateFilledFields().then(fields => {
-    console.log('validated fields', fields);
-});
 </code></pre>
                     </div>
                     <div class="col-lg-6">
@@ -235,11 +229,6 @@ formInstance.validateFilledFields().then(fields => {
                         <hr />
                         <p>
                             Once the instance is created, you can also access the instance itself via <code>$form.formjs</code>
-                        </p>
-                        <hr />
-                        <p>
-                            Method <code>validateFilledFields</code> is not included in <span class="badge badge-pill badge-yellow">Lite</span> version.<br />
-                            Check <a href="api.html">API page</a> for details.
                         </p>
                 </div>
             </div>

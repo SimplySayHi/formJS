@@ -117,9 +117,4 @@ Array.from(formsList).forEach(function($form, idx){
                 console.log(e.type, 'finally');
             });
     }, false);
-
-    // OPTIONAL STEP
-    window[fNum].validateFilledFields().then(function( fields ){
-        console.log('formJsInstance '+ fNum +' => validated fields', fields);
-    });
 });

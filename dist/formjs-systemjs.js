@@ -41,6 +41,7 @@ System.register([], (function(exports) {
             }, customEvents_field = {
                 validation: "fjs.field:validation"
             }, customEvents_form = {
+                init: "fjs.form:init",
                 submit: "fjs.form:submit",
                 validation: "fjs.form:validation"
             }, isPlainObject = function(object) {
@@ -210,7 +211,8 @@ System.register([], (function(exports) {
                     },
                     getFormData: defaultCallbacksInOptions.formOptions.getFormData,
                     handleFileUpload: !0,
-                    handleSubmit: !0
+                    handleSubmit: !0,
+                    onInitCheckFilled: !0
                 }
             }, validationRules = {
                 date: function(string) {
@@ -465,11 +467,7 @@ System.register([], (function(exports) {
                         target: $field,
                         type: isFieldForChangeEventBoolean ? "change" : ""
                     });
-                }))).then((function(fields) {
-                    return fields;
-                })).catch((function(fields) {
-                    return fields;
-                }));
+                })));
             };
             function checkFieldValidity($field, fieldOptions, validationRules, validationErrors) {
                 if (!isDOMNode($field)) {
@@ -577,6 +575,14 @@ System.register([], (function(exports) {
                             return cbFn.bind(self);
                         })) : cbOpt.bind(self));
                     })), formStartup(self.$form, self.options);
+                    var initOptions = {};
+                    if (self.options.formOptions.onInitCheckFilled) {
+                        var focusOnRelated = self.options.fieldOptions.focusOnRelated;
+                        self.options.fieldOptions.focusOnRelated = !1, initOptions.detail = checkFilledFields(self.$form).then((function(fields) {
+                            return self.options.fieldOptions.focusOnRelated = focusOnRelated, fields;
+                        }));
+                    }
+                    dispatchCustomEvent(self.$form, customEvents_form.init, initOptions);
                 }
                 var Constructor, protoProps, staticProps;
                 return Constructor = Form, staticProps = [ {
@@ -620,10 +626,10 @@ System.register([], (function(exports) {
                 }, {
                     key: "validateField",
                     value: function(field, fieldOptions) {
-                        var self = this, $field = "string" == typeof field ? this.$form.querySelector(field) : field;
-                        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-                        var $form = this.$form;
-                        return checkFieldValidity($field, fieldOptions, this.validationRules, this.validationErrors).then((function(obj) {
+                        var self = this, $field = "string" == typeof field ? self.$form.querySelector(field) : field;
+                        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+                        var $form = self.$form;
+                        return checkFieldValidity($field, fieldOptions, self.validationRules, self.validationErrors).then((function(obj) {
                             return dispatchCustomEvent(obj.$field, customEvents_field.validation, {
                                 detail: obj
                             }), obj.result && fieldOptions.onValidationCheckAll ? checkFormValidity($form, fieldOptions, self.validationRules, self.validationErrors, obj.$field).then((function(dataForm) {
@@ -633,14 +639,6 @@ System.register([], (function(exports) {
                             })) : obj.result || removeClass($form, self.options.formOptions.cssClasses.valid), 
                             obj;
                         })).then(finalizeFieldPromise);
-                    }
-                }, {
-                    key: "validateFilledFields",
-                    value: function() {
-                        var _this = this, focusOnRelated = this.options.fieldOptions.focusOnRelated;
-                        return this.options.fieldOptions.focusOnRelated = !1, checkFilledFields(this.$form).then((function(fields) {
-                            return _this.options.fieldOptions.focusOnRelated = focusOnRelated, fields;
-                        }));
                     }
                 }, {
                     key: "validateForm",

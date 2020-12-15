@@ -162,10 +162,6 @@
     System.import('Form').then(({default:Form}) => {
             const $form = document.querySelector('form');
             const formInstance = new Form( $form );
-            // OPTIONAL STEP
-            formInstance.validateFilledFields().then(fields => {
-                console.log('validated fields', fields);
-            });
         })
         .catch(function(e) {
             console.error(e)
@@ -279,10 +275,6 @@
                 var Form = mod.default;
                 var $form = document.querySelector('form');
                 var formInstance = new Form( $form );
-                // OPTIONAL STEP
-                formInstance.validateFilledFields().then(function( fields ){
-                    console.log('validated fields', fields);
-                });
             })
             .catch(function(e) {
                 console.error(e)

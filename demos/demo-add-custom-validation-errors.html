@@ -167,11 +167,6 @@ $form.querySelector('[type="email"]').addEventListener('fjs.field:validation', f
         console.log('EMAIL CUSTOM ERRORS', event.detail.errors);
     }
 });
-
-// OPTIONAL STEP
-formInstance.validateFilledFields().then(fields => {
-    console.log('validated fields', fields);
-});
 </code></pre>
                             </div>
                         </div>
@@ -286,11 +281,6 @@ formInstance.validateFilledFields().then(fields => {
             if( event.detail.errors && Object.keys(event.detail.errors).length > 0 ){
                 console.log('EMAIL CUSTOM ERRORS', event.detail.errors);
             }
-        });
-
-        // OPTIONAL STEP
-        formInstance.validateFilledFields().then(function( fields ){
-            console.log('validated fields', fields);
         });
     </script>
 

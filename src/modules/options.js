@@ -48,7 +48,8 @@ export const options = {
         },
         getFormData:            defaultCallbacksInOptions.formOptions.getFormData,
         handleFileUpload:       true,
-        handleSubmit:           true
+        handleSubmit:           true,
+        onInitCheckFilled:      true
     }
     
 }

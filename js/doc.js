@@ -62,10 +62,3 @@ $form.addEventListener('fjs.form:submit', function(e){
             console.log(e.type, 'finally');
         });
 }, false);
-
-formInstance.validateFilledFields().then(function( fields ){
-    initCharLengthFields( $form );
-    initMaxFileSizeFields( $form );
-    console.log('validated fields', fields);
-});
-

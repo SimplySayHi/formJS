@@ -157,11 +157,6 @@ const options = {
     }
 };
 const formInstance = new Form( $form, options );
-
-// OPTIONAL STEP
-formInstance.validateFilledFields().then(fields => {
-    console.log('validated fields', fields);
-});
 </code></pre>
                             </div>
                         </div>
@@ -267,11 +262,6 @@ formInstance.validateFilledFields().then(fields => {
             }
         };
         var formInstance = new Form( $form, options );
-
-        // OPTIONAL STEP
-        formInstance.validateFilledFields().then(function( fields ){
-            console.log('validated fields', fields);
-        });
     </script>
 
     <script src="../js/include.js"></script>

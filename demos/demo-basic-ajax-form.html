@@ -152,11 +152,6 @@
                                 <pre class="m-0">
 <code class="language-js">const $form = document.querySelector('form');
 const formInstance = new Form( $form );
-
-// OPTIONAL STEP
-formInstance.validateFilledFields().then(fields => {
-    console.log('validated fields', fields);
-});
 </code></pre>
                             </div>
                         </div>
@@ -257,11 +252,6 @@ formInstance.validateFilledFields().then(fields => {
     <script>
         var $form = document.querySelector('form');
         var formInstance = new Form( $form );
-
-        // OPTIONAL STEP
-        formInstance.validateFilledFields().then(function( fields ){
-            console.log('validated fields', fields);
-        });
     </script>
 
     <script src="../js/include.js"></script>

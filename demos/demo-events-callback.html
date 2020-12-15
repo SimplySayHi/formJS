@@ -158,11 +158,6 @@ $form.addEventListener('fjs.form:validation', function(event){
         alert('THE FORM IS VALID!');
     }
 });
-
-// OPTIONAL STEP
-formInstance.validateFilledFields().then(fields => {
-    console.log('validated fields', fields);
-});
 </code></pre>
                             </div>
                         </div>
@@ -268,11 +263,6 @@ formInstance.validateFilledFields().then(fields => {
             if( event.detail.result ){
                 alert('THE FORM IS VALID!');
             }
-        });
-
-        // OPTIONAL STEP
-        formInstance.validateFilledFields().then(function( fields ){
-            console.log('validated fields', fields);
         });
     </script>
 

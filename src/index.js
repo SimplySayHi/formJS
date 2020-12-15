@@ -49,6 +49,18 @@ class Form {
         });
 
         formStartup( self.$form, self.options );
+
+        let initOptions = {};
+        if( self.options.formOptions.onInitCheckFilled ){
+            const focusOnRelated = self.options.fieldOptions.focusOnRelated;
+            self.options.fieldOptions.focusOnRelated = false;
+            initOptions.detail = checkFilledFields(self.$form)
+                            .then(fields => {
+                                self.options.fieldOptions.focusOnRelated = focusOnRelated;
+                                return fields;
+                            });
+        }
+        dispatchCustomEvent( self.$form, customEvents.form.init, initOptions );
     }
 
     destroy(){
@@ -63,10 +75,10 @@ class Form {
 
     validateField( field, fieldOptions ){
         const self = this;
-        const $field = typeof field === 'string' ? this.$form.querySelector(field) : field;
-        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-        const $form = this.$form;
-        return checkFieldValidity($field, fieldOptions, this.validationRules, this.validationErrors)
+        const $field = typeof field === 'string' ? self.$form.querySelector(field) : field;
+        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+        const $form = self.$form;
+        return checkFieldValidity($field, fieldOptions, self.validationRules, self.validationErrors)
             .then(obj => {
                 dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } );
                 if( obj.result && fieldOptions.onValidationCheckAll ){
@@ -80,16 +92,6 @@ class Form {
                 return obj;
             })
             .then(finalizeFieldPromise);
-    }
-
-    validateFilledFields(){
-        const focusOnRelated = this.options.fieldOptions.focusOnRelated;
-        this.options.fieldOptions.focusOnRelated = false;
-        return checkFilledFields(this.$form)
-        .then(fields => {
-            this.options.fieldOptions.focusOnRelated = focusOnRelated;
-            return fields;
-        });
     }
 
     validateForm( fieldOptions ){

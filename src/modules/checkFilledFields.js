@@ -12,7 +12,5 @@ export const checkFilledFields = $form => {
         return validation( fakeEventObj );
 
     }) )
-    .then(fields => fields)
-    .catch(fields => fields);
 
 }

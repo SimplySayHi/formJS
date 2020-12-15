@@ -10,6 +10,7 @@ const addClass = (element, cssClasses) => {
 }, isDOMNode = node => Element.prototype.isPrototypeOf(node), customEvents_field = {
     validation: "fjs.field:validation"
 }, customEvents_form = {
+    init: "fjs.form:init",
     submit: "fjs.form:submit",
     validation: "fjs.form:validation"
 }, isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
@@ -144,7 +145,8 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
         },
         getFormData: defaultCallbacksInOptions.formOptions.getFormData,
         handleFileUpload: !0,
-        handleSubmit: !0
+        handleSubmit: !0,
+        onInitCheckFilled: !0
     }
 }, validationRules = {
     date: function(string) {
@@ -383,7 +385,7 @@ const checkFilledFields = $form => {
             target: $field,
             type: isFieldForChangeEventBoolean ? "change" : ""
         });
-    })).then(fields => fields).catch(fields => fields);
+    }));
 };
 
 function checkFieldValidity($field, fieldOptions, validationRules, validationErrors) {
@@ -503,6 +505,13 @@ class Form {
             $form.getAttribute("method") && (formOptions.ajaxOptions.method = $form.getAttribute("method").toUpperCase()), 
             $form.getAttribute("action") && (formOptions.ajaxOptions.url = $form.getAttribute("action"))));
         }(self.$form, self.options);
+        let initOptions = {};
+        if (self.options.formOptions.onInitCheckFilled) {
+            const focusOnRelated = self.options.fieldOptions.focusOnRelated;
+            self.options.fieldOptions.focusOnRelated = !1, initOptions.detail = checkFilledFields(self.$form).then(fields => (self.options.fieldOptions.focusOnRelated = focusOnRelated, 
+            fields));
+        }
+        dispatchCustomEvent(self.$form, customEvents_form.init, initOptions);
     }
     destroy() {
         !function($form, options) {
@@ -522,10 +531,10 @@ class Form {
         return this.options.formOptions.getFormData($filteredFields);
     }
     validateField(field, fieldOptions) {
-        const self = this, $field = "string" == typeof field ? this.$form.querySelector(field) : field;
-        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-        const $form = this.$form;
-        return checkFieldValidity($field, fieldOptions, this.validationRules, this.validationErrors).then(obj => (dispatchCustomEvent(obj.$field, customEvents_field.validation, {
+        const self = this, $field = "string" == typeof field ? self.$form.querySelector(field) : field;
+        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+        const $form = self.$form;
+        return checkFieldValidity($field, fieldOptions, self.validationRules, self.validationErrors).then(obj => (dispatchCustomEvent(obj.$field, customEvents_field.validation, {
             detail: obj
         }), obj.result && fieldOptions.onValidationCheckAll ? checkFormValidity($form, fieldOptions, self.validationRules, self.validationErrors, obj.$field).then(dataForm => {
             dispatchCustomEvent($form, customEvents_form.validation, {
@@ -533,11 +542,6 @@ class Form {
             });
         }) : obj.result || removeClass($form, self.options.formOptions.cssClasses.valid), 
         obj)).then(finalizeFieldPromise);
-    }
-    validateFilledFields() {
-        const focusOnRelated = this.options.fieldOptions.focusOnRelated;
-        return this.options.fieldOptions.focusOnRelated = !1, checkFilledFields(this.$form).then(fields => (this.options.fieldOptions.focusOnRelated = focusOnRelated, 
-        fields));
     }
     validateForm(fieldOptions) {
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);

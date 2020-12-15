@@ -62,6 +62,7 @@ System.register([], function () {
         validation: "fjs.field:validation"
       },
           customEvents_form = {
+        init: "fjs.form:init",
         submit: "fjs.form:submit",
         validation: "fjs.form:validation"
       },
@@ -264,7 +265,8 @@ System.register([], function () {
           },
           getFormData: defaultCallbacksInOptions.formOptions.getFormData,
           handleFileUpload: !0,
-          handleSubmit: !0
+          handleSubmit: !0,
+          onInitCheckFilled: !0
         }
       },
           validationRules = {
@@ -572,11 +574,7 @@ System.register([], function () {
             target: $field,
             type: isFieldForChangeEventBoolean ? "change" : ""
           });
-        })).then(function (fields) {
-          return fields;
-        })["catch"](function (fields) {
-          return fields;
-        });
+        }));
       };
 
       function checkFieldValidity($field, fieldOptions, validationRules, validationErrors) {
@@ -721,6 +719,16 @@ System.register([], function () {
               $form.addEventListener(eventName, validation, useCapture);
             }), $form.addEventListener(customEvents_field.validation, validationEnd, !1), $form.addEventListener(customEvents_form.validation, formValidationEnd, !1), formOptions.handleSubmit && ($form.addEventListener("submit", submit), formOptions.ajaxSubmit && ($form.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = $form.getAttribute("enctype")), $form.getAttribute("method") && (formOptions.ajaxOptions.method = $form.getAttribute("method").toUpperCase()), $form.getAttribute("action") && (formOptions.ajaxOptions.url = $form.getAttribute("action"))));
           }(self.$form, self.options);
+          var initOptions = {};
+
+          if (self.options.formOptions.onInitCheckFilled) {
+            var focusOnRelated = self.options.fieldOptions.focusOnRelated;
+            self.options.fieldOptions.focusOnRelated = !1, initOptions.detail = checkFilledFields(self.$form).then(function (fields) {
+              return self.options.fieldOptions.focusOnRelated = focusOnRelated, fields;
+            });
+          }
+
+          dispatchCustomEvent(self.$form, customEvents_form.init, initOptions);
         }
 
         _createClass(Form, [{
@@ -746,10 +754,10 @@ System.register([], function () {
           key: "validateField",
           value: function validateField(field, fieldOptions) {
             var self = this,
-                $field = "string" == typeof field ? this.$form.querySelector(field) : field;
-            fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-            var $form = this.$form;
-            return checkFieldValidity($field, fieldOptions, this.validationRules, this.validationErrors).then(function (obj) {
+                $field = "string" == typeof field ? self.$form.querySelector(field) : field;
+            fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+            var $form = self.$form;
+            return checkFieldValidity($field, fieldOptions, self.validationRules, self.validationErrors).then(function (obj) {
               return dispatchCustomEvent(obj.$field, customEvents_field.validation, {
                 detail: obj
               }), obj.result && fieldOptions.onValidationCheckAll ? checkFormValidity($form, fieldOptions, self.validationRules, self.validationErrors, obj.$field).then(function (dataForm) {
@@ -758,16 +766,6 @@ System.register([], function () {
                 });
               }) : obj.result || removeClass($form, self.options.formOptions.cssClasses.valid), obj;
             }).then(finalizeFieldPromise);
-          }
-        }, {
-          key: "validateFilledFields",
-          value: function validateFilledFields() {
-            var _this = this;
-
-            var focusOnRelated = this.options.fieldOptions.focusOnRelated;
-            return this.options.fieldOptions.focusOnRelated = !1, checkFilledFields(this.$form).then(function (fields) {
-              return _this.options.fieldOptions.focusOnRelated = focusOnRelated, fields;
-            });
           }
         }, {
           key: "validateForm",
@@ -807,11 +805,7 @@ System.register([], function () {
       Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, Form.prototype.version = "5.0.0";
 
       var $form = document.querySelector('form');
-      var formInstance = new Form($form); // OPTIONAL STEP
-
-      formInstance.validateFilledFields().then(function (fields) {
-        console.log('validated fields', fields);
-      });
+      var formInstance = new Form($form);
 
     }
   };
