@@ -228,11 +228,12 @@ function onValidationDemoErrorsCss ( obj, options ){
 }
 
 const $form = document.querySelector('form');
-const formInstance = new Form( $form );
 
 $form.addEventListener('fjs.field:validation', function(event){
     onValidationDemoErrorsCss( event.detail, this.formjs.options );
 });
+
+const formInstance = new Form( $form );
 </code></pre>
                             </div>
                         </div>
@@ -409,11 +410,12 @@ $form.addEventListener('fjs.field:validation', function(event){
         }
         
         var $form = document.querySelector('form');
-        var formInstance = new Form( $form );
 
         $form.addEventListener('fjs.field:validation', function(event){
             onValidationDemoErrorsCss( event.detail, this.formjs.options );
         });
+
+        var formInstance = new Form( $form );
     </script>
 
     <script src="../js/include.js"></script>

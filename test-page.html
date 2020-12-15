@@ -249,8 +249,6 @@
         // DECOMMENT TO TEST LITE VERSION
         // delete options.formOptions;
 
-        var formInstance = new Form( formEl, options );
-
         formEl.addEventListener('fjs.field:validation', function(e){
             console.log('--- GENERAL FIELD VALIDATION', this);
             console.log(e.type, e.detail);
@@ -289,6 +287,8 @@
                 console.log('form validation', obj);
             });
         }); */
+
+        var formInstance = new Form( formEl, options );
     </script>
     <script src="dist/additionals/utils.js"></script>
     

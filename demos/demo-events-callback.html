@@ -151,13 +151,14 @@
                             <div class="card-body p-0">
                                 <pre class="m-0">
 <code class="language-js">const $form = document.querySelector('form');
-const formInstance = new Form( $form );
 
 $form.addEventListener('fjs.form:validation', function(event){
     if( event.detail.result ){
         alert('THE FORM IS VALID!');
     }
 });
+
+const formInstance = new Form( $form );
 </code></pre>
                             </div>
                         </div>
@@ -257,13 +258,14 @@ $form.addEventListener('fjs.form:validation', function(event){
     <script src="../dist/additionals/validationErrors.js"></script>
     <script>
         var $form = document.querySelector('form');
-        var formInstance = new Form( $form );
 
         $form.addEventListener('fjs.form:validation', function(event){
             if( event.detail.result ){
                 alert('THE FORM IS VALID!');
             }
         });
+
+        var formInstance = new Form( $form );
     </script>
 
     <script src="../js/include.js"></script>

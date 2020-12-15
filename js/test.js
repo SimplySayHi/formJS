@@ -68,8 +68,6 @@ Array.from(formsList).forEach(function($form, idx){
 
     if( isLocalEnv ){ $form.method = 'GET'; }
 
-    window[fNum] = new Form( $form, options );
-
     $form.addEventListener('fjs.field:validation', function(event){
         console.log(event.type, event.detail);
         console.log( 'field "' + event.detail.$field.name + '" is valid? ', event.detail.result );
@@ -116,5 +114,7 @@ Array.from(formsList).forEach(function($form, idx){
             .finally(function(){
                 console.log(e.type, 'finally');
             });
-    }, false);
+    });
+
+    window[fNum] = new Form( $form, options );
 });

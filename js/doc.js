@@ -13,7 +13,6 @@ var optionsPlugin = {
     };
 
 var $form = document.querySelector('form');
-var formInstance = new Form( $form, optionsPlugin );
 
 $form.addEventListener('fjs.field:validation', function(event){
     console.log(event.type, event.detail);
@@ -61,4 +60,6 @@ $form.addEventListener('fjs.form:submit', function(e){
         .finally(function(){
             console.log(e.type, 'finally');
         });
-}, false);
+});
+
+var formInstance = new Form( $form, optionsPlugin );

@@ -176,14 +176,6 @@ function validateField(event){
 }
 
 const $form = document.querySelector('form');
-const options = {
-    fieldOptions: {
-        beforeValidation: function(fieldObj){
-            checkDirtyField(fieldObj.$field);
-        }
-    }
-};
-const formInstance = new Form( $form, options );
 
 /* VALIDATE FIELDS WITH EVENT DELAGATION */
 $form.addEventListener('blur', validateField, true);
@@ -204,6 +196,15 @@ $form.addEventListener('submit', event => {
         });
     });
 });
+
+const options = {
+    fieldOptions: {
+        beforeValidation: function(fieldObj){
+            checkDirtyField(fieldObj.$field);
+        }
+    }
+};
+const formInstance = new Form( $form, options );
 </code></pre>
                             </div>
                         </div>
@@ -334,14 +335,6 @@ $form.addEventListener('submit', event => {
         }
 
         var $form = document.querySelector('form');
-        var options = {
-            fieldOptions: {
-                beforeValidation: function(fieldObj){
-                    checkDirtyField(fieldObj.$field);
-                }
-            }
-        };
-        var formInstance = new Form( $form, options );
 
         /* VALIDATE FIELDS WITH EVENT DELAGATION */
         $form.addEventListener('blur', validateField, true);
@@ -373,6 +366,15 @@ $form.addEventListener('submit', event => {
                     });
                 });
         });
+
+        var options = {
+            fieldOptions: {
+                beforeValidation: function(fieldObj){
+                    checkDirtyField(fieldObj.$field);
+                }
+            }
+        };
+        var formInstance = new Form( $form, options );
     </script>
 
     <script src="../js/include.js"></script>

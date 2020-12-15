@@ -160,13 +160,14 @@
 });
 
 const $form = document.querySelector('form');
-const formInstance = new Form( $form );
 
 $form.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(event){
     if( event.detail.errors && Object.keys(event.detail.errors).length > 0 ){
         console.log('EMAIL CUSTOM ERRORS', event.detail.errors);
     }
 });
+
+const formInstance = new Form( $form );
 </code></pre>
                             </div>
                         </div>
@@ -274,7 +275,6 @@ $form.querySelector('[type="email"]').addEventListener('fjs.field:validation', f
         });
 
         var $form = document.querySelector('form');
-        var formInstance = new Form( $form );
 
         $form.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(event){
             console.log(event.detail);
@@ -282,6 +282,8 @@ $form.querySelector('[type="email"]').addEventListener('fjs.field:validation', f
                 console.log('EMAIL CUSTOM ERRORS', event.detail.errors);
             }
         });
+
+        var formInstance = new Form( $form );
     </script>
 
     <script src="../js/include.js"></script>
