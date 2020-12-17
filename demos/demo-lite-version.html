@@ -158,12 +158,17 @@
     }
 }
 
-function applyFeedbackOnUI(fieldObj){
-    const containerEl = fieldObj.$field.closest('[data-formjs-question]');
-    const className = fieldObj.result ? 'is-valid' : 'has-error';
-        containerEl.classList.remove('is-valid');
+function setFieldValid(){
+    const containerEl = this.closest('[data-formjs-question]');
         containerEl.classList.remove('has-error');
-        containerEl.classList.add( className );
+        containerEl.classList.add('is-valid');
+}
+
+function showErrorMessage(errors){
+    console.log(this, errors);
+    const containerEl = this.closest('[data-formjs-question]');
+        containerEl.classList.remove('is-valid');
+        containerEl.classList.add('has-error');
 }
 
 function validateField(event){
@@ -171,8 +176,9 @@ function validateField(event){
     if( !$field.matches('input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea') ){
         return;
     }
-    const containerEl = $field.closest('[data-formjs-question]');
-    formInstance.validateField($field).then(applyFeedbackOnUI);
+    formInstance.validateField($field)
+        .then(setFieldValid.bind($field))
+        .catch(showErrorMessage.bind($field));
 }
 
 const $form = document.querySelector('form');
@@ -181,20 +187,29 @@ const $form = document.querySelector('form');
 $form.addEventListener('blur', validateField, true);
 
 /* VALIDATE FIELDS DIRECTLY */
-Array.from(document.querySelectorAll('[type="checkbox"], [type="radio"]')).forEach($field => {
+Array.from($form.querySelectorAll('[type="checkbox"], [type="radio"]')).forEach($field => {
     $field.addEventListener('change', validateField, false);
 });
 
 $form.addEventListener('submit', event => {
     event.preventDefault();
-    formInstance.validateForm().then(obj => {
-        const formValidity = obj.result ? 'valid' : 'not valid';
-        alert('Form is '+formValidity);
-        obj.fields.forEach(fieldObj => {
-            checkDirtyField(fieldObj.$field);
-            applyFeedbackOnUI(fieldObj);
+    formInstance.validateForm()
+        .then(fields => {
+            alert('Form is valid');
+            console.log(fields);
+            fields.forEach(obj => {
+                setFieldValid.call(obj.$field);
+            });
+        })
+        .catch(fields => {
+            alert('Form is NOT valid');
+            console.log(fields);
+            fields.forEach(obj => {
+                if( !obj.result ){
+                    showErrorMessage.call(obj.$field, obj.errors);
+                }
+            });
         });
-    });
 });
 
 const options = {
@@ -204,7 +219,9 @@ const options = {
         }
     }
 };
+
 const formInstance = new Form( $form, options );
+
 </code></pre>
                             </div>
                         </div>
@@ -340,7 +357,7 @@ const formInstance = new Form( $form, options );
         $form.addEventListener('blur', validateField, true);
 
         /* VALIDATE FIELDS DIRECTLY */
-        Array.from(document.querySelectorAll('[type="checkbox"], [type="radio"]')).forEach(function($field){
+        Array.from($form.querySelectorAll('[type="checkbox"], [type="radio"]')).forEach(function($field){
             $field.addEventListener('change', validateField, false);
         });
 
@@ -351,7 +368,6 @@ const formInstance = new Form( $form, options );
                     alert('Form is valid');
                     console.log(fields);
                     fields.forEach(function(obj){
-                        checkDirtyField(obj.$field);
                         setFieldValid.call(obj.$field);
                     });
                 })
@@ -359,7 +375,6 @@ const formInstance = new Form( $form, options );
                     alert('Form is NOT valid');
                     console.log(fields);
                     fields.forEach(function(obj){
-                        checkDirtyField(obj.$field);
                         if( !obj.result ){
                             showErrorMessage.call(obj.$field, obj.errors);
                         }
