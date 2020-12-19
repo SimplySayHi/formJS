@@ -41,7 +41,7 @@ System.register([], function () {
         return Constructor;
       }
 
-      /* formJS v4.3.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+      /* formJS v4.3.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
       var addClass = function addClass(element, cssClasses) {
         cssClasses.split(" ").forEach(function (className) {
           element.classList.add(className);
@@ -488,7 +488,7 @@ System.register([], function () {
               }
 
               return fetch(ajaxOptions.url, ajaxOptions).then(function (response) {
-                if (!response.ok) return Promise.reject(response);
+                if (!response.ok) throw new Error(response.statusText);
 
                 var fetchMethod = function (response, options) {
                   var accept = options.headers.get("Accept"),
@@ -501,7 +501,7 @@ System.register([], function () {
               }).then(function (data) {
                 return addClass(formEl, options.formOptions.cssClasses.ajaxSuccess), data;
               })["catch"](function (error) {
-                return addClass(formEl, options.formOptions.cssClasses.ajaxError), Promise.reject(error);
+                throw addClass(formEl, options.formOptions.cssClasses.ajaxError), new Error(error.message);
               })["finally"](function () {
                 timeoutTimer && window.clearTimeout(timeoutTimer), removeClass(formEl, options.formOptions.cssClasses.submit + " " + options.formOptions.cssClasses.ajaxPending), addClass(formEl, options.formOptions.cssClasses.ajaxComplete), btnEl.disabled = !1;
               });
@@ -804,7 +804,7 @@ System.register([], function () {
           }
           return obj;
         }
-      }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.1";
+      }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.2";
 
       var formEl = document.querySelector('form');
       var formInstance = new Form(formEl);

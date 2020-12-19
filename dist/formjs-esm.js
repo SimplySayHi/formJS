@@ -1,4 +1,4 @@
-/* formJS v4.3.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v4.3.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 const addClass = (element, cssClasses) => {
     cssClasses.split(" ").forEach(className => {
         element.classList.add(className);
@@ -329,7 +329,7 @@ function submit(event) {
                     }), ajaxOptions.timeout);
                 }
                 return fetch(ajaxOptions.url, ajaxOptions).then((function(response) {
-                    if (!response.ok) return Promise.reject(response);
+                    if (!response.ok) throw new Error(response.statusText);
                     const fetchMethod = ((response, options) => {
                         const accept = options.headers.get("Accept"), contentType = response.headers.get("Content-Type"), headerOpt = accept || contentType || "";
                         return headerOpt.indexOf("application/json") > -1 || "" === headerOpt ? "json" : headerOpt.indexOf("text/") > -1 ? "text" : "blob";
@@ -338,7 +338,7 @@ function submit(event) {
                 })).then((function(data) {
                     return addClass(formEl, options.formOptions.cssClasses.ajaxSuccess), data;
                 })).catch((function(error) {
-                    return addClass(formEl, options.formOptions.cssClasses.ajaxError), Promise.reject(error);
+                    throw addClass(formEl, options.formOptions.cssClasses.ajaxError), new Error(error.message);
                 })).finally((function() {
                     timeoutTimer && window.clearTimeout(timeoutTimer), removeClass(formEl, options.formOptions.cssClasses.submit + " " + options.formOptions.cssClasses.ajaxPending), 
                     addClass(formEl, options.formOptions.cssClasses.ajaxComplete), btnEl.disabled = !1;
@@ -573,6 +573,6 @@ Form.prototype.isInitialized = !1, Form.prototype.options = options, Form.protot
         }
         return obj;
     }
-}, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.1";
+}, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.2";
 
 export default Form;

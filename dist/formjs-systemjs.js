@@ -1,4 +1,4 @@
-/* formJS v4.3.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v4.3.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 System.register([], (function(exports) {
     "use strict";
     return {
@@ -385,7 +385,7 @@ System.register([], (function(exports) {
                                 }), ajaxOptions.timeout);
                             }
                             return fetch(ajaxOptions.url, ajaxOptions).then((function(response) {
-                                if (!response.ok) return Promise.reject(response);
+                                if (!response.ok) throw new Error(response.statusText);
                                 var fetchMethod = function(response, options) {
                                     var accept = options.headers.get("Accept"), contentType = response.headers.get("Content-Type"), headerOpt = accept || contentType || "";
                                     return headerOpt.indexOf("application/json") > -1 || "" === headerOpt ? "json" : headerOpt.indexOf("text/") > -1 ? "text" : "blob";
@@ -394,7 +394,7 @@ System.register([], (function(exports) {
                             })).then((function(data) {
                                 return addClass(formEl, options.formOptions.cssClasses.ajaxSuccess), data;
                             })).catch((function(error) {
-                                return addClass(formEl, options.formOptions.cssClasses.ajaxError), Promise.reject(error);
+                                throw addClass(formEl, options.formOptions.cssClasses.ajaxError), new Error(error.message);
                             })).finally((function() {
                                 timeoutTimer && window.clearTimeout(timeoutTimer), removeClass(formEl, options.formOptions.cssClasses.submit + " " + options.formOptions.cssClasses.ajaxPending), 
                                 addClass(formEl, options.formOptions.cssClasses.ajaxComplete), btnEl.disabled = !1;
@@ -660,7 +660,7 @@ System.register([], (function(exports) {
                     }
                     return obj;
                 }
-            }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.1";
+            }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.2";
         }
     };
 }));

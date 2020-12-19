@@ -20,7 +20,7 @@
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
     <script defer src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
     <script defer src="dist/additionals/utils.js"></script>
-    <script defer src="dist/formjs.min.js"></script>
+    <script defer src="dist/formjs.js"></script>
     <script defer src="dist/additionals/validationRules.js"></script>
     <script defer src="dist/additionals/validationErrors.js"></script>
     <script defer src="js/doc.js"></script>
@@ -206,7 +206,10 @@
                     <div class="media-body pl-2">
                         <ul>
                             <li>
-                                Fixed bug for validation on "focus" event ( full version only )
+                                Fixed bug on fetch response not ok ( full version only )
+                            </li>
+                            <li>
+                                Updated custom validation for username ( in external validations )
                             </li>
                         </ul>
                     </div>
@@ -221,6 +224,16 @@
                 <div class="toggable-content">
                     <ul class="p-0">
 
+                        <li class="media my-3">
+                            <div class="version-num text-red">4.3.1</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Fixed bug for validation on "focus" event ( full version only )
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="media my-3">
                             <div class="version-num text-red">4.3.0</div>
                             <div class="media-body pl-2">

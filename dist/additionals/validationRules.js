@@ -154,12 +154,19 @@ var validationRules = {
             return obj;
         }
 
+        var url = fieldEl.getAttribute('data-async-validation-url');
         var fetchOptions = instance.options.formOptions.ajaxOptions;
         fetchOptions.body = JSON.stringify({username: string});
         
-        return fetch('remoteValidations/username.php', fetchOptions)
-            .then(function(data){
-                return data.json();
+        return fetch(url, fetchOptions)
+            .then(function(response){
+                if( !response.ok ){
+                    throw new Error(response.statusText);
+                }
+                return response.json();
+            })
+            .then(function(response){
+                return response;
             })
             .catch(function(error){
                 return {
