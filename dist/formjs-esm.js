@@ -293,14 +293,15 @@ function ajaxCall($form, formDataObj, options) {
         }, ajaxOptions.timeout);
     }
     return fetch(ajaxOptions.url, ajaxOptions).then(response => {
-        if (!response.ok) return Promise.reject(response);
+        if (!response.ok) throw new Error(response.statusText);
         const fetchMethod = ((response, options) => {
             const accept = options.headers.get("Accept"), contentType = response.headers.get("Content-Type"), headerOpt = accept || contentType || "";
             return headerOpt.indexOf("application/json") > -1 || "" === headerOpt ? "json" : headerOpt.indexOf("text/") > -1 ? "text" : "blob";
         })(response, ajaxOptions);
         return response[fetchMethod]();
-    }).then(data => (addClass($form, options.formOptions.cssClasses.ajaxSuccess), data)).catch(error => (addClass($form, options.formOptions.cssClasses.ajaxError), 
-    Promise.reject(error))).finally(() => {
+    }).then(data => (addClass($form, options.formOptions.cssClasses.ajaxSuccess), data)).catch(error => {
+        throw addClass($form, options.formOptions.cssClasses.ajaxError), new Error(error.message);
+    }).finally(() => {
         timeoutTimer && window.clearTimeout(timeoutTimer), removeClass($form, options.formOptions.cssClasses.submit + " " + options.formOptions.cssClasses.ajaxPending), 
         addClass($form, options.formOptions.cssClasses.ajaxComplete), $form.querySelector('[type="submit"]').disabled = !1;
     });

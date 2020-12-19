@@ -138,12 +138,12 @@ export const url = function( string ){
     return obj;
 }
 
-export const username = function( string, fieldEl ){
+export const username = function( string, $field ){
     // MUST START WITH A LETTER/NUMBER/UNDERSCORE
     // CAN ALSO CONTAIN . - @
     // MIN LENGTH 3 AND MAX LENGTH 24
 
-    const instance = fieldEl.closest('form').formjs;
+    const instance = $field.closest('form').formjs;
     const obj = {
         result: /^(?=\w)(?=[\-\.\@]?)[\w\-\.\@]{3,24}$/.test( string )
     };
@@ -152,20 +152,27 @@ export const username = function( string, fieldEl ){
         return obj;
     }
 
+    const url = $field.getAttribute('data-async-validation-url');
     const fetchOptions = instance.options.formOptions.ajaxOptions;
     fetchOptions.body = JSON.stringify({username: string});
     
-    return fetch('remoteValidations/username.php', fetchOptions)
-        .then(data => {
-            return data.json();
-        })
-        .catch(error => {
-            return {
-                result: false,
-                errors: { ajaxCall: true },
-                errorThrown: error
-            };
-        });
+    return fetch(url, fetchOptions)
+            .then(response => {
+                if( !response.ok ){
+                    throw new Error(response.statusText);
+                }
+                return response.json();
+            })
+            .then(response => {
+                return response;
+            })
+            .catch(error => {
+                return {
+                    result: false,
+                    errors: { ajaxCall: true },
+                    errorThrown: error
+                };
+            });
 }
 
 export const vatNumber = function( string ){

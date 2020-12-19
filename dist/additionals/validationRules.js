@@ -140,12 +140,12 @@ var validationRules = {
         return obj;
     },
 
-    username: function( string, fieldEl ){
+    username: function( string, $field ){
         // MUST START WITH A LETTER/NUMBER/UNDERSCORE
         // CAN ALSO CONTAIN . - @
         // MIN LENGTH 3 AND MAX LENGTH 24
 
-        var instance = fieldEl.closest('form').formjs;
+        var instance = $field.closest('form').formjs;
         var obj = {
             result: /^(?=\w)(?=[\-\.\@]?)[\w\-\.\@]{3,24}$/.test( string )
         };
@@ -154,12 +154,19 @@ var validationRules = {
             return obj;
         }
 
+        var url = $field.getAttribute('data-async-validation-url');
         var fetchOptions = instance.options.formOptions.ajaxOptions;
         fetchOptions.body = JSON.stringify({username: string});
         
-        return fetch('remoteValidations/username.php', fetchOptions)
-            .then(function(data){
-                return data.json();
+        return fetch(url, fetchOptions)
+            .then(function(response){
+                if( !response.ok ){
+                    throw new Error(response.statusText);
+                }
+                return response.json();
+            })
+            .then(function(response){
+                return response;
             })
             .catch(function(error){
                 return {

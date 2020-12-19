@@ -1669,20 +1669,20 @@
                             <div>
                                 <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
-                                        <input name="username" type="text" data-subtype="username" class="form-control" />
+                                        <input name="username" type="text" data-subtype="username" data-async-validation-url="./remoteValidations/username.php" class="form-control" />
                                         <label>Username</label>
                                     </div>
                                 </div>
                                 <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
-                                        <input name="username-required" type="text" data-subtype="username" class="form-control" required />
+                                        <input name="username-required" type="text" data-subtype="username" data-async-validation-url="./remoteValidations/username.php" class="form-control" required />
                                         <label>Username required</label>
                                     </div>
                                     <div class="field-error-message small">This is mandatory and not valid!</div>
                                 </div>
                                 <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
-                                        <input name="username-if-filled" type="text" data-subtype="username" class="form-control" data-validate-if-filled />
+                                        <input name="username-if-filled" type="text" data-subtype="username" data-async-validation-url="./remoteValidations/username.php" class="form-control" data-validate-if-filled />
                                         <label>Username if filled</label>
                                     </div>
                                     <div class="field-error-message small">This is wrong!</div>

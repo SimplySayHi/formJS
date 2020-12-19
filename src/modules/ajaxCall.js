@@ -74,7 +74,7 @@ export function ajaxCall( $form, formDataObj, options ){
     return fetch(ajaxOptions.url, ajaxOptions)
         .then(response => {
             if( !response.ok ){
-                return Promise.reject(response);
+                throw new Error(response.statusText);
             }
             const fetchMethod = getFetchMethod(response, ajaxOptions);
             return response[fetchMethod]();
@@ -85,7 +85,7 @@ export function ajaxCall( $form, formDataObj, options ){
         })
         .catch(error => {
             addClass( $form, options.formOptions.cssClasses.ajaxError );
-            return Promise.reject(error);
+            throw new Error(error.message);
         })
         .finally(() => {
             if( timeoutTimer ){
