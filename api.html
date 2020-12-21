@@ -64,8 +64,7 @@
                 <a href="#methods">Methods</a> | 
                 <a href="#prototype-methods">Prototype</a> | 
                 <a href="#builtin-events">Events</a> | 
-                <a href="#builtin-validations">Validation Rules</a> | 
-                <a href="#builtin-errors">Validation Errors</a>
+                <a href="#builtin-validations">Validation Rules</a>
             </div>
 
         <div class="mt-5">
@@ -1244,15 +1243,53 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
         <!-- Built-in Validations -->
         <div id="builtin-validations" class="toggable-content-outer">
             <h3 class="sticky-title">Built-in Validations</h3>
-            <p>
+            <p class="m-0">
                 Below the rules used to validate the fields depending on html basic/data-* attributes.<br />
                 You can add new validations or override existing ones - having "JS key" specified below - with <a href="#prototype-methods">addValidationRules</a> method.
                 <br />
                 Validations can also be async, see <code>username</code> validation as example.
                 <br /><br />
-                After validation, in case of invalid field, the validation method will return the "errors" object ( see <a href="#builtin-errors">Built-in Errors Section</a> for details ).
-                <hr />
-                <span class="text-red">[ add. ]</span> : Additional validation that is not part of the core plugin. Can be found in file <code>dist/additionals/validationRules.js</code> ( also available as ES Module in <code>dist/additionals/validationRules.esm.js</code> ).
+                After validation, in case of invalid field, the validation method will return the <code>errors</code> object.<br />
+                Errors can be returned:
+            </p>
+            <ul>
+                <li>
+                    <p class="m-0">
+                        Together with the validation
+                    </p>
+                </li>
+                <li>
+                    <p class="m-0">
+                        From a specific method in <code>Form.prototype.validationErrors</code> ( the key must be the same as the validation method - validation-error methods can be added and/or overridden via prototype method <code>Form.addValidationErrors</code> ).
+                    </p>
+                </li>
+            </ul>
+            <div class="row">
+                <div class="col-12 col-sm-6">
+                    <p>
+                        In case of empty field value, <code>errors</code> object will return only the "empty" error like:
+                    </p>
+            <pre>
+<code class="language-js">{
+    empty: true
+}</code></pre>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <p>
+                        In case of invalid field value, <code>errors</code> object will contain by default a key with the same name as the validation method, for example:
+                    </p>
+            <pre>
+<code class="language-js">{
+    email: true,
+    ...
+}</code></pre>
+                </div>
+            </div>
+            <hr />
+            <p>
+                <span class="text-red">[ add. ]</span> : Additional validation/error that is not part of the core library.<br />
+                Additional validations can be found in file <code>dist/additionals/validationRules.js</code> ( also available as ES Module in <code>dist/additionals/validationRules.esm.js</code> ).<br />
+                Additional errors can be found in file <code>dist/additionals/validationErrors.js</code>( also available as ES Module in <code>dist/additionals/validationErrors.esm.js</code> ).
             </p>
             <input type="checkbox" class="fake-checkbox btn-toggable-content" id="validations-show-additional" />
             <label class="btn toggable-label text-red mb-4" for="validations-show-additional">
@@ -1269,7 +1306,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             API
                         </div>
                         <div class="col-lg-7 col-xl-6">
-                            validation rule / notes
+                            validation rule / notes / errors
                         </div>
                     </div>
                 </div>
@@ -1337,6 +1374,16 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                 <p>
                                     Valid italian CAP with 5 digits
                                 </p>
+                                <hr />
+                                <p>
+                                    <code>errors</code> object can also return these specific errors:
+                                </p>
+                                <pre>
+<code class="language-js">{
+    maxlength: true,
+    minlength: true,
+    invalidChars: true
+}</code></pre>
                             </div>
                         </div>
                         <div id="validation-checkbox" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -1372,6 +1419,15 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                     Check that the number of checked checkboxes is between the the given numbers ( must be a valid - 2 values - array ).<br />
                                     The attribute can be applied to only one of the checkboxes, not mandatory for all.
                                 </p>
+                                <hr />
+                                <p>
+                                    <code>errors</code> object can also return these specific errors:
+                                </p>
+                                <pre>
+<code class="language-js">{
+    maxChecks: true,
+    minChecks: true
+}</code></pre>
                             </div>
                         </div>
                         <div id="validation-color" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -1391,7 +1447,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                     Can be lowercase or uppercase.<br />
                                     Can be 3 or 6 characters ( 0fa | 00FFaa ).
                                 </p>
-                                <p>
+                                <p class="m-0">
                                     <b>Important Note</b>:<br />
                                     <code>type="color"</code> is not supported by:
                                 </p>
@@ -1424,7 +1480,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                     Date as ISO 8601 date format with space / . - as separator:<br />
                                     YYYY MM DD | YYYY/MM/DD | YYYY.MM.DD | YYYY-MM-DD
                                 </p>
-                                <p>
+                                <p class="m-0">
                                     <b>Important Note</b>:<br />
                                     <code>type="date"</code> is not supported by:
                                 </p>
@@ -1484,6 +1540,19 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                 <p>
                                     Check common email addresses instead of RFC5322 Official Standard ( <a href="https://regex101.com/r/cdlyJy/3" target="_blank">see tests</a> ).
                                 </p>
+                                <hr />
+                                <p>
+                                    <span class="text-red">[ add. ]</span> <code>errors</code> object can also return these specific errors:
+                                </p>
+                                <pre>
+<code class="language-js">{
+    missingAtChar: true,
+    missingUserName: true,
+    missingDomain: true,
+    missingExtensionDot: true,
+    missingExtension: true,
+    minlengthExtension: true
+}</code></pre>
                             </div>
                         </div>
                         <div id="validation-equal-to" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -1523,6 +1592,15 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                 <p class="small text-lowercase text-opacity">
                                     Eg: a field that must have a specific number of characters, such as for cents ( 2 digits )
                                 </p>
+                                <hr />
+                                <p>
+                                    <code>errors</code> object can also return these specific errors:
+                                </p>
+                                <pre>
+<code class="language-js">{
+    maxlength: true,
+    minlength: true
+}</code></pre>
                             </div>
                         </div>
                         <div id="validation-file" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -1542,8 +1620,17 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>
                                     Check if a file is selected or not.<br />
-                                    "accept" attribute is supported for JS validation.
+                                    <code>accept</code> attribute is supported for JS validation.
                                 </p>
+                                <hr />
+                                <p>
+                                    <code>errors</code> object can also return these specific errors:
+                                </p>
+                                <pre>
+<code class="language-js">{
+    maxFileSize: true,
+    acceptedFileType: true
+}</code></pre>
                             </div>
                         </div>
                         <div id="validation-fiscal-code" class="additional-validation clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -1816,6 +1903,18 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                         min length of 8 characters
                                     </li>
                                 </ul>
+                                <hr />
+                                <p>
+                                    <code>errors</code> object can also return these specific errors:
+                                </p>
+                                <pre>
+<code class="language-js">{
+    minlength: true,
+    missingNumber: true,
+    missingLowercase: true,
+    missingUppercase: true,
+    invalidChars: true
+}</code></pre>
                             </div>
                         </div>
                         <div id="validation-pattern" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -1950,10 +2049,18 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                         Max length of 24 characters
                                     </li>
                                 </ul>
+                                <hr />
                                 <p>
-                                    You can find the remote validation in <code>remoteValidations/username.php</code><br />
-                                    It is just a demo. Please change it with your custom remote validation.
+                                    <code>errors</code> object can also return these specific errors:
                                 </p>
+                                <pre>
+<code class="language-js">{
+    minlength: true,
+    maxlength: true,
+    invalidChars: true,
+    invalidStartChar: true,
+    ajaxCall: true
+}</code></pre>
                             </div>
                         </div>
                         <div id="validation-validate-if-filled" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -1986,6 +2093,15 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                 <p>
                                     VAT number can contain or not the string "it" ( as for italian VAT numbers ) and then 11 numbers
                                 </p>
+                                <hr />
+                                <p>
+                                    <code>errors</code> object can also return these specific errors:
+                                </p>
+                                <pre>
+<code class="language-js">{
+    minlength: true,
+    maxlength: true
+}</code></pre>
                             </div>
                         </div>
                     </div>
@@ -1995,414 +2111,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                         <p>
                             <span class="text-yellow">*</span> you can also set <code>type="number"</code> together with the specific data-subtype attribute related to numbers, to let the device show the numeric keyboard, because type="number" is not well implemented in all browsers ( some allow users to write non-numeric characters and / or not related to the number format ).<br />
                                 Better to use <code>type="text"</code> together with the specific data-subtype related to numbers attribute to validate a numeric field. You can also use <code>data-type="number"</code> to emulate <code>type="number"</code> inputs. See "strictHtmlValidation" option in <a href="#field-options">Field Options</a> section for details.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Built-in Errors -->
-        <div id="builtin-errors" class="toggable-content-outer">
-            <h3 class="sticky-title">Built-in Errors</h3>
-            <p class="mb-0">
-                After validation, in case of invalid field, "errors" object will be returned.<br />
-                Errors can be returned:
-            </p>
-            <ul>
-                <li>
-                    <p class="m-0">
-                        Together with the validation ( see below <span class="text-yellow">*</span> )
-                    </p>
-                </li>
-                <li>
-                    <p class="m-0">
-                        From a specific method in <code>Form.prototype.validationErrors</code> ( the key must be the same as the validation method - validation-error methods can be added and/or overridden via prototype method <code>Form.addValidationErrors</code> ).
-                    </p>
-                </li>
-            </ul>
-            <div class="row">
-                <div class="col-12 col-sm-6">
-                    <p>
-                        In case of empty field value, "errors" object will return only the "empty" error like:
-                    </p>
-            <pre>
-<code class="language-js">{
-    empty: true
-}</code></pre>
-                </div>
-                <div class="col-12 col-sm-6">
-                    <p>
-                        In case of invalid field value, "errors" object will contain a key with the same name as the validation method, below an example:
-                    </p>
-            <pre>
-<code class="language-js">{
-    email: true,
-    ...
-}</code></pre>
-                </div>
-            </div>
-            <hr />
-            <p>
-                <span class="text-red">[ add. ]</span> : Additional error that is not part of the core plugin. Can be found in file <code>dist/additionals/validationErrors.js</code>( also available as ES Module in <code>dist/additionals/validationErrors.esm.js</code> ).
-            </p>
-            <input type="checkbox" class="fake-checkbox btn-toggable-content" id="errors-show-additional" />
-            <label class="btn toggable-label text-red mb-4" for="errors-show-additional">
-                <span>Show Additional Errors</span>
-                <span>Hide Additional Errors</span>
-            </label>
-            <div class="panel panel-default panel-transparent no-bg">
-                <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
-                    <div class="d-flex">
-                        <div class="col-lg-5 col-xl-3">
-                            validation name ( JS key )<span class="d-inline d-xl-none">, validation API</span>
-                        </div>
-                        <div class="col-xl-3 d-none d-xl-block">
-                            validation API
-                        </div>
-                        <div class="col-lg-7 col-xl-6">
-                            returned "errors" object
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="errors-list">
-                        <div class="additional-error clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3 text-green">
-                                CAP
-                                <div>( cap )</div>
-                                <div class="text-red">[ add. ]</div>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
-                                <div><code>data-subtype="cap"</code></div>
-                            </div>
-                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
-                                <p>
-                                    "errors" object can contain these specific errors:
-                                </p>
-                                <pre>
-<code class="language-js">{
-    cap: true,
-    maxlength: true,
-    minlength: true,
-    invalidChars: true
-}</code></pre>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3 text-green">
-                                Checks <span class="text-yellow">*</span>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
-                                <p class="small">
-                                    NOTE: this validation is packed together with "checkbox" validation
-                                </p>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
-                                <div><code>data-checks="[1,3]"</code></div>
-                            </div>
-                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
-                                <p>
-                                    "errors" object can contain these specific errors:
-                                </p>
-                                <pre>
-<code class="language-js">{
-    checks: true,
-    checkbox: true,
-    maxChecks: true,
-    minChecks: true
-}</code></pre>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3 text-green">
-                                Email
-                                <div>( email )</div>
-                                <div class="text-red">[ add. ]</div>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
-                                <div><code>type="email"</code></div>
-                                <div><code>data-subtype="email"</code></div>
-                            </div>
-                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
-                                <p>
-                                    "errors" object can contain these specific errors:
-                                </p>
-                                <pre>
-<code class="language-js">{
-    email: true,
-    missingAtChar: true,
-    missingUserName: true,
-    missingDomain: true,
-    missingExtensionDot: true,
-    missingExtension: true,
-    minlengthExtension: true
-}</code></pre>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3 text-green">
-                                Equal To <span class="text-yellow">*</span>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
-                                <div><code>data-equal-to="password"</code></div>
-                            </div>
-                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
-                                <p>
-                                    "errors" object can contain these specific errors:
-                                </p>
-                                <pre>
-<code class="language-js">{
-    equalTo: true
-}</code></pre>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3 text-green">
-                                Exact Length <span class="text-yellow">*</span>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
-                                <div><code>data-exact-length="24"</code></div>
-                            </div>
-                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
-                                <p>
-                                    "errors" object can contain these specific errors:
-                                </p>
-                                <pre>
-<code class="language-js">{
-    exactLength: true,
-    maxlength: true,
-    minlength: true
-}</code></pre>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3 text-green">
-                                File <span class="text-yellow">*</span>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
-                                <div><code>type="file"</code></div>
-                            </div>
-                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
-                                <p>
-                                    "errors" object can contain these specific errors:
-                                </p>
-                                <pre>
-<code class="language-js">{
-    file: true,
-    maxFileSize: true,
-    acceptedFileType: true
-}</code></pre>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3 text-green">
-                                Length <span class="text-yellow">*</span>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
-                                <div><code>data-length="[5,30]"</code></div>
-                            </div>
-                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
-                                <p>
-                                    "errors" object can contain these specific errors:
-                                </p>
-                                <pre>
-<code class="language-js">{
-    length: true,
-    maxlength: true,
-    minlength: true
-}</code></pre>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3 text-green">
-                                Max <span class="text-yellow">*</span>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
-                                <p class="small mb-1">With Numbers</p>
-                                <div><code>max="13"</code></div>
-                                <p class="small mt-5 mb-1">With Dates</p>
-                                <div><code>max="2019-02-22"</code></div>
-                            </div>
-                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
-                                <p>
-                                    "errors" object can contain these specific errors:
-                                </p>
-                                <pre>
-<code class="language-js">{
-    max: true
-}</code></pre>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3 text-green">
-                                Maxlength <span class="text-yellow">*</span>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
-                                <div><code>maxlength="150"</code></div>
-                            </div>
-                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
-                                <p>
-                                    "errors" object can contain these specific errors:
-                                </p>
-                                <pre>
-<code class="language-js">{
-    maxlength: true
-}</code></pre>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3 text-green">
-                                Min <span class="text-yellow">*</span>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
-                                <p class="small mb-1">With Numbers</p>
-                                <div><code>max="7"</code></div>
-                                <p class="small mt-5 mb-1">With Dates</p>
-                                <div><code>max="1900-01-01"</code></div>
-                            </div>
-                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
-                                <p>
-                                    "errors" object can contain these specific errors:
-                                </p>
-                                <pre>
-<code class="language-js">{
-    min: true
-}</code></pre>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3 text-green">
-                                Minlength <span class="text-yellow">*</span>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
-                                <div><code>minlength="10"</code></div>
-                            </div>
-                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
-                                <p>
-                                    "errors" object can contain these specific errors:
-                                </p>
-                                <pre>
-<code class="language-js">{
-    minlength: true
-}</code></pre>
-                            </div>
-                        </div>
-                        <div class="additional-error clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3 text-green">
-                                Password
-                                <div>( password )</div>
-                                <div class="text-red">[ add. ]</div>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
-                                <div><code>type="password"</code></div>
-                                <div><code>data-subtype="password"</code></div>
-                            </div>
-                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
-                                <p>
-                                    "errors" object can contain these specific errors:
-                                </p>
-                                <pre>
-<code class="language-js">{
-    password: true,
-    minlength: true,
-    missingNumber: true,
-    missingLowercase: true,
-    missingUppercase: true,
-    invalidChars: true
-}</code></pre>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3 text-green">
-                                Pattern <span class="text-yellow">*</span>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
-                                <div><code>pattern="[RegExp]"</code></div>
-                            </div>
-                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
-                                <p>
-                                    "errors" object can contain these specific errors:
-                                </p>
-                                <pre>
-<code class="language-js">{
-    pattern: true
-}</code></pre>
-                            </div>
-                        </div>
-                        <div class="additional-error clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3 text-green">
-                                Username
-                                <div>( username )</div>
-                                <div class="text-red">[ add. ]</div>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
-                                <div><code>data-subtype="username"</code></div>
-                            </div>
-                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
-                                <p>
-                                    "errors" object can contain these specific errors:
-                                </p>
-                                <pre>
-<code class="language-js">{
-    username: true,
-    minlength: true,
-    maxlength: true,
-    invalidChars: true,
-    invalidStartChar: true,
-    ajaxCall: true
-}</code></pre>
-                            </div>
-                        </div>
-                        <div class="additional-error clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-3 text-green">
-                                VAT Number
-                                <div>( vatNumber )</div>
-                                <div class="text-red">[ add. ]</div>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
-                                <div><code>data-subtype="vat-number"</code></div>
-                            </div>
-                            <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
-                                <p>
-                                    "errors" object can return these specific errors:
-                                </p>
-                                <pre>
-<code class="language-js">{
-    vatNumber: true,
-    minlength: true,
-    maxlength: true
-}</code></pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div>
-                        <p>
-                            <span class="text-yellow">*</span> errors are returned by the validation rule. If you want to change returned errors, you need to override the validation rule.
                         </p>
                     </div>
                 </div>
