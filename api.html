@@ -62,9 +62,9 @@
                 <a href="#field-options">Field Options</a> | 
                 <a href="#form-options">Form Options</a> | 
                 <a href="#methods">Methods</a> | 
-                <a href="#prototype-methods">Prototype</a> | 
+                <a href="#static-methods">Static</a> | 
                 <a href="#builtin-events">Events</a> | 
-                <a href="#builtin-validations">Validation Rules</a>
+                <a href="#builtin-validations">Validations</a>
             </div>
 
         <div class="mt-5">
@@ -107,7 +107,7 @@
                             </ul>
                         </div>
                         <div class="col-sm-6 col-md-3">
-                            <h3 class="small-title mt-3">Prototype</h3>
+                            <h3 class="small-title mt-3">Static</h3>
                             <ul>
                                 <li>
                                     as main version
@@ -115,7 +115,7 @@
                             </ul>
                         </div>
                         <div class="col-sm-6 col-md-3">
-                            <h3 class="small-title mt-3">Validation Rules &amp; Errors</h3>
+                            <h3 class="small-title mt-3">Validations</h3>
                             <ul>
                                 <li>
                                     as main version
@@ -920,11 +920,11 @@
             </div>
         </div>
 
-        <!-- Prototype Methods -->
-        <div id="prototype-methods">
-            <h3 class="sticky-title">Prototype Methods</h3>
+        <!-- Static Methods -->
+        <div id="static-methods">
+            <h3 class="sticky-title">Static Methods</h3>
             <p class="mt-5">
-                You can use these methods <b>ONLY</b> from the original Form object ( not from a new instance - but you can always set each single property/method from the class prototype ):
+                You can use these methods <b>ONLY</b> from the original Form class ( not from a new instance ):
             </p>
             <div class="panel panel-default panel-transparent no-bg">
                 <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
@@ -1245,7 +1245,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
             <h3 class="sticky-title">Built-in Validations</h3>
             <p class="mt-5 mb-0">
                 Below the rules used to validate the fields depending on html basic/data-* attributes.<br />
-                You can add new validations or override existing ones - having "JS key" specified below - with <a href="#prototype-methods">addValidationRules</a> method.
+                You can add new validations or override existing ones - having "JS key" specified below - with <a href="#static-methods">addValidationRules</a> method.
                 <br />
                 Validations can also be async, see <code>username</code> validation as example.
                 <br /><br />
@@ -1260,7 +1260,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                 </li>
                 <li>
                     <p class="m-0">
-                        From a specific method in <code>Form.prototype.validationErrors</code> ( the key must be the same as the validation method - validation-error methods can be added and/or overridden via prototype method <code>Form.addValidationErrors</code> ).
+                        From a specific method in <code>Form.prototype.validationErrors</code> ( the key must be the same as the validation method - validation-error methods can be added and/or overridden via static method <code>Form.addValidationErrors</code> ).
                     </p>
                 </li>
             </ul>
