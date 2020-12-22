@@ -1073,11 +1073,11 @@
 <code class="language-js">Form.addValidationErrors({
     username: function ( fieldValue, $field ) {
         var obj = {};
-        var strLength = string.length;
+        var strLength = fieldValue.length;
         if( strLength &lt; 3 ){ obj.minlength = true; }
         if( strLength &gt; 24 ){ obj.maxlength = true; }
-        if( /[^\w\-\.\@]/.test(string) ){ obj.invalidChars = true; }
-        if( !/^[\w]/.test(string) ){ obj.invalidStartChar = true; }
+        if( /[^\w\-\.\@]/.test(fieldValue) ){ obj.invalidChars = true; }
+        if( !/^[\w]/.test(fieldValue) ){ obj.invalidStartChar = true; }
         return obj;
     }
 });
@@ -1085,11 +1085,11 @@
 Form.addValidationRules({
     myPassword: function( fieldValue, $field ){
         var obj = {
-            result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(string)
+            result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(fieldValue)
         };
         // ERRORS CAN BE ATTACHED HERE BUT IT'S BETTER TO USE METHOD addValidationErrors
         if( !obj.result ){
-            if( string.length &lt; 8 ){ obj.errors.minlength = true; }
+            if( fieldValue.length &lt; 8 ){ obj.errors.minlength = true; }
         }
         return obj;
     }
