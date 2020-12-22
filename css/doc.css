@@ -80,8 +80,7 @@ h3 .small { color: inherit; }
     padding: 0.45em 0.05em 0.33em 52px;
     height: 60px;
 }
-.sticky-title + * { margin-top: 1rem !important; }
-.sticky-title + p, .sticky-title + ul { margin-top: 0.5rem !important; }
+.sticky-title + * { margin-top: 1rem; }
 .sticky-title ~ .panel .sticky-header {
     position: -webkit-sticky; position: sticky; top: 98px; z-index: 5;
 }
