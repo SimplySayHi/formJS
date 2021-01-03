@@ -957,7 +957,7 @@
                                         <span class="text-green">newErrors</span>: JS object containing the new validation error method(s) to add ( see example below ).
                                     </li>
                                 </ul>
-                                <p>
+                                <p class="mb-0">
                                     The key / value pairs must be passed as:
                                 </p>
                                 <ul>
@@ -1002,7 +1002,7 @@
                                         <span class="text-green">newRules</span>: JS object containing the new validation rule(s) to add ( see example below ).
                                     </li>
                                 </ul>
-                                <p>
+                                <p class="mb-0">
                                     The key / value pairs must be passed as:
                                 </p>
                                 <ul>
@@ -1019,16 +1019,13 @@
                                             <li>
                                                 $field: the evaluated field
                                             </li>
-                                            <li>
-                                                fieldOptions: ( <span class="text-red">DEPRECATED</span> ) fieldOptions of the form instance
-                                            </li>
                                         </ul>
                                         The function must return an object ( at least ) like:
                                         <pre>
 <code class="language-js">{
     result: true // or false
 }</code></pre>
-                                        In case of invalid field you can add the "errors" key to return the specific errors.
+                                        In case of invalid field you can add the <code>errors</code> key to return the specific errors.
                                     </li>
                                 </ul>
                             </div>
@@ -1087,7 +1084,7 @@ Form.addValidationRules({
         var obj = {
             result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(fieldValue)
         };
-        // ERRORS CAN BE ATTACHED HERE BUT IT'S BETTER TO USE METHOD addValidationErrors
+        // ERRORS CAN ALSO BE HANDLED HERE
         if( !obj.result ){
             if( fieldValue.length &lt; 8 ){ obj.errors.minlength = true; }
         }
