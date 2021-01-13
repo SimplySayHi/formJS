@@ -41,7 +41,7 @@ System.register([], function () {
         return Constructor;
       }
 
-      /* formJS v5.0.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+      /* formJS v5.0.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
       var addClass = function addClass(element, cssClasses) {
         cssClasses.split(" ").forEach(function (className) {
           element.classList.add(className);
@@ -802,7 +802,7 @@ System.register([], function () {
         return Form;
       }();
 
-      Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, Form.prototype.version = "5.0.0";
+      Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, Form.prototype.version = "5.0.1";
 
       var $form = document.querySelector('form');
       var formInstance = new Form($form);
