@@ -207,43 +207,7 @@
                     <div class="media-body pl-2">
                         <ul>
                             <li>
-                                Added event "fjs.form:init"
-                            </li>
-                            <li>
-                                Added "onInitCheckFilled" in formOptions to run or not validation of filled fields on form init ( same as removed method "init" )
-                            </li>
-                            <li>
-                                Changed Promise returned from methods "validateField" and "validateForm". Now if validation succeeds it will resolve with .then(), if validation fails it will reject with .catch()
-                            </li>
-                            <li>
-                                Changed "fieldEl" with "$field" and "formEl" with "$form"
-                            </li>
-                            <li>
-                                Changed key "stringLength" in favor of "length" in built-in errors
-                            </li>
-                            <li>
-                                Removed method "init" in favor of option "onInitCheckFilled"
-                            </li>
-                            <li>
-                                Removed "handleValidation" and "maxFileSize" in fieldOptions
-                            </li>
-                            <li>
-                                Removed fieldOptions parameter in validation-rule methods
-                            </li>
-                            <li>
-                                Removed "rule" in built-in errors
-                            </li>
-                            <li>
-                                Moved option "handleFileUpload" from fieldOptions to formOptions for consistency
-                            </li>
-                            <li>
-                                Moved "email" validation-error method from core to additionals ( external )
-                            </li>
-                            <li>
-                                Switched usage of JS Event with CustomEvent
-                            </li>
-                            <li>
-                                Minor improvements
+                                Exported main versions as UMD instead of IIFE for better environments compatibility
                             </li>
                         </ul>
                     </div>
@@ -258,6 +222,52 @@
                 <div class="toggable-content">
                     <ul class="p-0">
 
+                        <li class="media my-3">
+                            <div class="version-num text-red">5.0.0</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Added event "fjs.form:init"
+                                    </li>
+                                    <li>
+                                        Added "onInitCheckFilled" in formOptions to run or not validation of filled fields on form init ( same as removed method "init" )
+                                    </li>
+                                    <li>
+                                        Changed Promise returned from methods "validateField" and "validateForm". Now if validation succeeds it will resolve with .then(), if validation fails it will reject with .catch()
+                                    </li>
+                                    <li>
+                                        Changed "fieldEl" with "$field" and "formEl" with "$form"
+                                    </li>
+                                    <li>
+                                        Changed key "stringLength" in favor of "length" in built-in errors
+                                    </li>
+                                    <li>
+                                        Removed method "init" in favor of option "onInitCheckFilled"
+                                    </li>
+                                    <li>
+                                        Removed "handleValidation" and "maxFileSize" in fieldOptions
+                                    </li>
+                                    <li>
+                                        Removed fieldOptions parameter in validation-rule methods
+                                    </li>
+                                    <li>
+                                        Removed "rule" in built-in errors
+                                    </li>
+                                    <li>
+                                        Moved option "handleFileUpload" from fieldOptions to formOptions for consistency
+                                    </li>
+                                    <li>
+                                        Moved "email" validation-error method from core to additionals ( external )
+                                    </li>
+                                    <li>
+                                        Switched usage of JS Event with CustomEvent
+                                    </li>
+                                    <li>
+                                        Minor improvements
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="media my-3">
                             <div class="version-num text-red">4.3.3</div>
                             <div class="media-body pl-2">
