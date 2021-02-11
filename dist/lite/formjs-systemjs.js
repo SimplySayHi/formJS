@@ -1,4 +1,4 @@
-/* formJS Lite v4.3.3 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS Lite v4.3.4 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 System.register([], (function(exports) {
     "use strict";
     return {
@@ -335,7 +335,7 @@ System.register([], (function(exports) {
                     maxFileSize: 10
                 }
             }, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-            Form.prototype.version = "4.3.3";
+            Form.prototype.version = "4.3.4";
         }
     };
 }));

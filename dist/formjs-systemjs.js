@@ -1,4 +1,4 @@
-/* formJS v4.3.3 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v4.3.4 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 System.register([], (function(exports) {
     "use strict";
     return {
@@ -406,8 +406,8 @@ System.register([], (function(exports) {
             var validation = function(event) {
                 var isChangeEvent = "change" === event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs;
                 if (fieldEl.matches(fieldsStringSelector)) {
-                    var isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl);
-                    if (isFieldForChangeEventBoolean && isChangeEvent || !isFieldForChangeEventBoolean && !isChangeEvent) return self.validateField(fieldEl).then((function(obj) {
+                    var isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl), hasOnlyChangeEvent = "change" === self.options.fieldOptions.validateOnEvents;
+                    if (isFieldForChangeEventBoolean && isChangeEvent || !isFieldForChangeEventBoolean && (!isChangeEvent || hasOnlyChangeEvent)) return self.validateField(fieldEl).then((function(obj) {
                         var type = obj.fieldEl.type, realtedFieldEqualTo = obj.fieldEl.closest("form").querySelector('[data-equal-to="' + obj.fieldEl.name + '"]');
                         return (obj.fieldEl.required || obj.fieldEl.matches("[data-validate-if-filled]")) && "checkbox" !== type && "radio" !== type && realtedFieldEqualTo && "" !== realtedFieldEqualTo.value.trim() && self.validateField(realtedFieldEqualTo), 
                         obj;
@@ -660,7 +660,7 @@ System.register([], (function(exports) {
                     }
                     return obj;
                 }
-            }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.3";
+            }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.4";
         }
     };
 }));

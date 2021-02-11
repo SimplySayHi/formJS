@@ -9,10 +9,11 @@ export const validation = function( event ){
 
     if( fieldEl.matches( fieldsStringSelector ) ){
         const isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl);
+        const hasOnlyChangeEvent = self.options.fieldOptions.validateOnEvents === 'change';
         
         if(
             (isFieldForChangeEventBoolean && isChangeEvent) ||
-            (!isFieldForChangeEventBoolean && !isChangeEvent)
+            (!isFieldForChangeEventBoolean && (!isChangeEvent || hasOnlyChangeEvent))
         ){
             
             return self.validateField( fieldEl ).then(obj => {

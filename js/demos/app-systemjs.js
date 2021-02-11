@@ -41,7 +41,7 @@ System.register([], function () {
         return Constructor;
       }
 
-      /* formJS v4.3.3 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+      /* formJS v4.3.4 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
       var addClass = function addClass(element, cssClasses) {
         cssClasses.split(" ").forEach(function (className) {
           element.classList.add(className);
@@ -516,8 +516,9 @@ System.register([], function () {
             self = fieldEl.closest("form").formjs;
 
         if (fieldEl.matches(fieldsStringSelector)) {
-          var isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl);
-          if (isFieldForChangeEventBoolean && isChangeEvent || !isFieldForChangeEventBoolean && !isChangeEvent) return self.validateField(fieldEl).then(function (obj) {
+          var isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl),
+              hasOnlyChangeEvent = "change" === self.options.fieldOptions.validateOnEvents;
+          if (isFieldForChangeEventBoolean && isChangeEvent || !isFieldForChangeEventBoolean && (!isChangeEvent || hasOnlyChangeEvent)) return self.validateField(fieldEl).then(function (obj) {
             var type = obj.fieldEl.type,
                 realtedFieldEqualTo = obj.fieldEl.closest("form").querySelector('[data-equal-to="' + obj.fieldEl.name + '"]');
             return (obj.fieldEl.required || obj.fieldEl.matches("[data-validate-if-filled]")) && "checkbox" !== type && "radio" !== type && realtedFieldEqualTo && "" !== realtedFieldEqualTo.value.trim() && self.validateField(realtedFieldEqualTo), obj;
@@ -804,7 +805,7 @@ System.register([], function () {
           }
           return obj;
         }
-      }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.3";
+      }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.4";
 
       var formEl = document.querySelector('form');
       var formInstance = new Form(formEl);

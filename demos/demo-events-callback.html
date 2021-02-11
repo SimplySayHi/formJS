@@ -153,6 +153,10 @@
 <code class="language-js">const formEl = document.querySelector('form');
 const formInstance = new Form( formEl );
 
+formEl.addEventListener('fjs.field:validation', function(event){
+    console.log(event.type, event.target);
+});
+
 formEl.addEventListener('fjs.form:validation', function(event){
     if( event.data.result ){
         alert('THE FORM IS VALID!');
@@ -263,6 +267,10 @@ formInstance.init().then(obj => {
     <script>
         var formEl = document.querySelector('form');
         var formInstance = new Form( formEl );
+
+        formEl.addEventListener('fjs.field:validation', function(event){
+            console.log(event.type, event.target);
+        });
 
         formEl.addEventListener('fjs.form:validation', function(event){
             if( event.data.result ){
