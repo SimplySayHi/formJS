@@ -41,7 +41,7 @@ System.register([], function () {
         return Constructor;
       }
 
-      /* formJS v5.0.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+      /* formJS v5.0.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
       var addClass = function addClass(element, cssClasses) {
         cssClasses.split(" ").forEach(function (className) {
           element.classList.add(className);
@@ -512,8 +512,9 @@ System.register([], function () {
             self = $field.closest("form").formjs;
 
         if ($field.matches(fieldsStringSelector)) {
-          var isFieldForChangeEventBoolean = isFieldForChangeEvent($field);
-          if (isFieldForChangeEventBoolean && isChangeEvent || !isFieldForChangeEventBoolean && !isChangeEvent) return self.validateField($field).then(function () {
+          var isFieldForChangeEventBoolean = isFieldForChangeEvent($field),
+              hasOnlyChangeEvent = "change" === self.options.fieldOptions.validateOnEvents;
+          if (isFieldForChangeEventBoolean && isChangeEvent || !isFieldForChangeEventBoolean && (!isChangeEvent || hasOnlyChangeEvent)) return self.validateField($field).then(function () {
             var type = $field.type,
                 $realtedEqualTo = $field.closest("form").querySelector('[data-equal-to="' + $field.name + '"]');
             return ($field.required || $field.matches("[data-validate-if-filled]")) && "checkbox" !== type && "radio" !== type && $realtedEqualTo && "" !== $realtedEqualTo.value.trim() && self.validateField($realtedEqualTo)["catch"](function (errors) {}), mergeValidateFieldDefault({
@@ -802,7 +803,7 @@ System.register([], function () {
         return Form;
       }();
 
-      Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, Form.prototype.version = "5.0.1";
+      Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, Form.prototype.version = "5.0.2";
 
       var $form = document.querySelector('form');
       var formInstance = new Form($form);

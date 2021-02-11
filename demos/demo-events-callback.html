@@ -152,6 +152,10 @@
                                 <pre class="m-0">
 <code class="language-js">const $form = document.querySelector('form');
 
+$form.addEventListener('fjs.field:validation', function(event){
+    console.log(event.type, event.target);
+});
+
 $form.addEventListener('fjs.form:validation', function(event){
     if( event.detail.result ){
         alert('THE FORM IS VALID!');
@@ -258,6 +262,10 @@ const formInstance = new Form( $form );
     <script src="../dist/additionals/validationErrors.js"></script>
     <script>
         var $form = document.querySelector('form');
+
+        $form.addEventListener('fjs.field:validation', function(event){
+            console.log(event.type, event.target);
+        });
 
         $form.addEventListener('fjs.form:validation', function(event){
             if( event.detail.result ){
