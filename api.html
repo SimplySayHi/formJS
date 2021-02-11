@@ -433,9 +433,11 @@
                                 <p>
                                     Events on which the validation will fire ( only for required fields )
                                     <br /><br />
-                                    <span class="text-green">Tip</span>: always add "change" to the events in order to properly validate checkbox, radio, file inputs and selects.
+                                    <span class="text-green">Tip</span>: always add <code>change</code> to the events list in order to properly validate checkbox, radio, file inputs and selects.
                                     <br />
-                                    For example: "change input" or "change blur".
+                                    For example: <code>change input</code> or <code>change blur</code>.
+                                    <br /><br />
+                                    <span class="text-green">Tip</span>: in order to validate "textual" fields ( with type text, email etc ) only on change event, you must set this option to <code>change</code>. Setting this option with multiple values ( for example <code>change input</code> ) will fire validation for "textual" fields ONLY on <code>input</code> event.
                                     <br /><br />
                                     <span class="small">( NOT used if <code>handleValidation: false</code> )</span>
                                 </p>
