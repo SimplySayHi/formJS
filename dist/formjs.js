@@ -1,4 +1,4 @@
-/* formJS v4.3.4 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v4.4.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 !function(global, factory) {
     "object" == typeof exports && "undefined" != typeof module ? module.exports = factory() : "function" == typeof define && define.amd ? define(factory) : (global = "undefined" != typeof globalThis ? globalThis : global || self).Form = factory();
 }(this, (function() {
@@ -61,7 +61,7 @@
         }, eventOptions);
         var eventObj = new Event(eventName, eventOptions);
         eventObj.data = data, elem.dispatchEvent(eventObj);
-    }, fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', formatMap = {
+    }, excludeSelector = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])', fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', formatMap = {
         "YYYY-MM-DD": function(dateArray) {
             return dateArray;
         },
@@ -76,6 +76,9 @@
         var separator, splitChar = (separator = dateString.match(/\D/)) && separator.length > 0 ? separator[0] : null;
         if (!(dateFormat.indexOf(splitChar) < 0)) return dateFormat = dateFormat.replace(/[^YMD]/g, "-"), 
         dateString = dateString.split(splitChar), dateString = formatMap[dateFormat](dateString).join("");
+    }, getJSONobjectFromFieldAttribute = function(fieldEl, attrName) {
+        var customAttrEl = fieldEl.closest("[" + attrName + "]");
+        return customAttrEl && JSON.parse(customAttrEl.getAttribute(attrName)) || {};
     }, getUniqueFields = function(nodeList) {
         var currentFieldName = "", currentFieldType = "";
         return Array.from(nodeList).filter((function(fieldEl) {
@@ -120,51 +123,20 @@
         return string.replace(/-([a-z])/gi, (function(all, letter) {
             return letter.toUpperCase();
         }));
-    }, defaultCallbacksInOptions = {
+    }, options = {
         fieldOptions: {
-            beforeValidation: function(fieldObj) {
-                var fieldOptions = this.options.fieldOptions;
-                !function(fields, fieldOptions) {
+            beforeValidation: [ function(_ref) {
+                var fieldEl = _ref.fieldEl, fieldOptions = _ref.fieldOptions;
+                fieldOptions.trimValue && !isFieldForChangeEvent(fieldEl) && (fieldEl.value = fieldEl.value.trim()), 
+                function(fields, fieldOptions) {
                     (fields = isNodeList(fields) ? Array.from(fields) : [ fields ]).forEach((function(fieldEl) {
                         if ("checkbox" !== fieldEl.type && "radio" !== fieldEl.type) {
                             var containerEl = fieldEl.closest(fieldOptions.questionContainer) || fieldEl;
                             fieldEl.value ? addClass(containerEl, fieldOptions.cssClasses.dirty) : removeClass(containerEl, fieldOptions.cssClasses.dirty);
                         }
                     }));
-                }(fieldObj.fieldEl, fieldOptions), fieldOptions.skipUIfeedback || addClass(fieldObj.fieldEl.closest(fieldOptions.questionContainer), fieldOptions.cssClasses.pending);
-            }
-        },
-        formOptions: {
-            getFormData: function(filteredFields) {
-                var formData = {}, formEl = this.formEl;
-                return filteredFields.forEach((function(fieldEl) {
-                    var isCheckbox = "checkbox" === fieldEl.type, isRadio = "radio" === fieldEl.type, isSelect = fieldEl.matches("select"), name = fieldEl.name, value = fieldEl.value;
-                    if (isCheckbox) {
-                        value = fieldEl.checked;
-                        var checkboxes = Array.from(formEl.querySelectorAll('[name="' + name + '"]'));
-                        if (checkboxes.length > 1) value = [], checkboxes.filter((function(field) {
-                            return field.checked;
-                        })).forEach((function(fieldEl) {
-                            value.push(fieldEl.value);
-                        }));
-                    } else if (isRadio) {
-                        var checkedRadio = formEl.querySelector('[name="' + name + '"]:checked');
-                        value = null === checkedRadio ? null : checkedRadio.value;
-                    } else if (isSelect) {
-                        var selectedOpts = Array.from(fieldEl.options).filter((function(option) {
-                            return option.selected;
-                        }));
-                        selectedOpts.length > 1 && (value = [], selectedOpts.forEach((function(fieldEl) {
-                            value.push(fieldEl.value);
-                        })));
-                    }
-                    formData[name] = value;
-                })), formData;
-            }
-        }
-    }, options = {
-        fieldOptions: {
-            beforeValidation: [ defaultCallbacksInOptions.fieldOptions.beforeValidation ],
+                }(fieldEl, fieldOptions), fieldOptions.skipUIfeedback || addClass(fieldEl.closest(fieldOptions.questionContainer), fieldOptions.cssClasses.pending);
+            } ],
             cssClasses: {
                 dirty: "is-dirty",
                 error: "has-error",
@@ -182,6 +154,7 @@
             questionContainer: "[data-formjs-question]",
             skipUIfeedback: !1,
             strictHtmlValidation: !0,
+            trimValue: !1,
             validateOnEvents: "input change"
         },
         formOptions: {
@@ -208,7 +181,32 @@
                 submit: "is-submitting",
                 valid: "is-valid"
             },
-            getFormData: defaultCallbacksInOptions.formOptions.getFormData,
+            getFormData: function(filteredFields, trimValues) {
+                var formData = {}, formEl = this.formEl;
+                return filteredFields.forEach((function(fieldEl) {
+                    var isCheckbox = "checkbox" === fieldEl.type, isRadio = "radio" === fieldEl.type, isSelect = fieldEl.matches("select"), name = fieldEl.name, value = trimValues ? fieldEl.value.trim() : fieldEl.value;
+                    if (isCheckbox) {
+                        value = fieldEl.checked;
+                        var checkboxes = Array.from(formEl.querySelectorAll('[name="' + name + '"]'));
+                        if (checkboxes.length > 1) value = [], checkboxes.filter((function(field) {
+                            return field.checked;
+                        })).forEach((function(fieldEl) {
+                            value.push(fieldEl.value);
+                        }));
+                    } else if (isRadio) {
+                        var checkedRadio = formEl.querySelector('[name="' + name + '"]:checked');
+                        value = null === checkedRadio ? null : checkedRadio.value;
+                    } else if (isSelect) {
+                        var selectedOpts = Array.from(fieldEl.options).filter((function(option) {
+                            return option.selected;
+                        }));
+                        selectedOpts.length > 1 && (value = [], selectedOpts.forEach((function(fieldEl) {
+                            value.push(fieldEl.value);
+                        })));
+                    }
+                    formData[name] = value;
+                })), formData;
+            },
             handleSubmit: !0
         }
     }, validationRules = {
@@ -253,7 +251,7 @@
             return obj.result || (obj.errors = {}, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), 
             obj;
         },
-        file: function(value, fieldEl) {
+        file: function(value, fieldEl, fieldOptions) {
             var maxFileSize = 1 * (fieldEl.getAttribute("data-max-file-size") || fieldOptions.maxFileSize), MIMEtype = fieldEl.accept ? new RegExp(fieldEl.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from(fieldEl.files), obj = {
                 result: !0
             };
@@ -286,7 +284,7 @@
         },
         min: function(value, fieldEl) {
             var minVal = fieldEl.min, dateFormat = fieldEl.getAttribute("data-date-format");
-            return ("date" === fieldEl.type || fieldEl.getAttribute("data-date-format")) && (value = getDateAsNumber(value, dateFormat), 
+            return ("date" === fieldEl.type || dateFormat) && (value = getDateAsNumber(value, dateFormat), 
             minVal = minVal.split("-").join("")), {
                 result: (value *= 1) >= (minVal *= 1)
             };
@@ -414,18 +412,18 @@
             }));
         }
     }, validationEnd = function(event) {
-        var eventData = event.data, fieldEl = eventData.fieldEl, options = fieldEl.closest("form").formjs.options.fieldOptions, containerEl = fieldEl.closest(options.questionContainer), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = document.querySelector(fieldEl.getAttribute("data-required-from"));
-        if (null !== containerEl && removeClass(containerEl, options.cssClasses.pending), 
-        null !== containerEl && !options.skipUIfeedback) if (eventData.result) {
+        var eventData = event.data, fieldEl = eventData.fieldEl, dataFieldOptions = getJSONobjectFromFieldAttribute(fieldEl, "data-field-options"), fieldOptions = mergeObjects({}, fieldEl.closest("form").formjs.options.fieldOptions, dataFieldOptions), containerEl = fieldEl.closest(fieldOptions.questionContainer), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = document.querySelector(fieldEl.getAttribute("data-required-from"));
+        if (containerEl && !fieldOptions.skipUIfeedback) if (eventData.result) {
             if (!isReqFrom || isReqFrom && reqMoreEl.checked) {
-                var errorClasses = options.cssClasses.error + " " + options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
-                removeClass(containerEl, errorClasses), addClass(containerEl, options.cssClasses.valid);
+                var errorClasses = fieldOptions.cssClasses.error + " " + fieldOptions.cssClasses.errorEmpty + " " + fieldOptions.cssClasses.errorRule;
+                removeClass(containerEl, errorClasses), addClass(containerEl, fieldOptions.cssClasses.valid);
             }
         } else {
-            var extraErrorClass = options.cssClasses.errorRule, isChecks = fieldEl.matches("[data-checks]"), checkedElLength = isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0;
-            (!isChecks && eventData.errors && eventData.errors.empty || isChecks && 0 === checkedElLength) && (extraErrorClass = options.cssClasses.errorEmpty);
-            var _errorClasses = options.cssClasses.error + " " + extraErrorClass, errorClassToRemove = options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
-            removeClass(containerEl, options.cssClasses.valid + " " + errorClassToRemove), addClass(containerEl, _errorClasses);
+            var extraErrorClass = fieldOptions.cssClasses.errorRule, isChecks = fieldEl.matches("[data-checks]"), checkedElLength = isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0;
+            (!isChecks && eventData.errors && eventData.errors.empty || isChecks && 0 === checkedElLength) && (extraErrorClass = fieldOptions.cssClasses.errorEmpty);
+            var _errorClasses = fieldOptions.cssClasses.error + " " + extraErrorClass, errorClassToRemove = fieldOptions.cssClasses.errorEmpty + " " + fieldOptions.cssClasses.errorRule;
+            removeClass(containerEl, fieldOptions.cssClasses.valid + " " + errorClassToRemove), 
+            addClass(containerEl, _errorClasses);
         }
     };
     function formStartup(formEl, options) {
@@ -471,8 +469,8 @@
             });
             return Promise.resolve(obj);
         }
-        var formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0;
-        if ("radio" === fieldEl.type) {
+        var formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0, dataFieldOptions = getJSONobjectFromFieldAttribute(fieldEl, "data-field-options");
+        if (fieldOptions = mergeObjects(fieldOptions, dataFieldOptions), "radio" === fieldEl.type) {
             var checkedEl = fieldEl.checked ? fieldEl : formEl.querySelector('[name="' + fieldEl.name + '"]:checked'), reqMoreIsChecked = checkedEl && checkedEl.matches("[data-require-more]"), findReqMoreEl = reqMoreIsChecked ? checkedEl : formEl.querySelector('[data-require-more][name="' + fieldEl.name + '"]'), findReqFromEl = findReqMoreEl ? formEl.querySelector('[data-required-from="#' + findReqMoreEl.id + '"]') : null;
             checkedEl && findReqFromEl && (findReqFromEl.required = findReqMoreEl.required && findReqMoreEl.checked, 
             reqMoreIsChecked ? fieldOptions.focusOnRelated && findReqFromEl.focus() : findReqFromEl.value = "");
@@ -485,7 +483,8 @@
         return runFunctionsSequence({
             functionsList: fieldOptions.beforeValidation,
             data: {
-                fieldEl: fieldEl
+                fieldEl: fieldEl,
+                fieldOptions: fieldOptions
             }
         }).then((function(data) {
             var dataObj = data.pop();
@@ -527,6 +526,10 @@
                     }));
                 }(fieldEl, fieldOptions, validationRules, validationErrors) : dataObj);
             }));
+        })).then((function(data) {
+            var containerEl = fieldOptions.questionContainer && data.fieldEl.closest(fieldOptions.questionContainer);
+            return containerEl && removeClass(containerEl, fieldOptions.cssClasses.pending), 
+            data;
         }));
     }
     function checkFormValidity(formEl, fieldOptions, validationRules, validationErrors) {
@@ -605,10 +608,10 @@
         }, {
             key: "getFormData",
             value: function() {
-                var formFieldsEl = this.formEl.querySelectorAll("input, select, textarea"), filteredFields = Array.from(formFieldsEl).filter((function(elem) {
-                    return elem.matches(':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])');
+                var trimValues = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : this.options.fieldOptions.trimValue, formFieldsEl = this.formEl.querySelectorAll("input, select, textarea"), filteredFields = Array.from(formFieldsEl).filter((function(elem) {
+                    return elem.matches(excludeSelector);
                 }));
-                return this.options.formOptions.getFormData(filteredFields);
+                return this.options.formOptions.getFormData(filteredFields, trimValues);
             }
         }, {
             key: "init",
@@ -660,6 +663,6 @@
             }
             return obj;
         }
-    }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.3.4", 
+    }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.4.0", 
     Form;
 }));

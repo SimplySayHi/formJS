@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Callback "beforeValidation" - Demos | formJS - JavaScript Form Validation. Made Easy</title>
+    <title>HTML Attribute data-field-options - Demos | formJS - JavaScript Form Validation. Made Easy</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="Valerio Di Punzio">
@@ -60,7 +60,18 @@
                 <h4 class="my-0">Demos</h4>
             </div>
             
-            <h2 class="border-0 mt-2 mb-4 pt-0">Callback "beforeValidation"</h2>
+            <h2 class="border-0 mt-2 mb-4 pt-0">HTML Attribute data-field-options</h2>
+            <p>
+                HTML attribute <code>data-field-options</code> can be placed:
+            </p>
+            <ul>
+                <li>
+                    directly on the field itself: see email input
+                </li>
+                <li>
+                    on one of the parents of the field(s): see checkboxes
+                </li>
+            </ul>
 
             <div class="row justify-content-center">
                 <div class="col-md-6 col-lg-7 col-xl-8 order-6 order-md-1">
@@ -90,12 +101,12 @@
     &lt;/div&gt;
     &lt;div data-formjs-question class="form-group"&gt;
         &lt;div class="answers-box label-move-up"&gt;
-            &lt;input name="email" type="email" class="form-control" required /&gt;
+            &lt;input name="email" type="email" class="form-control" required data-field-options='{"trimValue": true}' /&gt;
             &lt;label&gt;Email&lt;/label&gt;
         &lt;/div&gt;
         &lt;div class="field-error-message small"&gt;Check your email address, it is not valid!&lt;/div&gt;
     &lt;/div&gt;
-    &lt;div data-formjs-question class="form-group"&gt;
+    &lt;div data-formjs-question class="form-group" data-field-options='{"cssClasses": {"valid": "is-valid is-valid-checks"}}'&gt;
         &lt;p class="mb-2 small"&gt;Select your contact preferences &lt;br /&gt;( 2 answers max )&lt;/p&gt;
         &lt;div class="answers-box"&gt;
             &lt;div class="form-check"&gt;
@@ -151,19 +162,7 @@
                             <div class="card-body p-0">
                                 <pre class="m-0">
 <code class="language-js">const formEl = document.querySelector('form');
-const options = {
-    fieldOptions: {
-        beforeValidation: function( fieldObj ){
-            const fieldEl = fieldObj.fieldEl;
-            if( fieldEl.matches('[type="email"]') && fieldEl.value ){
-                console.log('beforeValidation fieldObj', fieldObj);
-                console.log('TRANSFORM FIELD VALUE TO UPPERCASE');
-                fieldEl.value = fieldEl.value.toUpperCase();
-            }
-        }
-    }
-};
-const formInstance = new Form( formEl, options );
+const formInstance = new Form( formEl );
 
 // INITIALIZATION ( OPTIONAL )
 formInstance.init().then(obj => {
@@ -199,12 +198,12 @@ formInstance.init().then(obj => {
                                 </div>
                                 <div data-formjs-question class="form-group">
                                     <div class="answers-box label-move-up">
-                                        <input name="email" type="email" class="form-control" required />
+                                        <input name="email" type="email" class="form-control" required data-field-options='{"trimValue": true}' />
                                         <label>Email</label>
                                     </div>
                                     <div class="field-error-message small">Check your email address, it is not valid!</div>
                                 </div>
-                                <div data-formjs-question class="form-group">
+                                <div data-formjs-question class="form-group" data-field-options='{"cssClasses": {"valid": "is-valid is-valid-checks"}}'>
                                     <p class="mb-2 small">Select your contact preferences <br />( 2 answers max )</p>
                                     <div class="answers-box">
                                         <div class="form-check">
@@ -268,19 +267,7 @@ formInstance.init().then(obj => {
     <script src="../dist/formjs.min.js"></script>
     <script>
         var formEl = document.querySelector('form');
-        var options = {
-            fieldOptions: {
-                beforeValidation: function( fieldObj ){
-                    var fieldEl = fieldObj.fieldEl;
-                    if( fieldEl.matches('[type="email"]') && fieldEl.value ){
-                        console.log('beforeValidation fieldObj', fieldObj);
-                        console.log('TRANSFORM FIELD VALUE TO UPPERCASE');
-                        fieldEl.value = fieldEl.value.toUpperCase();
-                    }
-                }
-            }
-        };
-        var formInstance = new Form( formEl, options );
+        var formInstance = new Form( formEl );
 
         // INITIALIZATION ( OPTIONAL )
         formInstance.init().then(function(obj){

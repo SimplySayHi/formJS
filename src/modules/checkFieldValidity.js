@@ -1,6 +1,12 @@
 
-import { getValidateFieldDefault, isDOMNode, runFunctionsSequence } from './helpers';
-import { isValid } from './isValid';
+import {    getJSONobjectFromFieldAttribute,
+            getValidateFieldDefault,
+            isDOMNode,
+            mergeObjects,
+            removeClass,
+            runFunctionsSequence 
+        }           from './helpers';
+import { isValid }  from './isValid';
 
 export function checkFieldValidity( fieldEl, fieldOptions, validationRules, validationErrors ){
 
@@ -10,7 +16,10 @@ export function checkFieldValidity( fieldEl, fieldOptions, validationRules, vali
     }
 
     const formEl = fieldEl.closest('form'),
-          isValidValue = fieldEl.value.trim().length > 0;
+          isValidValue = fieldEl.value.trim().length > 0,
+          dataFieldOptions = getJSONobjectFromFieldAttribute( fieldEl, 'data-field-options' );
+
+    fieldOptions = mergeObjects( fieldOptions, dataFieldOptions );
 
      // HANDLE FIELDS radio/data-require-more
      if( fieldEl.type === 'radio' ){
@@ -40,7 +49,7 @@ export function checkFieldValidity( fieldEl, fieldOptions, validationRules, vali
 
     return runFunctionsSequence({
             functionsList: fieldOptions.beforeValidation,
-            data: {fieldEl}
+            data: { fieldEl, fieldOptions }
         })
         .then(data => {
             const dataObj = data.pop();
@@ -50,6 +59,14 @@ export function checkFieldValidity( fieldEl, fieldOptions, validationRules, vali
                 }
                 resolve( needsValidation ? isValid(fieldEl, fieldOptions, validationRules, validationErrors) : dataObj );
             });
-        });
+        })
+        .then(data => {
+            const containerEl = fieldOptions.questionContainer && data.fieldEl.closest( fieldOptions.questionContainer );
+            if( containerEl ){
+                removeClass( containerEl, fieldOptions.cssClasses.pending );
+            }
+            return data;
+        })
+        ;
 
 }

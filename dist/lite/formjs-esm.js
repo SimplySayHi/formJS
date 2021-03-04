@@ -1,4 +1,4 @@
-/* formJS Lite v4.3.4 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS Lite v4.4.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 const isDOMNode = node => Element.prototype.isPrototypeOf(node), isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
     return Array.from(arguments).slice(1).filter(arg => !!arg).forEach(arg => {
         Object.keys(arg).forEach(key => {
@@ -68,7 +68,7 @@ const isDOMNode = node => Element.prototype.isPrototypeOf(node), isPlainObject =
         return obj.result || (obj.errors = {}, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), 
         obj;
     },
-    file: function(value, fieldEl) {
+    file: function(value, fieldEl, fieldOptions) {
         const maxFileSize = 1 * (fieldEl.getAttribute("data-max-file-size") || fieldOptions.maxFileSize), MIMEtype = fieldEl.accept ? new RegExp(fieldEl.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from(fieldEl.files), obj = {
             result: !0
         };
@@ -103,7 +103,7 @@ const isDOMNode = node => Element.prototype.isPrototypeOf(node), isPlainObject =
     min: function(value, fieldEl) {
         let minVal = fieldEl.min;
         const dateFormat = fieldEl.getAttribute("data-date-format");
-        return ("date" === fieldEl.type || fieldEl.getAttribute("data-date-format")) && (value = getDateAsNumber(value, dateFormat), 
+        return ("date" === fieldEl.type || dateFormat) && (value = getDateAsNumber(value, dateFormat), 
         minVal = minVal.split("-").join("")), minVal *= 1, {
             result: (value *= 1) >= minVal
         };
@@ -133,8 +133,11 @@ function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationEr
         });
         return Promise.resolve(obj);
     }
-    const formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0;
-    if ("radio" === fieldEl.type) {
+    const formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0, dataFieldOptions = ((fieldEl, attrName) => {
+        const customAttrEl = fieldEl.closest("[" + attrName + "]");
+        return customAttrEl && JSON.parse(customAttrEl.getAttribute(attrName)) || {};
+    })(fieldEl, "data-field-options");
+    if (fieldOptions = mergeObjects(fieldOptions, dataFieldOptions), "radio" === fieldEl.type) {
         const checkedEl = fieldEl.checked ? fieldEl : formEl.querySelector('[name="' + fieldEl.name + '"]:checked'), reqMoreIsChecked = checkedEl && checkedEl.matches("[data-require-more]"), findReqMoreEl = reqMoreIsChecked ? checkedEl : formEl.querySelector('[data-require-more][name="' + fieldEl.name + '"]'), findReqFromEl = findReqMoreEl ? formEl.querySelector('[data-required-from="#' + findReqMoreEl.id + '"]') : null;
         checkedEl && findReqFromEl && (findReqFromEl.required = findReqMoreEl.required && findReqMoreEl.checked, 
         reqMoreIsChecked ? fieldOptions.focusOnRelated && findReqFromEl.focus() : findReqFromEl.value = "");
@@ -152,7 +155,8 @@ function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationEr
     }), Promise.resolve([ data ])).then(dataList => dataList.length > 1 ? dataList.slice(1) : dataList))({
         functionsList: fieldOptions.beforeValidation,
         data: {
-            fieldEl: fieldEl
+            fieldEl: fieldEl,
+            fieldOptions: fieldOptions
         }
     }).then(data => {
         const dataObj = data.pop();
@@ -188,6 +192,12 @@ function checkFieldValidity(fieldEl, fieldOptions, validationRules, validationEr
                 }, data.errors), data.errors.rule = !0), data));
             }(fieldEl, fieldOptions, validationRules, validationErrors) : dataObj);
         });
+    }).then(data => {
+        const containerEl = fieldOptions.questionContainer && data.fieldEl.closest(fieldOptions.questionContainer);
+        var element;
+        return containerEl && (element = containerEl, fieldOptions.cssClasses.pending.split(" ").forEach(className => {
+            element.classList.remove(className);
+        })), data;
     });
 }
 
@@ -270,6 +280,6 @@ Form.prototype.options = {
         maxFileSize: 10
     }
 }, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-Form.prototype.version = "4.3.4";
+Form.prototype.version = "4.4.0";
 
 export default Form;

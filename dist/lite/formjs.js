@@ -1,4 +1,4 @@
-/* formJS Lite v4.3.4 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS Lite v4.4.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 !function(global, factory) {
     "object" == typeof exports && "undefined" != typeof module ? module.exports = factory() : "function" == typeof define && define.amd ? define(factory) : (global = "undefined" != typeof globalThis ? globalThis : global || self).Form = factory();
 }(this, (function() {
@@ -119,7 +119,7 @@
             return obj.result || (obj.errors = {}, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), 
             obj;
         },
-        file: function(value, fieldEl) {
+        file: function(value, fieldEl, fieldOptions) {
             var maxFileSize = 1 * (fieldEl.getAttribute("data-max-file-size") || fieldOptions.maxFileSize), MIMEtype = fieldEl.accept ? new RegExp(fieldEl.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from(fieldEl.files), obj = {
                 result: !0
             };
@@ -152,7 +152,7 @@
         },
         min: function(value, fieldEl) {
             var minVal = fieldEl.min, dateFormat = fieldEl.getAttribute("data-date-format");
-            return ("date" === fieldEl.type || fieldEl.getAttribute("data-date-format")) && (value = getDateAsNumber(value, dateFormat), 
+            return ("date" === fieldEl.type || dateFormat) && (value = getDateAsNumber(value, dateFormat), 
             minVal = minVal.split("-").join("")), {
                 result: (value *= 1) >= (minVal *= 1)
             };
@@ -181,8 +181,11 @@
             });
             return Promise.resolve(obj);
         }
-        var formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0;
-        if ("radio" === fieldEl.type) {
+        var formEl = fieldEl.closest("form"), isValidValue = fieldEl.value.trim().length > 0, dataFieldOptions = function(fieldEl, attrName) {
+            var customAttrEl = fieldEl.closest("[" + attrName + "]");
+            return customAttrEl && JSON.parse(customAttrEl.getAttribute(attrName)) || {};
+        }(fieldEl, "data-field-options");
+        if (fieldOptions = mergeObjects(fieldOptions, dataFieldOptions), "radio" === fieldEl.type) {
             var checkedEl = fieldEl.checked ? fieldEl : formEl.querySelector('[name="' + fieldEl.name + '"]:checked'), reqMoreIsChecked = checkedEl && checkedEl.matches("[data-require-more]"), findReqMoreEl = reqMoreIsChecked ? checkedEl : formEl.querySelector('[data-require-more][name="' + fieldEl.name + '"]'), findReqFromEl = findReqMoreEl ? formEl.querySelector('[data-required-from="#' + findReqMoreEl.id + '"]') : null;
             checkedEl && findReqFromEl && (findReqFromEl.required = findReqMoreEl.required && findReqMoreEl.checked, 
             reqMoreIsChecked ? fieldOptions.focusOnRelated && findReqFromEl.focus() : findReqFromEl.value = "");
@@ -212,7 +215,8 @@
         }({
             functionsList: fieldOptions.beforeValidation,
             data: {
-                fieldEl: fieldEl
+                fieldEl: fieldEl,
+                fieldOptions: fieldOptions
             }
         }).then((function(data) {
             var dataObj = data.pop();
@@ -254,6 +258,11 @@
                     }));
                 }(fieldEl, fieldOptions, validationRules, validationErrors) : dataObj);
             }));
+        })).then((function(data) {
+            var element, containerEl = fieldOptions.questionContainer && data.fieldEl.closest(fieldOptions.questionContainer);
+            return containerEl && (element = containerEl, fieldOptions.cssClasses.pending.split(" ").forEach((function(className) {
+                element.classList.remove(className);
+            }))), data;
         }));
     }
     var Form = function() {
@@ -335,5 +344,5 @@
             maxFileSize: 10
         }
     }, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-    Form.prototype.version = "4.3.4", Form;
+    Form.prototype.version = "4.4.0", Form;
 }));

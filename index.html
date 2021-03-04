@@ -103,7 +103,7 @@
                     <div class="mt-auto">
                         <div class="mt-3">
                             <p class="m-0">
-                                Only 6KB ( <span class="badge badge-pill badge-yellow">Lite</span> version 3.1KB - minified &amp; gzipped )
+                                Only 6.1KB ( <span class="badge badge-pill badge-yellow">Lite</span> version 3.2KB - minified &amp; gzipped )
                             </p>
                             <p class="m-0">
                                 Download
@@ -126,7 +126,7 @@
                                 <div class="nl-text-box nl-text-in text-right align-self-end">
                                     <p>Yep! I'd like to book <br />a room for </p>
                                     <div data-formjs-question>
-                                        <select name="guests" class="form-control" required>
+                                        <select name="guests" class="custom-select" required>
                                             <option value=""># people</option>
                                             <option value="1">1 person</option>
                                             <option value="2">2 people</option>
@@ -206,9 +206,30 @@
                     <div class="media-body pl-2">
                         <ul>
                             <li>
-                                Enabled validation for "change" event only ( full version only )
-                                <br />
-                                NOTE: This patch was released after publishing v5.0.0, so it's shipped in v5 only from v5.0.2
+                                Added "trimValue" in "fieldOptions" ( full version only )
+                            </li>
+                            <li>
+                                Added argument "trimValues" for method "getFormData" ( full version only )
+                            </li>
+                            <li>
+                                Added HTML attribute "data-field-options" to enable specific field options for single fields
+                            </li>
+                            <li>
+                                Added "fieldOptions" to data passed to "beforeValidation" callback(s)
+                            </li>
+                            <li>
+                                Fixed bug where "fieldOptions" argument was not declared in validation method for input type "file" 
+                            </li>
+                            <li>
+                                Fixed bug where css class(es) for "pending" were not removed when enabling fieldOptions.onValidationCheckAll ( full version only )
+                            </li>
+                            <li>
+                                <span class="text-red">DEPRECATED</span> features:
+                                <ul>
+                                    <li>
+                                        HTML attribute "data-max-file-size" in favor of "maxFileSize" in "fieldOptions" and/or HTML attribute "data-field-options"
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -223,6 +244,18 @@
                 <div class="toggable-content">
                     <ul class="p-0">
 
+                        <li class="media my-3">
+                            <div class="version-num text-red">4.3.4</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Enabled validation for "change" event only ( full version only )
+                                        <br />
+                                        NOTE: This patch was released after publishing v5.0.0, so it's shipped in v5 only from v5.0.2
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="media my-3">
                             <div class="version-num text-red">4.3.3</div>
                             <div class="media-body pl-2">

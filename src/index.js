@@ -56,10 +56,10 @@ class Form {
         destroy(this.formEl, this.options);
     }
     
-    getFormData(){
+    getFormData( trimValues = this.options.fieldOptions.trimValue ){
         const formFieldsEl = this.formEl.querySelectorAll('input, select, textarea'),
               filteredFields = Array.from( formFieldsEl ).filter( elem => elem.matches(excludeSelector) );
-        return this.options.formOptions.getFormData(filteredFields);
+        return this.options.formOptions.getFormData( filteredFields, trimValues );
     }
 
     init(){

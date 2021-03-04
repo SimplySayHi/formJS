@@ -1,10 +1,10 @@
 
-import { defaultCallbacksInOptions } from './optionsUtils';
+import { beforeValidation, getFormData } from './optionsUtils';
 
 export const options = {
 
     fieldOptions: {
-        beforeValidation:       [defaultCallbacksInOptions.fieldOptions.beforeValidation],
+        beforeValidation:       [beforeValidation],
         cssClasses: {
             dirty:              'is-dirty',
             error:              'has-error',
@@ -22,6 +22,7 @@ export const options = {
         questionContainer:      '[data-formjs-question]',
         skipUIfeedback:         false,
         strictHtmlValidation:   true,
+        trimValue:              false,
         validateOnEvents:       'input change'
     },
 
@@ -49,7 +50,7 @@ export const options = {
             submit:             'is-submitting',
             valid:              'is-valid'
         },
-        getFormData:            defaultCallbacksInOptions.formOptions.getFormData,
+        getFormData:            getFormData,
         handleSubmit:           true
     }
     
