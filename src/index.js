@@ -67,10 +67,10 @@ class Form {
         destroy(this.$form, this.options);
     }
     
-    getFormData(){
+    getFormData( trimValues = this.options.fieldOptions.trimValue ){
         const $formFields = this.$form.querySelectorAll('input, select, textarea'),
               $filteredFields = Array.from( $formFields ).filter( elem => elem.matches(excludeSelector) );
-        return this.options.formOptions.getFormData($filteredFields);
+        return this.options.formOptions.getFormData( $filteredFields, trimValues );
     }
 
     validateField( field, fieldOptions ){

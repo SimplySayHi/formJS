@@ -1,6 +1,12 @@
 
-import { mergeValidateFieldDefault, isDOMNode, runFunctionsSequence } from './helpers';
-import { isValid } from './isValid';
+import {    getJSONobjectFromFieldAttribute,
+            isDOMNode,
+            mergeObjects,
+            mergeValidateFieldDefault,
+            removeClass,
+            runFunctionsSequence
+        }           from './helpers';
+import { isValid }  from './isValid';
 
 export function checkFieldValidity( $field, fieldOptions, validationRules, validationErrors ){
 
@@ -10,7 +16,10 @@ export function checkFieldValidity( $field, fieldOptions, validationRules, valid
     }
 
     const $form = $field.closest('form'),
-          isValidValue = $field.value.trim().length > 0;
+          isValidValue = $field.value.trim().length > 0,
+          dataFieldOptions = getJSONobjectFromFieldAttribute( $field, 'data-field-options' );
+
+    fieldOptions = mergeObjects( fieldOptions, dataFieldOptions );
 
     // HANDLE FIELD data-required-from WHEN CHANGING ITS RELATED RADIO
     if( $field.type === 'radio' ){
@@ -40,7 +49,7 @@ export function checkFieldValidity( $field, fieldOptions, validationRules, valid
 
     return runFunctionsSequence({
             functionsList: fieldOptions.beforeValidation,
-            data: {$field}
+            data: { $field, fieldOptions }
         })
         .then(data => {
             const dataObj = data.pop();
@@ -48,8 +57,16 @@ export function checkFieldValidity( $field, fieldOptions, validationRules, valid
                 if( !needsValidation ){
                     dataObj.result = true;
                 }
-                resolve( needsValidation ? isValid($field, validationRules, validationErrors) : dataObj );
+                resolve( needsValidation ? isValid($field, fieldOptions, validationRules, validationErrors) : dataObj );
             });
-        });
+        })
+        .then(data => {
+            const $container = fieldOptions.questionContainer && data.$field.closest( fieldOptions.questionContainer );
+            if( $container ){
+                removeClass( $container, fieldOptions.cssClasses.pending );
+            }
+            return data;
+        })
+        ;
 
 }

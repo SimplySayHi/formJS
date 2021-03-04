@@ -9,6 +9,7 @@ export { fieldsStringSelector }     from './helpers/fieldsStringSelector';
 export { finalizeFieldPromise }     from './helpers/finalizeFieldPromise';
 export { finalizeFormPromise }      from './helpers/finalizeFormPromise';
 export { getDateAsNumber }          from './helpers/getDateAsNumber';
+export { getJSONobjectFromFieldAttribute } from './helpers/getJSONobjectFromFieldAttribute';
 export { getSplitChar }             from './helpers/getSplitChar';
 export { getFilledFields }          from './helpers/getFilledFields';
 export { getUniqueFields }          from './helpers/getUniqueFields';

@@ -1,4 +1,4 @@
-/* formJS Lite v5.0.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS Lite v5.1.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 System.register([], (function(exports) {
     "use strict";
     return {
@@ -123,8 +123,8 @@ System.register([], (function(exports) {
                     return obj.result || (obj.errors = {}, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), 
                     obj;
                 },
-                file: function(value, $field) {
-                    var maxFileSize = 1 * ($field.getAttribute("data-max-file-size") || 0), MIMEtype = $field.accept ? new RegExp($field.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from($field.files), obj = {
+                file: function(value, $field, fieldOptions) {
+                    var maxFileSize = 1 * ($field.getAttribute("data-max-file-size") || fieldOptions.maxFileSize), MIMEtype = $field.accept ? new RegExp($field.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from($field.files), obj = {
                         result: !0
                     };
                     return filesList.forEach((function(file) {
@@ -154,7 +154,7 @@ System.register([], (function(exports) {
                 },
                 min: function(value, $field) {
                     var minVal = $field.min, dateFormat = $field.getAttribute("data-date-format");
-                    return ("date" === $field.type || $field.getAttribute("data-date-format")) && (value = getDateAsNumber(value, dateFormat), 
+                    return ("date" === $field.type || dateFormat) && (value = getDateAsNumber(value, dateFormat), 
                     minVal = minVal.split("-").join("")), {
                         result: (value *= 1) >= (minVal *= 1)
                     };
@@ -183,8 +183,9 @@ System.register([], (function(exports) {
                     });
                     return Promise.resolve(obj);
                 }
-                var $form = $field.closest("form"), isValidValue = $field.value.trim().length > 0;
-                if ("radio" === $field.type) {
+                var attrName, customAttrEl, $form = $field.closest("form"), isValidValue = $field.value.trim().length > 0, dataFieldOptions = (attrName = "data-field-options", 
+                (customAttrEl = $field.closest("[" + attrName + "]")) && JSON.parse(customAttrEl.getAttribute(attrName)) || {});
+                if (fieldOptions = mergeObjects(fieldOptions, dataFieldOptions), "radio" === $field.type) {
                     var $checked = $field.checked ? $field : $form.querySelector('[name="' + $field.name + '"]:checked'), reqMoreIsChecked = $checked && $checked.matches("[data-require-more]"), $findReqMore = reqMoreIsChecked ? $checked : $form.querySelector('[data-require-more][name="' + $field.name + '"]'), $findReqFrom = $findReqMore ? $form.querySelector('[data-required-from="#' + $findReqMore.id + '"]') : null;
                     $checked && $findReqFrom && ($findReqFrom.required = $findReqMore.required && $findReqMore.checked, 
                     reqMoreIsChecked ? fieldOptions.focusOnRelated && $findReqFrom.focus() : $findReqFrom.value = "");
@@ -214,12 +215,13 @@ System.register([], (function(exports) {
                 }({
                     functionsList: fieldOptions.beforeValidation,
                     data: {
-                        $field: $field
+                        $field: $field,
+                        fieldOptions: fieldOptions
                     }
                 }).then((function(data) {
                     var dataObj = data.pop();
                     return new Promise((function(resolve) {
-                        needsValidation || (dataObj.result = !0), resolve(needsValidation ? function($field, validationRules, validationErrors) {
+                        needsValidation || (dataObj.result = !0), resolve(needsValidation ? function($field, fieldOptions, validationRules, validationErrors) {
                             var fieldValue = $field.value, obj = mergeValidateFieldDefault({
                                 result: fieldValue.trim().length > 0,
                                 $field: $field
@@ -237,7 +239,7 @@ System.register([], (function(exports) {
                                 resolve(validationMethods.reduce((function(accPromise, methodName) {
                                     return accPromise.then((function(accObj) {
                                         return new Promise((function(resolveVal) {
-                                            resolveVal(validationRules[methodName](fieldValue, $field));
+                                            resolveVal(validationRules[methodName](fieldValue, $field, fieldOptions));
                                         })).then((function(valObj) {
                                             if (!valObj.result) {
                                                 var errorObj = {};
@@ -254,8 +256,13 @@ System.register([], (function(exports) {
                                     return mergeObjects(accObj, errors);
                                 }), data.errors)), data;
                             }));
-                        }($field, validationRules, validationErrors) : dataObj);
+                        }($field, fieldOptions, validationRules, validationErrors) : dataObj);
                     }));
+                })).then((function(data) {
+                    var element, $container = fieldOptions.questionContainer && data.$field.closest(fieldOptions.questionContainer);
+                    return $container && (element = $container, fieldOptions.cssClasses.pending.split(" ").forEach((function(className) {
+                        element.classList.remove(className);
+                    }))), data;
                 }));
             }
             var Form = exports("default", function() {
@@ -333,10 +340,11 @@ System.register([], (function(exports) {
             Form.prototype.options = {
                 fieldOptions: {
                     beforeValidation: [],
-                    focusOnRelated: !0
+                    focusOnRelated: !0,
+                    maxFileSize: 10
                 }
             }, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-            Form.prototype.version = "5.0.2";
+            Form.prototype.version = "5.1.0";
         }
     };
 }));

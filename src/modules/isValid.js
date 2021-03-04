@@ -1,7 +1,7 @@
 
 import { mergeValidateFieldDefault, mergeObjects, toCamelCase } from './helpers';
 
-export function isValid( $field, validationRules, validationErrors ){
+export function isValid( $field, fieldOptions, validationRules, validationErrors ){
 
     const fieldValue = $field.value,
           obj = mergeValidateFieldDefault({result: fieldValue.trim().length > 0, $field}),
@@ -34,7 +34,7 @@ export function isValid( $field, validationRules, validationErrors ){
             return accPromise.then(accObj => {
                 return new Promise(resolveVal => {
                     // RUN VALIDATION INSIDE A PROMISE IS USEFUL FOR ASYNC VALIDATIONS
-                    resolveVal( validationRules[methodName](fieldValue, $field) );
+                    resolveVal( validationRules[methodName](fieldValue, $field, fieldOptions) );
                 }).then(valObj => {
                     // ADD CUSTOM ERROR-KEY FOR EACH VALIDATION RULE
                     if( !valObj.result ){

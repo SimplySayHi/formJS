@@ -3,7 +3,8 @@ export const options = {
 
     fieldOptions: {
         beforeValidation:       [],
-        focusOnRelated:         true
+        focusOnRelated:         true,
+        maxFileSize:            10
     }
     
 }

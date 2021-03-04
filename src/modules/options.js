@@ -1,10 +1,10 @@
 
-import { defaultCallbacksInOptions } from './optionsUtils';
+import { beforeValidation, getFormData } from './optionsUtils';
 
 export const options = {
 
     fieldOptions: {
-        beforeValidation:       [defaultCallbacksInOptions.fieldOptions.beforeValidation],
+        beforeValidation:       [beforeValidation],
         cssClasses: {
             dirty:              'is-dirty',
             error:              'has-error',
@@ -14,11 +14,13 @@ export const options = {
             valid:              'is-valid'
         },
         focusOnRelated:         true,
+        maxFileSize:            10,
         onValidationCheckAll:   false,
         preventPasteFields:     '[type="password"], [data-equal-to]',
         questionContainer:      '[data-formjs-question]',
         skipUIfeedback:         false,
         strictHtmlValidation:   true,
+        trimValue:              false,
         validateOnEvents:       'input change'
     },
 
@@ -46,7 +48,7 @@ export const options = {
             submit:             'is-submitting',
             valid:              'is-valid'
         },
-        getFormData:            defaultCallbacksInOptions.formOptions.getFormData,
+        getFormData:            getFormData,
         handleFileUpload:       true,
         handleSubmit:           true,
         onInitCheckFilled:      true
