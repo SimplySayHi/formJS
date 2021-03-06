@@ -90,6 +90,9 @@
                                 <li>
                                     focusOnRelated
                                 </li>
+                                <li>
+                                    maxFileSize
+                                </li>
                             </ul>
                         </div>
                         <div class="col-sm-6 col-md-3">
@@ -110,7 +113,7 @@
                             <h3 class="small-title mt-3">Static</h3>
                             <ul>
                                 <li>
-                                    as main version
+                                    as full version
                                 </li>
                             </ul>
                         </div>
@@ -118,7 +121,7 @@
                             <h3 class="small-title mt-3">Validations</h3>
                             <ul>
                                 <li>
-                                    as main version
+                                    as full version
                                 </li>
                             </ul>
                         </div>
@@ -145,7 +148,22 @@
             <!-- Field Options -->
             <div id="field-options">
                 <h3 class="sticky-title mt-0 ml-4em bg-transparent"><span class="small">Field Options</span></h3>
-                <div class="panel panel-default panel-transparent no-bg mt-5">
+                <p class="mt-5 mb-0">
+                    Field options that will be used for every field of the form.
+                    <br /><br />
+                    You can also set specific field options for a specific field or group of checkboxes/radios via HTML attribute <code class="text-green">data-field-options</code> as JSON string ( <a href="./demos/demo-data-field-options.html">see demo</a> ).
+                    <br />
+                    This is the list of field options you can set:
+                </p>
+                <ul>
+                    <li>cssClasses</li>
+                    <li>focusOnRelated</li>
+                    <li>maxFileSize</li>
+                    <li>questionContainer</li>
+                    <li>skipUIfeedback</li>
+                    <li>trimValue</li>
+                </ul>
+                <div class="panel panel-default panel-transparent no-bg">
                     <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
                         <div class="d-flex">
                             <div class="col-xl-4 d-none d-xl-block">
@@ -165,6 +183,9 @@
                             <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">beforeValidation</pre>
                                 <span class="badge badge-pill badge-yellow">Lite</span>
+                                <div class="mt-1">
+                                    <a href="./demos/demo-callback-before-validation.html">see demo</a>
+                                </div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-4 col-xl-3">
@@ -177,7 +198,7 @@
                                     Fires just before a field is being validated and it is executed as Promise ( or chain/sequence of Promises if as array ).
                                 </p>
                                 <p>
-                                    Additionally, the "this" keyword is bound to the Form instance.
+                                    Additionally, the keyword <code>this</code> is bound to the Form instance.
                                 </p>
                                 <div class="card-footer bg-transparent pb-0 px-0">
                                     <p class="text-green">
@@ -185,15 +206,19 @@
                                     </p>
                                     <ul>
                                         <li>
-                                            fieldObj: ( Object )
+                                            data: ( Object )
 <pre>
 <code class="language-js">{
-    $field: $field
+    $field: $field,
+    fieldOptions: {...}
 }
 </code></pre>
                                             <ul>
                                                 <li>
                                                     $field: JS node element ( the field that will be validated )
+                                                </li>
+                                                <li>
+                                                    fieldOptions: JS object ( field options from the form instance merged with field specific options from <code>data-field-options</code> if present )
                                                 </li>
                                             </ul>
                                         </li>
@@ -252,6 +277,27 @@
                             <div class="col-lg-8 col-xl-5">
                                 <p>
                                     Whether or not to focus on the related ( input / select ) field when selecting its radio answer 
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                            <div class="col-lg-auto col-xl-4">
+                                <pre class="text-green">maxFileSize</pre>
+                                <span class="badge badge-pill badge-yellow">Lite</span>
+                            </div>
+                            <div class="w-100 d-xl-none"></div>
+                            <div class="col-lg-4 col-xl-3">
+                                number
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-8 col-xl-5">
+                                <p>
+                                    Size limit ( in MB ) for each file to upload.<br />
+                                    Set to 0 ( zero ) if you want to disable the size check.<br />
+                                    Can also be set on the specific field via attribute <code>data-max-file-size</code> to set a custom limit.
+                                </p>
+                                <p>
+                                    HTML attribute <code>data-max-file-size</code> is now <span class="text-red">DEPRECATED</span> and will be removed soon.
                                 </p>
                             </div>
                         </div>
@@ -357,7 +403,28 @@
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
+                                <pre class="text-green">trimValue</pre>
+                            </div>
+                            <div class="w-100 d-xl-none"></div>
+                            <div class="col-lg-4 col-xl-3">
+                                boolean
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-8 col-xl-5">
+                                <p>
+                                    Whether or not to trim the field value before running the validation ( select, checkbox, radio and file input are not trimmed ).
+                                </p>
+                                <p>
+                                    <span class="text-green">Tip</span>: use this option with caution. If set to true and <code>validateOnEvents</code> contains "input", this will prevent the user to type spaces at the beginning/end and leads to a bad user experience.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                            <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">validateOnEvents</pre>
+                                <div class="mt-1">
+                                    <a href="./demos/demo-option-validate-on-events.html">see demo</a>
+                                </div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-4 col-xl-3">
@@ -393,11 +460,13 @@
         valid:              'is-valid'
     },
     focusOnRelated:         true,
+    maxFileSize:            10,
     onValidationCheckAll:   false,
     preventPasteFields:     '[type="password"], [data-equal-to]',
     questionContainer:      '[data-formjs-question]',
     skipUIfeedback:         false,
     strictHtmlValidation:   true,
+    trimValue:              false,
     validateOnEvents:       'input change'
 }
 
@@ -495,7 +564,7 @@
                                     </li>
                                 </ul>
                                 <p>
-                                    Additionally, the "this" keyword is bound to the Form instance.
+                                    Additionally, the keyword <code>this</code> is bound to the Form instance.
                                 </p>
                             </div>
                             <div class="col-lg-6 col-xl-4">
@@ -561,6 +630,9 @@
                                     <li>
                                         <span class="text-green">fields</span>: a filtered collection of form fields.
                                     </li>
+                                    <li>
+                                        <span class="text-green">trimValues</span>: boolean indicating if field values must be trimmed or not ( by default it takes the value from "fieldOptions.trimValue" - values from selects, checkboxes, radios and file inputs are not trimmed ).
+                                    </li>
                                 </ul>
                                 <p>
                                     These fields are excluded:
@@ -574,7 +646,7 @@
                                     If you want to select fields by yourself, you can access the form element through <code>this.$form</code>.
                                 </p>
                                 <p>
-                                    Additionally, the "this" keyword is bound to the Form instance.
+                                    Additionally, the keyword <code>this</code> is bound to the Form instance.
                                 </p>
                             </div>
                             <div class="col-lg-6 col-xl-4">
@@ -734,7 +806,7 @@
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
-                                <pre class="text-green">getFormData()</pre>
+                                <pre class="text-green">getFormData( [trimValues] )</pre>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-7 col-xl-5">
@@ -763,15 +835,26 @@
                                         otherwise: set / given value
                                     </li>
                                 </ul>
-                                <div class="card-footer no-bg pt-3">
-                                    <p>
-                                        The function set in options.formOptions.getFormData will be used to collect data.<br />
-                                        See <a href="#form-options">Form Options Section</a> for details.
-                                    </p>
-                                    <p class="m-0">
-                                        Additionally, the "this" keyword is bound to the Form instance.
-                                    </p>
-                                </div>
+                                <hr />
+                                <p>
+                                    The function set in options.formOptions.getFormData will be used to collect data.<br />
+                                    See <a href="#form-options">Form Options Section</a> for details.
+                                </p>
+                                <p>
+                                    Attribute <code>data-exclude-data</code> can be used to avoid the plugin to take in consideration the field when collecting form data.
+                                </p>
+                                <p>
+                                    Additionally, the keyword <code>this</code> is bound to the Form instance.
+                                </p>
+                                <hr />
+                                <p class="d-lg-none m-0">
+                                    Parameters:
+                                </p>
+                                <ul>
+                                    <li>
+                                        <span class="text-green">trimValues</span>: ( Optional ) boolean indicating whether or not to trim field values when collecting data ( by default it takes the value from "fieldOptions.trimValue" - values from selects, checkboxes, radios and file inputs are not trimmed )
+                                    </li>
+                                </ul>
                             </div>
                             <div class="col-lg-5 col-xl-3">
                                 <p class="d-lg-none m-0">
@@ -948,6 +1031,9 @@
                             <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">addValidationErrors( newErrors )</pre>
                                 <span class="badge badge-pill badge-yellow">Lite</span>
+                                <div class="mt-1">
+                                    <a href="./demos/demo-add-custom-validation-errors.html">see demo</a>
+                                </div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-7 col-xl-5">
@@ -993,6 +1079,9 @@
                             <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">addValidationRules( newRules )</pre>
                                 <span class="badge badge-pill badge-yellow">Lite</span>
+                                <div class="mt-1">
+                                    <a href="./demos/demo-add-custom-validation-rules.html">see demo</a>
+                                </div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-7 col-xl-5">
@@ -1021,6 +1110,9 @@
                                             <li>
                                                 $field: the evaluated field
                                             </li>
+                                            <li>
+                                                fieldOptions: fieldOptions of the form instance
+                                            </li>
                                         </ul>
                                         The function must return an object ( at least ) like:
                                         <pre>
@@ -1043,6 +1135,9 @@
                             <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">setOptions( options )</pre>
                                 <span class="badge badge-pill badge-yellow">Lite</span>
+                                <div class="mt-1">
+                                    <a href="./demos/demo-change-global-options.html">see demo</a>
+                                </div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-7 col-xl-5">
@@ -1082,7 +1177,7 @@
 });
 
 Form.addValidationRules({
-    myPassword: function( fieldValue, $field ){
+    myPassword: function( fieldValue, $field, fieldOptions ){
         var obj = {
             result: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(fieldValue)
         };
@@ -1106,7 +1201,7 @@ Form.setOptions( { fieldOptions: {onValidationCheckAll: true} } );
 Form.prototype.validationErrors.email = function( fieldValue, $field ){ ... }
 
 // ADD/OVERRIDE A VALIDATION METHOD
-Form.prototype.validationRules.myPassword = function( fieldValue, $field ){ ... }
+Form.prototype.validationRules.myPassword = function( fieldValue, $field, fieldOptions ){ ... }
 
 // OVERRIDE AN OPTION
 Form.prototype.options.fieldOptions.onValidationCheckAll = true;
@@ -1128,6 +1223,8 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
             <h3 class="sticky-title">Built-in Events</h3>
             <p class="mt-5">
                 Each built-in event has the object <code>event.detail</code> as defined in column "event detail object". By default all built-in events will bubble.
+                <br />
+                <a href="./demos/demo-events-callback.html">see demo</a>
             </p>
             <div class="panel panel-default panel-transparent no-bg">
                 <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
@@ -1541,7 +1638,9 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                 </p>
                                 <hr />
                                 <p>
-                                    <span class="text-red">[ add. ]</span> <code>errors</code> object can also return these specific errors:
+                                    <span class="text-red">[ add. ]</span>
+                                    <br />
+                                    <code>errors</code> object can also return these specific errors:
                                 </p>
                                 <pre>
 <code class="language-js">{
@@ -1611,10 +1710,18 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
                                 <div><code>type="file"</code></div>
-                                <p class="small mt-5 mb-1">
-                                    File size limit ( in MB ) can be specified like:
-                                </p>
-                                <div><code>data-max-file-size="10"</code></div>
+                                <div class="mt-5">
+                                    <p class="m-0">
+                                        <span class="text-red">DEPRECATED</span>
+                                    </p>
+                                    <p class="small mb-1">
+                                        File size limit ( in MB ) can be specified like:
+                                    </p>
+                                    <div><code>data-max-file-size="10"</code></div>
+                                    <p class="small mt-5 mb-0">
+                                        Use <code>fieldOptions.maxFileSize</code> or attribute <code>data-field-options</code> instead of <code>data-max-file-size</code>
+                                    </p>
+                                </div>
                             </div>
                             <div class="col-md-6 col-lg-7 col-xl-6 mt-md-3 mt-xl-0">
                                 <p>

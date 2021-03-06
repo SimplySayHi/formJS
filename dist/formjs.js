@@ -1,4 +1,4 @@
-/* formJS v5.0.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v5.1.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 !function(global, factory) {
     "object" == typeof exports && "undefined" != typeof module ? module.exports = factory() : "function" == typeof define && define.amd ? define(factory) : (global = "undefined" != typeof globalThis ? globalThis : global || self).Form = factory();
 }(this, (function() {
@@ -61,7 +61,7 @@
         }, eventOptions);
         var eventObj = new CustomEvent(eventName, eventOptions);
         elem.dispatchEvent(eventObj);
-    }, fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', finalizeFieldPromise = function(obj) {
+    }, excludeSelector = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])', fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', finalizeFieldPromise = function(obj) {
         return obj.result ? Promise.resolve() : Promise.reject(obj.errors);
     }, finalizeFormPromise = function(obj) {
         return obj.result ? Promise.resolve(obj.fields) : Promise.reject(obj.fields);
@@ -80,6 +80,9 @@
         var separator, splitChar = (separator = dateString.match(/\D/)) && separator.length > 0 ? separator[0] : null;
         if (!(dateFormat.indexOf(splitChar) < 0)) return dateFormat = dateFormat.replace(/[^YMD]/g, "-"), 
         dateString = dateString.split(splitChar), dateString = formatMap[dateFormat](dateString).join("");
+    }, getJSONobjectFromFieldAttribute = function(fieldEl, attrName) {
+        var customAttrEl = fieldEl.closest("[" + attrName + "]");
+        return customAttrEl && JSON.parse(customAttrEl.getAttribute(attrName)) || {};
     }, getUniqueFields = function($nodeList) {
         var currentFieldName = "", currentFieldType = "";
         return Array.from($nodeList).filter((function($field) {
@@ -124,51 +127,20 @@
         return string.replace(/-([a-z])/gi, (function(all, letter) {
             return letter.toUpperCase();
         }));
-    }, defaultCallbacksInOptions = {
+    }, options = {
         fieldOptions: {
-            beforeValidation: function(fieldObj) {
-                var fieldOptions = this.options.fieldOptions;
-                !function($fields, fieldOptions) {
+            beforeValidation: [ function(_ref) {
+                var $field = _ref.$field, fieldOptions = _ref.fieldOptions;
+                fieldOptions.trimValue && !isFieldForChangeEvent($field) && ($field.value = $field.value.trim()), 
+                function($fields, fieldOptions) {
                     ($fields = isNodeList($fields) ? Array.from($fields) : [ $fields ]).forEach((function($field) {
                         if ("checkbox" !== $field.type && "radio" !== $field.type) {
                             var $container = $field.closest(fieldOptions.questionContainer) || $field;
                             $field.value ? addClass($container, fieldOptions.cssClasses.dirty) : removeClass($container, fieldOptions.cssClasses.dirty);
                         }
                     }));
-                }(fieldObj.$field, fieldOptions), fieldOptions.skipUIfeedback || addClass(fieldObj.$field.closest(fieldOptions.questionContainer), fieldOptions.cssClasses.pending);
-            }
-        },
-        formOptions: {
-            getFormData: function($filteredFields) {
-                var formData = {}, $form = this.$form;
-                return $filteredFields.forEach((function($field) {
-                    var isCheckbox = "checkbox" === $field.type, isRadio = "radio" === $field.type, isSelect = $field.matches("select"), name = $field.name, value = $field.value;
-                    if (isCheckbox) {
-                        value = $field.checked;
-                        var $checkboxes = Array.from($form.querySelectorAll('[name="' + name + '"]'));
-                        if ($checkboxes.length > 1) value = [], $checkboxes.filter((function(field) {
-                            return field.checked;
-                        })).forEach((function($field) {
-                            value.push($field.value);
-                        }));
-                    } else if (isRadio) {
-                        var $checkedRadio = $form.querySelector('[name="' + name + '"]:checked');
-                        value = null === $checkedRadio ? null : $checkedRadio.value;
-                    } else if (isSelect) {
-                        var $selectedOpts = Array.from($field.options).filter((function(option) {
-                            return option.selected;
-                        }));
-                        $selectedOpts.length > 1 && (value = [], $selectedOpts.forEach((function($field) {
-                            value.push($field.value);
-                        })));
-                    }
-                    formData[name] = value;
-                })), formData;
-            }
-        }
-    }, options = {
-        fieldOptions: {
-            beforeValidation: [ defaultCallbacksInOptions.fieldOptions.beforeValidation ],
+                }($field, fieldOptions), fieldOptions.skipUIfeedback || addClass($field.closest(fieldOptions.questionContainer), fieldOptions.cssClasses.pending);
+            } ],
             cssClasses: {
                 dirty: "is-dirty",
                 error: "has-error",
@@ -178,11 +150,13 @@
                 valid: "is-valid"
             },
             focusOnRelated: !0,
+            maxFileSize: 10,
             onValidationCheckAll: !1,
             preventPasteFields: '[type="password"], [data-equal-to]',
             questionContainer: "[data-formjs-question]",
             skipUIfeedback: !1,
             strictHtmlValidation: !0,
+            trimValue: !1,
             validateOnEvents: "input change"
         },
         formOptions: {
@@ -209,7 +183,32 @@
                 submit: "is-submitting",
                 valid: "is-valid"
             },
-            getFormData: defaultCallbacksInOptions.formOptions.getFormData,
+            getFormData: function($filteredFields, trimValues) {
+                var formData = {}, $form = this.$form;
+                return $filteredFields.forEach((function($field) {
+                    var isCheckbox = "checkbox" === $field.type, isRadio = "radio" === $field.type, isSelect = $field.matches("select"), name = $field.name, value = trimValues ? $field.value.trim() : $field.value;
+                    if (isCheckbox) {
+                        value = $field.checked;
+                        var $checkboxes = Array.from($form.querySelectorAll('[name="' + name + '"]'));
+                        if ($checkboxes.length > 1) value = [], $checkboxes.filter((function(field) {
+                            return field.checked;
+                        })).forEach((function($field) {
+                            value.push($field.value);
+                        }));
+                    } else if (isRadio) {
+                        var $checkedRadio = $form.querySelector('[name="' + name + '"]:checked');
+                        value = null === $checkedRadio ? null : $checkedRadio.value;
+                    } else if (isSelect) {
+                        var $selectedOpts = Array.from($field.options).filter((function(option) {
+                            return option.selected;
+                        }));
+                        $selectedOpts.length > 1 && (value = [], $selectedOpts.forEach((function($field) {
+                            value.push($field.value);
+                        })));
+                    }
+                    formData[name] = value;
+                })), formData;
+            },
             handleFileUpload: !0,
             handleSubmit: !0,
             onInitCheckFilled: !0
@@ -256,8 +255,8 @@
             return obj.result || (obj.errors = {}, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), 
             obj;
         },
-        file: function(value, $field) {
-            var maxFileSize = 1 * ($field.getAttribute("data-max-file-size") || 0), MIMEtype = $field.accept ? new RegExp($field.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from($field.files), obj = {
+        file: function(value, $field, fieldOptions) {
+            var maxFileSize = 1 * ($field.getAttribute("data-max-file-size") || fieldOptions.maxFileSize), MIMEtype = $field.accept ? new RegExp($field.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from($field.files), obj = {
                 result: !0
             };
             return filesList.forEach((function(file) {
@@ -287,7 +286,7 @@
         },
         min: function(value, $field) {
             var minVal = $field.min, dateFormat = $field.getAttribute("data-date-format");
-            return ("date" === $field.type || $field.getAttribute("data-date-format")) && (value = getDateAsNumber(value, dateFormat), 
+            return ("date" === $field.type || dateFormat) && (value = getDateAsNumber(value, dateFormat), 
             minVal = minVal.split("-").join("")), {
                 result: (value *= 1) >= (minVal *= 1)
             };
@@ -425,18 +424,18 @@
             }));
         }
     }, validationEnd = function(event) {
-        var eventDetail = event.detail, $field = eventDetail.$field, options = $field.closest("form").formjs.options.fieldOptions, $container = $field.closest(options.questionContainer), isReqFrom = $field.matches("[data-required-from]"), $reqMore = document.querySelector($field.getAttribute("data-required-from"));
-        if (null !== $container && removeClass($container, options.cssClasses.pending), 
-        null !== $container && !options.skipUIfeedback) if (eventDetail.result) {
+        var eventDetail = event.detail, $field = eventDetail.$field, dataFieldOptions = getJSONobjectFromFieldAttribute($field, "data-field-options"), fieldOptions = mergeObjects({}, $field.closest("form").formjs.options.fieldOptions, dataFieldOptions), $container = $field.closest(fieldOptions.questionContainer), isReqFrom = $field.matches("[data-required-from]"), $reqMore = document.querySelector($field.getAttribute("data-required-from"));
+        if ($container && !fieldOptions.skipUIfeedback) if (eventDetail.result) {
             if (!isReqFrom || isReqFrom && $reqMore.checked) {
-                var errorClasses = options.cssClasses.error + " " + options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
-                removeClass($container, errorClasses), addClass($container, options.cssClasses.valid);
+                var errorClasses = fieldOptions.cssClasses.error + " " + fieldOptions.cssClasses.errorEmpty + " " + fieldOptions.cssClasses.errorRule;
+                removeClass($container, errorClasses), addClass($container, fieldOptions.cssClasses.valid);
             }
         } else {
-            var extraErrorClass = options.cssClasses.errorRule, isChecks = $field.matches("[data-checks]"), checkedElLength = isChecks ? $container.querySelectorAll('[name="' + $field.name + '"]:checked').length : 0;
-            (!isChecks && eventDetail.errors && eventDetail.errors.empty || isChecks && 0 === checkedElLength) && (extraErrorClass = options.cssClasses.errorEmpty);
-            var _errorClasses = options.cssClasses.error + " " + extraErrorClass, errorClassToRemove = options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
-            removeClass($container, options.cssClasses.valid + " " + errorClassToRemove), addClass($container, _errorClasses);
+            var extraErrorClass = fieldOptions.cssClasses.errorRule, isChecks = $field.matches("[data-checks]"), checkedElLength = isChecks ? $container.querySelectorAll('[name="' + $field.name + '"]:checked').length : 0;
+            (!isChecks && eventDetail.errors && eventDetail.errors.empty || isChecks && 0 === checkedElLength) && (extraErrorClass = fieldOptions.cssClasses.errorEmpty);
+            var _errorClasses = fieldOptions.cssClasses.error + " " + extraErrorClass, errorClassToRemove = fieldOptions.cssClasses.errorEmpty + " " + fieldOptions.cssClasses.errorRule;
+            removeClass($container, fieldOptions.cssClasses.valid + " " + errorClassToRemove), 
+            addClass($container, _errorClasses);
         }
     };
     function formStartup($form, options) {
@@ -476,8 +475,8 @@
             });
             return Promise.resolve(obj);
         }
-        var $form = $field.closest("form"), isValidValue = $field.value.trim().length > 0;
-        if ("radio" === $field.type) {
+        var $form = $field.closest("form"), isValidValue = $field.value.trim().length > 0, dataFieldOptions = getJSONobjectFromFieldAttribute($field, "data-field-options");
+        if (fieldOptions = mergeObjects(fieldOptions, dataFieldOptions), "radio" === $field.type) {
             var $checked = $field.checked ? $field : $form.querySelector('[name="' + $field.name + '"]:checked'), reqMoreIsChecked = $checked && $checked.matches("[data-require-more]"), $findReqMore = reqMoreIsChecked ? $checked : $form.querySelector('[data-require-more][name="' + $field.name + '"]'), $findReqFrom = $findReqMore ? $form.querySelector('[data-required-from="#' + $findReqMore.id + '"]') : null;
             $checked && $findReqFrom && ($findReqFrom.required = $findReqMore.required && $findReqMore.checked, 
             reqMoreIsChecked ? fieldOptions.focusOnRelated && $findReqFrom.focus() : $findReqFrom.value = "");
@@ -490,12 +489,13 @@
         return runFunctionsSequence({
             functionsList: fieldOptions.beforeValidation,
             data: {
-                $field: $field
+                $field: $field,
+                fieldOptions: fieldOptions
             }
         }).then((function(data) {
             var dataObj = data.pop();
             return new Promise((function(resolve) {
-                needsValidation || (dataObj.result = !0), resolve(needsValidation ? function($field, validationRules, validationErrors) {
+                needsValidation || (dataObj.result = !0), resolve(needsValidation ? function($field, fieldOptions, validationRules, validationErrors) {
                     var fieldValue = $field.value, obj = mergeValidateFieldDefault({
                         result: fieldValue.trim().length > 0,
                         $field: $field
@@ -513,7 +513,7 @@
                         resolve(validationMethods.reduce((function(accPromise, methodName) {
                             return accPromise.then((function(accObj) {
                                 return new Promise((function(resolveVal) {
-                                    resolveVal(validationRules[methodName](fieldValue, $field));
+                                    resolveVal(validationRules[methodName](fieldValue, $field, fieldOptions));
                                 })).then((function(valObj) {
                                     if (!valObj.result) {
                                         var errorObj = {};
@@ -530,8 +530,11 @@
                             return mergeObjects(accObj, errors);
                         }), data.errors)), data;
                     }));
-                }($field, validationRules, validationErrors) : dataObj);
+                }($field, fieldOptions, validationRules, validationErrors) : dataObj);
             }));
+        })).then((function(data) {
+            var $container = fieldOptions.questionContainer && data.$field.closest(fieldOptions.questionContainer);
+            return $container && removeClass($container, fieldOptions.cssClasses.pending), data;
         }));
     }
     function checkFormValidity($form, fieldOptions, validationRules, validationErrors) {
@@ -618,10 +621,10 @@
         }, {
             key: "getFormData",
             value: function() {
-                var $formFields = this.$form.querySelectorAll("input, select, textarea"), $filteredFields = Array.from($formFields).filter((function(elem) {
-                    return elem.matches(':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])');
+                var trimValues = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : this.options.fieldOptions.trimValue, $formFields = this.$form.querySelectorAll("input, select, textarea"), $filteredFields = Array.from($formFields).filter((function(elem) {
+                    return elem.matches(excludeSelector);
                 }));
-                return this.options.formOptions.getFormData($filteredFields);
+                return this.options.formOptions.getFormData($filteredFields, trimValues);
             }
         }, {
             key: "validateField",
@@ -659,5 +662,5 @@
         Form;
     }();
     return Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-    Form.prototype.version = "5.0.2", Form;
+    Form.prototype.version = "5.1.0", Form;
 }));

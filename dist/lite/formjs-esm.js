@@ -1,4 +1,4 @@
-/* formJS Lite v5.0.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS Lite v5.1.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 const isDOMNode = node => Element.prototype.isPrototypeOf(node), isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
     return Array.from(arguments).slice(1).filter(arg => !!arg).forEach(arg => {
         Object.keys(arg).forEach(key => {
@@ -68,8 +68,8 @@ const isDOMNode = node => Element.prototype.isPrototypeOf(node), isPlainObject =
         return obj.result || (obj.errors = {}, valueLength < exactLength ? obj.errors.minlength = !0 : obj.errors.maxlength = !0), 
         obj;
     },
-    file: function(value, $field) {
-        const maxFileSize = 1 * ($field.getAttribute("data-max-file-size") || 0), MIMEtype = $field.accept ? new RegExp($field.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from($field.files), obj = {
+    file: function(value, $field, fieldOptions) {
+        const maxFileSize = 1 * ($field.getAttribute("data-max-file-size") || fieldOptions.maxFileSize), MIMEtype = $field.accept ? new RegExp($field.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from($field.files), obj = {
             result: !0
         };
         return filesList.forEach(file => {
@@ -101,7 +101,7 @@ const isDOMNode = node => Element.prototype.isPrototypeOf(node), isPlainObject =
     min: function(value, $field) {
         let minVal = $field.min;
         const dateFormat = $field.getAttribute("data-date-format");
-        return ("date" === $field.type || $field.getAttribute("data-date-format")) && (value = getDateAsNumber(value, dateFormat), 
+        return ("date" === $field.type || dateFormat) && (value = getDateAsNumber(value, dateFormat), 
         minVal = minVal.split("-").join("")), minVal *= 1, {
             result: (value *= 1) >= minVal
         };
@@ -131,8 +131,11 @@ function checkFieldValidity($field, fieldOptions, validationRules, validationErr
         });
         return Promise.resolve(obj);
     }
-    const $form = $field.closest("form"), isValidValue = $field.value.trim().length > 0;
-    if ("radio" === $field.type) {
+    const $form = $field.closest("form"), isValidValue = $field.value.trim().length > 0, dataFieldOptions = ((fieldEl, attrName) => {
+        const customAttrEl = fieldEl.closest("[" + attrName + "]");
+        return customAttrEl && JSON.parse(customAttrEl.getAttribute(attrName)) || {};
+    })($field, "data-field-options");
+    if (fieldOptions = mergeObjects(fieldOptions, dataFieldOptions), "radio" === $field.type) {
         const $checked = $field.checked ? $field : $form.querySelector('[name="' + $field.name + '"]:checked'), reqMoreIsChecked = $checked && $checked.matches("[data-require-more]"), $findReqMore = reqMoreIsChecked ? $checked : $form.querySelector('[data-require-more][name="' + $field.name + '"]'), $findReqFrom = $findReqMore ? $form.querySelector('[data-required-from="#' + $findReqMore.id + '"]') : null;
         $checked && $findReqFrom && ($findReqFrom.required = $findReqMore.required && $findReqMore.checked, 
         reqMoreIsChecked ? fieldOptions.focusOnRelated && $findReqFrom.focus() : $findReqFrom.value = "");
@@ -150,12 +153,13 @@ function checkFieldValidity($field, fieldOptions, validationRules, validationErr
     }), Promise.resolve([ data ])).then(dataList => dataList.length > 1 ? dataList.slice(1) : dataList))({
         functionsList: fieldOptions.beforeValidation,
         data: {
-            $field: $field
+            $field: $field,
+            fieldOptions: fieldOptions
         }
     }).then(data => {
         const dataObj = data.pop();
         return new Promise(resolve => {
-            needsValidation || (dataObj.result = !0), resolve(needsValidation ? function($field, validationRules, validationErrors) {
+            needsValidation || (dataObj.result = !0), resolve(needsValidation ? function($field, fieldOptions, validationRules, validationErrors) {
                 const fieldValue = $field.value, obj = mergeValidateFieldDefault({
                     result: fieldValue.trim().length > 0,
                     $field: $field
@@ -171,7 +175,7 @@ function checkFieldValidity($field, fieldOptions, validationRules, validationErr
                 }, []);
                 return new Promise(resolve => {
                     resolve(validationMethods.reduce((accPromise, methodName) => accPromise.then(accObj => new Promise(resolveVal => {
-                        resolveVal(validationRules[methodName](fieldValue, $field));
+                        resolveVal(validationRules[methodName](fieldValue, $field, fieldOptions));
                     }).then(valObj => {
                         if (!valObj.result) {
                             const errorObj = {};
@@ -184,8 +188,14 @@ function checkFieldValidity($field, fieldOptions, validationRules, validationErr
                     const errors = validationErrors[methodName] && validationErrors[methodName](fieldValue, $field) || {};
                     return mergeObjects(accObj, errors);
                 }, data.errors)), data));
-            }($field, validationRules, validationErrors) : dataObj);
+            }($field, fieldOptions, validationRules, validationErrors) : dataObj);
         });
+    }).then(data => {
+        const $container = fieldOptions.questionContainer && data.$field.closest(fieldOptions.questionContainer);
+        var element;
+        return $container && (element = $container, fieldOptions.cssClasses.pending.split(" ").forEach(className => {
+            element.classList.remove(className);
+        })), data;
     });
 }
 
@@ -264,9 +274,10 @@ class Form {
 Form.prototype.options = {
     fieldOptions: {
         beforeValidation: [],
-        focusOnRelated: !0
+        focusOnRelated: !0,
+        maxFileSize: 10
     }
 }, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-Form.prototype.version = "5.0.2";
+Form.prototype.version = "5.1.0";
 
 export default Form;

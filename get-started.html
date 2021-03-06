@@ -187,10 +187,7 @@
                                 <code>data-type</code> ( optional ) by now only "number" is supported. See "strictHtmlValidation" option in <a href="api.html#field-options">Field Options</a> section for details. 
                             </li>
                             <li class="my-2">
-                                <code>data-subtype</code> ( optional ) for custom field types ( eg: VAT number, fiscal code, etc - see the <a href="api.html#builtin-validations">full list</a> ).
-                            </li>
-                            <li class="my-2">
-                                <code>data-exclude-data</code> ( optional | empty attribute ) used to avoid to take in consideration the field when collecting form data ( used inside "getFormData" method ).
+                                <code>data-subtype</code> ( optional ) for custom validations ( eg: VAT number, fiscal code, etc - see the <a href="api.html#builtin-validations">full list</a> ).
                             </li>
                         </ul>
                     </div>
@@ -203,8 +200,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                     <pre>
-<code class="language-js">// const $form = '.my-form'; // OR AS DOM NODE
-const $form = document.querySelector('form');
+<code class="language-js">const $form = document.querySelector('form');
 const options = {...};
 const formInstance = new Form( $form, options );
 </code></pre>
@@ -242,6 +238,10 @@ const formInstance = new Form( $form, options );
                                 Form instance: once the instance is created, via <code>$form.formjs</code>
                             </li>
                         </ul>
+                        <hr />
+                        <p>
+                            <a href="demos.html">See demos</a>
+                        </p>
                 </div>
             </div>
 
