@@ -223,6 +223,7 @@
                 ]
             },
             formOptions: {
+                // onInitCheckFilled: false,
                 beforeSend: [
                     function beforeSendTest ( data ){
                         console.log('beforeSendTest data', data);
@@ -264,6 +265,19 @@
 
         // DECOMMENT TO TEST LITE VERSION
         // delete options.formOptions;
+
+        formEl.addEventListener('fjs.form:init', function(e){
+            console.log(e.type, e.detail);
+            e.detail
+                .then(fields => {
+                    console.log(e.type, 'then');
+                    console.log(fields);
+                })
+                .catch(error => {
+                    console.log(e.type, 'error');
+                    console.log(error);
+                })
+        });
 
         formEl.addEventListener('fjs.field:validation', function(e){
             console.log('--- GENERAL FIELD VALIDATION', this);

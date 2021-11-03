@@ -136,7 +136,7 @@
             <h3 class="sticky-title">Options<span class="small">:</span></h3>
             <div>
                 <p>
-                    formJS takes an object as second argument <code>options</code> as follow:
+                    formJS takes an object as second parameter, <code>options</code>, as follow:
                 </p>
                 <pre>
 <code class="language-js">{
@@ -156,12 +156,12 @@
                     This is the list of field options you can set:
                 </p>
                 <ul>
-                    <li>cssClasses</li>
-                    <li>focusOnRelated</li>
-                    <li>maxFileSize</li>
-                    <li>questionContainer</li>
-                    <li>skipUIfeedback</li>
-                    <li>trimValue</li>
+                    <li><code>cssClasses</code></li>
+                    <li><code>focusOnRelated</code></li>
+                    <li><code>maxFileSize</code></li>
+                    <li><code>questionContainer</code></li>
+                    <li><code>skipUIfeedback</code></li>
+                    <li><code>trimValue</code></li>
                 </ul>
                 <div class="panel panel-default panel-transparent no-bg">
                     <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
@@ -202,11 +202,11 @@
                                 </p>
                                 <div class="card-footer bg-transparent pb-0 px-0">
                                     <p class="text-green">
-                                        Arguments
+                                        Parameters
                                     </p>
                                     <ul>
                                         <li>
-                                            data: ( Object )
+                                            <span class="text-green">data</span>: ( Object )
 <pre>
 <code class="language-js">{
     $field: $field,
@@ -215,10 +215,10 @@
 </code></pre>
                                             <ul>
                                                 <li>
-                                                    $field: JS node element ( the field that will be validated )
+                                                    <span class="text-green">$field</span>: JS node element ( the field that will be validated )
                                                 </li>
                                                 <li>
-                                                    fieldOptions: JS object ( field options from the form instance merged with field specific options from <code>data-field-options</code> if present )
+                                                    <span class="text-green">fieldOptions</span>: JS object ( field options from the form instance merged with field specific options from <code>data-field-options</code> if present )
                                                 </li>
                                             </ul>
                                         </li>
@@ -483,10 +483,10 @@
                     <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
                         <div class="d-flex">
                             <div class="col-lg-6 col-xl-3">
-                                name ( type )<span class="d-inline d-xl-none">, arguments</span>
+                                name ( type )<span class="d-inline d-xl-none">, parameters</span>
                             </div>
                             <div class="col-xl-5 d-none d-xl-block">
-                                arguments
+                                parameters
                             </div>
                             <div class="col-lg-6 col-xl-4">
                                 description
@@ -540,7 +540,7 @@
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-6 col-xl-5">
                                 <p class="d-lg-none m-0">
-                                    Arguments:
+                                    Parameters:
                                 </p>
                                 <p>
                                     Each function:
@@ -624,11 +624,11 @@
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-6 col-xl-5">
                                 <p class="d-lg-none m-0">
-                                    Arguments:
+                                    Parameters:
                                 </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">fields</span>: a filtered collection of form fields.
+                                        <span class="text-green">fields</span>: a filtered list of form fields.
                                     </li>
                                     <li>
                                         <span class="text-green">trimValues</span>: boolean indicating if field values must be trimmed or not ( by default it takes the value from "fieldOptions.trimValue" - values from selects, checkboxes, radios and file inputs are not trimmed ).
@@ -935,6 +935,28 @@
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
+                                <pre class="text-green">validateFilledFields()</pre>
+                            </div>
+                            <div class="w-100 d-xl-none"></div>
+                            <div class="col-lg-7 col-xl-5">
+                                <p class="d-lg-none m-0">
+                                    Description:
+                                </p>
+                                <p>
+                                    Run validation for fields that already have a value set.
+                                </p>
+                            </div>
+                            <div class="col-lg-5 col-xl-3">
+                                <p class="d-lg-none m-0">
+                                    Return value:
+                                </p>
+                                <p>
+                                    A Promise to which will be passed an array of objects ( same array as returned by method <code>validateForm</code> but will ONLY contain validated fields )
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                            <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">validateForm( [fieldOptions] )</pre>
                                 <span class="badge badge-pill badge-yellow">Lite</span>
                             </div>
@@ -1050,17 +1072,17 @@
                                 </p>
                                 <ul>
                                     <li>
-                                        key: the same used as data-subtype ( or type ) attribute, without dash and with Capital letter instead.<br />
+                                        <span class="text-green">key</span>: the same used as data-subtype ( or type ) attribute, without dash and with Capital letter instead.<br />
                                         Eg: to validate "mobile-number" ( as data-subtype ) the rule is "mobileNumber"
                                     </li>
                                     <li>
-                                        value: a function with these arguments:
+                                        <span class="text-green">value</span>: a function with these parameters:
                                         <ul>
                                             <li>
-                                                fieldValue: the string the user put in the field
+                                                <span class="text-green">fieldValue</span>: the string the user put in the field
                                             </li>
                                             <li>
-                                                $field: the evaluated field
+                                                <span class="text-green">$field</span>: the evaluated field
                                             </li>
                                         </ul>
                                         The function must return an object with all the specific errors.
@@ -1098,20 +1120,20 @@
                                 </p>
                                 <ul>
                                     <li>
-                                        key: the same used as data-subtype ( or type ) attribute, without dash and with Capital letter instead.<br />
+                                        <span class="text-green">key</span>: the same used as data-subtype ( or type ) attribute, without dash and with Capital letter instead.<br />
                                         Eg: to validate "mobile-number" ( as data-subtype ) the rule is "mobileNumber"
                                     </li>
                                     <li>
-                                        value: a function with these arguments:
+                                        <span class="text-green">value</span>: a function with these parameters:
                                         <ul>
                                             <li>
-                                                fieldValue: the string the user put in the field
+                                                <span class="text-green">fieldValue</span>: the string the user put in the field
                                             </li>
                                             <li>
-                                                $field: the evaluated field
+                                                <span class="text-green">$field</span>: the evaluated field
                                             </li>
                                             <li>
-                                                fieldOptions: fieldOptions of the form instance
+                                                <span class="text-green">fieldOptions</span>: fieldOptions of the form instance
                                             </li>
                                         </ul>
                                         The function must return an object ( at least ) like:
@@ -1271,6 +1293,16 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                     <span class="text-green">isCheckingForm</span>: <code>true</code> present ONLY when event is emitted by method <code>validateForm()</code>
                                 </li>
                             </ul>
+                        </div>
+                    </div>
+                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div class="col-lg-6">
+                            <pre class="text-green">fjs.form:destroy</pre>
+                            <p>
+                                Emitted after method <code>destroy</code> has been called.
+                            </p>
+                        </div>
+                        <div class="col-lg-6">
                         </div>
                     </div>
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
