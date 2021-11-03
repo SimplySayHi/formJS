@@ -1,6 +1,6 @@
 
 import { getFilledFields, isFieldForChangeEvent } from './helpers';
-import { validation } from './listenerCallbacks';
+import { validation } from './listenerCallbacks/validation';
 
 export const checkFilledFields = $form => {
 

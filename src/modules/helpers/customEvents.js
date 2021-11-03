@@ -4,6 +4,7 @@ export const customEvents = {
         validation: 'fjs.field:validation'
     },
     form: {
+        destroy:    'fjs.form:destroy',
         init:       'fjs.form:init',
         submit:     'fjs.form:submit',
         validation: 'fjs.form:validation'

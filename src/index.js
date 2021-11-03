@@ -1,13 +1,22 @@
 
 import { version }              from './modules/version';
-import { checkFormEl, customEvents, dispatchCustomEvent, excludeSelector, finalizeFieldPromise, finalizeFormPromise, isNodeList, mergeObjects, removeClass } from './modules/helpers';
+import { 
+    checkFormEl, 
+    customEvents, 
+    dispatchCustomEvent, 
+    excludeSelector, 
+    finalizeFieldPromise, 
+    finalizeFormPromise, 
+    isNodeList, 
+    mergeObjects, 
+    removeClass }               from './modules/helpers';
 import { options }              from './modules/options';
 import { validationRules }      from './modules/validationRules';
 import { formStartup }          from './modules/formStartup';
 import { destroy }              from './modules/destroy';
-import { checkFilledFields }    from './modules/checkFilledFields';
 import { checkFieldValidity }   from './modules/checkFieldValidity';
 import { checkFormValidity }    from './modules/checkFormValidity';
+import { checkFilledFields }    from './modules/checkFilledFields';
 
 class Form {
 
@@ -50,15 +59,9 @@ class Form {
 
         formStartup( self.$form, self.options );
 
-        let initOptions = {};
+        const initOptions = {};
         if( self.options.formOptions.onInitCheckFilled ){
-            const focusOnRelated = self.options.fieldOptions.focusOnRelated;
-            self.options.fieldOptions.focusOnRelated = false;
-            initOptions.detail = checkFilledFields(self.$form)
-                            .then(fields => {
-                                self.options.fieldOptions.focusOnRelated = focusOnRelated;
-                                return fields;
-                            });
+            initOptions.detail = self.validateFilledFields();
         }
         dispatchCustomEvent( self.$form, customEvents.form.init, initOptions );
     }
@@ -92,6 +95,17 @@ class Form {
                 return obj;
             })
             .then(finalizeFieldPromise);
+    }
+
+    validateFilledFields(){
+        const focusOnRelated = this.options.fieldOptions.focusOnRelated;
+
+        this.options.fieldOptions.focusOnRelated = false;
+
+        return checkFilledFields(this.$form).then(fields => {
+            this.options.fieldOptions.focusOnRelated = focusOnRelated;
+            return fields;
+        });
     }
 
     validateForm( fieldOptions ){
