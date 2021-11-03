@@ -68,6 +68,7 @@ class Form {
 
     destroy(){
         destroy(this.$form, this.options);
+        dispatchCustomEvent( this.$form, customEvents.form.destroy );
     }
     
     getFormData( trimValues = this.options.fieldOptions.trimValue ){
