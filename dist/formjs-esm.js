@@ -1,4 +1,4 @@
-/* formJS v5.1.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v5.2.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 const addClass = (element, cssClasses) => {
     cssClasses.split(" ").forEach(className => {
         element.classList.add(className);
@@ -10,6 +10,7 @@ const addClass = (element, cssClasses) => {
 }, isDOMNode = node => Element.prototype.isPrototypeOf(node), customEvents_field = {
     validation: "fjs.field:validation"
 }, customEvents_form = {
+    destroy: "fjs.form:destroy",
     init: "fjs.form:init",
     submit: "fjs.form:submit",
     validation: "fjs.form:validation"
@@ -373,20 +374,6 @@ const validation = function(event) {
     }
 };
 
-const checkFilledFields = $form => {
-    const formFields = ($form => getUniqueFields($form.querySelectorAll(fieldsStringSelector)).map($field => {
-        const name = $field.name, type = $field.type, isCheckboxOrRadio = "checkbox" === type || "radio" === type, fieldChecked = $form.querySelector('[name="' + name + '"]:checked'), isReqFrom = $field.matches("[data-required-from]"), $reqMore = isReqFrom ? $form.querySelector($field.getAttribute("data-required-from")) : null;
-        return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && $reqMore.checked || !isReqFrom && $field.value ? $field : null;
-    }).filter($field => null !== $field))($form);
-    return Promise.all(formFields.map($field => {
-        const isFieldForChangeEventBoolean = isFieldForChangeEvent($field);
-        return validation({
-            target: $field,
-            type: isFieldForChangeEventBoolean ? "change" : ""
-        });
-    }));
-};
-
 function checkFieldValidity($field, fieldOptions, validationRules, validationErrors) {
     if (!isDOMNode($field)) {
         const obj = mergeValidateFieldDefault({
@@ -477,6 +464,20 @@ function checkFormValidity($form, fieldOptions, validationRules, validationError
     });
 }
 
+const checkFilledFields = $form => {
+    const formFields = ($form => getUniqueFields($form.querySelectorAll(fieldsStringSelector)).map($field => {
+        const name = $field.name, type = $field.type, isCheckboxOrRadio = "checkbox" === type || "radio" === type, fieldChecked = $form.querySelector('[name="' + name + '"]:checked'), isReqFrom = $field.matches("[data-required-from]"), $reqMore = isReqFrom ? $form.querySelector($field.getAttribute("data-required-from")) : null;
+        return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && $reqMore.checked || !isReqFrom && $field.value ? $field : null;
+    }).filter($field => null !== $field))($form);
+    return Promise.all(formFields.map($field => {
+        const isFieldForChangeEventBoolean = isFieldForChangeEvent($field);
+        return validation({
+            target: $field,
+            type: isFieldForChangeEventBoolean ? "change" : ""
+        });
+    }));
+};
+
 class Form {
     constructor(form, optionsObj) {
         const argsL = arguments.length, checkFormElem = (form => {
@@ -508,12 +509,8 @@ class Form {
             $form.getAttribute("method") && (formOptions.ajaxOptions.method = $form.getAttribute("method").toUpperCase()), 
             $form.getAttribute("action") && (formOptions.ajaxOptions.url = $form.getAttribute("action"))));
         }(self.$form, self.options);
-        let initOptions = {};
-        if (self.options.formOptions.onInitCheckFilled) {
-            const focusOnRelated = self.options.fieldOptions.focusOnRelated;
-            self.options.fieldOptions.focusOnRelated = !1, initOptions.detail = checkFilledFields(self.$form).then(fields => (self.options.fieldOptions.focusOnRelated = focusOnRelated, 
-            fields));
-        }
+        const initOptions = {};
+        self.options.formOptions.onInitCheckFilled && (initOptions.detail = self.validateFilledFields()), 
         dispatchCustomEvent(self.$form, customEvents_form.init, initOptions);
     }
     destroy() {
@@ -527,7 +524,7 @@ class Form {
             }), $form.removeEventListener(customEvents_field.validation, validationEnd, !1), 
             $form.removeEventListener(customEvents_form.validation, formValidationEnd, !1), 
             delete $form.formjs;
-        }(this.$form, this.options);
+        }(this.$form, this.options), dispatchCustomEvent(this.$form, customEvents_form.destroy);
     }
     getFormData(trimValues = this.options.fieldOptions.trimValue) {
         const $formFields = this.$form.querySelectorAll("input, select, textarea"), $filteredFields = Array.from($formFields).filter(elem => elem.matches(':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])'));
@@ -545,6 +542,11 @@ class Form {
             });
         }) : obj.result || removeClass($form, self.options.formOptions.cssClasses.valid), 
         obj)).then(finalizeFieldPromise);
+    }
+    validateFilledFields() {
+        const focusOnRelated = this.options.fieldOptions.focusOnRelated;
+        return this.options.fieldOptions.focusOnRelated = !1, checkFilledFields(this.$form).then(fields => (this.options.fieldOptions.focusOnRelated = focusOnRelated, 
+        fields));
     }
     validateForm(fieldOptions) {
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
@@ -569,6 +571,6 @@ class Form {
 }
 
 Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-Form.prototype.version = "5.1.0";
+Form.prototype.version = "5.2.0";
 
 export default Form;

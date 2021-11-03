@@ -41,7 +41,7 @@ System.register([], function () {
         return Constructor;
       }
 
-      /* formJS v5.1.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+      /* formJS v5.2.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
       var addClass = function addClass(element, cssClasses) {
         cssClasses.split(" ").forEach(function (className) {
           element.classList.add(className);
@@ -62,6 +62,7 @@ System.register([], function () {
         validation: "fjs.field:validation"
       },
           customEvents_form = {
+        destroy: "fjs.form:destroy",
         init: "fjs.form:init",
         submit: "fjs.form:submit",
         validation: "fjs.form:validation"
@@ -554,30 +555,6 @@ System.register([], function () {
         }
       };
 
-      var checkFilledFields = function checkFilledFields($form) {
-        var formFields = function ($form) {
-          return getUniqueFields($form.querySelectorAll(fieldsStringSelector)).map(function ($field) {
-            var name = $field.name,
-                type = $field.type,
-                isCheckboxOrRadio = "checkbox" === type || "radio" === type,
-                fieldChecked = $form.querySelector('[name="' + name + '"]:checked'),
-                isReqFrom = $field.matches("[data-required-from]"),
-                $reqMore = isReqFrom ? $form.querySelector($field.getAttribute("data-required-from")) : null;
-            return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && $reqMore.checked || !isReqFrom && $field.value ? $field : null;
-          }).filter(function ($field) {
-            return null !== $field;
-          });
-        }($form);
-
-        return Promise.all(formFields.map(function ($field) {
-          var isFieldForChangeEventBoolean = isFieldForChangeEvent($field);
-          return validation({
-            target: $field,
-            type: isFieldForChangeEventBoolean ? "change" : ""
-          });
-        }));
-      };
-
       function checkFieldValidity($field, fieldOptions, validationRules, validationErrors) {
         if (!isDOMNode($field)) {
           var obj = mergeValidateFieldDefault({
@@ -690,6 +667,30 @@ System.register([], function () {
         });
       }
 
+      var checkFilledFields = function checkFilledFields($form) {
+        var formFields = function ($form) {
+          return getUniqueFields($form.querySelectorAll(fieldsStringSelector)).map(function ($field) {
+            var name = $field.name,
+                type = $field.type,
+                isCheckboxOrRadio = "checkbox" === type || "radio" === type,
+                fieldChecked = $form.querySelector('[name="' + name + '"]:checked'),
+                isReqFrom = $field.matches("[data-required-from]"),
+                $reqMore = isReqFrom ? $form.querySelector($field.getAttribute("data-required-from")) : null;
+            return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && $reqMore.checked || !isReqFrom && $field.value ? $field : null;
+          }).filter(function ($field) {
+            return null !== $field;
+          });
+        }($form);
+
+        return Promise.all(formFields.map(function ($field) {
+          var isFieldForChangeEventBoolean = isFieldForChangeEvent($field);
+          return validation({
+            target: $field,
+            type: isFieldForChangeEventBoolean ? "change" : ""
+          });
+        }));
+      };
+
       var Form = /*#__PURE__*/function () {
         function Form(form, optionsObj) {
           _classCallCheck(this, Form);
@@ -726,15 +727,7 @@ System.register([], function () {
             }), $form.addEventListener(customEvents_field.validation, validationEnd, !1), $form.addEventListener(customEvents_form.validation, formValidationEnd, !1), formOptions.handleSubmit && ($form.addEventListener("submit", submit), formOptions.ajaxSubmit && ($form.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = $form.getAttribute("enctype")), $form.getAttribute("method") && (formOptions.ajaxOptions.method = $form.getAttribute("method").toUpperCase()), $form.getAttribute("action") && (formOptions.ajaxOptions.url = $form.getAttribute("action"))));
           }(self.$form, self.options);
           var initOptions = {};
-
-          if (self.options.formOptions.onInitCheckFilled) {
-            var focusOnRelated = self.options.fieldOptions.focusOnRelated;
-            self.options.fieldOptions.focusOnRelated = !1, initOptions.detail = checkFilledFields(self.$form).then(function (fields) {
-              return self.options.fieldOptions.focusOnRelated = focusOnRelated, fields;
-            });
-          }
-
-          dispatchCustomEvent(self.$form, customEvents_form.init, initOptions);
+          self.options.formOptions.onInitCheckFilled && (initOptions.detail = self.validateFilledFields()), dispatchCustomEvent(self.$form, customEvents_form.init, initOptions);
         }
 
         _createClass(Form, [{
@@ -745,7 +738,7 @@ System.register([], function () {
                 var useCapturing = "blur" === eventName;
                 $form.removeEventListener(eventName, validation, useCapturing);
               }), $form.removeEventListener(customEvents_field.validation, validationEnd, !1), $form.removeEventListener(customEvents_form.validation, formValidationEnd, !1), delete $form.formjs;
-            }(this.$form, this.options);
+            }(this.$form, this.options), dispatchCustomEvent(this.$form, customEvents_form.destroy);
           }
         }, {
           key: "getFormData",
@@ -773,6 +766,16 @@ System.register([], function () {
                 });
               }) : obj.result || removeClass($form, self.options.formOptions.cssClasses.valid), obj;
             }).then(finalizeFieldPromise);
+          }
+        }, {
+          key: "validateFilledFields",
+          value: function validateFilledFields() {
+            var _this = this;
+
+            var focusOnRelated = this.options.fieldOptions.focusOnRelated;
+            return this.options.fieldOptions.focusOnRelated = !1, checkFilledFields(this.$form).then(function (fields) {
+              return _this.options.fieldOptions.focusOnRelated = focusOnRelated, fields;
+            });
           }
         }, {
           key: "validateForm",
@@ -809,7 +812,7 @@ System.register([], function () {
         return Form;
       }();
 
-      Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, Form.prototype.version = "5.1.0";
+      Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, Form.prototype.version = "5.2.0";
 
       var $form = document.querySelector('form');
       var formInstance = new Form($form);
