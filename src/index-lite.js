@@ -1,6 +1,13 @@
 
 import { version }              from './modules/version';
-import { checkFormEl, finalizeFieldPromise, finalizeFormPromise, isNodeList, mergeObjects } from './modules/helpers';
+import { 
+    checkFormEl,
+    dispatchCustomEvent,
+    finalizeFieldPromise,
+    finalizeFormPromise,
+    isNodeList,
+    mergeObjects }              from './modules/helpers';
+import { customEvents }         from './modules-lite/helpers/customEvents';
 import { options }              from './modules-lite/options';
 import { validationRules }      from './modules/validationRules';
 import { checkFieldValidity }   from './modules/checkFieldValidity';
@@ -32,10 +39,13 @@ class Form {
         self.options.fieldOptions.beforeValidation = self.options.fieldOptions.beforeValidation.map(cbFn => cbFn.bind(self));
 
         self.$form.noValidate = true;
+
+        dispatchCustomEvent( self.$form, customEvents.form.init );
     }
 
     destroy(){
         delete this.$form.formjs;
+        dispatchCustomEvent( this.$form, customEvents.form.destroy );
     }
 
     validateField( field, fieldOptions ){
@@ -43,6 +53,10 @@ class Form {
         const $field = typeof field === 'string' ? self.$form.querySelector(field) : field;
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
         return checkFieldValidity($field, fieldOptions, self.validationRules, self.validationErrors)
+            .then(obj => {
+                dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } );
+                return obj;
+            })
             .then(finalizeFieldPromise);
     }
 
@@ -50,6 +64,10 @@ class Form {
         const self = this;
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
         return checkFormValidity(self.$form, fieldOptions, self.validationRules, self.validationErrors)
+            .then(data => {
+                dispatchCustomEvent( self.$form, customEvents.form.validation, { detail: data } );
+                return data;
+            })
             .then(finalizeFormPromise);
     }
     
