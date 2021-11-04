@@ -118,6 +118,23 @@
                             </ul>
                         </div>
                         <div class="col-sm-6 col-md-3">
+                            <h3 class="small-title mt-3">Events</h3>
+                            <ul>
+                                <li>
+                                    fjs.field:validation
+                                </li>
+                                <li>
+                                    fjs.form:destroy
+                                </li>
+                                <li>
+                                    fjs.form:init
+                                </li>
+                                <li>
+                                    fjs.form:validation
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
                             <h3 class="small-title mt-3">Validations</h3>
                             <ul>
                                 <li>
@@ -1263,6 +1280,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-6">
                             <pre class="text-green">fjs.field:validation</pre>
+                            <span class="badge badge-pill badge-yellow">Lite</span>
                             <p>
                                 Emitted just after a field has been validated.
                             </p>
@@ -1298,6 +1316,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-6">
                             <pre class="text-green">fjs.form:destroy</pre>
+                            <span class="badge badge-pill badge-yellow">Lite</span>
                             <p>
                                 Emitted after method <code>destroy</code> has been called.
                             </p>
@@ -1308,6 +1327,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-6">
                             <pre class="text-green">fjs.form:init</pre>
+                            <span class="badge badge-pill badge-yellow">Lite</span>
                             <p>
                                 Emitted when the form is initialized ( on constructor call ).
                             </p>
@@ -1317,7 +1337,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                 additional parameter data
                             </p>
                             <p>
-                                In this case, ( if <code>onInitCheckFilled</code> is set to <code>true</code> in formOptions ) a Promise is returned in <code>event.detail</code> and it will always go through Promise method <code>.then</code> passing the array <code>fields</code> to the function ( same array as returned in event <code>fjs.form:validation</code> but will ONLY contain validated fields ).
+                                In this case, ( if <code>onInitCheckFilled</code> is set to <code>true</code> in formOptions ) a Promise is returned in <code>event.detail</code> and it will always go through Promise method <code>.then</code> passing the array <code>fields</code> to the function ( same array as returned in event <code>fjs.form:validation</code> but will ONLY contain validated fields ). NOT for <span class="badge badge-pill badge-yellow">Lite</span> version.
                             </p>
                         </div>
                     </div>
@@ -1340,6 +1360,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-6">
                             <pre class="text-green">fjs.form:validation</pre>
+                            <span class="badge badge-pill badge-yellow">Lite</span>
                             <p>
                                 Emitted just after the form has been validated.
                             </p>
