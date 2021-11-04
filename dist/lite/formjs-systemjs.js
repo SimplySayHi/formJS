@@ -41,6 +41,12 @@ System.register([], (function(exports) {
                         Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
                     }));
                 })), out;
+            }, dispatchCustomEvent = function(elem, eventName, eventOptions) {
+                eventOptions = mergeObjects({}, {
+                    bubbles: !0
+                }, eventOptions);
+                var eventObj = new CustomEvent(eventName, eventOptions);
+                elem.dispatchEvent(eventObj);
             }, fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', finalizeFieldPromise = function(obj) {
                 return obj.result ? Promise.resolve() : Promise.reject(obj.errors);
             }, finalizeFormPromise = function(obj) {
@@ -81,6 +87,12 @@ System.register([], (function(exports) {
                 return string.replace(/-([a-z])/gi, (function(all, letter) {
                     return letter.toUpperCase();
                 }));
+            }, customEvents_field = {
+                validation: "fjs.field:validation"
+            }, customEvents_form = {
+                destroy: "fjs.form:destroy",
+                init: "fjs.form:init",
+                validation: "fjs.form:validation"
             }, validationRules = {
                 date: function(string) {
                     return {
@@ -276,7 +288,7 @@ System.register([], (function(exports) {
                     self.$form = checkFormElem.$el, self.$form.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj), 
                     self.options.fieldOptions.beforeValidation = self.options.fieldOptions.beforeValidation.map((function(cbFn) {
                         return cbFn.bind(self);
-                    })), self.$form.noValidate = !0;
+                    })), self.$form.noValidate = !0, dispatchCustomEvent(self.$form, customEvents_form.init);
                 }
                 var Constructor, protoProps, staticProps;
                 return Constructor = Form, staticProps = [ {
@@ -297,17 +309,22 @@ System.register([], (function(exports) {
                 } ], (protoProps = [ {
                     key: "destroy",
                     value: function() {
-                        delete this.$form.formjs;
+                        delete this.$form.formjs, dispatchCustomEvent(this.$form, customEvents_form.destroy);
                     }
                 }, {
                     key: "validateField",
                     value: function(field, fieldOptions) {
-                        return checkFieldValidity("string" == typeof field ? this.$form.querySelector(field) : field, fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), this.validationRules, this.validationErrors).then(finalizeFieldPromise);
+                        return checkFieldValidity("string" == typeof field ? this.$form.querySelector(field) : field, fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), this.validationRules, this.validationErrors).then((function(obj) {
+                            return dispatchCustomEvent(obj.$field, customEvents_field.validation, {
+                                detail: obj
+                            }), obj;
+                        })).then(finalizeFieldPromise);
                     }
                 }, {
                     key: "validateForm",
                     value: function(fieldOptions) {
-                        return fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), 
+                        var self = this;
+                        return fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions), 
                         function($form, fieldOptions, validationRules, validationErrors) {
                             var fieldToSkip = arguments.length > 4 && void 0 !== arguments[4] ? arguments[4] : null;
                             fieldOptions = mergeObjects({}, fieldOptions, {
@@ -332,7 +349,11 @@ System.register([], (function(exports) {
                                     fields: fields
                                 });
                             }));
-                        }(this.$form, fieldOptions, this.validationRules, this.validationErrors).then(finalizeFormPromise);
+                        }(self.$form, fieldOptions, self.validationRules, self.validationErrors).then((function(data) {
+                            return dispatchCustomEvent(self.$form, customEvents_form.validation, {
+                                detail: data
+                            }), data;
+                        })).then(finalizeFormPromise);
                     }
                 } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
                 Form;

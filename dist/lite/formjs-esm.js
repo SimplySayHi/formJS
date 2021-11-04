@@ -5,6 +5,12 @@ const isDOMNode = node => Element.prototype.isPrototypeOf(node), isPlainObject =
             Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
         });
     }), out;
+}, dispatchCustomEvent = (elem, eventName, eventOptions) => {
+    eventOptions = mergeObjects({}, {
+        bubbles: !0
+    }, eventOptions);
+    const eventObj = new CustomEvent(eventName, eventOptions);
+    elem.dispatchEvent(eventObj);
 }, finalizeFieldPromise = obj => obj.result ? Promise.resolve() : Promise.reject(obj.errors), finalizeFormPromise = obj => obj.result ? Promise.resolve(obj.fields) : Promise.reject(obj.fields), formatMap = {
     "YYYY-MM-DD": function(dateArray) {
         return dateArray;
@@ -26,7 +32,13 @@ const isDOMNode = node => Element.prototype.isPrototypeOf(node), isPlainObject =
 }, mergeValidateFieldDefault = obj => mergeObjects({}, {
     result: !1,
     $field: null
-}, obj), toCamelCase = string => string.replace(/-([a-z])/gi, (all, letter) => letter.toUpperCase()), validationRules = {
+}, obj), toCamelCase = string => string.replace(/-([a-z])/gi, (all, letter) => letter.toUpperCase()), customEvents_field = {
+    validation: "fjs.field:validation"
+}, customEvents_form = {
+    destroy: "fjs.form:destroy",
+    init: "fjs.form:init",
+    validation: "fjs.form:validation"
+}, validationRules = {
     date: function(string) {
         return {
             result: /^((((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29))$/g.test(string)
@@ -248,17 +260,22 @@ class Form {
         const self = this;
         self.$form = checkFormElem.$el, self.$form.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj), 
         self.options.fieldOptions.beforeValidation = self.options.fieldOptions.beforeValidation.map(cbFn => cbFn.bind(self)), 
-        self.$form.noValidate = !0;
+        self.$form.noValidate = !0, dispatchCustomEvent(self.$form, customEvents_form.init);
     }
     destroy() {
-        delete this.$form.formjs;
+        delete this.$form.formjs, dispatchCustomEvent(this.$form, customEvents_form.destroy);
     }
     validateField(field, fieldOptions) {
-        return checkFieldValidity("string" == typeof field ? this.$form.querySelector(field) : field, fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), this.validationRules, this.validationErrors).then(finalizeFieldPromise);
+        return checkFieldValidity("string" == typeof field ? this.$form.querySelector(field) : field, fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), this.validationRules, this.validationErrors).then(obj => (dispatchCustomEvent(obj.$field, customEvents_field.validation, {
+            detail: obj
+        }), obj)).then(finalizeFieldPromise);
     }
     validateForm(fieldOptions) {
-        return fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), 
-        checkFormValidity(this.$form, fieldOptions, this.validationRules, this.validationErrors).then(finalizeFormPromise);
+        const self = this;
+        return fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions), 
+        checkFormValidity(self.$form, fieldOptions, self.validationRules, self.validationErrors).then(data => (dispatchCustomEvent(self.$form, customEvents_form.validation, {
+            detail: data
+        }), data)).then(finalizeFormPromise);
     }
     static addValidationErrors(errorsObj) {
         Form.prototype.validationErrors = mergeObjects({}, Form.prototype.validationErrors, errorsObj);
