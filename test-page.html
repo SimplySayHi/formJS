@@ -283,18 +283,18 @@
             console.log('--- GENERAL FIELD VALIDATION', this);
             console.log(e.type, e.detail);
             console.log('--- FIELD IS ' + (e.detail.result ? '' : 'NOT ') + 'VALID');
-        }, false);
+        });
 
         formEl.querySelector('[type="email"]').addEventListener('fjs.field:validation', function(e){
             console.log('--- SPECIFIC FIELD VALIDATION ( EMAIL )', this);
             console.log(e.type, e.detail);
             console.log('--- FIELD IS ' + (e.detail.result ? '' : 'NOT ') + 'VALID');
-        }, false);
+        });
 
         formEl.addEventListener('fjs.form:validation', function(e){
             console.log(e.type, e.detail);
             console.log('--- FORM IS ' + (e.detail.result ? '' : 'NOT ') + 'VALID');
-        }, false);
+        });
 
         formEl.addEventListener('fjs.form:submit', function(e){
             console.log(e.type, e.detail);
@@ -308,7 +308,7 @@
                 .finally(function(){
                     console.log(e.type, 'finally');
                 });
-        }, false);
+        });
 
         // DECOMMENT TO TEST LITE VERSION
         /* formEl.addEventListener('submit', function(e){
