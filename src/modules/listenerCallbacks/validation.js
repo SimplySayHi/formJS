@@ -1,5 +1,5 @@
 
-import { fieldsStringSelector, mergeValidateFieldDefault, isFieldForChangeEvent } from '../helpers';
+import { fieldsStringSelector, isFieldForChangeEvent } from '../helpers';
 
 export const validation = function( event ){
 
@@ -16,23 +16,21 @@ export const validation = function( event ){
             (!isFieldForChangeEventBoolean && (!isChangeEvent || hasOnlyChangeEvent))
         ){
             
-            return self.validateField( $field )
+            self.validateField( $field )
                 .then(() => {
-                    const type = $field.type,
-                          $realtedEqualTo = $field.closest('form').querySelector('[data-equal-to="'+ $field.name +'"]');
+                    const type = $field.type;
+                    const $relatedEqualTo = $field.closest('form').querySelector('[data-equal-to="'+ $field.name +'"]');
 
                     if(
                         // FIELD IS ( required OR data-validate-if-filled ) AND RELATED FIELD data-equal-to HAS A VALUE
                         ($field.required || $field.matches('[data-validate-if-filled]')) && 
                         !(type === 'checkbox' || type === 'radio') && 
-                        $realtedEqualTo && $realtedEqualTo.value.trim() !== ''
+                        $relatedEqualTo && $relatedEqualTo.value.trim() !== ''
                     ){
-                        self.validateField( $realtedEqualTo ).catch(errors => {});
+                        self.validateField( $relatedEqualTo ).catch(errors => {});
                     }
-
-                    return mergeValidateFieldDefault({ result: true, $field });
                 })
-                .catch(errors => mergeValidateFieldDefault({$field, errors}));
+                .catch(errors => {});
 
         }
     }
