@@ -29,7 +29,7 @@ module.exports = {
     "<rootDir>/js/",
     "<rootDir>/src/modules/helpers",
     "<rootDir>/src/modules/options.js",
-    "<rootDir>/src/modules/optionsUtils.js",
+    "<rootDir>/src/modules/optionsUtils/beforeValidation.js",
     "<rootDir>/src/modules/validationRules.js",
     "<rootDir>/src/modules/validationRulesAttributes.js",
     "<rootDir>/src/modules/validationRules/checks.js",
