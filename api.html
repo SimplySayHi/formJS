@@ -831,12 +831,9 @@
                                     Description:
                                 </p>
                                 <p>
-                                    Get a JS object of the form data with all the answers.
+                                    Get a JS object of the form data with all user answers.
                                     <br />
                                     Collected data depends on the field as follow:
-                                </p>
-                                <p class="d-lg-none m-0">
-                                    Parameters:
                                 </p>
                                 <ul>
                                     <li>
@@ -850,6 +847,18 @@
                                     </li>
                                     <li>
                                         otherwise: set / given value
+                                    </li>
+                                </ul>
+                                <hr />
+                                <p>
+                                    Default function supports 2 ways of creating data object:
+                                </p>
+                                <ul>
+                                    <li>
+                                        Use field name attribute as object key ( see example in the next column )
+                                    </li>
+                                    <li>
+                                        Use dot-notation-like way to create a nested/complex data structure ( see <a href="./demos/demo-get-form-data-complex.html">demo</a> )
                                     </li>
                                 </ul>
                                 <hr />
@@ -878,7 +887,7 @@
                                     Return value:
                                 </p>
                                 <p>
-                                    Object like:
+                                    For simple structure, an object like:
                                 </p>
                                 <pre>
 <code class="language-js">{
@@ -886,6 +895,9 @@
     city:   'Milan',
     website:'http://www.valeriodipunzio.com'
 }</code></pre>
+                                <p>
+                                    For complex structure, see <a href="./demos/demo-get-form-data-complex.html">demo</a>
+                                </p>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
