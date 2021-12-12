@@ -86,6 +86,13 @@ Array.from(formsList).forEach(function($form, idx){
         });
     });
 
+    $form.addEventListener('fjs.form:init', function(event){
+        console.log(event.type, event.detail);
+        event.detail.then(fields => {
+            console.log(fields);
+        })
+    });
+
     $form.addEventListener('fjs.form:submit', function(e){
         console.log(e.type, e.detail);
         e.detail
