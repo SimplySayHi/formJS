@@ -120,6 +120,7 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
         },
         getFormData: function($filteredFields, trimValues) {
             const formData = {}, $form = this.$form;
+            let prevObj = formData;
             return $filteredFields.forEach($field => {
                 const isCheckbox = "checkbox" === $field.type, isRadio = "radio" === $field.type, isSelect = $field.matches("select"), name = $field.name;
                 let value = trimValues ? $field.value.trim() : $field.value;
@@ -140,7 +141,18 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
                         value.push($field.value);
                     }));
                 }
-                formData[name] = value;
+                name.split(".").forEach((keyName, index, list) => {
+                    const isLastKeyName = index + 1 === list.length;
+                    if (Array.isArray(prevObj)) {
+                        const keyNameSplit = keyName.split("___"), arrPos = keyNameSplit[0] - 1, arrayHasItemAtIndex = void 0 !== prevObj[arrPos], arrItemKeyName = keyNameSplit[1];
+                        if (arrayHasItemAtIndex || prevObj.push({}), keyName = arrItemKeyName, isLastKeyName ? prevObj[arrPos][keyName] = value : void 0 === prevObj[arrPos][keyName] && (prevObj[arrPos][keyName] = {}), 
+                        !isLastKeyName) return void (prevObj = prevObj[arrPos][keyName]);
+                    } else {
+                        const isKeyNameArray = keyName.endsWith("[]");
+                        keyName = keyName.replace("[]", ""), isLastKeyName ? prevObj[keyName] = value : void 0 === prevObj[keyName] && (prevObj[keyName] = isKeyNameArray ? [] : {});
+                    }
+                    prevObj = isLastKeyName ? formData : prevObj[keyName];
+                });
             }), formData;
         },
         handleFileUpload: !0,
@@ -345,17 +357,10 @@ const validation = function(event) {
     const isChangeEvent = "change" === event.type, $field = event.target, self = $field.closest("form").formjs;
     if ($field.matches(fieldsStringSelector)) {
         const isFieldForChangeEventBoolean = isFieldForChangeEvent($field), hasOnlyChangeEvent = "change" === self.options.fieldOptions.validateOnEvents;
-        if (isFieldForChangeEventBoolean && isChangeEvent || !isFieldForChangeEventBoolean && (!isChangeEvent || hasOnlyChangeEvent)) return self.validateField($field).then(() => {
-            const type = $field.type, $realtedEqualTo = $field.closest("form").querySelector('[data-equal-to="' + $field.name + '"]');
-            return ($field.required || $field.matches("[data-validate-if-filled]")) && "checkbox" !== type && "radio" !== type && $realtedEqualTo && "" !== $realtedEqualTo.value.trim() && self.validateField($realtedEqualTo).catch(errors => {}), 
-            mergeValidateFieldDefault({
-                result: !0,
-                $field: $field
-            });
-        }).catch(errors => mergeValidateFieldDefault({
-            $field: $field,
-            errors: errors
-        }));
+        (isFieldForChangeEventBoolean && isChangeEvent || !isFieldForChangeEventBoolean && (!isChangeEvent || hasOnlyChangeEvent)) && self.validateField($field).then(() => {
+            const type = $field.type, $relatedEqualTo = $field.closest("form").querySelector('[data-equal-to="' + $field.name + '"]');
+            ($field.required || $field.matches("[data-validate-if-filled]")) && "checkbox" !== type && "radio" !== type && $relatedEqualTo && "" !== $relatedEqualTo.value.trim() && self.validateField($relatedEqualTo).catch(errors => {});
+        }).catch(errors => {});
     }
 }, validationEnd = function(event) {
     const eventDetail = event.detail, $field = eventDetail.$field, dataFieldOptions = getJSONobjectFromFieldAttribute($field, "data-field-options"), fieldOptions = mergeObjects({}, $field.closest("form").formjs.options.fieldOptions, dataFieldOptions), $container = $field.closest(fieldOptions.questionContainer), isReqFrom = $field.matches("[data-required-from]"), $reqMore = document.querySelector($field.getAttribute("data-required-from"));
@@ -469,13 +474,13 @@ const checkFilledFields = $form => {
         const name = $field.name, type = $field.type, isCheckboxOrRadio = "checkbox" === type || "radio" === type, fieldChecked = $form.querySelector('[name="' + name + '"]:checked'), isReqFrom = $field.matches("[data-required-from]"), $reqMore = isReqFrom ? $form.querySelector($field.getAttribute("data-required-from")) : null;
         return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && $reqMore.checked || !isReqFrom && $field.value ? $field : null;
     }).filter($field => null !== $field))($form);
-    return Promise.all(formFields.map($field => {
-        const isFieldForChangeEventBoolean = isFieldForChangeEvent($field);
-        return validation({
-            target: $field,
-            type: isFieldForChangeEventBoolean ? "change" : ""
-        });
-    }));
+    return Promise.all(formFields.map($field => $form.formjs.validateField($field).then(() => mergeValidateFieldDefault({
+        result: !0,
+        $field: $field
+    })).catch(errors => mergeValidateFieldDefault({
+        $field: $field,
+        errors: errors
+    }))));
 };
 
 class Form {
