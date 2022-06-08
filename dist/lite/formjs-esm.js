@@ -1,4 +1,4 @@
-/* formJS Lite v5.2.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS Lite v5.3.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 const isDOMNode = node => Element.prototype.isPrototypeOf(node), isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
     return Array.from(arguments).slice(1).filter(arg => !!arg).forEach(arg => {
         Object.keys(arg).forEach(key => {
@@ -11,7 +11,7 @@ const isDOMNode = node => Element.prototype.isPrototypeOf(node), isPlainObject =
     }, eventOptions);
     const eventObj = new CustomEvent(eventName, eventOptions);
     elem.dispatchEvent(eventObj);
-}, finalizeFieldPromise = obj => obj.result ? Promise.resolve() : Promise.reject(obj.errors), finalizeFormPromise = obj => obj.result ? Promise.resolve(obj.fields) : Promise.reject(obj.fields), formatMap = {
+}, finalizeFieldPromise = ({errors: errors, result: result}) => result ? Promise.resolve() : Promise.reject(errors), finalizeFormPromise = ({fields: fields, result: result}) => result ? Promise.resolve(fields) : Promise.reject(fields), formatMap = {
     "YYYY-MM-DD": function(dateArray) {
         return dateArray;
     },
@@ -211,7 +211,7 @@ function checkFieldValidity($field, fieldOptions, validationRules, validationErr
     });
 }
 
-function checkFormValidity($form, fieldOptions, validationRules, validationErrors, fieldToSkip = null) {
+function checkFieldsValidity($fields, fieldOptions, validationRules, validationErrors, fieldToSkip = null) {
     fieldOptions = mergeObjects({}, fieldOptions, {
         focusOnRelated: !1
     });
@@ -222,7 +222,7 @@ function checkFormValidity($form, fieldOptions, validationRules, validationError
             return (name !== currentFieldName || type !== currentFieldType) && ($field.matches("[data-required-from]") || (currentFieldName = name, 
             currentFieldType = type), !0);
         });
-    })($form.querySelectorAll('input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea'));
+    })($fields);
     return Promise.all($fieldsList.map($field => {
         if (fieldToSkip && $field === fieldToSkip) {
             const obj = mergeValidateFieldDefault({
@@ -233,7 +233,7 @@ function checkFormValidity($form, fieldOptions, validationRules, validationError
         }
         return checkFieldValidity($field, fieldOptions, validationRules, validationErrors);
     })).then(fields => {
-        const areAllFieldsValid = 0 === fields.filter(fieldObj => !fieldObj.result).length;
+        const areAllFieldsValid = fields.every(({result: result}) => result);
         return mergeObjects({}, {
             result: !0,
             fields: []
@@ -271,9 +271,12 @@ class Form {
         }), obj)).then(finalizeFieldPromise);
     }
     validateForm(fieldOptions) {
-        const self = this;
-        return fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions), 
-        checkFormValidity(self.$form, fieldOptions, self.validationRules, self.validationErrors).then(data => (dispatchCustomEvent(self.$form, customEvents_form.validation, {
+        const $form = this.$form;
+        return checkFieldsValidity($form.querySelectorAll('input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea'), fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), this.validationRules, this.validationErrors).then(data => (data.fields.forEach(obj => {
+            obj.isCheckingForm = !0, dispatchCustomEvent(obj.$field, customEvents_field.validation, {
+                detail: obj
+            });
+        }), dispatchCustomEvent($form, customEvents_form.validation, {
             detail: data
         }), data)).then(finalizeFormPromise);
     }
@@ -295,6 +298,6 @@ Form.prototype.options = {
         maxFileSize: 10
     }
 }, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-Form.prototype.version = "5.2.0";
+Form.prototype.version = "5.3.0";
 
 export default Form;

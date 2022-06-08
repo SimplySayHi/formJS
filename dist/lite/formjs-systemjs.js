@@ -1,4 +1,4 @@
-/* formJS Lite v5.2.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS Lite v5.3.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 System.register([], (function(exports) {
     "use strict";
     return {
@@ -47,10 +47,12 @@ System.register([], (function(exports) {
                 }, eventOptions);
                 var eventObj = new CustomEvent(eventName, eventOptions);
                 elem.dispatchEvent(eventObj);
-            }, fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', finalizeFieldPromise = function(obj) {
-                return obj.result ? Promise.resolve() : Promise.reject(obj.errors);
-            }, finalizeFormPromise = function(obj) {
-                return obj.result ? Promise.resolve(obj.fields) : Promise.reject(obj.fields);
+            }, finalizeFieldPromise = function(_ref) {
+                var errors = _ref.errors;
+                return _ref.result ? Promise.resolve() : Promise.reject(errors);
+            }, finalizeFormPromise = function(_ref) {
+                var fields = _ref.fields;
+                return _ref.result ? Promise.resolve(fields) : Promise.reject(fields);
             }, formatMap = {
                 "YYYY-MM-DD": function(dateArray) {
                     return dateArray;
@@ -323,14 +325,13 @@ System.register([], (function(exports) {
                 }, {
                     key: "validateForm",
                     value: function(fieldOptions) {
-                        var self = this;
-                        return fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions), 
-                        function($form, fieldOptions, validationRules, validationErrors) {
+                        var $form = this.$form;
+                        return function($fields, fieldOptions, validationRules, validationErrors) {
                             var fieldToSkip = arguments.length > 4 && void 0 !== arguments[4] ? arguments[4] : null;
                             fieldOptions = mergeObjects({}, fieldOptions, {
                                 focusOnRelated: !1
                             });
-                            var $fieldsList = getUniqueFields($form.querySelectorAll(fieldsStringSelector));
+                            var $fieldsList = getUniqueFields($fields);
                             return Promise.all($fieldsList.map((function($field) {
                                 if (fieldToSkip && $field === fieldToSkip) {
                                     var obj = mergeValidateFieldDefault({
@@ -341,16 +342,20 @@ System.register([], (function(exports) {
                                 }
                                 return checkFieldValidity($field, fieldOptions, validationRules, validationErrors);
                             }))).then((function(fields) {
-                                var areAllFieldsValid = 0 === fields.filter((function(fieldObj) {
-                                    return !fieldObj.result;
-                                })).length;
+                                var areAllFieldsValid = fields.every((function(_ref) {
+                                    return _ref.result;
+                                }));
                                 return mergeValidateFormDefault({
                                     result: areAllFieldsValid,
                                     fields: fields
                                 });
                             }));
-                        }(self.$form, fieldOptions, self.validationRules, self.validationErrors).then((function(data) {
-                            return dispatchCustomEvent(self.$form, customEvents_form.validation, {
+                        }($form.querySelectorAll('input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea'), fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), this.validationRules, this.validationErrors).then((function(data) {
+                            return data.fields.forEach((function(obj) {
+                                obj.isCheckingForm = !0, dispatchCustomEvent(obj.$field, customEvents_field.validation, {
+                                    detail: obj
+                                });
+                            })), dispatchCustomEvent($form, customEvents_form.validation, {
                                 detail: data
                             }), data;
                         })).then(finalizeFormPromise);
@@ -365,7 +370,7 @@ System.register([], (function(exports) {
                     maxFileSize: 10
                 }
             }, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-            Form.prototype.version = "5.2.0";
+            Form.prototype.version = "5.3.0";
         }
     };
 }));
