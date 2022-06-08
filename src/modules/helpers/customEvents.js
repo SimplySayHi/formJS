@@ -8,5 +8,8 @@ export const customEvents = {
         init:       'fjs.form:init',
         submit:     'fjs.form:submit',
         validation: 'fjs.form:validation'
+    },
+    group: {
+        validation: 'fjs.group:validation'
     }
 }

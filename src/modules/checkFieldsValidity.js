@@ -1,11 +1,11 @@
 
-import { fieldsStringSelector, getUniqueFields, mergeValidateFieldDefault, mergeValidateFormDefault, mergeObjects } from './helpers';
+import { getUniqueFields, mergeValidateFieldDefault, mergeValidateFormDefault, mergeObjects } from './helpers';
 import { checkFieldValidity } from './checkFieldValidity';
 
-export function checkFormValidity( $form, fieldOptions, validationRules, validationErrors, fieldToSkip = null ){
+export function checkFieldsValidity( $fields, fieldOptions, validationRules, validationErrors, fieldToSkip = null ){
 
     fieldOptions = mergeObjects( {}, fieldOptions, {focusOnRelated: false} );
-    const $fieldsList = getUniqueFields( $form.querySelectorAll(fieldsStringSelector) );
+    const $fieldsList = getUniqueFields( $fields );
 
     return Promise.all( $fieldsList.map($field => {
 
@@ -17,7 +17,7 @@ export function checkFormValidity( $form, fieldOptions, validationRules, validat
 
     }) ).then(fields => {
 
-        const areAllFieldsValid = fields.filter(fieldObj => !fieldObj.result).length === 0;
+        const areAllFieldsValid = fields.every(({result}) => result);
         return mergeValidateFormDefault({result: areAllFieldsValid, fields});
 
     });

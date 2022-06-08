@@ -31,7 +31,13 @@ export function submit( event ){
     addClass( $form, formCssClasses.submit );
 
     instance.validateForm()
-        .then(fields => {
+        .then(data => {
+            
+            const hasGroup = typeof data.group !== 'undefined';
+
+            if( hasGroup && !data.canSubmit ){
+                return [{ stopExecution: true }]
+            }
 
             const beforeSendData = {
                 stopExecution: false,
@@ -47,7 +53,7 @@ export function submit( event ){
 
         }).then(dataList => {
 
-            if( dataList.filter(data => data.stopExecution).length > 0 ){
+            if( dataList.some(({stopExecution}) => stopExecution) ){
                 eventPreventDefault();
                 return false;
             }

@@ -1,7 +1,7 @@
 
-export const finalizeFormPromise = obj => {
-    if( obj.result ){
-        return Promise.resolve(obj.fields);
+export const finalizeFormPromise = ({fields, result}) => {
+    if( result ){
+        return Promise.resolve(fields);
     }
-    return Promise.reject(obj.fields);
+    return Promise.reject(fields);
 }

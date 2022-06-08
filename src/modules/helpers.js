@@ -7,6 +7,7 @@ export { dispatchCustomEvent }      from './helpers/dispatchCustomEvent';
 export { excludeSelector }          from './helpers/excludeSelector';
 export { fieldsStringSelector }     from './helpers/fieldsStringSelector';
 export { finalizeFieldPromise }     from './helpers/finalizeFieldPromise';
+export { finalizeFieldsGroupPromise }from './helpers/finalizeFieldsGroupPromise';
 export { finalizeFormPromise }      from './helpers/finalizeFormPromise';
 export { getDateAsNumber }          from './helpers/getDateAsNumber';
 export { getJSONobjectFromFieldAttribute } from './helpers/getJSONobjectFromFieldAttribute';
@@ -16,6 +17,8 @@ export { getUniqueFields }          from './helpers/getUniqueFields';
 export { mergeValidateFieldDefault }  from './helpers/mergeValidateFieldDefault';
 export { mergeValidateFormDefault }   from './helpers/mergeValidateFormDefault';
 export { isDOMNode }                from './helpers/isDOMNode';
+export { isInteger }                from './helpers/isInteger'
+export { isValidSelector }          from './helpers/isValidSelector';
 export { isFieldForChangeEvent }    from './helpers/isFieldForChangeEvent';
 export { isNodeList }               from './helpers/isNodeList';
 export { isPlainObject }            from './helpers/isPlainObject';

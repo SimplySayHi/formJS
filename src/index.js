@@ -1,13 +1,18 @@
 
-import { version }              from './modules/version';
+import { version }              from '../package.json';
 import { 
     checkFormEl, 
     customEvents, 
     dispatchCustomEvent, 
     excludeSelector, 
+    fieldsStringSelector, 
     finalizeFieldPromise, 
+    finalizeFieldsGroupPromise, 
     finalizeFormPromise, 
-    isNodeList, 
+    getFilledFields, 
+    isInteger, 
+    isNodeList,
+    isValidSelector, 
     mergeObjects, 
     removeClass }               from './modules/helpers';
 import { options }              from './modules/options';
@@ -15,8 +20,7 @@ import { validationRules }      from './modules/validationRules';
 import { formStartup }          from './modules/formStartup';
 import { destroy }              from './modules/destroy';
 import { checkFieldValidity }   from './modules/checkFieldValidity';
-import { checkFormValidity }    from './modules/checkFormValidity';
-import { checkFilledFields }    from './modules/checkFilledFields';
+import { checkFieldsValidity }  from './modules/checkFieldsValidity';
 
 class Form {
 
@@ -39,6 +43,7 @@ class Form {
         self.$form = checkFormElem.$el;
         self.$form.formjs = self;
         self.options = mergeObjects({}, Form.prototype.options, optionsObj);
+        self.currentGroup = self.options.fieldOptions.groups[0];
 
         // BINDING CONTEXT FOR FUTURE EXECUTION
         const cbList = [
@@ -61,7 +66,7 @@ class Form {
 
         const initOptions = {};
         if( self.options.formOptions.onInitCheckFilled ){
-            initOptions.detail = self.validateFilledFields();
+            initOptions.detail = self.validateFilledFields().catch(fields => {});
         }
         dispatchCustomEvent( self.$form, customEvents.form.init, initOptions );
     }
@@ -79,18 +84,37 @@ class Form {
 
     validateField( field, fieldOptions ){
         const self = this;
-        const $field = typeof field === 'string' ? self.$form.querySelector(field) : field;
-        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
         const $form = self.$form;
+        const $field = typeof field === 'string' ? $form.querySelector(field) : field;
+
+        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+        
         return checkFieldValidity($field, fieldOptions, self.validationRules, self.validationErrors)
             .then(obj => {
                 dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } );
-                if( obj.result && fieldOptions.onValidationCheckAll ){
-                    checkFormValidity( $form, fieldOptions, self.validationRules, self.validationErrors, obj.$field )
-                        .then(dataForm => {
-                            dispatchCustomEvent( $form, customEvents.form.validation, { detail: dataForm } );
-                        });
-                } else if( !obj.result ){
+                if( obj.result ){
+                    if( fieldOptions.onValidationCheckAll ){
+                        const selector = self.currentGroup || fieldsStringSelector;
+                        const $fields = $form.querySelectorAll(selector);
+                        const groups = self.options.fieldOptions.groups;
+                        checkFieldsValidity( $fields, fieldOptions, self.validationRules, self.validationErrors, obj.$field )
+                            .then(dataForm => {
+                                const validationEventName = self.currentGroup ? customEvents.group.validation : customEvents.form.validation;
+                                if( self.currentGroup ){
+                                    dataForm.group = {
+                                        prev: groups[groups.indexOf(selector) - 1],
+                                        current: selector,
+                                        next: groups[groups.indexOf(selector) + 1]
+                                    }
+                                    if( dataForm.result ){
+                                        self.currentGroup = dataForm.group.next;
+                                    }
+                                    dataForm.canSubmit = !self.currentGroup;
+                                }
+                                dispatchCustomEvent( $form, validationEventName, { detail: dataForm } );
+                            });
+                    }
+                } else {
                     removeClass( $form, self.options.formOptions.cssClasses.valid );
                 }
                 return obj;
@@ -98,22 +122,65 @@ class Form {
             .then(finalizeFieldPromise);
     }
 
-    validateFilledFields(){
-        const focusOnRelated = this.options.fieldOptions.focusOnRelated;
+    validateFieldsGroup( selectorOrGroupIndex = this.currentGroup, fieldOptions ){
+        const self = this;
 
-        this.options.fieldOptions.focusOnRelated = false;
+        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
 
-        return checkFilledFields(this.$form).then(fields => {
-            this.options.fieldOptions.focusOnRelated = focusOnRelated;
-            return fields;
-        });
+        const groups = fieldOptions.groups;
+        const selector = isInteger(selectorOrGroupIndex) ? 
+                            groups[selectorOrGroupIndex] : 
+                            (isValidSelector(selectorOrGroupIndex) ? selectorOrGroupIndex : false);
+        const $fields = selector ? self.$form.querySelectorAll(selector) : selectorOrGroupIndex;
+        return checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors)
+            .then(data => {
+                data.fields.forEach(obj => {
+                    obj.isCheckingGroup = true;
+                    dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } );
+                });
+                if( groups.length > 0 ){
+                    data.group = {
+                        prev: groups[groups.indexOf(selector) - 1],
+                        current: selector,
+                        next: groups[groups.indexOf(selector) + 1]
+                    }
+                    data.canSubmit = !data.group.next;
+                }
+                dispatchCustomEvent( self.$form, customEvents.group.validation, { detail: data } );
+                return data;
+            })
+            .then(finalizeFieldsGroupPromise);
+    }
+
+    validateFilledFields( fieldOptions ){
+        const self = this;
+        const $filledFields = getFilledFields( self.$form );
+
+        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+
+        return checkFieldsValidity($filledFields, fieldOptions, self.validationRules, self.validationErrors)
+            .then(data => {
+                data.fields.forEach(obj => {
+                    dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } );
+                });
+                return data;
+            })
+            .then(finalizeFormPromise);
     }
 
     validateForm( fieldOptions ){
         const self = this;
+
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+
+        if( self.currentGroup ){
+            return self.validateFieldsGroup( self.currentGroup, fieldOptions )
+        }
+
         const $form = self.$form;
-        return checkFormValidity($form, fieldOptions, self.validationRules, self.validationErrors)
+        const $fields = $form.querySelectorAll(fieldsStringSelector);
+
+        return checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors)
             .then(data => {
                 data.fields.forEach(obj => {
                     obj.isCheckingForm = true;

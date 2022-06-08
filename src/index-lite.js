@@ -1,8 +1,9 @@
 
-import { version }              from './modules/version';
+import { version }              from '../package.json';
 import { 
     checkFormEl,
     dispatchCustomEvent,
+    fieldsStringSelector,
     finalizeFieldPromise,
     finalizeFormPromise,
     isNodeList,
@@ -11,7 +12,7 @@ import { customEvents }         from './modules-lite/helpers/customEvents';
 import { options }              from './modules-lite/options';
 import { validationRules }      from './modules/validationRules';
 import { checkFieldValidity }   from './modules/checkFieldValidity';
-import { checkFormValidity }    from './modules/checkFormValidity';
+import { checkFieldsValidity }  from './modules/checkFieldsValidity';
 
 class Form {
 
@@ -51,7 +52,9 @@ class Form {
     validateField( field, fieldOptions ){
         const self = this;
         const $field = typeof field === 'string' ? self.$form.querySelector(field) : field;
+        
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+        
         return checkFieldValidity($field, fieldOptions, self.validationRules, self.validationErrors)
             .then(obj => {
                 dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } );
@@ -62,10 +65,18 @@ class Form {
 
     validateForm( fieldOptions ){
         const self = this;
+        const $form = self.$form;
+        const $fields = $form.querySelectorAll(fieldsStringSelector);
+
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
-        return checkFormValidity(self.$form, fieldOptions, self.validationRules, self.validationErrors)
+
+        return checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors)
             .then(data => {
-                dispatchCustomEvent( self.$form, customEvents.form.validation, { detail: data } );
+                data.fields.forEach(obj => {
+                    obj.isCheckingForm = true;
+                    dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } );
+                });
+                dispatchCustomEvent( $form, customEvents.form.validation, { detail: data } );
                 return data;
             })
             .then(finalizeFormPromise);

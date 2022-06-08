@@ -15,6 +15,7 @@ export const options = {
             valid:              'is-valid'
         },
         focusOnRelated:         true,
+        groups:                 [],
         maxFileSize:            10,
         onValidationCheckAll:   false,
         preventPasteFields:     '[type="password"], [data-equal-to]',

@@ -1,7 +1,7 @@
 
-export const finalizeFieldPromise = obj => {
-    if( obj.result ){
+export const finalizeFieldPromise = ({errors, result}) => {
+    if( result ){
         return Promise.resolve();
     }
-    return Promise.reject(obj.errors);
+    return Promise.reject(errors);
 }
