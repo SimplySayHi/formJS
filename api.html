@@ -67,6 +67,7 @@
                 <a href="#builtin-validations">Validations</a>
             </div>
 
+        <!-- Lite Version Options -->
         <div class="mt-5">
             <hr />
             <p class="m-0">
@@ -146,6 +147,34 @@
                 </div>
             </div>
             <hr />
+        </div>
+
+        <!-- Instance -->
+        <div id="instance">
+            <h3 class="sticky-title">Instance<span class="small">:</span></h3>
+            <div>
+                <p>
+                    Once the instance is created, you can access to it from the DOM node of the form:
+                </p>
+                <pre><code class="language-js">const formInstance = document.querySelector('form').formjs</code></pre>
+                <p>
+                    and you can access these properties directly from the form instance:
+                </p>
+                <ul>
+                    <li>
+                        <span class="text-green">Current group</span>: <code>formInstance.currentGroup</code> ( default value is <code>options.formOptions.groups[0]</code> )
+                    </li>
+                    <li>
+                        <span class="text-green">Form element</span>: <code>formInstance.$form</code>
+                    </li>
+                    <li>
+                        <span class="text-green">Options</span>: <code>formInstance.options</code>
+                    </li>
+                    <li>
+                        <span class="text-green">Version</span>: <code>formInstance.version</code>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <!-- Options -->
@@ -677,6 +706,22 @@
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3">
+                                <pre class="text-green">groups</pre>
+                            </div>
+                            <div class="w-100 d-xl-none"></div>
+                            <div class="col-lg-6 col-xl-5">
+                                array of CSS selectors
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-6 col-xl-4">
+                                <p>
+                                    List of CSS selectors to define groups of validation.<br />
+                                    If defined they will act like "steps", so, on form submit or call method <code>validateForm</code>, the fields that match the selector will be valdiated ( see also method <code>validateFieldsGroup</code> )
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                            <div class="col-lg-auto col-xl-3">
                                 <pre class="text-green">handleFileUpload</pre>
                                 <p>( boolean )</p>
                             </div>
@@ -763,6 +808,7 @@
         valid:          'is-valid'
     },
     getFormData:        getFormDataDefault,
+    groups:             [],
     handleFileUpload:   true,
     handleSubmit:       true,
     onInitCheckFilled:  true
@@ -964,6 +1010,96 @@
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
+                                <pre class="text-green">validateFieldsGroup( [selectorOrGroupIndex] )</pre>
+                            </div>
+                            <div class="w-100 d-xl-none"></div>
+                            <div class="col-lg-7 col-xl-5">
+                                <p class="d-lg-none m-0">
+                                    Description:
+                                </p>
+                                <p>
+                                    Fires validation for fields that match the given selector or the corresponding selector taken from option <code>groups</code> thanks to the given index.
+                                    <br /><br />
+                                    Then:
+                                </p>
+                                <ul>
+                                    <li>
+                                        Emit event <code>fjs.field:validation</code> for each field <span class="text-yellow">*</span>
+                                    </li>
+                                    <li>
+                                        Emit event <code>fjs.group:validation</code> <span class="text-yellow">*</span>
+                                    </li>
+                                    <li>
+                                        If all group fields are valid, updates the value of <code>this.currentGroup</code> with the selector in <code>group.next</code> ( values of <code>group</code> come from option <code>groups</code>, if there's no next selector, it is set to <code>undefined</code> )
+                                    </li>
+                                </ul>
+                                <p class="small">
+                                    <span class="text-yellow">*</span> See <a href="#builtin-events">Events section</a> for details.
+                                </p>
+                                <hr />
+                                <p class="d-lg-none m-0">
+                                    Parameters:
+                                </p>
+                                <ul>
+                                    <li>
+                                        <span class="text-green">selectorOrGroupIndex</span>: CSS string selector ( or index of selector in option <code>groups</code> ) to select fields to validate. Default value is <code>this.currentGroup</code>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-5 col-xl-3">
+                                <p class="d-lg-none m-0">
+                                    Return value:
+                                </p>
+                                <p>
+                                    A Promise that will:
+                                </p>
+                                <ul>
+                                    <li>
+                                        Resolve in <code>.then(({canSubmit, fields, group}) => {})</code> if the group of fields is valid.
+                                    </li>
+                                    <li>
+                                        Reject in <code>.catch(({fields, group}) => {})</code> if the group of fields is NOT valid.
+                                    </li>
+                                </ul>
+                                <p>
+                                    Example of returned object <code>errors</code>:
+                                </p>
+<pre><code class="language-js">{
+    canSubmit: false,
+    fields: [...],
+    group: {
+        prev: Selector || undefined,
+        current: Selector,
+        next: Selector || undefined
+    }
+}
+</code></pre>
+                                <ul>
+                                    <li>
+                                        <span class="text-green">canSubmit</span>: ( Boolean ) is returned <code>true</code> only when <code>group.next = undefined</code> that will tell you reached the last step/group.
+                                    </li>
+                                    <li>
+                                        <span class="text-green">fields</span>: ( Array ) same as returned by method <code>validateForm</code> but every item will have <code>isCheckingGroup = true</code> instead of isCheckingForm.
+                                    </li>
+                                    <li>
+                                        <span class="text-green">group</span>: ( Object ) 
+                                        <ul>
+                                            <li>
+                                                <span class="text-green">prev</span>: ( Selector || undefined ) based on current selector, the previous one from option <code>groups</code>
+                                            </li>
+                                            <li>
+                                                <span class="text-green">current</span>: ( Selector ) selector of the group that has just been validated
+                                            </li>
+                                            <li>
+                                                <span class="text-green">next</span>: ( Selector || undefined ) based on current selector, the next one from option <code>groups</code>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                            <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">validateFilledFields()</pre>
                             </div>
                             <div class="w-100 d-xl-none"></div>
@@ -972,7 +1108,17 @@
                                     Description:
                                 </p>
                                 <p>
-                                    Run validation for fields that already have a value set.
+                                    Fires validation for fields that already have a value set.
+                                    <br /><br />
+                                    Then:
+                                </p>
+                                <ul>
+                                    <li>
+                                        Emit event <code>fjs.field:validation</code> for each field <span class="text-yellow">*</span>
+                                    </li>
+                                </ul>
+                                <p class="small">
+                                    <span class="text-yellow">*</span> See <a href="#builtin-events">Events section</a> for details.
                                 </p>
                             </div>
                             <div class="col-lg-5 col-xl-3">
@@ -996,6 +1142,8 @@
                                 </p>
                                 <p>
                                     <span class="badge badge-pill badge-yellow">Lite</span> Fires validation for the form.
+                                    <br /><br />
+                                    If option <code>groups</code> is set, the validation will act like "steps" by firing method <code>validateFieldsGroup</code> ( validating <code>this.currentGroup</code> ) each time <code>validateForm</code> is called until last step, where, if fields are valid, the for is submitted as usual.
                                     <br /><br />
                                     Then:
                                 </p>
@@ -1306,7 +1454,8 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
     $field: $field,
     result: false,
     errors: {...},
-    isCheckingForm: true
+    isCheckingForm: true,
+    isCheckingGroup: true
 }
 </code></pre>
                             <ul>
@@ -1321,6 +1470,9 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                 </li>
                                 <li>
                                     <span class="text-green">isCheckingForm</span>: <code>true</code> present ONLY when event is emitted by method <code>validateForm()</code>
+                                </li>
+                                <li>
+                                    <span class="text-green">isCheckingGroup</span>: <code>true</code> present ONLY when event is emitted by method <code>validateFieldsGroup()</code>
                                 </li>
                             </ul>
                         </div>
@@ -1390,6 +1542,56 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <ul>
                                 <li>
                                     <span class="text-green">fields</span>: Array of objects ( each object is like described in event <code>fjs.field:validation</code> )
+                                </li>
+                                <li>
+                                    <span class="text-green">result</span>: Boolean
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div class="col-lg-6">
+                            <pre class="text-green">fjs.group:validation</pre>
+                            <p>
+                                Emitted just after a group of fields has been validated ( after calling method <code>validateFieldsGroup</code> ).
+                            </p>
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="d-lg-none">
+                                additional parameter data
+                            </p>
+<pre>
+<code class="language-js">{
+    canSubmit: false,
+    fields: [{...}],
+    group: {
+        prev: Selector || undefined,
+        current: Selector,
+        next: Selector || undefined
+    },
+    result: true
+}
+</code></pre>
+                            <ul>
+                                <li>
+                                    <span class="text-green">canSubmit</span>: ( Boolean ) is returned <code>true</code> only when <code>group.next = undefined</code> that will tell you reached the last step/group.
+                                </li>
+                                <li>
+                                    <span class="text-green">fields</span>: Array of objects ( each object is like described in event <code>fjs.field:validation</code> )
+                                </li>
+                                <li>
+                                    <span class="text-green">group</span>: ( Object ) 
+                                    <ul>
+                                        <li>
+                                            <span class="text-green">prev</span>: ( Selector || undefined ) based on current selector, the previous one from option <code>groups</code>
+                                        </li>
+                                        <li>
+                                            <span class="text-green">current</span>: ( Selector ) selector of the group that has just been validated
+                                        </li>
+                                        <li>
+                                            <span class="text-green">next</span>: ( Selector || undefined ) based on current selector, the next one from option <code>groups</code>
+                                        </li>
+                                    </ul>
                                 </li>
                                 <li>
                                     <span class="text-green">result</span>: Boolean

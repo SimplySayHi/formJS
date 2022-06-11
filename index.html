@@ -104,7 +104,7 @@
                     <div class="mt-auto">
                         <div class="mt-3">
                             <p class="m-0">
-                                Only 6.2KB ( <span class="badge badge-pill badge-yellow">Lite</span> version 3.4KB ) minified &amp; gzipped
+                                Only 6.5KB ( <span class="badge badge-pill badge-yellow">Lite</span> version 3.5KB ) minified &amp; gzipped
                             </p>
                             <p class="m-0">
                                 Download
@@ -207,16 +207,33 @@
                     <div class="media-body pl-2">
                         <ul>
                             <li>
-                                Added method "validateFilledFields" ( full version only )
+                                Added option "groups" in "formOptions" to enable validation steps/groups ( full version only )
                             </li>
                             <li>
-                                Update "getFormData" to support object notation in fields name in returned js object ( full version only )
+                                Added instance prop "currentGroup"
                             </li>
                             <li>
-                                Added support for custom events for Lite version
+                                Added method "validateFieldsGroup" ( full version only )
                             </li>
                             <li>
-                                Minor improvements
+                                Added event "fjs.group:validation"
+                            </li>
+                            <li>
+                                Fixed bug on method "validateForm" to fire event "fjs.field:validation" for each filed after validation ( Lite version only )
+                            </li>
+                            <li>
+                                Minor internal improvements
+                            </li>
+                            <li>
+                                <span class="text-red">DEPRECATED</span> features ( will be dropped in v6 ):
+                                <ul>
+                                    <li>
+                                        Support for IE and old browsers
+                                    </li>
+                                    <li>
+                                        SystemJS version
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -231,6 +248,25 @@
                 <div class="toggable-content">
                     <ul class="p-0">
 
+                        <li class="media my-3">
+                            <div class="version-num text-red">5.2.0</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Added method "validateFilledFields" ( full version only )
+                                    </li>
+                                    <li>
+                                        Update "getFormData" to support object notation in fields name in returned js object ( full version only )
+                                    </li>
+                                    <li>
+                                        Added support for custom events for Lite version
+                                    </li>
+                                    <li>
+                                        Minor improvements
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="media my-3">
                             <div class="version-num text-red">5.1.0</div>
                             <div class="media-body pl-2">
