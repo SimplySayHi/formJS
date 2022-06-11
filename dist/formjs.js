@@ -174,7 +174,6 @@
                 valid: "is-valid"
             },
             focusOnRelated: !0,
-            groups: [],
             maxFileSize: 10,
             onValidationCheckAll: !1,
             preventPasteFields: '[type="password"], [data-equal-to]',
@@ -245,6 +244,7 @@
                     }));
                 })), formData;
             },
+            groups: [],
             handleFileUpload: !0,
             handleSubmit: !0,
             onInitCheckFilled: !0
@@ -588,7 +588,7 @@
             if (!checkFormElem.result) throw new Error('First argument "form" is not a DOM node nor a form CSS selector!');
             var self = this;
             self.$form = checkFormElem.$el, self.$form.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj), 
-            self.currentGroup = self.options.fieldOptions.groups[0];
+            self.currentGroup = self.options.formOptions.groups[0];
             var cbList = [ "beforeValidation", "beforeSend", "getFormData" ];
             cbList.forEach((function(cbName) {
                 var optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions", cbOpt = self.options[optionType][cbName];
@@ -648,7 +648,7 @@
                         detail: obj
                     }), obj.result) {
                         if (fieldOptions.onValidationCheckAll) {
-                            var selector = self.currentGroup || fieldsStringSelector, $fields = $form.querySelectorAll(selector), groups = self.options.fieldOptions.groups;
+                            var selector = self.currentGroup || fieldsStringSelector, $fields = $form.querySelectorAll(selector), groups = self.options.formOptions.groups;
                             checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors, obj.$field).then((function(dataForm) {
                                 var validationEventName = self.currentGroup ? customEvents_group.validation : customEvents_form.validation;
                                 self.currentGroup && (dataForm.group = {
@@ -668,7 +668,9 @@
         }, {
             key: "validateFieldsGroup",
             value: function() {
-                var selectorOrGroupIndex = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : this.currentGroup, fieldOptions = arguments.length > 1 ? arguments[1] : void 0, self = this, groups = (fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions)).groups, selector = isInteger(selectorOrGroupIndex) ? groups[selectorOrGroupIndex] : !!isValidSelector(selectorOrGroupIndex) && selectorOrGroupIndex, $fields = selector ? self.$form.querySelectorAll(selector) : selectorOrGroupIndex;
+                var selectorOrGroupIndex = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : this.currentGroup, fieldOptions = arguments.length > 1 ? arguments[1] : void 0, self = this;
+                fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+                var groups = self.options.formOptions.groups, selector = isInteger(selectorOrGroupIndex) ? groups[selectorOrGroupIndex] : !!isValidSelector(selectorOrGroupIndex) && selectorOrGroupIndex, $fields = selector ? self.$form.querySelectorAll(selector) : selectorOrGroupIndex;
                 return checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors).then((function(data) {
                     return data.fields.forEach((function(obj) {
                         obj.isCheckingGroup = !0, dispatchCustomEvent(obj.$field, customEvents_field.validation, {

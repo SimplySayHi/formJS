@@ -216,7 +216,6 @@ System.register([], function () {
             valid: "is-valid"
           },
           focusOnRelated: !0,
-          groups: [],
           maxFileSize: 10,
           onValidationCheckAll: !1,
           preventPasteFields: '[type="password"], [data-equal-to]',
@@ -302,6 +301,7 @@ System.register([], function () {
               });
             }), formData;
           },
+          groups: [],
           handleFileUpload: !0,
           handleSubmit: !0,
           onInitCheckFilled: !0
@@ -725,7 +725,7 @@ System.register([], function () {
           if (isNodeList(form)) throw new Error('First argument "form" must be a single DOM node or a form CSS selector, not a NodeList!');
           if (!checkFormElem.result) throw new Error('First argument "form" is not a DOM node nor a form CSS selector!');
           var self = this;
-          self.$form = checkFormElem.$el, self.$form.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj), self.currentGroup = self.options.fieldOptions.groups[0];
+          self.$form = checkFormElem.$el, self.$form.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj), self.currentGroup = self.options.formOptions.groups[0];
           ["beforeValidation", "beforeSend", "getFormData"].forEach(function (cbName) {
             var optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions";
             var cbOpt = self.options[optionType][cbName];
@@ -777,7 +777,7 @@ System.register([], function () {
                 if (fieldOptions.onValidationCheckAll) {
                   var selector = self.currentGroup || fieldsStringSelector,
                       $fields = $form.querySelectorAll(selector),
-                      groups = self.options.fieldOptions.groups;
+                      groups = self.options.formOptions.groups;
                   checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors, obj.$field).then(function (dataForm) {
                     var validationEventName = self.currentGroup ? customEvents_group.validation : customEvents_form.validation;
                     self.currentGroup && (dataForm.group = {
@@ -799,9 +799,10 @@ System.register([], function () {
           value: function validateFieldsGroup() {
             var selectorOrGroupIndex = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.currentGroup;
             var fieldOptions = arguments.length > 1 ? arguments[1] : undefined;
-            var self = this,
-                groups = self.options.fieldOptions.groups,
-                selector = /^\d+$/.test(selectorOrGroupIndex) ? self.options.fieldOptions.groups[selectorOrGroupIndex] : !!function (stringSelector) {
+            var self = this;
+            fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+            var groups = self.options.formOptions.groups,
+                selector = /^\d+$/.test(selectorOrGroupIndex) ? groups[selectorOrGroupIndex] : !!function (stringSelector) {
               try {
                 var isString = "string" == typeof stringSelector;
                 return document.querySelector(stringSelector), isString;
@@ -837,7 +838,7 @@ System.register([], function () {
               return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && $reqMore.checked || !isReqFrom && $field.value ? $field : null;
             }).filter(function ($field) {
               return null !== $field;
-            })), fieldOptions, this.validationRules, this.validationErrors).then(function (data) {
+            })), fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), this.validationRules, this.validationErrors).then(function (data) {
               return data.fields.forEach(function (obj) {
                 dispatchCustomEvent(obj.$field, customEvents_field.validation, {
                   detail: obj

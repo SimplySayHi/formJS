@@ -94,7 +94,6 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
             valid: "is-valid"
         },
         focusOnRelated: !0,
-        groups: [],
         maxFileSize: 10,
         onValidationCheckAll: !1,
         preventPasteFields: '[type="password"], [data-equal-to]',
@@ -165,6 +164,7 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
                 });
             }), formData;
         },
+        groups: [],
         handleFileUpload: !0,
         handleSubmit: !0,
         onInitCheckFilled: !0
@@ -499,7 +499,7 @@ class Form {
         if (!checkFormElem.result) throw new Error('First argument "form" is not a DOM node nor a form CSS selector!');
         const self = this;
         self.$form = checkFormElem.$el, self.$form.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj), 
-        self.currentGroup = self.options.fieldOptions.groups[0];
+        self.currentGroup = self.options.formOptions.groups[0];
         [ "beforeValidation", "beforeSend", "getFormData" ].forEach(cbName => {
             const optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions";
             let cbOpt = self.options[optionType][cbName];
@@ -546,7 +546,7 @@ class Form {
                 detail: obj
             }), obj.result) {
                 if (fieldOptions.onValidationCheckAll) {
-                    const selector = self.currentGroup || fieldsStringSelector, $fields = $form.querySelectorAll(selector), groups = self.options.fieldOptions.groups;
+                    const selector = self.currentGroup || fieldsStringSelector, $fields = $form.querySelectorAll(selector), groups = self.options.formOptions.groups;
                     checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors, obj.$field).then(dataForm => {
                         const validationEventName = self.currentGroup ? customEvents_group.validation : customEvents_form.validation;
                         self.currentGroup && (dataForm.group = {
@@ -564,7 +564,9 @@ class Form {
         }).then(finalizeFieldPromise);
     }
     validateFieldsGroup(selectorOrGroupIndex = this.currentGroup, fieldOptions) {
-        const self = this, groups = (fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions)).groups, selector = /^\d+$/.test(selectorOrGroupIndex) ? groups[selectorOrGroupIndex] : !!(stringSelector => {
+        const self = this;
+        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+        const groups = self.options.formOptions.groups, selector = /^\d+$/.test(selectorOrGroupIndex) ? groups[selectorOrGroupIndex] : !!(stringSelector => {
             try {
                 const isString = "string" == typeof stringSelector;
                 return document.querySelector(stringSelector), isString;
