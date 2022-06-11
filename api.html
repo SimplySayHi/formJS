@@ -677,7 +677,7 @@
                                         <span class="text-green">fields</span>: a filtered list of form fields.
                                     </li>
                                     <li>
-                                        <span class="text-green">trimValues</span>: boolean indicating if field values must be trimmed or not ( by default it takes the value from "fieldOptions.trimValue" - values from selects, checkboxes, radios and file inputs are not trimmed ).
+                                        <span class="text-green">trimValues</span>: boolean indicating if field values must be trimmed or not ( by default it takes the value from <code>fieldOptions.trimValue</code> - values from selects, checkboxes, radios and file inputs are not trimmed ).
                                     </li>
                                 </ul>
                                 <p>
@@ -891,7 +891,7 @@
                                         radio: value set or null
                                     </li>
                                     <li>
-                                        otherwise: set / given value
+                                        others: set / given value
                                     </li>
                                 </ul>
                                 <hr />
@@ -923,7 +923,7 @@
                                 </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">trimValues</span>: ( Optional ) boolean indicating whether or not to trim field values when collecting data ( by default it takes the value from "fieldOptions.trimValue" - values from selects, checkboxes, radios and file inputs are not trimmed )
+                                        <span class="text-green">trimValues</span>: ( Optional ) boolean indicating whether or not to trim field values when collecting data ( by default it takes the value from <code>fieldOptions.trimValue</code> - values from selects, checkboxes, radios and file inputs are not trimmed )
                                     </li>
                                 </ul>
                             </div>
@@ -965,7 +965,7 @@
                                         Emit event <code>fjs.field:validation</code> ( which runs basic feedback on UI - with CSS classes )
                                     </li>
                                     <li>
-                                        If field is valid and <code>onValidationCheckAll</code> is set to <code>true</code>, form validation will run and ONLY event <code>fjs.form:validation</code> will be emitted ( it will not emit <code>fjs.field:validation</code> for each field )
+                                        If field is valid and <code>onValidationCheckAll</code> is set to <code>true</code>, the form validation will run and ONLY event <code>fjs.form:validation</code> will be emitted ( it will not emit <code>fjs.field:validation</code> for each field )
                                     </li>
                                 </ul>
                                 <hr />
@@ -1009,7 +1009,7 @@
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
-                                <pre class="text-green">validateFieldsGroup( [selectorOrGroupIndex] )</pre>
+                                <pre class="text-green">validateFieldsGroup( [selectorOrGroupIndex[, fieldOptions]] )</pre>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-7 col-xl-5">
@@ -1041,7 +1041,10 @@
                                 </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">selectorOrGroupIndex</span>: CSS string selector ( or index of selector in option <code>groups</code> ) to select fields to validate. Default value is <code>this.currentGroup</code>
+                                        <span class="text-green">selectorOrGroupIndex</span>: ( Optional ) CSS string selector ( or index of selector in option <code>groups</code> ) to select fields to validate. Default value is <code>this.currentGroup</code>
+                                    </li>
+                                    <li>
+                                        <span class="text-green">fieldOptions</span>: ( Optional ) JS object. As described in <a href="#field-options">Field Options section</a>
                                     </li>
                                 </ul>
                             </div>
@@ -1075,7 +1078,7 @@
 </code></pre>
                                 <ul>
                                     <li>
-                                        <span class="text-green">canSubmit</span>: ( Boolean ) is returned <code>true</code> only when <code>group.next = undefined</code> that will tell you reached the last step/group.
+                                        <span class="text-green">canSubmit</span>: ( Boolean ) <code>true</code> only when <code>group.next = undefined</code> that will tell you reached the last step/group.
                                     </li>
                                     <li>
                                         <span class="text-green">fields</span>: ( Array ) same as returned by method <code>validateForm</code> but every item will have <code>isCheckingGroup = true</code> instead of isCheckingForm.
@@ -1099,7 +1102,7 @@
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
-                                <pre class="text-green">validateFilledFields()</pre>
+                                <pre class="text-green">validateFilledFields( [fieldOptions] )</pre>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-7 col-xl-5">
@@ -1119,6 +1122,15 @@
                                 <p class="small">
                                     <span class="text-yellow">*</span> See <a href="#builtin-events">Events section</a> for details.
                                 </p>
+                                <hr />
+                                <p class="d-lg-none m-0">
+                                    Parameters:
+                                </p>
+                                <ul>
+                                    <li>
+                                        <span class="text-green">fieldOptions</span>: ( Optional ) JS object. As described in <a href="#field-options">Field Options section</a>
+                                    </li>
+                                </ul>
                             </div>
                             <div class="col-lg-5 col-xl-3">
                                 <p class="d-lg-none m-0">
@@ -1573,7 +1585,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
 </code></pre>
                             <ul>
                                 <li>
-                                    <span class="text-green">canSubmit</span>: ( Boolean ) is returned <code>true</code> only when <code>group.next = undefined</code> that will tell you reached the last step/group.
+                                    <span class="text-green">canSubmit</span>: ( Boolean ) <code>true</code> only when <code>group.next = undefined</code> that will tell you reached the last step/group.
                                 </li>
                                 <li>
                                     <span class="text-green">fields</span>: Array of objects ( each object is like described in event <code>fjs.field:validation</code> )
