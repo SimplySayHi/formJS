@@ -43,7 +43,7 @@ class Form {
         self.$form = checkFormElem.$el;
         self.$form.formjs = self;
         self.options = mergeObjects({}, Form.prototype.options, optionsObj);
-        self.currentGroup = self.options.fieldOptions.groups[0];
+        self.currentGroup = self.options.formOptions.groups[0];
 
         // BINDING CONTEXT FOR FUTURE EXECUTION
         const cbList = [
@@ -96,7 +96,7 @@ class Form {
                     if( fieldOptions.onValidationCheckAll ){
                         const selector = self.currentGroup || fieldsStringSelector;
                         const $fields = $form.querySelectorAll(selector);
-                        const groups = self.options.fieldOptions.groups;
+                        const groups = self.options.formOptions.groups;
                         checkFieldsValidity( $fields, fieldOptions, self.validationRules, self.validationErrors, obj.$field )
                             .then(dataForm => {
                                 const validationEventName = self.currentGroup ? customEvents.group.validation : customEvents.form.validation;
@@ -127,7 +127,7 @@ class Form {
 
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
 
-        const groups = fieldOptions.groups;
+        const groups = self.options.formOptions.groups;
         const selector = isInteger(selectorOrGroupIndex) ? 
                             groups[selectorOrGroupIndex] : 
                             (isValidSelector(selectorOrGroupIndex) ? selectorOrGroupIndex : false);

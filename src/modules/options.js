@@ -15,7 +15,6 @@ export const options = {
             valid:              'is-valid'
         },
         focusOnRelated:         true,
-        groups:                 [],
         maxFileSize:            10,
         onValidationCheckAll:   false,
         preventPasteFields:     '[type="password"], [data-equal-to]',
@@ -51,6 +50,7 @@ export const options = {
             valid:              'is-valid'
         },
         getFormData:            getFormData,
+        groups:                 [],
         handleFileUpload:       true,
         handleSubmit:           true,
         onInitCheckFilled:      true
