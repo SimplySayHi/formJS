@@ -122,27 +122,23 @@ class Form {
             .then(finalizeFieldPromise);
     }
 
-    validateFieldsGroup( selectorOrGroupIndex = this.currentGroup, fieldOptions ){
+    validateFieldsGroup( group = this.currentGroup, fieldOptions ){
         const self = this;
-
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+        const $fields = self.$form.querySelectorAll(group);
 
-        const groups = self.options.formOptions.groups;
-        const selector = isInteger(selectorOrGroupIndex) ? 
-                            groups[selectorOrGroupIndex] : 
-                            (isValidSelector(selectorOrGroupIndex) ? selectorOrGroupIndex : false);
-        const $fields = selector ? self.$form.querySelectorAll(selector) : selectorOrGroupIndex;
         return checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors)
             .then(data => {
                 data.fields.forEach(obj => {
                     obj.isCheckingGroup = true;
                     dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } );
                 });
+                const groups = self.options.formOptions.groups;
                 if( groups.length > 0 ){
                     data.group = {
-                        prev: groups[groups.indexOf(selector) - 1],
-                        current: selector,
-                        next: groups[groups.indexOf(selector) + 1]
+                        prev: groups[groups.indexOf(group) - 1],
+                        current: group,
+                        next: groups[groups.indexOf(group) + 1]
                     }
                     data.canSubmit = !data.group.next;
                 }
