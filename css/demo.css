@@ -490,3 +490,13 @@ label, .radio label, .checkbox label {
 .nl-form .alert {
     border-radius: 1em;
 }
+
+.form-step {
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.4s ease-in;
+}
+
+.form-step.active {
+    max-height: 400px;
+}
