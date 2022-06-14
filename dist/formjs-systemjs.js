@@ -115,15 +115,6 @@ System.register([], (function(exports) {
                     result: !0,
                     fields: []
                 }, obj);
-            }, isInteger = function(string) {
-                return /^\d+$/.test(string);
-            }, isValidSelector = function(stringSelector) {
-                try {
-                    var isString = "string" == typeof stringSelector;
-                    return document.querySelector(stringSelector), isString;
-                } catch (error) {
-                    return !1;
-                }
             }, isFieldForChangeEvent = function($field) {
                 return $field.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
             }, runFunctionsSequence = function() {
@@ -668,18 +659,20 @@ System.register([], (function(exports) {
                 }, {
                     key: "validateFieldsGroup",
                     value: function() {
-                        var selectorOrGroupIndex = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : this.currentGroup, fieldOptions = arguments.length > 1 ? arguments[1] : void 0, self = this;
+                        var group = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : this.currentGroup, fieldOptions = arguments.length > 1 ? arguments[1] : void 0, self = this;
                         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
-                        var groups = self.options.formOptions.groups, selector = isInteger(selectorOrGroupIndex) ? groups[selectorOrGroupIndex] : !!isValidSelector(selectorOrGroupIndex) && selectorOrGroupIndex, $fields = selector ? self.$form.querySelectorAll(selector) : selectorOrGroupIndex;
+                        var $fields = self.$form.querySelectorAll(group);
                         return checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors).then((function(data) {
-                            return data.fields.forEach((function(obj) {
+                            data.fields.forEach((function(obj) {
                                 obj.isCheckingGroup = !0, dispatchCustomEvent(obj.$field, customEvents_field.validation, {
                                     detail: obj
                                 });
-                            })), groups.length > 0 && (data.group = {
-                                prev: groups[groups.indexOf(selector) - 1],
-                                current: selector,
-                                next: groups[groups.indexOf(selector) + 1]
+                            }));
+                            var groups = self.options.formOptions.groups;
+                            return groups.length > 0 && (data.group = {
+                                prev: groups[groups.indexOf(group) - 1],
+                                current: group,
+                                next: groups[groups.indexOf(group) + 1]
                             }, data.canSubmit = !data.group.next), dispatchCustomEvent(self.$form, customEvents_group.validation, {
                                 detail: data
                             }), data;

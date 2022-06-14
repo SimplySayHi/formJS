@@ -563,28 +563,24 @@ class Form {
             return obj;
         }).then(finalizeFieldPromise);
     }
-    validateFieldsGroup(selectorOrGroupIndex = this.currentGroup, fieldOptions) {
+    validateFieldsGroup(group = this.currentGroup, fieldOptions) {
         const self = this;
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
-        const groups = self.options.formOptions.groups, selector = /^\d+$/.test(selectorOrGroupIndex) ? groups[selectorOrGroupIndex] : !!(stringSelector => {
-            try {
-                const isString = "string" == typeof stringSelector;
-                return document.querySelector(stringSelector), isString;
-            } catch (error) {
-                return !1;
-            }
-        })(selectorOrGroupIndex) && selectorOrGroupIndex;
-        return checkFieldsValidity(selector ? self.$form.querySelectorAll(selector) : selectorOrGroupIndex, fieldOptions, self.validationRules, self.validationErrors).then(data => (data.fields.forEach(obj => {
-            obj.isCheckingGroup = !0, dispatchCustomEvent(obj.$field, customEvents_field.validation, {
-                detail: obj
+        return checkFieldsValidity(self.$form.querySelectorAll(group), fieldOptions, self.validationRules, self.validationErrors).then(data => {
+            data.fields.forEach(obj => {
+                obj.isCheckingGroup = !0, dispatchCustomEvent(obj.$field, customEvents_field.validation, {
+                    detail: obj
+                });
             });
-        }), groups.length > 0 && (data.group = {
-            prev: groups[groups.indexOf(selector) - 1],
-            current: selector,
-            next: groups[groups.indexOf(selector) + 1]
-        }, data.canSubmit = !data.group.next), dispatchCustomEvent(self.$form, customEvents_group.validation, {
-            detail: data
-        }), data)).then(finalizeFieldsGroupPromise);
+            const groups = self.options.formOptions.groups;
+            return groups.length > 0 && (data.group = {
+                prev: groups[groups.indexOf(group) - 1],
+                current: group,
+                next: groups[groups.indexOf(group) + 1]
+            }, data.canSubmit = !data.group.next), dispatchCustomEvent(self.$form, customEvents_group.validation, {
+                detail: data
+            }), data;
+        }).then(finalizeFieldsGroupPromise);
     }
     validateFilledFields(fieldOptions) {
         var $form;
