@@ -546,15 +546,14 @@ class Form {
                 detail: obj
             }), obj.result) {
                 if (fieldOptions.onValidationCheckAll) {
-                    const selector = self.currentGroup || fieldsStringSelector, $fields = $form.querySelectorAll(selector), groups = self.options.formOptions.groups;
-                    checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors, obj.$field).then(dataForm => {
-                        const validationEventName = self.currentGroup ? customEvents_group.validation : customEvents_form.validation;
-                        self.currentGroup && (dataForm.group = {
+                    const selector = self.currentGroup || fieldsStringSelector;
+                    checkFieldsValidity($form.querySelectorAll(selector), fieldOptions, self.validationRules, self.validationErrors, obj.$field).then(dataForm => {
+                        const groups = self.options.formOptions.groups, validationEventName = self.currentGroup ? customEvents_group.validation : customEvents_form.validation;
+                        groups.length > 0 && (dataForm.group = {
                             prev: groups[groups.indexOf(selector) - 1],
                             current: selector,
                             next: groups[groups.indexOf(selector) + 1]
-                        }, dataForm.result && (self.currentGroup = dataForm.group.next), dataForm.canSubmit = !self.currentGroup), 
-                        dispatchCustomEvent($form, validationEventName, {
+                        }, dataForm.canSubmit = dataForm.result && !dataForm.group.next), dispatchCustomEvent($form, validationEventName, {
                             detail: dataForm
                         });
                     });
@@ -577,7 +576,7 @@ class Form {
                 prev: groups[groups.indexOf(group) - 1],
                 current: group,
                 next: groups[groups.indexOf(group) + 1]
-            }, data.canSubmit = !data.group.next), dispatchCustomEvent(self.$form, customEvents_group.validation, {
+            }, data.canSubmit = data.result && !data.group.next), dispatchCustomEvent(self.$form, customEvents_group.validation, {
                 detail: data
             }), data;
         }).then(finalizeFieldsGroupPromise);
