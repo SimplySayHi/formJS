@@ -96,20 +96,17 @@ class Form {
                     if( fieldOptions.onValidationCheckAll ){
                         const selector = self.currentGroup || fieldsStringSelector;
                         const $fields = $form.querySelectorAll(selector);
-                        const groups = self.options.formOptions.groups;
                         checkFieldsValidity( $fields, fieldOptions, self.validationRules, self.validationErrors, obj.$field )
                             .then(dataForm => {
+                                const groups = self.options.formOptions.groups;
                                 const validationEventName = self.currentGroup ? customEvents.group.validation : customEvents.form.validation;
-                                if( self.currentGroup ){
+                                if( groups.length > 0 ){
                                     dataForm.group = {
                                         prev: groups[groups.indexOf(selector) - 1],
                                         current: selector,
                                         next: groups[groups.indexOf(selector) + 1]
                                     }
-                                    if( dataForm.result ){
-                                        self.currentGroup = dataForm.group.next;
-                                    }
-                                    dataForm.canSubmit = !self.currentGroup;
+                                    dataForm.canSubmit = dataForm.result && !dataForm.group.next;
                                 }
                                 dispatchCustomEvent( $form, validationEventName, { detail: dataForm } );
                             });
@@ -140,7 +137,7 @@ class Form {
                         current: group,
                         next: groups[groups.indexOf(group) + 1]
                     }
-                    data.canSubmit = !data.group.next;
+                    data.canSubmit = data.result && !data.group.next;
                 }
                 dispatchCustomEvent( self.$form, customEvents.group.validation, { detail: data } );
                 return data;
