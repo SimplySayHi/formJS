@@ -359,7 +359,8 @@
                             <div class="col-lg-8 col-xl-5">
                                 <p>
                                     If set to <code>true</code>, when a field is valid, this will fire the whole form validation without feedback on the UI and will emit ONLY built-in event <code>fjs.form:validation</code>.<br />
-                                    This is useful to check if the form is valid on each field validation.
+                                    If option <code>groups</code> is set, ONLY fields of <code>this.currentGroup</code> will be validated ( not the whole form ) and event emitted is <code>fjs.group:validation</code>.<br />
+                                    This is useful to check if the whole form/group is valid on each field validation.
                                 </p>
                             </div>
                         </div>
@@ -965,7 +966,7 @@
                                         Emit event <code>fjs.field:validation</code> ( which runs basic feedback on UI - with CSS classes )
                                     </li>
                                     <li>
-                                        If field is valid and <code>onValidationCheckAll</code> is set to <code>true</code>, the form validation will run and ONLY event <code>fjs.form:validation</code> will be emitted ( it will not emit <code>fjs.field:validation</code> for each field )
+                                        If field is valid and <code>onValidationCheckAll</code> is set to <code>true</code>, it will not emit <code>fjs.field:validation</code> for each field ( see <a href="#field-options">Field Options section</a> ) but event <code>fjs.form:validation</code> or <code>fjs.form:validation</code> based on option <code>groups</code>
                                     </li>
                                 </ul>
                                 <hr />
@@ -1009,7 +1010,7 @@
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
-                                <pre class="text-green">validateFieldsGroup( [selectorOrGroupIndex[, fieldOptions]] )</pre>
+                                <pre class="text-green">validateFieldsGroup( [group[, fieldOptions]] )</pre>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-7 col-xl-5">
@@ -1017,7 +1018,7 @@
                                     Description:
                                 </p>
                                 <p>
-                                    Fires validation for fields that match the given selector or the corresponding selector taken from option <code>groups</code> thanks to the given index.
+                                    Fires validation for all fields that match the given selector.
                                     <br /><br />
                                     Then:
                                 </p>
@@ -1029,7 +1030,7 @@
                                         Emit event <code>fjs.group:validation</code> <span class="text-yellow">*</span>
                                     </li>
                                     <li>
-                                        If all group fields are valid, updates the value of <code>this.currentGroup</code> with the selector in <code>group.next</code> ( values of <code>group</code> come from option <code>groups</code>, if there's no next selector, it is set to <code>undefined</code> )
+                                        If all the fields in the group are valid, updates the value of <code>this.currentGroup</code> with the selector in <code>group.next</code> ( values in <code>group</code> come from option <code>groups</code>, if there's no next selector, it is set to <code>undefined</code> )
                                     </li>
                                 </ul>
                                 <p class="small">
@@ -1041,7 +1042,7 @@
                                 </p>
                                 <ul>
                                     <li>
-                                        <span class="text-green">selectorOrGroupIndex</span>: ( Optional ) CSS string selector ( or index of selector in option <code>groups</code> ) to select fields to validate. Default value is <code>this.currentGroup</code>
+                                        <span class="text-green">group</span>: ( Optional ) CSS string selector to select fields to validate. Default value is <code>this.currentGroup</code>
                                     </li>
                                     <li>
                                         <span class="text-green">fieldOptions</span>: ( Optional ) JS object. As described in <a href="#field-options">Field Options section</a>
