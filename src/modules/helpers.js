@@ -17,8 +17,6 @@ export { getUniqueFields }          from './helpers/getUniqueFields';
 export { mergeValidateFieldDefault }  from './helpers/mergeValidateFieldDefault';
 export { mergeValidateFormDefault }   from './helpers/mergeValidateFormDefault';
 export { isDOMNode }                from './helpers/isDOMNode';
-export { isInteger }                from './helpers/isInteger'
-export { isValidSelector }          from './helpers/isValidSelector';
 export { isFieldForChangeEvent }    from './helpers/isFieldForChangeEvent';
 export { isNodeList }               from './helpers/isNodeList';
 export { isPlainObject }            from './helpers/isPlainObject';

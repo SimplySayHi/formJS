@@ -10,9 +10,7 @@ import {
     finalizeFieldsGroupPromise, 
     finalizeFormPromise, 
     getFilledFields, 
-    isInteger, 
     isNodeList,
-    isValidSelector, 
     mergeObjects, 
     removeClass }               from './modules/helpers';
 import { options }              from './modules/options';
