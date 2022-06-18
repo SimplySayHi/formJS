@@ -3,8 +3,18 @@
     "title": "formJS",
     "description": "JavaScript Form Validation. Made Easy",
     "version": "5.3.0",
-    "main": "dist/formjs.min.js",
+    "jsdelivr": "dist/formjs.min.js",
+    "unpkg": "dist/formjs.min.js",
+    "main": "dist/formjs.js",
     "module": "dist/formjs-esm.js",
+    "jsnext:main": "dist/formjs-esm.js",
+    "exports": {
+        ".": "./dist/formjs-esm.js",
+        "./lite": "./dist/lite/formjs-esm.js",
+        "./additional-rules": "./dist/additionals/validationRules.esm.js",
+        "./additional-errors": "./dist/additionals/validationErrors.esm.js",
+        "./utils": "./dist/additionals/utils.esm.js"
+    },
     "homepage": "https://valeriodipunzio.com/plugins/formJS/",
     "author": {
         "email": "sayhi@valeriodipunzio.com",
