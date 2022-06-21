@@ -14,6 +14,65 @@
     <link rel="stylesheet" href="../css/doc.css">
     <link rel="stylesheet" href="../css/demo.css">
     <link rel="stylesheet" href="../css/prism.css">
+    <style>
+.label-move-up .form-control[type="date"] + label,
+.label-move-up .form-control[type="file"] + label,
+.field-has-error.field-is-dirty .label-move-up .form-control + label,
+.label-move-up .form-control:focus + label,
+.field-is-dirty .label-move-up .form-control + label {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+    top: 0;
+    font-size: 0.75em;
+}
+
+/* FIELD WITH ERROR */
+.field-has-error .form-control,
+.field-has-error .form-control:focus,
+.field-has-error .label-inline,
+.field-has-error .label-inline-flex .form-control + label:after {
+    border-color: #a94442;
+    border-width: 2px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.field-has-error .label-inline,
+.field-has-error .label-inline-flex .form-control + label:after {
+    border-color: #a94442;
+}
+
+/* FIELD ERROR MESSAGE */
+.field-error-message,
+[data-error-type] {
+    display: none;
+    color: #a94442;
+}
+.field-has-error .field-error-message,
+.field-has-error.has-error-empty [data-error-type="empty"],
+.field-has-error.has-error-rule [data-error-type="rule"] {
+    display: block;
+}
+.field-has-error.has-error-empty li[data-error-type="empty"],
+.field-has-error.has-error-rule li[data-error-type="rule"] {
+    display: list-item;
+}
+
+.field-has-error.has-error-rule-maxlength li[data-error-type="maxlength"],
+.field-has-error.has-error-rule-minlength li[data-error-type="minlength"],
+.field-has-error.has-error-rule-missingNumber li[data-error-type="missingNumber"],
+.field-has-error.has-error-rule-missingLowercase li[data-error-type="missingLowercase"],
+.field-has-error.has-error-rule-missingUppercase li[data-error-type="missingUppercase"],
+.field-has-error.has-error-rule-invalidChars li[data-error-type="invalidChars"],
+.field-has-error.has-error-rule-invalidStartChar li[data-error-type="invalidStartChar"],
+.field-has-error.has-error-rule-missingAtChar li[data-error-type="missingAtChar"],
+.field-has-error.has-error-rule-missingUserName li[data-error-type="missingUserName"],
+.field-has-error.has-error-rule-missingDomain li[data-error-type="missingDomain"],
+.field-has-error.has-error-rule-missingExtensionDot li[data-error-type="missingExtensionDot"],
+.field-has-error.has-error-rule-missingExtension li[data-error-type="missingExtension"],
+.field-has-error.has-error-rule-minlengthExtension li[data-error-type="minlengthExtension"] {
+    display: list-item;
+}
+    </style>
 </head>
 
 <body>
