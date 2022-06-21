@@ -88,6 +88,9 @@ Array.from(formsList).forEach(function($form, idx){
 
     $form.addEventListener('fjs.form:init', function(event){
         console.log(event.type, event.detail);
+        var $form = event.target;
+        initCharLengthFields($form)
+        initMaxFileSizeFields($form)
         event.detail.then(fields => {
             console.log(fields);
         })

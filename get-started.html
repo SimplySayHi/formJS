@@ -85,10 +85,21 @@
 <code class="language-markup">npm install formjs-plugin
 </code></pre>
                         <pre>
-<code class="language-js">import Form from 'formjs-plugin';
+<code class="language-js">import Form from 'formjs-plugin'
 </code></pre>
                     </div>
                 </div>
+                <hr />
+                <p>
+                    You can also import <span class="badge badge-pill badge-yellow">Lite</span> version and some extras, for example:
+                </p>
+                <code>import Form from 'formjs-plugin/lite'</code>
+                <br />
+                <code>import { username } from 'formjs-plugin/additional-rules'</code>
+                <br />
+                <code>import { username } from 'formjs-plugin/additional-errors'</code>
+                <br />
+                <code>import { initCharLengthFields } from 'formjs-plugin/utils'</code>
                 <hr />
                 <p>
                     In folder <code>dist</code> ( and via CDNs ) are also available these versions:
@@ -223,7 +234,7 @@ const formInstance = new Form( $form, options );
                                 Fields validation: on events defined in <code>options.fieldOptions.validateOnEvents</code> ( see <a href="api.html#field-options">Field Options section</a> )
                             </li>
                             <li>
-                                Form submit: on submit event, if form is valid ( form is validated via method <code>validateForm</code> - see <a href="api.html#methods">Methods section</a> )
+                                Form submit: on submit event, if form is valid ( form is validated via method <code>validateForm</code> - see <a href="api.html#methods">Methods section</a> ). By default, for is submitted via ajax with options from <code>options.formOptions.ajaxOptions</code>
                             </li>
                         </ul>
                         <hr />

@@ -64,7 +64,8 @@
                 <a href="#methods">Methods</a> | 
                 <a href="#static-methods">Static</a> | 
                 <a href="#builtin-events">Events</a> | 
-                <a href="#builtin-validations">Validations</a>
+                <a href="#builtin-validations">Validations</a> | 
+                <a href="#utils">Utils</a>
             </div>
 
         <!-- Lite Version Options -->
@@ -1662,9 +1663,12 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
             </div>
             <hr />
             <p>
-                <span class="text-red">[ add. ]</span> : Additional validation/error that is not part of the core library.<br />
-                Additional validations can be found in file <code>dist/additionals/validationRules.js</code> ( also available as ES Module in <code>dist/additionals/validationRules.esm.js</code> ).<br />
-                Additional errors can be found in file <code>dist/additionals/validationErrors.js</code>( also available as ES Module in <code>dist/additionals/validationErrors.esm.js</code> ).
+                <span class="text-red">[ val ]</span> : Additional validation that is not part of the core library.<br />
+                <span class="text-red">[ err ]</span> : Additional error that is not part of the core library.<br />
+                Additional validations can be used via <code>import { username } from 'formjs-plugin/additional-rules'</code> or found in file <code>dist/additionals/validationRules.js</code> ( also available as ES Module in <code>dist/additionals/validationRules.esm.js</code> ).<br />
+                Additional errors can be used via <code>import { username } from 'formjs-plugin/additional-errors'</code> or found in file <code>dist/additionals/validationErrors.js</code>( also available as ES Module in <code>dist/additionals/validationErrors.esm.js</code> ).
+                <br />
+                NOTE: some validation errors from <code>formjs-plugin/additional-errors</code> may not be available.
             </p>
             <input type="checkbox" class="fake-checkbox btn-toggable-content" id="validations-show-additional" />
             <label class="btn toggable-label text-red mb-4" for="validations-show-additional">
@@ -1691,7 +1695,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Alphabetic
                                 <div>( alphabetic )</div>
-                                <div class="text-red">[ add. ]</div>
+                                <div class="text-red">[ val ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -1707,7 +1711,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Alphabetic Extended
                                 <div>( alphabeticExtended )</div>
-                                <div class="text-red">[ add. ]</div>
+                                <div class="text-red">[ val ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -1723,7 +1727,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Alphanumeric
                                 <div>( alphanumeric )</div>
-                                <div class="text-red">[ add. ]</div>
+                                <div class="text-red">[ val ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -1739,7 +1743,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 CAP <span class="text-yellow">*</span>
                                 <div>( cap )</div>
-                                <div class="text-red">[ add. ]</div>
+                                <div class="text-red">[ val ] [ err ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -1809,7 +1813,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Color
                                 <div>( color )</div>
-                                <div class="text-red">[ add. ]</div>
+                                <div class="text-red">[ val ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -1881,7 +1885,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Date in format DDMMYYYY
                                 <div>( dateDDMMYYYY )</div>
-                                <div class="text-red">[ add. ]</div>
+                                <div class="text-red">[ val ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -1905,6 +1909,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                 Email
                                 <div>( email )</div>
                                 <div><span class="badge badge-pill badge-yellow">Lite</span></div>
+                                <div class="text-red">[ err ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -1917,7 +1922,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                 </p>
                                 <hr />
                                 <p>
-                                    <span class="text-red">[ add. ]</span>
+                                    <span class="text-red">[ err ]</span>
                                     <br />
                                     <code>errors</code> object can also return these specific errors:
                                 </p>
@@ -2022,7 +2027,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Fiscal Code
                                 <div>( fiscalCode )</div>
-                                <div class="text-red">[ add. ]</div>
+                                <div class="text-red">[ val ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2038,7 +2043,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Landline Number
                                 <div>( landlineNumber )</div>
-                                <div class="text-red">[ add. ]</div>
+                                <div class="text-red">[ val ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2184,7 +2189,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Mobile Number
                                 <div>( mobileNumber )</div>
-                                <div class="text-red">[ add. ]</div>
+                                <div class="text-red">[ val ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2222,7 +2227,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Number Float <span class="text-yellow">*</span>
                                 <div>( numberFloat )</div>
-                                <div class="text-red">[ add. ]</div>
+                                <div class="text-red">[ val ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2243,7 +2248,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Number Integer <span class="text-yellow">*</span>
                                 <div>( numberInteger )</div>
-                                <div class="text-red">[ add. ]</div>
+                                <div class="text-red">[ val ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2263,7 +2268,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Password
                                 <div>( password )</div>
-                                <div class="text-red">[ add. ]</div>
+                                <div class="text-red">[ val ] [ err ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2360,7 +2365,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Tel
                                 <div>( tel )</div>
-                                <div class="text-red">[ add. ]</div>
+                                <div class="text-red">[ val ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2387,7 +2392,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Url
                                 <div>( url )</div>
-                                <div class="text-red">[ add. ]</div>
+                                <div class="text-red">[ val ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2406,7 +2411,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                 Username
                                 <div>( username )</div>
                                 <div class="text-yellow">Async Validation</div>
-                                <div class="text-red">[ add. ]</div>
+                                <div class="text-red">[ val ] [ err ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2468,7 +2473,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 VAT Number
                                 <div>( vatNumber )</div>
-                                <div class="text-red">[ add. ]</div>
+                                <div class="text-red">[ val ] [ err ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2497,6 +2502,101 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <span class="text-yellow">*</span> you can also set <code>type="number"</code> together with the specific data-subtype attribute related to numbers, to let the device show the numeric keyboard, because type="number" is not well implemented in all browsers ( some allow users to write non-numeric characters and / or not related to the number format ).<br />
                                 Better to use <code>type="text"</code> together with the specific data-subtype related to numbers attribute to validate a numeric field. You can also use <code>data-type="number"</code> to emulate <code>type="number"</code> inputs. See "strictHtmlValidation" option in <a href="#field-options">Field Options</a> section for details.
                         </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Utils -->
+        <div id="utils">
+            <h3 class="sticky-title">Utils</h3>
+            <p class="mt-5">
+                There are some extra features you can use from <code>formjs-plugin/utils</code>, for example:
+                <br />
+<pre>
+<code class="language-js">import { initCharLengthFields } from 'formjs-plugin/utils'
+</code></pre>
+            </p>
+            <div class="panel panel-default panel-transparent no-bg">
+                <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
+                    <div class="d-flex">
+                        <div class="col-lg-5">
+                            name
+                        </div>
+                        <div class="col-lg-7">
+                            description
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                            <div class="col-lg-5">
+                                <pre class="text-green">initCharLengthFields()</pre>
+                            </div>
+                            <div class="w-100 d-xl-none"></div>
+                            <div class="col-lg-7">
+                                <p class="d-lg-none m-0">
+                                    Description:
+                                </p>
+                                <p>
+                                    Initialize character count for fields.
+                                    <br />
+                                    HTML example:
+                                </p>
+                                <pre>
+<code class="language-html">&lt;div data-formjs-question class="form-group"&gt;
+    &lt;div class="answers-box label-move-up"&gt;
+        &lt;textarea name="char-count-message" class="form-control" rows="3" maxlength="100" data-char-count&gt;&lt;/textarea&gt;
+        &lt;label&gt;Message ( &lt;span data-char-length&gt;&lt;/span&gt;/&lt;span data-char-maxlength&gt;&lt;/span&gt; )&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+                                <ul>
+                                    <li>
+                                        <code>data-char-count</code> the field you want to count the characters on
+                                    </li>
+                                    <li>
+                                        <code>data-char-length</code> where you want to show the chatacters counter
+                                    </li>
+                                    <li>
+                                        <code>data-char-maxlength</code> where you want to show the maximum length of the field
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                            <div class="col-lg-5">
+                                <pre class="text-green">initMaxFileSizeFields()</pre>
+                            </div>
+                            <div class="w-100 d-xl-none"></div>
+                            <div class="col-lg-7">
+                                <p class="d-lg-none m-0">
+                                    Description:
+                                </p>
+                                <p>
+                                    Initialize file fields to show the max file size.
+                                    <br />
+                                    HTML example:
+                                </p>
+                                <pre>
+<code class="language-html">&lt;div data-formjs-question class="form-group"&gt;
+    &lt;div class="answers-box label-move-up"&gt;
+        &lt;input name="file-required" type="file" class="form-control" data-max-file-size="2" required /&gt;
+        &lt;label&gt;Upload file&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class="field-error-message small"&gt;
+        This is mandatory and not valid! ( max file size is: &lt;span data-print-max-file-size&gt;&lt;/span&gt;MB )
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+                                <ul>
+                                    <li>
+                                        <code>data-print-max-file-size</code> where you want to show the maximum size of the file to upload
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
