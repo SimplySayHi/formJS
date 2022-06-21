@@ -1,10 +1,11 @@
 
-import { checkFormValidity } from '../src/modules/checkFormValidity';
+import { checkFieldsValidity } from '../src/modules/checkFieldsValidity';
 import { options } from '../src/modules/options';
 import { validationRules } from '../src/modules/validationRules';
 import { validationErrors } from '../js/test-modules/validationErrors';
+import { fieldsStringSelector } from '../src/modules/helpers';
 
-describe( 'checkFormValidity', () => {
+describe( 'checkFieldsValidity', () => {
 
     const $ = (strNum) => {
         return document.querySelector(`form [name="field-${strNum}"]`);
@@ -308,7 +309,7 @@ describe( 'checkFormValidity', () => {
         </form>`;
     } );
 
-    test( 'checkFormValidity -> form not valid', () => {
+    test( 'checkFieldsValidity -> form fields not valid', () => {
         const returnObj1 = {
             fields: [
                 // FIELD TO SKIP
@@ -438,12 +439,12 @@ describe( 'checkFormValidity', () => {
             ],
             result: false
         };
-        return checkFormValidity( document.querySelector('form'), options.fieldOptions, validationRules, validationErrors ).then(obj1 => {
+        return checkFieldsValidity( document.querySelector('form').querySelectorAll(fieldsStringSelector), options.fieldOptions, validationRules, validationErrors ).then(obj1 => {
             expect( obj1 ).toMatchSnapshot( returnObj1 );
         });
     } );
 
-    test( 'checkFormValidity -> form not valid with skip field', () => {
+    test( 'checkFieldsValidity -> form fields not valid with skip field', () => {
         const returnObj2 = {
             fields: [
                 { $field: $('00'), result: true },
@@ -572,7 +573,7 @@ describe( 'checkFormValidity', () => {
             ],
             result: false
         };
-        return checkFormValidity( document.querySelector('form'), options.fieldOptions, validationRules, validationErrors, $('00') ).then(obj2 => {
+        return checkFieldsValidity( document.querySelector('form').querySelectorAll(fieldsStringSelector), options.fieldOptions, validationRules, validationErrors, $('00') ).then(obj2 => {
             expect( obj2 ).toMatchSnapshot( returnObj2 );
         });
     } );

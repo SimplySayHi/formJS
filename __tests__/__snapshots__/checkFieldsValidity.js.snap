@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`checkFormValidity checkFormValidity -> form not valid 1`] = `
+exports[`checkFieldsValidity checkFieldsValidity -> form fields not valid 1`] = `
 Object {
   "fields": Array [
     Object {
@@ -1325,7 +1325,7 @@ Object {
 }
 `;
 
-exports[`checkFormValidity checkFormValidity -> form not valid with skip field 1`] = `
+exports[`checkFieldsValidity checkFieldsValidity -> form fields not valid with skip field 1`] = `
 Object {
   "fields": Array [
     Object {
