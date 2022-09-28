@@ -3,7 +3,7 @@
         "build": {
             "exclude": "node_modules/**",
             "presets": [
-                [ "@babel/env", {"modules": false} ]
+                [ "@babel/env", {"modules": false, "targets": {"chrome": "73"}} ]
             ]
         },
         "test": {
