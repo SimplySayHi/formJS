@@ -2,7 +2,7 @@
     "name": "formjs-plugin",
     "title": "formJS",
     "description": "JavaScript Form Validation. Made Easy",
-    "version": "5.3.1",
+    "version": "6.0.0",
     "jsdelivr": "dist/formjs.min.js",
     "unpkg": "dist/formjs.min.js",
     "main": "dist/formjs.js",
