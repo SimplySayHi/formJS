@@ -1,6 +1,4 @@
 
 export const removeClass = ( element, cssClasses ) => {
-    cssClasses.split(' ').forEach(className => {
-        element.classList.remove( className );
-    });
+    element.classList.remove( ...cssClasses.split(' ') )
 }

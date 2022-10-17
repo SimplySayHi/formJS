@@ -1,90 +1,90 @@
 
 export const getFormData = function getFormDataDefault( $filteredFields, trimValues ){
 
-    const formData = {};
-    const $form = this.$form;
-    let prevObj = formData;
+    const formData = {}
+    const $form = this.$form
+    let prevObj = formData
   
     $filteredFields.forEach($field => {
-        const isCheckbox = $field.type === "checkbox";
-        const isRadio = $field.type === "radio";
-        const isSelect = $field.matches("select");
-        const name = $field.name;
-        let value = trimValues ? $field.value.trim() : $field.value;
+        const isCheckbox = $field.type === 'checkbox'
+        const isRadio = $field.type === 'radio'
+        const isSelect = $field.matches('select')
+        const name = $field.name
+        let value = trimValues ? $field.value.trim() : $field.value
   
         if( isCheckbox ){
 
-            value = $field.checked;
-            let $checkboxes = Array.from( $form.querySelectorAll('[name="' + name + '"]') );
+            value = $field.checked
+            let $checkboxes = Array.from( $form.querySelectorAll(`[name="${name}"]`) )
             if( $checkboxes.length > 1 ){
-                value = [];
-                let $checked = $checkboxes.filter((field) => field.checked);
+                value = []
+                let $checked = $checkboxes.filter((field) => field.checked)
                 $checked.forEach($field => {
-                    value.push($field.value);
-                });
+                    value.push($field.value)
+                })
             }
 
         } else if( isRadio ){
 
-            const $checkedRadio = $form.querySelector('[name="' + name + '"]:checked');
-            value = $checkedRadio === null ? null : $checkedRadio.value;
+            const $checkedRadio = $form.querySelector(`[name="${name}"]:checked`)
+            value = $checkedRadio === null ? null : $checkedRadio.value
 
         } else if( isSelect ){
 
-            const $selectedOpts = Array.from($field.options).filter(option => option.selected);
+            const $selectedOpts = Array.from($field.options).filter(option => option.selected)
             if( $selectedOpts.length > 1 ){
-                value = [];
+                value = []
                 $selectedOpts.forEach($field => { 
-                    value.push($field.value); 
-                });
+                    value.push($field.value)
+                })
             }
         }
   
-        const nameSplit = name.split(".");
+        const nameSplit = name.split('.')
         nameSplit.forEach((keyName, index, list) => {
-            const isLastKeyName = index + 1 === list.length;
+            const isLastKeyName = index + 1 === list.length
   
             if( Array.isArray(prevObj) ){
-                const keyNameSplit = keyName.split("___");
-                const arrPos = keyNameSplit[0] - 1;
-                const arrayHasItemAtIndex = typeof prevObj[arrPos] !== "undefined";
-                const arrItemKeyName = keyNameSplit[1];
+                const keyNameSplit = keyName.split('___')
+                const arrPos = keyNameSplit[0] - 1
+                const arrayHasItemAtIndex = typeof prevObj[arrPos] !== 'undefined'
+                const arrItemKeyName = keyNameSplit[1]
   
                 if( !arrayHasItemAtIndex ){
-                    prevObj.push({});
+                    prevObj.push({})
                 }
   
-                keyName = arrItemKeyName;
+                keyName = arrItemKeyName
 
                 if( isLastKeyName ){
-                    prevObj[arrPos][keyName] = value;
+                    prevObj[arrPos][keyName] = value
                 } else if( typeof prevObj[arrPos][keyName] === 'undefined' ) {
-                    prevObj[arrPos][keyName] = {};
+                    prevObj[arrPos][keyName] = {}
                 }
                 
                 if( !isLastKeyName ){
-                    prevObj = prevObj[arrPos][keyName];
-                    return;
+                    prevObj = prevObj[arrPos][keyName]
+                    return
                 }
             } else {
-                const isKeyNameArray = keyName.endsWith("[]");
-                keyName = keyName.replace("[]", "");
+                const isKeyNameArray = keyName.endsWith('[]')
+                keyName = keyName.replace('[]', '')
   
                 if( isLastKeyName ){
-                    prevObj[keyName] = value;
-                } else if( typeof prevObj[keyName] === "undefined" ){
+                    prevObj[keyName] = value
+                } else if( typeof prevObj[keyName] === 'undefined' ){
                     if( isKeyNameArray ){
-                        prevObj[keyName] = [];
+                        prevObj[keyName] = []
                     } else {
-                        prevObj[keyName] = {};
+                        prevObj[keyName] = {}
                     }
                 }
             }
   
-            prevObj = isLastKeyName ? formData : prevObj[keyName];
-        });
-    });
+            prevObj = isLastKeyName ? formData : prevObj[keyName]
+        })
+    })
   
-    return formData;
+    return formData
 
 }

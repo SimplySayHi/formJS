@@ -1,32 +1,34 @@
 
-import { customEvents } from './helpers';
-import { dataTypeNumber, formValidationEnd, groupValidationEnd, keypressMaxlength, pastePrevent, submit, validation, validationEnd } from './listenerCallbacks';
+import { customEvents } from './helpers'
+import { dataTypeNumber, formValidationEnd, groupValidationEnd, keypressMaxlength, pastePrevent, submit, validation, validationEnd } from './listenerCallbacks'
 
 
 export function destroy( $form, options ){
 
     if( options.fieldOptions.strictHtmlValidation ){
-        $form.removeEventListener('keypress', keypressMaxlength, false);
-        $form.removeEventListener('input', dataTypeNumber, false);
+        $form.removeEventListener('keypress', keypressMaxlength, false)
+        $form.removeEventListener('input', dataTypeNumber, false)
     }
 
     if( options.fieldOptions.preventPasteFields ){
-        $form.removeEventListener('paste', pastePrevent, false);
+        $form.removeEventListener('paste', pastePrevent, false)
     }
 
     if( options.formOptions.handleSubmit ){
-        $form.removeEventListener('submit', submit);
+        $form.removeEventListener('submit', submit)
     }
 
     options.fieldOptions.validateOnEvents.split(' ').forEach(eventName => {
-        const useCapturing = eventName === 'blur' ? true : false;
-        $form.removeEventListener(eventName, validation, useCapturing);
-    });
+        const useCapturing = eventName === 'blur' ? true : false
+        $form.removeEventListener(eventName, validation, useCapturing)
+    })
 
-    $form.removeEventListener(customEvents.field.validation, validationEnd, false);
-    $form.removeEventListener(customEvents.group.validation, groupValidationEnd, false);
-    $form.removeEventListener(customEvents.form.validation, formValidationEnd, false);
+    $form.removeEventListener(customEvents.field.validation, validationEnd, false)
+    if( options.formOptions.groups.length > 0 ){
+        $form.removeEventListener(customEvents.group.validation, groupValidationEnd, false)
+    }
+    $form.removeEventListener(customEvents.form.validation, formValidationEnd, false)
 
-    delete $form.formjs;
+    delete $form.formjs
     
 }

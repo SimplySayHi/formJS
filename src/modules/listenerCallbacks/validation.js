@@ -1,15 +1,15 @@
 
-import { fieldsStringSelector, isFieldForChangeEvent } from '../helpers';
+import { fieldsStringSelector, isFieldForChangeEvent } from '../helpers'
 
 export const validation = function( event ){
 
-    const isChangeEvent = event.type === 'change',
-          $field = event.target,
-          self = $field.closest('form').formjs;
+    const isChangeEvent = event.type === 'change'
+    const $field = event.target
+    const self = $field.form.formjs
 
     if( $field.matches( fieldsStringSelector ) ){
-        const isFieldForChangeEventBoolean = isFieldForChangeEvent($field);
-        const hasOnlyChangeEvent = self.options.fieldOptions.validateOnEvents === 'change';
+        const isFieldForChangeEventBoolean = isFieldForChangeEvent($field)
+        const hasOnlyChangeEvent = self.options.fieldOptions.validateOnEvents === 'change'
         
         if(
             (isFieldForChangeEventBoolean && isChangeEvent) ||
@@ -18,8 +18,8 @@ export const validation = function( event ){
             
             self.validateField( $field )
                 .then(() => {
-                    const type = $field.type;
-                    const $relatedEqualTo = $field.closest('form').querySelector('[data-equal-to="'+ $field.name +'"]');
+                    const type = $field.type
+                    const $relatedEqualTo = $field.form.querySelector(`[data-equal-to="${$field.name}"]`)
 
                     if(
                         // FIELD IS ( required OR data-validate-if-filled ) AND RELATED FIELD data-equal-to HAS A VALUE
@@ -27,10 +27,10 @@ export const validation = function( event ){
                         !(type === 'checkbox' || type === 'radio') && 
                         $relatedEqualTo && $relatedEqualTo.value.trim() !== ''
                     ){
-                        self.validateField( $relatedEqualTo ).catch(errors => {});
+                        self.validateField( $relatedEqualTo ).catch(errors => {})
                     }
                 })
-                .catch(errors => {});
+                .catch(errors => {})
 
         }
     }

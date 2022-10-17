@@ -1,5 +1,5 @@
 
-export const getJSONobjectFromFieldAttribute = ( fieldEl, attrName ) => {
-    const customAttrEl = fieldEl.closest('['+ attrName +']');
-    return (customAttrEl && JSON.parse(customAttrEl.getAttribute(attrName))) || {};
+export const getJSONobjectFromFieldAttribute = ( $field, attrName ) => {
+    const $customAttr = $field.closest(`[${attrName}]`)
+    return ($customAttr && JSON.parse($customAttr.getAttribute(attrName))) || {}
 }

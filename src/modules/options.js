@@ -1,6 +1,6 @@
 
-import { beforeValidation } from './optionsUtils/beforeValidation';
-import { getFormData } from './optionsUtils/getFormData';
+import { beforeValidation } from './optionsUtils/beforeValidation'
+import { getFormData } from './optionsUtils/getFormData'
 
 export const options = {
 

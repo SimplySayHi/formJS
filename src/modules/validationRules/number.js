@@ -7,5 +7,5 @@
 export const number = function( string ){
     return {
         result: /[+-]?([0-9]*[.])?[0-9]+/.test( string )
-    };
+    }
 }
