@@ -1,4 +1,4 @@
-/* formJS Lite v5.3.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS Lite v5.3.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 !function(global, factory) {
     "object" == typeof exports && "undefined" != typeof module ? module.exports = factory() : "function" == typeof define && define.amd ? define(factory) : (global = "undefined" != typeof globalThis ? globalThis : global || self).Form = factory();
 }(this, (function() {
@@ -361,7 +361,9 @@
                 })).then(finalizeFormPromise);
             }
         } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
-        Form;
+        Object.defineProperty(Constructor, "prototype", {
+            writable: !1
+        }), Form;
     }();
     return Form.prototype.options = {
         fieldOptions: {
@@ -370,5 +372,5 @@
             maxFileSize: 10
         }
     }, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-    Form.prototype.version = "5.3.1", Form;
+    Form.prototype.version = "5.3.2", Form;
 }));

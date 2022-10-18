@@ -1,4 +1,4 @@
-/* formJS v5.3.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v5.3.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 const addClass = (element, cssClasses) => {
     cssClasses.split(" ").forEach(className => {
         element.classList.add(className);
@@ -512,7 +512,7 @@ class Form {
             fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
                 const useCapture = /^(blur|focus)$/.test(eventName);
                 $form.addEventListener(eventName, validation, useCapture);
-            }), $form.addEventListener(customEvents_field.validation, validationEnd, !1), $form.addEventListener(customEvents_group.validation, groupValidationEnd, !1), 
+            }), $form.addEventListener(customEvents_field.validation, validationEnd, !1), formOptions.groups.length > 0 && $form.addEventListener(customEvents_group.validation, groupValidationEnd, !1), 
             $form.addEventListener(customEvents_form.validation, formValidationEnd, !1), formOptions.handleSubmit && ($form.addEventListener("submit", submit), 
             formOptions.ajaxSubmit && ($form.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = $form.getAttribute("enctype")), 
             $form.getAttribute("method") && (formOptions.ajaxOptions.method = $form.getAttribute("method").toUpperCase()), 
@@ -531,6 +531,7 @@ class Form {
                 const useCapturing = "blur" === eventName;
                 $form.removeEventListener(eventName, validation, useCapturing);
             }), $form.removeEventListener(customEvents_field.validation, validationEnd, !1), 
+            options.formOptions.groups.length > 0 && $form.removeEventListener(customEvents_group.validation, groupValidationEnd, !1), 
             $form.removeEventListener(customEvents_form.validation, formValidationEnd, !1), 
             delete $form.formjs;
         }(this.$form, this.options), dispatchCustomEvent(this.$form, customEvents_form.destroy);
@@ -616,6 +617,6 @@ class Form {
 }
 
 Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-Form.prototype.version = "5.3.1";
+Form.prototype.version = "5.3.2";
 
-export default Form;
+export { Form as default };

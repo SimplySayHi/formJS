@@ -1,4 +1,4 @@
-/* formJS v5.3.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v5.3.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 System.register([], (function(exports) {
     "use strict";
     return {
@@ -470,7 +470,7 @@ System.register([], (function(exports) {
                 fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                     var useCapture = /^(blur|focus)$/.test(eventName);
                     $form.addEventListener(eventName, validation, useCapture);
-                })), $form.addEventListener(customEvents_field.validation, validationEnd, !1), $form.addEventListener(customEvents_group.validation, groupValidationEnd, !1), 
+                })), $form.addEventListener(customEvents_field.validation, validationEnd, !1), formOptions.groups.length > 0 && $form.addEventListener(customEvents_group.validation, groupValidationEnd, !1), 
                 $form.addEventListener(customEvents_form.validation, formValidationEnd, !1), formOptions.handleSubmit && ($form.addEventListener("submit", submit), 
                 formOptions.ajaxSubmit && ($form.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = $form.getAttribute("enctype")), 
                 $form.getAttribute("method") && (formOptions.ajaxOptions.method = $form.getAttribute("method").toUpperCase()), 
@@ -618,6 +618,7 @@ System.register([], (function(exports) {
                                 var useCapturing = "blur" === eventName;
                                 $form.removeEventListener(eventName, validation, useCapturing);
                             })), $form.removeEventListener(customEvents_field.validation, validationEnd, !1), 
+                            options.formOptions.groups.length > 0 && $form.removeEventListener(customEvents_group.validation, groupValidationEnd, !1), 
                             $form.removeEventListener(customEvents_form.validation, formValidationEnd, !1), 
                             delete $form.formjs;
                         }(this.$form, this.options), dispatchCustomEvent(this.$form, customEvents_form.destroy);
@@ -710,10 +711,12 @@ System.register([], (function(exports) {
                         })).then(finalizeFormPromise);
                     }
                 } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
-                Form;
+                Object.defineProperty(Constructor, "prototype", {
+                    writable: !1
+                }), Form;
             }());
             Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-            Form.prototype.version = "5.3.1";
+            Form.prototype.version = "5.3.2";
         }
     };
 }));
