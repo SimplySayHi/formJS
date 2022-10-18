@@ -43,7 +43,9 @@ export function formStartup( $form, options ){
     });
 
     $form.addEventListener(customEvents.field.validation, validationEnd, false);
-    $form.addEventListener(customEvents.group.validation, groupValidationEnd, false);
+    if( formOptions.groups.length > 0 ){
+        $form.addEventListener(customEvents.group.validation, groupValidationEnd, false);
+    }
     $form.addEventListener(customEvents.form.validation, formValidationEnd, false);
     
     // HANDLE FORM SUBMIT
