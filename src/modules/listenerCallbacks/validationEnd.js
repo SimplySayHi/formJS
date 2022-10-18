@@ -9,7 +9,7 @@ export const validationEnd = function( event ){
     const fieldOptions = mergeObjects({}, $field.form.formjs.options.fieldOptions, dataFieldOptions)
     const $container = $field.closest( fieldOptions.questionContainer )
     const isReqFrom = $field.matches('[data-required-from]')
-    const $reqMore = document.querySelector( $field.getAttribute('data-required-from') )
+    const $reqMore = document.querySelector( $field.dataset.requiredFrom )
 
     if( $container && !fieldOptions.skipUIfeedback ){
 

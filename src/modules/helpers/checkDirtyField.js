@@ -6,8 +6,10 @@ import { removeClass } from './removeClass'
 export const checkDirtyField = ( $fields, fieldOptions ) => {
 
     $fields = isNodeList($fields) ? Array.from( $fields ) : [$fields]
+
     $fields.forEach($field => {
-        if( $field.type !== 'checkbox' && $field.type !== 'radio' ){
+        const isNotCheckboxOrRadio = !['checkbox', 'radio'].includes($field.type)
+        if( isNotCheckboxOrRadio ){
             const $container = $field.closest( fieldOptions.questionContainer ) || $field
             if( $field.value ){
                 addClass( $container, fieldOptions.cssClasses.dirty )

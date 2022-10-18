@@ -3,7 +3,7 @@ import { getDateAsNumber } from '../helpers'
 
 export const max = function( value, $field ){
     let maxVal = $field.max
-    const dateFormat = $field.getAttribute('data-date-format')
+    const dateFormat = $field.dataset.dateFormat
     
     if( $field.type === 'date' || dateFormat ){
         value = getDateAsNumber( value, dateFormat )

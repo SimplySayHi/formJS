@@ -3,7 +3,7 @@ import { getDateAsNumber } from '../helpers'
 
 export const min = function( value, $field ){
     let minVal = $field.min
-    const dateFormat = $field.getAttribute('data-date-format')
+    const dateFormat = $field.dataset.dateFormat
     
     if( $field.type === 'date' || dateFormat ){
         value = getDateAsNumber( value, dateFormat )

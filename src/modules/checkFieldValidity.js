@@ -1,11 +1,12 @@
 
-import {    getJSONobjectFromFieldAttribute,
-            isDOMNode,
-            mergeObjects,
-            mergeValidateFieldDefault,
-            removeClass,
-            runFunctionsSequence
-        }           from './helpers'
+import {    
+    getJSONobjectFromFieldAttribute,
+    isDOMNode,
+    mergeObjects,
+    mergeValidateFieldDefault,
+    removeClass,
+    runFunctionsSequence
+}                   from './helpers'
 import { isValid }  from './isValid'
 
 export async function checkFieldValidity( $field, fieldOptions, validationRules, validationErrors ){
@@ -40,7 +41,7 @@ export async function checkFieldValidity( $field, fieldOptions, validationRules,
 
     // HANDLE FIELD data-require-more & data-required-from WHEN *-from IT'S FILLED
     if( $field.matches('[data-required-from]') && isValidValue ){
-        const $reqMore = $form.querySelector( $field.getAttribute('data-required-from') )
+        const $reqMore = $form.querySelector( $field.dataset.requiredFrom )
         $reqMore.checked = true
         $field.required = $reqMore.required
     }

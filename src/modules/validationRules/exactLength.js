@@ -1,7 +1,7 @@
 
 export const exactLength = function( value, $field ){
     const valueLength = value.length
-    const exactLength = $field.getAttribute('data-exact-length') * 1
+    const exactLength = $field.dataset.exactLength * 1
     const obj = { result: valueLength === exactLength }
 
     if( !obj.result ){

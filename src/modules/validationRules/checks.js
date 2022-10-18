@@ -1,6 +1,6 @@
 
 export const checks = function( $field ){
-    const attrValue = JSON.parse( $field.getAttribute('data-checks') )
+    const attrValue = JSON.parse( $field.dataset.checks )
     const checkedLength = $field.form.querySelectorAll(`[name="${$field.name}"]:checked`).length
     const isMinOk = checkedLength >= attrValue[0]
     const isMaxOk = checkedLength <= attrValue[1]

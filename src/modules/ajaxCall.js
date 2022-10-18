@@ -15,7 +15,7 @@ const getFetchMethod = (response, options) => {
     }
 }
 
-export function ajaxCall( $form, formDataObj, options ){
+export async function ajaxCall( $form, formDataObj, options ){
 
     let timeoutTimer
     const ajaxOptions = mergeObjects( {}, options.formOptions.ajaxOptions )

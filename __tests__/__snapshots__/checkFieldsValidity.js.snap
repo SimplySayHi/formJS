@@ -333,6 +333,9 @@ Object {
             "type": "checkbox",
             "value": "sms",
           },
+          "dataset": DOMStringMap {
+            "checks": "[1,2]",
+          },
         },
       },
       "result": true,
@@ -347,6 +350,9 @@ Object {
             "required": "",
             "type": "checkbox",
             "value": "sms",
+          },
+          "dataset": DOMStringMap {
+            "checks": "[1,2]",
           },
         },
       },
@@ -462,6 +468,9 @@ Object {
             "type": "text",
             "value": "hello",
           },
+          "dataset": DOMStringMap {
+            "equalTo": "field-25",
+          },
         },
       },
       "result": true,
@@ -488,6 +497,9 @@ Object {
             "required": "",
             "type": "text",
             "value": "hello-",
+          },
+          "dataset": DOMStringMap {
+            "equalTo": "field-26",
           },
         },
       },
@@ -530,6 +542,9 @@ Object {
             "type": "text",
             "value": "hello",
           },
+          "dataset": DOMStringMap {
+            "exactLength": "5",
+          },
         },
       },
       "result": true,
@@ -543,6 +558,9 @@ Object {
             "required": "",
             "type": "text",
             "value": "hellohello",
+          },
+          "dataset": DOMStringMap {
+            "exactLength": "5",
           },
         },
       },
@@ -562,6 +580,9 @@ Object {
             "type": "text",
             "value": "he",
           },
+          "dataset": DOMStringMap {
+            "exactLength": "5",
+          },
         },
       },
       "errors": Object {
@@ -579,6 +600,9 @@ Object {
             "required": "",
             "type": "text",
             "value": "hellohello",
+          },
+          "dataset": DOMStringMap {
+            "exactLength": "a",
           },
         },
       },
@@ -622,6 +646,9 @@ Object {
             "type": "text",
             "value": "Valerio",
           },
+          "dataset": DOMStringMap {
+            "length": "[3,20]",
+          },
         },
       },
       "result": true,
@@ -635,6 +662,9 @@ Object {
             "required": "",
             "type": "text",
             "value": "a",
+          },
+          "dataset": DOMStringMap {
+            "length": "[3,20]",
           },
         },
       },
@@ -653,6 +683,9 @@ Object {
             "required": "",
             "type": "text",
             "value": "ValerioValerioValerio",
+          },
+          "dataset": DOMStringMap {
+            "length": "[3,20]",
           },
         },
       },
@@ -696,6 +729,7 @@ Object {
             "type": "number",
             "value": "7",
           },
+          "dataset": DOMStringMap {},
         },
       },
       "result": true,
@@ -734,6 +768,7 @@ Object {
             "type": "number",
             "value": "11",
           },
+          "dataset": DOMStringMap {},
         },
       },
       "errors": Object {
@@ -775,6 +810,7 @@ Object {
             "type": "date",
             "value": "2012-12-11",
           },
+          "dataset": DOMStringMap {},
         },
       },
       "result": true,
@@ -813,6 +849,7 @@ Object {
             "type": "date",
             "value": "2012-12-13",
           },
+          "dataset": DOMStringMap {},
         },
       },
       "errors": Object {
@@ -885,6 +922,7 @@ Object {
             "type": "number",
             "value": "7",
           },
+          "dataset": DOMStringMap {},
         },
       },
       "errors": Object {
@@ -926,6 +964,7 @@ Object {
             "type": "number",
             "value": "11",
           },
+          "dataset": DOMStringMap {},
         },
       },
       "result": true,
@@ -964,6 +1003,7 @@ Object {
             "type": "date",
             "value": "2012-12-11",
           },
+          "dataset": DOMStringMap {},
         },
       },
       "errors": Object {
@@ -1005,6 +1045,7 @@ Object {
             "type": "date",
             "value": "2012-12-13",
           },
+          "dataset": DOMStringMap {},
         },
       },
       "result": true,
@@ -1196,6 +1237,9 @@ Object {
             "type": "text",
             "value": "Hi",
           },
+          "dataset": DOMStringMap {
+            "requiredFrom": "#req-more-1",
+          },
         },
       },
       "result": true,
@@ -1311,6 +1355,9 @@ Object {
             "required": "",
             "type": "email",
             "value": "a",
+          },
+          "dataset": DOMStringMap {
+            "requiredFrom": "#req-more-5",
           },
         },
       },
@@ -1649,6 +1696,9 @@ Object {
             "type": "checkbox",
             "value": "sms",
           },
+          "dataset": DOMStringMap {
+            "checks": "[1,2]",
+          },
         },
       },
       "result": true,
@@ -1663,6 +1713,9 @@ Object {
             "required": "",
             "type": "checkbox",
             "value": "sms",
+          },
+          "dataset": DOMStringMap {
+            "checks": "[1,2]",
           },
         },
       },
@@ -1778,6 +1831,9 @@ Object {
             "type": "text",
             "value": "hello",
           },
+          "dataset": DOMStringMap {
+            "equalTo": "field-25",
+          },
         },
       },
       "result": true,
@@ -1804,6 +1860,9 @@ Object {
             "required": "",
             "type": "text",
             "value": "hello-",
+          },
+          "dataset": DOMStringMap {
+            "equalTo": "field-26",
           },
         },
       },
@@ -1846,6 +1905,9 @@ Object {
             "type": "text",
             "value": "hello",
           },
+          "dataset": DOMStringMap {
+            "exactLength": "5",
+          },
         },
       },
       "result": true,
@@ -1859,6 +1921,9 @@ Object {
             "required": "",
             "type": "text",
             "value": "hellohello",
+          },
+          "dataset": DOMStringMap {
+            "exactLength": "5",
           },
         },
       },
@@ -1878,6 +1943,9 @@ Object {
             "type": "text",
             "value": "he",
           },
+          "dataset": DOMStringMap {
+            "exactLength": "5",
+          },
         },
       },
       "errors": Object {
@@ -1895,6 +1963,9 @@ Object {
             "required": "",
             "type": "text",
             "value": "hellohello",
+          },
+          "dataset": DOMStringMap {
+            "exactLength": "a",
           },
         },
       },
@@ -1938,6 +2009,9 @@ Object {
             "type": "text",
             "value": "Valerio",
           },
+          "dataset": DOMStringMap {
+            "length": "[3,20]",
+          },
         },
       },
       "result": true,
@@ -1951,6 +2025,9 @@ Object {
             "required": "",
             "type": "text",
             "value": "a",
+          },
+          "dataset": DOMStringMap {
+            "length": "[3,20]",
           },
         },
       },
@@ -1969,6 +2046,9 @@ Object {
             "required": "",
             "type": "text",
             "value": "ValerioValerioValerio",
+          },
+          "dataset": DOMStringMap {
+            "length": "[3,20]",
           },
         },
       },
@@ -2012,6 +2092,7 @@ Object {
             "type": "number",
             "value": "7",
           },
+          "dataset": DOMStringMap {},
         },
       },
       "result": true,
@@ -2050,6 +2131,7 @@ Object {
             "type": "number",
             "value": "11",
           },
+          "dataset": DOMStringMap {},
         },
       },
       "errors": Object {
@@ -2091,6 +2173,7 @@ Object {
             "type": "date",
             "value": "2012-12-11",
           },
+          "dataset": DOMStringMap {},
         },
       },
       "result": true,
@@ -2129,6 +2212,7 @@ Object {
             "type": "date",
             "value": "2012-12-13",
           },
+          "dataset": DOMStringMap {},
         },
       },
       "errors": Object {
@@ -2201,6 +2285,7 @@ Object {
             "type": "number",
             "value": "7",
           },
+          "dataset": DOMStringMap {},
         },
       },
       "errors": Object {
@@ -2242,6 +2327,7 @@ Object {
             "type": "number",
             "value": "11",
           },
+          "dataset": DOMStringMap {},
         },
       },
       "result": true,
@@ -2280,6 +2366,7 @@ Object {
             "type": "date",
             "value": "2012-12-11",
           },
+          "dataset": DOMStringMap {},
         },
       },
       "errors": Object {
@@ -2321,6 +2408,7 @@ Object {
             "type": "date",
             "value": "2012-12-13",
           },
+          "dataset": DOMStringMap {},
         },
       },
       "result": true,
@@ -2512,6 +2600,9 @@ Object {
             "type": "text",
             "value": "Hi",
           },
+          "dataset": DOMStringMap {
+            "requiredFrom": "#req-more-1",
+          },
         },
       },
       "result": true,
@@ -2627,6 +2718,9 @@ Object {
             "required": "",
             "type": "email",
             "value": "a",
+          },
+          "dataset": DOMStringMap {
+            "requiredFrom": "#req-more-5",
           },
         },
       },

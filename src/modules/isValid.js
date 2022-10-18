@@ -1,14 +1,14 @@
 
 import { mergeValidateFieldDefault, mergeObjects, toCamelCase } from './helpers'
 
-export function isValid( $field, fieldOptions, validationRules, validationErrors ){
+export async function isValid( $field, fieldOptions, validationRules, validationErrors ){
 
     const fieldValue = $field.value
     const obj = mergeValidateFieldDefault({result: fieldValue.trim().length > 0, $field})
-    const isRadioOrCheckbox = /^(radio|checkbox)$/.test($field.type)
+    const isCheckboxOrRadio = ['checkbox', 'radio'].includes($field.type)
     const hasSelectedInput = $field.form.querySelectorAll(`[name="${$field.name}"]:checked`).length > 0
 
-    if( (!isRadioOrCheckbox && !obj.result) || (isRadioOrCheckbox && !hasSelectedInput) ){
+    if( (!isCheckboxOrRadio && !obj.result) || (isCheckboxOrRadio && !hasSelectedInput) ){
         obj.result = false
         obj.errors = { empty: true }
         return Promise.resolve(obj)
@@ -27,7 +27,7 @@ export function isValid( $field, fieldOptions, validationRules, validationErrors
         return accList
     }, [])
 
-    return new Promise(resolve => {
+    const validity = await new Promise(resolve => {
 
         // RUN VALIDATIONS
         const validationsResult = validationMethods.reduce((accPromise, methodName) => {
@@ -51,17 +51,15 @@ export function isValid( $field, fieldOptions, validationRules, validationErrors
         }, Promise.resolve(obj))
         resolve(validationsResult)
 
-    }).then(data => {
-
-        // GET ERRORS
-        if( !data.result ){
-            data.errors = validationMethods.reduce((accObj, methodName) => {
-                const errors = (validationErrors[methodName] && validationErrors[methodName](fieldValue, $field)) || {}
-                return mergeObjects(accObj, errors)
-            }, data.errors)
-        }
-        return data
-
     })
+
+    if( !validity.result ){
+        validity.errors = validationMethods.reduce((accObj, methodName) => {
+            const errors = (validationErrors[methodName] && validationErrors[methodName](fieldValue, $field)) || {}
+            return mergeObjects(accObj, errors)
+        }, validity.errors)
+    }
+
+    return validity
 
 }

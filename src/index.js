@@ -117,49 +117,49 @@ class Form {
         return finalizeFieldPromise(fieldValidity)
     }
 
-    validateFieldsGroup( group = this.currentGroup, fieldOptions ){
+    async validateFieldsGroup( group = this.currentGroup, fieldOptions ){
         const self = this
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions)
         const $fields = self.$form.querySelectorAll(group)
 
-        return checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors)
-            .then(data => {
-                data.fields.forEach(obj => {
-                    obj.isCheckingGroup = true
-                    dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } )
-                })
-                const groups = self.options.formOptions.groups
-                if( groups.length > 0 ){
-                    data.group = {
-                        prev: groups[groups.indexOf(group) - 1],
-                        current: group,
-                        next: groups[groups.indexOf(group) + 1]
-                    }
-                    data.canSubmit = data.result && !data.group.next
-                }
-                dispatchCustomEvent( self.$form, customEvents.group.validation, { detail: data } )
-                return data
-            })
-            .then(finalizeFieldsGroupPromise)
+        const groupValidity = await checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors)
+
+        groupValidity.fields.forEach(obj => {
+            obj.isCheckingGroup = true
+            dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } )
+        })
+
+        const groups = self.options.formOptions.groups
+        if( groups.length > 0 ){
+            groupValidity.group = {
+                prev: groups[groups.indexOf(group) - 1],
+                current: group,
+                next: groups[groups.indexOf(group) + 1]
+            }
+            groupValidity.canSubmit = groupValidity.result && !groupValidity.group.next
+        }
+
+        dispatchCustomEvent( self.$form, customEvents.group.validation, { detail: groupValidity } )
+        
+        return finalizeFieldsGroupPromise(groupValidity)
     }
 
-    validateFilledFields( fieldOptions ){
+    async validateFilledFields( fieldOptions ){
         const self = this
         const $filledFields = getFilledFields( self.$form )
 
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions)
 
-        return checkFieldsValidity($filledFields, fieldOptions, self.validationRules, self.validationErrors)
-            .then(data => {
-                data.fields.forEach(obj => {
-                    dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } )
-                })
-                return data
-            })
-            .then(finalizeFormPromise)
+        const filledFieldsValidity = checkFieldsValidity($filledFields, fieldOptions, self.validationRules, self.validationErrors)
+
+        filledFieldsValidity.fields.forEach(obj => {
+            dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } )
+        })
+        
+        return finalizeFormPromise(filledFieldsValidity)
     }
 
-    validateForm( fieldOptions ){
+    async validateForm( fieldOptions ){
         const self = this
 
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions)
@@ -171,16 +171,16 @@ class Form {
         const $form = self.$form
         const $fields = $form.querySelectorAll(fieldsStringSelector)
 
-        return checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors)
-            .then(data => {
-                data.fields.forEach(obj => {
-                    obj.isCheckingForm = true
-                    dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } )
-                })
-                dispatchCustomEvent( $form, customEvents.form.validation, { detail: data } )
-                return data
-            })
-            .then(finalizeFormPromise)
+        const formVaidity = await checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors)
+
+        formVaidity.fields.forEach(obj => {
+            obj.isCheckingForm = true
+            dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } )
+        })
+
+        dispatchCustomEvent( $form, customEvents.form.validation, { detail: formVaidity } )
+
+        return finalizeFormPromise(formVaidity)
     }
     
     static addValidationErrors( errorsObj ){

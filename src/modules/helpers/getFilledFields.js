@@ -11,7 +11,7 @@ export const getFilledFields = $form => {
         const isCheckboxOrRadio = ['checkbox', 'radio'].includes(type)
         const fieldChecked = $form.querySelector(`[name="${name}"]:checked`)
         const isReqFrom = $field.matches('[data-required-from]')
-        const $reqMore = (isReqFrom ? $form.querySelector($field.getAttribute('data-required-from')) : null)
+        const $reqMore = (isReqFrom ? $form.querySelector($field.dataset.requiredFrom) : null)
 
         return (
             isCheckboxOrRadio ? (fieldChecked || null) :
