@@ -3,12 +3,12 @@
         "build": {
             "exclude": "node_modules/**",
             "presets": [
-                [ "@babel/env", {"modules": false, "targets": {"chrome": "73"}} ]
+                [ "@babel/preset-env", { "modules": false } ]
             ]
         },
         "test": {
             "presets": [
-                [ "@babel/env", {"targets": {"node": "current"}} ]
+                [ "@babel/preset-env", {"targets": {"node": "current"}} ]
             ]
         }
     }

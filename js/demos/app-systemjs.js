@@ -25,7 +25,8 @@ System.register([], (function () {
               validation: "fjs.group:validation"
             },
                   isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object),
-                  mergeObjects = function (out = {}) {
+                  mergeObjects = function () {
+              let out = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
               return Array.from(arguments).slice(1).filter(arg => !!arg).forEach(arg => {
                 Object.keys(arg).forEach(key => {
                   Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
@@ -40,10 +41,13 @@ System.register([], (function () {
               elem.dispatchEvent(eventObj);
             },
                   fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea',
-                  finalizeFormPromise = ({
-              fields: fields,
-              result: result
-            }) => result ? Promise.resolve(fields) : Promise.reject(fields),
+                  finalizeFormPromise = _ref => {
+              let {
+                fields: fields,
+                result: result
+              } = _ref;
+              return result ? Promise.resolve(fields) : Promise.reject(fields);
+            },
                   formatMap = {
               "YYYY-MM-DD": function (dateArray) {
                 return dateArray;
@@ -83,24 +87,31 @@ System.register([], (function () {
               $field: null
             }, obj),
                   isFieldForChangeEvent = $field => $field.matches('select, [type="radio"], [type="checkbox"], [type="file"]'),
-                  runFunctionsSequence = ({
-              functionsList = [],
-              data = {},
-              stopConditionFn = () => !1
-            } = {}) => functionsList.reduce((acc, promiseFn) => acc.then(res => {
-              let dataNew = mergeObjects({}, res[res.length - 1]);
-              return stopConditionFn(dataNew) ? Promise.resolve(res) : new Promise(resolve => {
-                resolve(promiseFn(dataNew));
-              }).then((result = dataNew) => (res.push(result), res));
-            }), Promise.resolve([data])).then(dataList => dataList.length > 1 ? dataList.slice(1) : dataList),
+                  runFunctionsSequence = function () {
+              let {
+                functionsList = [],
+                data = {},
+                stopConditionFn = () => !1
+              } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+              return functionsList.reduce((acc, promiseFn) => acc.then(res => {
+                let dataNew = mergeObjects({}, res[res.length - 1]);
+                return stopConditionFn(dataNew) ? Promise.resolve(res) : new Promise(resolve => {
+                  resolve(promiseFn(dataNew));
+                }).then(function () {
+                  let result = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : dataNew;
+                  return res.push(result), res;
+                });
+              }), Promise.resolve([data])).then(dataList => dataList.length > 1 ? dataList.slice(1) : dataList);
+            },
                   serializeObject = obj => obj && "object" == typeof obj && obj.constructor === Object ? Object.keys(obj).reduce((a, k) => (a.push(k + "=" + encodeURIComponent(obj[k])), a), []).join("&") : obj,
                   toCamelCase = string => string.replace(/-([a-z])/gi, (all, letter) => letter.toUpperCase()),
                   options = {
               fieldOptions: {
-                beforeValidation: [function ({
-                  $field: $field,
-                  fieldOptions: fieldOptions
-                }) {
+                beforeValidation: [function (_ref2) {
+                  let {
+                    $field: $field,
+                    fieldOptions: fieldOptions
+                  } = _ref2;
                   fieldOptions.trimValue && !isFieldForChangeEvent($field) && ($field.value = $field.value.trim()), (($fields, fieldOptions) => {
                     ($fields = isNodeList($fields) ? Array.from($fields) : [$fields]).forEach($field => {
                       if (!["checkbox", "radio"].includes($field.type)) {
@@ -400,7 +411,8 @@ System.register([], (function () {
                     formCssClasses = options.formOptions.cssClasses,
                     isAjaxForm = options.formOptions.ajaxSubmit,
                     $btn = $form.querySelector('[type="submit"]'),
-                    eventPreventDefault = (enableBtn = !0) => {
+                    eventPreventDefault = function () {
+                let enableBtn = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : !0;
                 $btn && enableBtn && ($btn.disabled = !1), event && event.preventDefault();
               };
 
@@ -426,9 +438,12 @@ System.register([], (function () {
                 };
                 return runFunctionsSequence(rfsObject);
               }).then(dataList => {
-                if (dataList.some(({
-                  stopExecution: stopExecution
-                }) => stopExecution)) return eventPreventDefault(), !1;
+                if (dataList.some(_ref3 => {
+                  let {
+                    stopExecution: stopExecution
+                  } = _ref3;
+                  return stopExecution;
+                })) return eventPreventDefault(), !1;
 
                 if (isAjaxForm) {
                   const formData = dataList.pop().formData;
@@ -557,7 +572,8 @@ System.register([], (function () {
               return $container && removeClass($container, fieldOptions.cssClasses.pending), validationResult;
             }
 
-            async function checkFieldsValidity($fields, fieldOptions, validationRules, validationErrors, fieldToSkip = null) {
+            async function checkFieldsValidity($fields, fieldOptions, validationRules, validationErrors) {
+              let fieldToSkip = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
               fieldOptions = mergeObjects({}, fieldOptions, {
                 focusOnRelated: !1
               });
@@ -573,9 +589,12 @@ System.register([], (function () {
 
                 return checkFieldValidity($field, fieldOptions, validationRules, validationErrors);
               })),
-                    areAllFieldsValid = fieldsValidity.every(({
-                result: result
-              }) => result);
+                    areAllFieldsValid = fieldsValidity.every(_ref4 => {
+                let {
+                  result: result
+                } = _ref4;
+                return result;
+              });
               return mergeObjects({}, {
                 result: !0,
                 fields: []
@@ -628,7 +647,8 @@ System.register([], (function () {
                 }(this.$form, this.options), dispatchCustomEvent(this.$form, customEvents_form.destroy);
               }
 
-              getFormData(trimValues = this.options.fieldOptions.trimValue) {
+              getFormData() {
+                let trimValues = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.options.fieldOptions.trimValue;
                 const $formFields = this.$form.querySelectorAll("input, select, textarea"),
                       $filteredFields = Array.from($formFields).filter(elem => elem.matches(':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])'));
                 return this.options.formOptions.getFormData($filteredFields, trimValues);
@@ -660,13 +680,18 @@ System.register([], (function () {
                   }
                 } else removeClass($form, self.options.formOptions.cssClasses.valid);
 
-                return (({
-                  errors: errors,
-                  result: result
-                }) => result ? Promise.resolve() : Promise.reject(errors))(fieldValidity);
+                return (_ref5 => {
+                  let {
+                    errors: errors,
+                    result: result
+                  } = _ref5;
+                  return result ? Promise.resolve() : Promise.reject(errors);
+                })(fieldValidity);
               }
 
-              async validateFieldsGroup(group = this.currentGroup, fieldOptions) {
+              async validateFieldsGroup() {
+                let group = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.currentGroup;
+                let fieldOptions = arguments.length > 1 ? arguments[1] : undefined;
                 fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
                 const $fields = this.$form.querySelectorAll(group),
                       groupValidity = await checkFieldsValidity($fields, fieldOptions, this.validationRules, this.validationErrors);
@@ -682,19 +707,22 @@ System.register([], (function () {
                   next: groups[groups.indexOf(group) + 1]
                 }, groupValidity.canSubmit = groupValidity.result && !groupValidity.group.next), dispatchCustomEvent(this.$form, customEvents_group.validation, {
                   detail: groupValidity
-                }), (({
-                  canSubmit: canSubmit,
-                  fields: fields,
-                  group: group,
-                  result: result
-                }) => result ? Promise.resolve({
-                  canSubmit: canSubmit,
-                  fields: fields,
-                  group: group
-                }) : Promise.reject({
-                  fields: fields,
-                  group: group
-                }))(groupValidity);
+                }), (_ref6 => {
+                  let {
+                    canSubmit: canSubmit,
+                    fields: fields,
+                    group: group,
+                    result: result
+                  } = _ref6;
+                  return result ? Promise.resolve({
+                    canSubmit: canSubmit,
+                    fields: fields,
+                    group: group
+                  }) : Promise.reject({
+                    fields: fields,
+                    group: group
+                  });
+                })(groupValidity);
               }
 
               async validateFilledFields(fieldOptions) {
