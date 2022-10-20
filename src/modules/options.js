@@ -11,7 +11,9 @@ export const options = {
             error:              'has-error',
             errorEmpty:         'has-error-empty',
             errorRule:          'has-error-rule',
+            modified:           'is-modified',
             pending:            'is-pending',
+            touched:            'is-touched',
             valid:              'is-valid'
         },
         focusOnRelated:         true,

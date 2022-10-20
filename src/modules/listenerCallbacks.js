@@ -1,4 +1,5 @@
 
+export { blurHandler }          from './listenerCallbacks/blurHandler';
 export { dataTypeNumber }       from './listenerCallbacks/dataTypeNumber';
 export { formValidationEnd }    from './listenerCallbacks/formValidationEnd';
 export { keypressMaxlength }    from './listenerCallbacks/keypressMaxlength';

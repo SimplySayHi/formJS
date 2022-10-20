@@ -10,6 +10,7 @@ import {
     finalizeFieldsGroupPromise, 
     finalizeFormPromise, 
     getFilledFields, 
+    getInitialValues,
     isNodeList,
     mergeObjects, 
     removeClass }               from './modules/helpers';
@@ -59,6 +60,8 @@ class Form {
                 self.options[optionType][cbName] = ( Array.isArray(cbOpt) ? cbOpt.map(cbFn => cbFn.bind(self)) : cbOpt.bind(self) );
             }
         });
+
+        self._ = { initialValues: getInitialValues(self.$form) }
 
         formStartup( self.$form, self.options );
 

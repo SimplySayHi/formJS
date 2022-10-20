@@ -1,4 +1,4 @@
-/* formJS v5.3.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v5.4.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 const addClass = (element, cssClasses) => {
     cssClasses.split(" ").forEach(className => {
         element.classList.add(className);
@@ -7,7 +7,10 @@ const addClass = (element, cssClasses) => {
     cssClasses.split(" ").forEach(className => {
         element.classList.remove(className);
     });
-}, isDOMNode = node => Element.prototype.isPrototypeOf(node), customEvents_field = {
+}, isDOMNode = node => Element.prototype.isPrototypeOf(node), checkTouchedField = ($field, fieldOptions) => {
+    const $container = $field.closest(fieldOptions.questionContainer) || $field;
+    addClass($container, fieldOptions.cssClasses.touched);
+}, customEvents_field = {
     validation: "fjs.field:validation"
 }, customEvents_form = {
     destroy: "fjs.form:destroy",
@@ -28,7 +31,7 @@ const addClass = (element, cssClasses) => {
     }, eventOptions);
     const eventObj = new CustomEvent(eventName, eventOptions);
     elem.dispatchEvent(eventObj);
-}, fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', finalizeFieldPromise = ({errors: errors, result: result}) => result ? Promise.resolve() : Promise.reject(errors), finalizeFieldsGroupPromise = ({canSubmit: canSubmit, fields: fields, group: group, result: result}) => result ? Promise.resolve({
+}, excludeSelector = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])', fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', finalizeFieldPromise = ({errors: errors, result: result}) => result ? Promise.resolve() : Promise.reject(errors), finalizeFieldsGroupPromise = ({canSubmit: canSubmit, fields: fields, group: group, result: result}) => result ? Promise.resolve({
     canSubmit: canSubmit,
     fields: fields,
     group: group
@@ -75,6 +78,7 @@ const addClass = (element, cssClasses) => {
 a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (all, letter) => letter.toUpperCase()), options = {
     fieldOptions: {
         beforeValidation: [ function({$field: $field, fieldOptions: fieldOptions}) {
+            const initialValues = $field.form.formjs._.initialValues;
             fieldOptions.trimValue && !isFieldForChangeEvent($field) && ($field.value = $field.value.trim()), 
             (($fields, fieldOptions) => {
                 ($fields = isNodeList($fields) ? Array.from($fields) : [ $fields ]).forEach($field => {
@@ -83,14 +87,30 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
                         $field.value ? addClass($container, fieldOptions.cssClasses.dirty) : removeClass($container, fieldOptions.cssClasses.dirty);
                     }
                 });
-            })($field, fieldOptions), fieldOptions.skipUIfeedback || addClass($field.closest(fieldOptions.questionContainer), fieldOptions.cssClasses.pending);
+            })($field, fieldOptions), (($field, initialValues, fieldOptions) => {
+                const $container = $field.closest(fieldOptions.questionContainer) || $field;
+                (({form: form, tagName: tagName, type: type, name: name, value: value, multiple: multiple, options: options}, initValues) => {
+                    const isRadio = "radio" === type, isCheckbox = "checkbox" === type, isSelect = "SELECT" === tagName;
+                    if (isCheckbox && form.querySelectorAll(`[name="${name}"]`).length > 1 || isSelect && multiple) {
+                        const multiValues = isCheckbox ? [ ...form.querySelectorAll(`[name="${name}"]:checked`) ].map($el => $el.value) : [ ...options ].filter(opt => opt.selected);
+                        return initValues[name].length !== multiValues.length || multiValues.filter(val => initValues[name].includes(val)).length !== initValues[name].length;
+                    }
+                    if (isRadio) {
+                        const $checkedRadio = form.querySelector(`[name="${name}"]:checked`);
+                        value = null, $checkedRadio && (value = $checkedRadio.value);
+                    }
+                    return value !== initValues[name];
+                })($field, initialValues) ? addClass($container, fieldOptions.cssClasses.modified) : removeClass($container, fieldOptions.cssClasses.modified);
+            })($field, initialValues, fieldOptions), fieldOptions.skipUIfeedback || addClass($field.closest(fieldOptions.questionContainer), fieldOptions.cssClasses.pending);
         } ],
         cssClasses: {
             dirty: "is-dirty",
             error: "has-error",
             errorEmpty: "has-error-empty",
             errorRule: "has-error-rule",
+            modified: "is-modified",
             pending: "is-pending",
+            touched: "is-touched",
             valid: "is-valid"
         },
         focusOnRelated: !0,
@@ -265,6 +285,9 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
             result: null !== $fieldChecked && $fieldChecked.value.trim().length > 0
         };
     }
+}, blurHandler = function(event) {
+    const $field = event.target, {fieldOptions: fieldOptions} = $field.form.formjs.options;
+    checkTouchedField($field, fieldOptions);
 }, dataTypeNumber = function(event) {
     const $field = event.target;
     if ($field.matches('[data-type="number"]')) {
@@ -276,11 +299,14 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
         }
     }
 }, formValidationEnd = function(event) {
-    const formEl = event.target, options = formEl.formjs.options;
+    const $form = event.target, options = $form.formjs.options;
     if (!options.fieldOptions.skipUIfeedback) {
         const clMethodName = event.detail.result ? "add" : "remove";
-        formEl.classList[clMethodName](options.formOptions.cssClasses.valid);
+        $form.classList[clMethodName](options.formOptions.cssClasses.valid);
     }
+    event.detail.fields[0].isCheckingForm && event.detail.fields.forEach(({$field: $field}) => {
+        checkTouchedField($field, options.fieldOptions);
+    });
 }, keypressMaxlength = function(event) {
     const $field = event.target;
     if ($field.matches("[maxlength]")) {
@@ -367,8 +393,10 @@ function submit(event) {
 }
 
 const groupValidationEnd = function(event) {
-    const detail = event.detail;
-    detail.result && (event.target.formjs.currentGroup = detail.group.next);
+    const detail = event.detail, {fieldOptions: fieldOptions} = event.target.formjs.options;
+    detail.result && (event.target.formjs.currentGroup = detail.group.next), detail.fields[0].isCheckingGroup && detail.fields.forEach(({$field: $field}) => {
+        checkTouchedField($field, fieldOptions);
+    });
 }, validation = function(event) {
     const isChangeEvent = "change" === event.type, $field = event.target, self = $field.closest("form").formjs;
     if ($field.matches(fieldsStringSelector)) {
@@ -500,16 +528,29 @@ class Form {
         const self = this;
         self.$form = checkFormElem.$el, self.$form.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj), 
         self.currentGroup = self.options.formOptions.groups[0];
+        var $form;
         [ "beforeValidation", "beforeSend", "getFormData" ].forEach(cbName => {
             const optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions";
             let cbOpt = self.options[optionType][cbName];
             cbOpt && (self.options[optionType][cbName] = Array.isArray(cbOpt) ? cbOpt.map(cbFn => cbFn.bind(self)) : cbOpt.bind(self));
-        }), function($form, options) {
+        }), self._ = {
+            initialValues: ($form = self.$form, [ ...$form.querySelectorAll("input, select, textarea") ].filter($el => $el.matches(excludeSelector)).reduce((accData, {tagName: tagName, type: type, name: name, value: value, checked: checked, multiple: multiple, options: options}) => {
+                const isCheckboxOrRadio = [ "checkbox", "radio" ].includes(type), isMultiCheckbox = "checkbox" === type && $form.querySelectorAll(`[name="${name}"]`).length > 1;
+                if (void 0 !== accData[name] && isCheckboxOrRadio && !checked) return accData;
+                if (void 0 === accData[name]) {
+                    if (isCheckboxOrRadio && !checked) return accData[name] = isMultiCheckbox ? [] : null, 
+                    accData;
+                    const isMultiSelect = "SELECT" === tagName && multiple, multiSelectValues = options && [ ...options ].filter(opt => opt.selected);
+                    accData[name] = isMultiSelect ? multiSelectValues : isMultiCheckbox ? [ value ] : value;
+                } else isMultiCheckbox ? accData[name].push(value) : accData[name] = value;
+                return accData;
+            }, {}))
+        }, function($form, options) {
             $form.noValidate = !0;
             const fieldOptions = options.fieldOptions, formOptions = options.formOptions;
             fieldOptions.strictHtmlValidation && ($form.addEventListener("keypress", keypressMaxlength, !1), 
             $form.addEventListener("input", dataTypeNumber, !1)), fieldOptions.preventPasteFields && $form.querySelectorAll(fieldOptions.preventPasteFields).length && $form.addEventListener("paste", pastePrevent, !1), 
-            fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
+            $form.addEventListener("blur", blurHandler, !0), fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
                 const useCapture = /^(blur|focus)$/.test(eventName);
                 $form.addEventListener(eventName, validation, useCapture);
             }), $form.addEventListener(customEvents_field.validation, validationEnd, !1), formOptions.groups.length > 0 && $form.addEventListener(customEvents_group.validation, groupValidationEnd, !1), 
@@ -527,8 +568,8 @@ class Form {
             options.fieldOptions.strictHtmlValidation && ($form.removeEventListener("keypress", keypressMaxlength, !1), 
             $form.removeEventListener("input", dataTypeNumber, !1)), options.fieldOptions.preventPasteFields && $form.removeEventListener("paste", pastePrevent, !1), 
             options.formOptions.handleSubmit && $form.removeEventListener("submit", submit), 
-            options.fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
-                const useCapturing = "blur" === eventName;
+            $form.removeEventListener("blur", blurHandler, !0), options.fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
+                const useCapturing = [ "blur", "focus" ].includes(eventName);
                 $form.removeEventListener(eventName, validation, useCapturing);
             }), $form.removeEventListener(customEvents_field.validation, validationEnd, !1), 
             options.formOptions.groups.length > 0 && $form.removeEventListener(customEvents_group.validation, groupValidationEnd, !1), 
@@ -537,7 +578,7 @@ class Form {
         }(this.$form, this.options), dispatchCustomEvent(this.$form, customEvents_form.destroy);
     }
     getFormData(trimValues = this.options.fieldOptions.trimValue) {
-        const $formFields = this.$form.querySelectorAll("input, select, textarea"), $filteredFields = Array.from($formFields).filter(elem => elem.matches(':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])'));
+        const $formFields = this.$form.querySelectorAll("input, select, textarea"), $filteredFields = Array.from($formFields).filter(elem => elem.matches(excludeSelector));
         return this.options.formOptions.getFormData($filteredFields, trimValues);
     }
     validateField(field, fieldOptions) {
@@ -617,6 +658,6 @@ class Form {
 }
 
 Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-Form.prototype.version = "5.3.2";
+Form.prototype.version = "5.4.0";
 
 export { Form as default };

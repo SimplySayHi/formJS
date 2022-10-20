@@ -34,8 +34,33 @@ System.register([], (function () {
         });
         return Constructor;
       }
+      function _toConsumableArray(arr) {
+        return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+      }
+      function _arrayWithoutHoles(arr) {
+        if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+      }
+      function _iterableToArray(iter) {
+        if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+      }
+      function _unsupportedIterableToArray(o, minLen) {
+        if (!o) return;
+        if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+        var n = Object.prototype.toString.call(o).slice(8, -1);
+        if (n === "Object" && o.constructor) n = o.constructor.name;
+        if (n === "Map" || n === "Set") return Array.from(o);
+        if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+      }
+      function _arrayLikeToArray(arr, len) {
+        if (len == null || len > arr.length) len = arr.length;
+        for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+        return arr2;
+      }
+      function _nonIterableSpread() {
+        throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+      }
 
-      /* formJS v5.3.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+      /* formJS v5.4.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
       var addClass = function addClass(element, cssClasses) {
           cssClasses.split(" ").forEach(function (className) {
             element.classList.add(className);
@@ -51,6 +76,10 @@ System.register([], (function () {
         },
         isDOMNode = function isDOMNode(node) {
           return Element.prototype.isPrototypeOf(node);
+        },
+        checkTouchedField = function checkTouchedField($field, fieldOptions) {
+          var $container = $field.closest(fieldOptions.questionContainer) || $field;
+          addClass($container, fieldOptions.cssClasses.touched);
         },
         customEvents_field = {
           validation: "fjs.field:validation"
@@ -84,6 +113,7 @@ System.register([], (function () {
           var eventObj = new CustomEvent(eventName, eventOptions);
           elem.dispatchEvent(eventObj);
         },
+        excludeSelector = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])',
         fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea',
         finalizeFieldPromise = function finalizeFieldPromise(_ref) {
           var errors = _ref.errors,
@@ -189,6 +219,7 @@ System.register([], (function () {
             beforeValidation: [function (_ref5) {
               var $field = _ref5.$field,
                 fieldOptions = _ref5.fieldOptions;
+              var initialValues = $field.form.formjs._.initialValues;
               fieldOptions.trimValue && !isFieldForChangeEvent($field) && ($field.value = $field.value.trim()), function ($fields, fieldOptions) {
                 ($fields = isNodeList($fields) ? Array.from($fields) : [$fields]).forEach(function ($field) {
                   if ("checkbox" !== $field.type && "radio" !== $field.type) {
@@ -196,14 +227,45 @@ System.register([], (function () {
                     $field.value ? addClass($container, fieldOptions.cssClasses.dirty) : removeClass($container, fieldOptions.cssClasses.dirty);
                   }
                 });
-              }($field, fieldOptions), fieldOptions.skipUIfeedback || addClass($field.closest(fieldOptions.questionContainer), fieldOptions.cssClasses.pending);
+              }($field, fieldOptions), function ($field, initialValues, fieldOptions) {
+                var $container = $field.closest(fieldOptions.questionContainer) || $field;
+                (function (_ref6, initValues) {
+                  var form = _ref6.form,
+                    tagName = _ref6.tagName,
+                    type = _ref6.type,
+                    name = _ref6.name,
+                    value = _ref6.value,
+                    multiple = _ref6.multiple,
+                    options = _ref6.options;
+                  var isRadio = "radio" === type,
+                    isCheckbox = "checkbox" === type,
+                    isSelect = "SELECT" === tagName;
+                  if (isCheckbox && form.querySelectorAll("[name=\"".concat(name, "\"]")).length > 1 || isSelect && multiple) {
+                    var multiValues = isCheckbox ? _toConsumableArray(form.querySelectorAll("[name=\"".concat(name, "\"]:checked"))).map(function ($el) {
+                      return $el.value;
+                    }) : _toConsumableArray(options).filter(function (opt) {
+                      return opt.selected;
+                    });
+                    return initValues[name].length !== multiValues.length || multiValues.filter(function (val) {
+                      return initValues[name].includes(val);
+                    }).length !== initValues[name].length;
+                  }
+                  if (isRadio) {
+                    var $checkedRadio = form.querySelector("[name=\"".concat(name, "\"]:checked"));
+                    value = null, $checkedRadio && (value = $checkedRadio.value);
+                  }
+                  return value !== initValues[name];
+                })($field, initialValues) ? addClass($container, fieldOptions.cssClasses.modified) : removeClass($container, fieldOptions.cssClasses.modified);
+              }($field, initialValues, fieldOptions), fieldOptions.skipUIfeedback || addClass($field.closest(fieldOptions.questionContainer), fieldOptions.cssClasses.pending);
             }],
             cssClasses: {
               dirty: "is-dirty",
               error: "has-error",
               errorEmpty: "has-error-empty",
               errorRule: "has-error-rule",
+              modified: "is-modified",
               pending: "is-pending",
+              touched: "is-touched",
               valid: "is-valid"
             },
             focusOnRelated: !0,
@@ -398,6 +460,11 @@ System.register([], (function () {
             };
           }
         },
+        blurHandler = function blurHandler(event) {
+          var $field = event.target,
+            fieldOptions = $field.form.formjs.options.fieldOptions;
+          checkTouchedField($field, fieldOptions);
+        },
         dataTypeNumber = function dataTypeNumber(event) {
           var $field = event.target;
           if ($field.matches('[data-type="number"]')) {
@@ -410,12 +477,16 @@ System.register([], (function () {
           }
         },
         formValidationEnd = function formValidationEnd(event) {
-          var formEl = event.target,
-            options = formEl.formjs.options;
+          var $form = event.target,
+            options = $form.formjs.options;
           if (!options.fieldOptions.skipUIfeedback) {
             var clMethodName = event.detail.result ? "add" : "remove";
-            formEl.classList[clMethodName](options.formOptions.cssClasses.valid);
+            $form.classList[clMethodName](options.formOptions.cssClasses.valid);
           }
+          event.detail.fields[0].isCheckingForm && event.detail.fields.forEach(function (_ref7) {
+            var $field = _ref7.$field;
+            checkTouchedField($field, options.fieldOptions);
+          });
         },
         keypressMaxlength = function keypressMaxlength(event) {
           var $field = event.target;
@@ -503,8 +574,8 @@ System.register([], (function () {
             };
           return runFunctionsSequence(rfsObject);
         }).then(function (dataList) {
-          if (dataList.some(function (_ref6) {
-            var stopExecution = _ref6.stopExecution;
+          if (dataList.some(function (_ref8) {
+            var stopExecution = _ref8.stopExecution;
             return stopExecution;
           })) return eventPreventDefault(), !1;
           if (isAjaxForm) {
@@ -518,8 +589,12 @@ System.register([], (function () {
         });
       }
       var groupValidationEnd = function groupValidationEnd(event) {
-          var detail = event.detail;
-          detail.result && (event.target.formjs.currentGroup = detail.group.next);
+          var detail = event.detail,
+            fieldOptions = event.target.formjs.options.fieldOptions;
+          detail.result && (event.target.formjs.currentGroup = detail.group.next), detail.fields[0].isCheckingGroup && detail.fields.forEach(function (_ref9) {
+            var $field = _ref9.$field;
+            checkTouchedField($field, fieldOptions);
+          });
         },
         validation = function validation(event) {
           var isChangeEvent = "change" === event.type,
@@ -650,8 +725,8 @@ System.register([], (function () {
           }
           return checkFieldValidity($field, fieldOptions, validationRules, validationErrors);
         })).then(function (fields) {
-          var areAllFieldsValid = fields.every(function (_ref7) {
-            var result = _ref7.result;
+          var areAllFieldsValid = fields.every(function (_ref10) {
+            var result = _ref10.result;
             return result;
           });
           return mergeObjects({}, {
@@ -680,17 +755,42 @@ System.register([], (function () {
           if (!checkFormElem.result) throw new Error('First argument "form" is not a DOM node nor a form CSS selector!');
           var self = this;
           self.$form = checkFormElem.$el, self.$form.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj), self.currentGroup = self.options.formOptions.groups[0];
+          var $form;
           ["beforeValidation", "beforeSend", "getFormData"].forEach(function (cbName) {
             var optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions";
             var cbOpt = self.options[optionType][cbName];
             cbOpt && (self.options[optionType][cbName] = Array.isArray(cbOpt) ? cbOpt.map(function (cbFn) {
               return cbFn.bind(self);
             }) : cbOpt.bind(self));
-          }), function ($form, options) {
+          }), self._ = {
+            initialValues: ($form = self.$form, _toConsumableArray($form.querySelectorAll("input, select, textarea")).filter(function ($el) {
+              return $el.matches(excludeSelector);
+            }).reduce(function (accData, _ref11) {
+              var tagName = _ref11.tagName,
+                type = _ref11.type,
+                name = _ref11.name,
+                value = _ref11.value,
+                checked = _ref11.checked,
+                multiple = _ref11.multiple,
+                options = _ref11.options;
+              var isCheckboxOrRadio = ["checkbox", "radio"].includes(type),
+                isMultiCheckbox = "checkbox" === type && $form.querySelectorAll("[name=\"".concat(name, "\"]")).length > 1;
+              if (void 0 !== accData[name] && isCheckboxOrRadio && !checked) return accData;
+              if (void 0 === accData[name]) {
+                if (isCheckboxOrRadio && !checked) return accData[name] = isMultiCheckbox ? [] : null, accData;
+                var isMultiSelect = "SELECT" === tagName && multiple,
+                  multiSelectValues = options && _toConsumableArray(options).filter(function (opt) {
+                    return opt.selected;
+                  });
+                accData[name] = isMultiSelect ? multiSelectValues : isMultiCheckbox ? [value] : value;
+              } else isMultiCheckbox ? accData[name].push(value) : accData[name] = value;
+              return accData;
+            }, {}))
+          }, function ($form, options) {
             $form.noValidate = !0;
             var fieldOptions = options.fieldOptions,
               formOptions = options.formOptions;
-            fieldOptions.strictHtmlValidation && ($form.addEventListener("keypress", keypressMaxlength, !1), $form.addEventListener("input", dataTypeNumber, !1)), fieldOptions.preventPasteFields && $form.querySelectorAll(fieldOptions.preventPasteFields).length && $form.addEventListener("paste", pastePrevent, !1), fieldOptions.validateOnEvents.split(" ").forEach(function (eventName) {
+            fieldOptions.strictHtmlValidation && ($form.addEventListener("keypress", keypressMaxlength, !1), $form.addEventListener("input", dataTypeNumber, !1)), fieldOptions.preventPasteFields && $form.querySelectorAll(fieldOptions.preventPasteFields).length && $form.addEventListener("paste", pastePrevent, !1), $form.addEventListener("blur", blurHandler, !0), fieldOptions.validateOnEvents.split(" ").forEach(function (eventName) {
               var useCapture = /^(blur|focus)$/.test(eventName);
               $form.addEventListener(eventName, validation, useCapture);
             }), $form.addEventListener(customEvents_field.validation, validationEnd, !1), formOptions.groups.length > 0 && $form.addEventListener(customEvents_group.validation, groupValidationEnd, !1), $form.addEventListener(customEvents_form.validation, formValidationEnd, !1), formOptions.handleSubmit && ($form.addEventListener("submit", submit), formOptions.ajaxSubmit && ($form.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = $form.getAttribute("enctype")), $form.getAttribute("method") && (formOptions.ajaxOptions.method = $form.getAttribute("method").toUpperCase()), $form.getAttribute("action") && (formOptions.ajaxOptions.url = $form.getAttribute("action"))));
@@ -702,8 +802,8 @@ System.register([], (function () {
           key: "destroy",
           value: function destroy() {
             !function ($form, options) {
-              options.fieldOptions.strictHtmlValidation && ($form.removeEventListener("keypress", keypressMaxlength, !1), $form.removeEventListener("input", dataTypeNumber, !1)), options.fieldOptions.preventPasteFields && $form.removeEventListener("paste", pastePrevent, !1), options.formOptions.handleSubmit && $form.removeEventListener("submit", submit), options.fieldOptions.validateOnEvents.split(" ").forEach(function (eventName) {
-                var useCapturing = "blur" === eventName;
+              options.fieldOptions.strictHtmlValidation && ($form.removeEventListener("keypress", keypressMaxlength, !1), $form.removeEventListener("input", dataTypeNumber, !1)), options.fieldOptions.preventPasteFields && $form.removeEventListener("paste", pastePrevent, !1), options.formOptions.handleSubmit && $form.removeEventListener("submit", submit), $form.removeEventListener("blur", blurHandler, !0), options.fieldOptions.validateOnEvents.split(" ").forEach(function (eventName) {
+                var useCapturing = ["blur", "focus"].includes(eventName);
                 $form.removeEventListener(eventName, validation, useCapturing);
               }), $form.removeEventListener(customEvents_field.validation, validationEnd, !1), options.formOptions.groups.length > 0 && $form.removeEventListener(customEvents_group.validation, groupValidationEnd, !1), $form.removeEventListener(customEvents_form.validation, formValidationEnd, !1), delete $form.formjs;
             }(this.$form, this.options), dispatchCustomEvent(this.$form, customEvents_form.destroy);
@@ -714,7 +814,7 @@ System.register([], (function () {
             var trimValues = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.options.fieldOptions.trimValue;
             var $formFields = this.$form.querySelectorAll("input, select, textarea"),
               $filteredFields = Array.from($formFields).filter(function (elem) {
-                return elem.matches(':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])');
+                return elem.matches(excludeSelector);
               });
             return this.options.formOptions.getFormData($filteredFields, trimValues);
           }
@@ -824,7 +924,7 @@ System.register([], (function () {
         }]);
         return Form;
       }();
-      Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, Form.prototype.version = "5.3.2";
+      Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, Form.prototype.version = "5.4.0";
 
       var $form = document.querySelector('form');
       new Form($form);

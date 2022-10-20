@@ -1,7 +1,6 @@
 
 import { customEvents } from './helpers';
-import { dataTypeNumber, formValidationEnd, groupValidationEnd, keypressMaxlength, pastePrevent, submit, validation, validationEnd } from './listenerCallbacks';
-
+import { blurHandler, dataTypeNumber, formValidationEnd, groupValidationEnd, keypressMaxlength, pastePrevent, submit, validation, validationEnd } from './listenerCallbacks';
 
 export function destroy( $form, options ){
 
@@ -18,8 +17,10 @@ export function destroy( $form, options ){
         $form.removeEventListener('submit', submit);
     }
 
+    $form.removeEventListener('blur', blurHandler, true);
+
     options.fieldOptions.validateOnEvents.split(' ').forEach(eventName => {
-        const useCapturing = eventName === 'blur' ? true : false;
+        const useCapturing = ['blur', 'focus'].includes(eventName);
         $form.removeEventListener(eventName, validation, useCapturing);
     });
 

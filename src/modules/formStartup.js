@@ -1,6 +1,7 @@
 
 import { customEvents } from './helpers';
 import { 
+    blurHandler,
     dataTypeNumber,
     formValidationEnd,
     groupValidationEnd,
@@ -35,6 +36,8 @@ export function formStartup( $form, options ){
         // INIT EVENT LISTENER FOR "PASTE" EVENT TO PREVENT IT ON SPECIFIED FIELDS
         $form.addEventListener('paste', pastePrevent, false);
     }
+
+    $form.addEventListener('blur', blurHandler, true);
 
     // INIT EVENTS LISTENER ( AS IN fieldOptions )
     fieldOptions.validateOnEvents.split(' ').forEach(eventName => {

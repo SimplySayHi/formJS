@@ -2,6 +2,8 @@
 export { addClass }                 from './helpers/addClass';
 export { checkDirtyField }          from './helpers/checkDirtyField';
 export { checkFormEl }              from './helpers/checkFormEl';
+export { checkModifiedField }       from './helpers/checkModifiedField';
+export { checkTouchedField }        from './helpers/checkTouchedField';
 export { customEvents }             from './helpers/customEvents';
 export { dispatchCustomEvent }      from './helpers/dispatchCustomEvent';
 export { excludeSelector }          from './helpers/excludeSelector';
@@ -10,6 +12,7 @@ export { finalizeFieldPromise }     from './helpers/finalizeFieldPromise';
 export { finalizeFieldsGroupPromise }from './helpers/finalizeFieldsGroupPromise';
 export { finalizeFormPromise }      from './helpers/finalizeFormPromise';
 export { getDateAsNumber }          from './helpers/getDateAsNumber';
+export { getInitialValues }         from './helpers/getInitialValues';
 export { getJSONobjectFromFieldAttribute } from './helpers/getJSONobjectFromFieldAttribute';
 export { getSplitChar }             from './helpers/getSplitChar';
 export { getFilledFields }          from './helpers/getFilledFields';
