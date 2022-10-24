@@ -28,7 +28,6 @@ export function submit( event ){
     }
 
     removeClass( $form, (formCssClasses.ajaxComplete + ' ' + formCssClasses.ajaxError + ' ' + formCssClasses.ajaxSuccess) );
-    addClass( $form, formCssClasses.submit );
 
     instance.validateForm()
         .then(data => {
@@ -57,6 +56,8 @@ export function submit( event ){
                 eventPreventDefault();
                 return false;
             }
+
+            addClass( $form, formCssClasses.submit );
             
             if( isAjaxForm ){
                 const formData = dataList.pop().formData;
