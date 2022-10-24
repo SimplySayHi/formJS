@@ -300,7 +300,13 @@
                                         <span class="text-green">errorRule</span>: ( string ) additional CSS class(es) to be applied if the field value does not comply the validation rule
                                     </li>
                                     <li>
+                                        <span class="text-green">modified</span>: ( string ) CSS class(es) to be applied if the field has a different value than page load
+                                    </li>
+                                    <li>
                                         <span class="text-green">pending</span>: ( string ) CSS class(es) to be applied when the field validation starts and removed when it finishes ( useful for async validations )
+                                    </li>
+                                    <li>
+                                        <span class="text-green">touched</span>: ( string ) CSS class(es) to be applied if the user blurred the field or group/form has been validated
                                     </li>
                                     <li>
                                         <span class="text-green">valid</span>: ( string ) CSS class(es) to be applied if the field is valid
@@ -406,7 +412,7 @@
                             </div>
                             <div class="col-lg-8 col-xl-5">
                                 <p>
-                                    If true, the css classes for error ( any type ) and valid fields will not be added ( for UI feedback as said by the name ) 
+                                    If true, the css classes for 'error' ( any type ), 'valid' and 'pending' fields and form will not be added
                                 </p>
                             </div>
                         </div>
@@ -504,7 +510,9 @@
         error:              'has-error',
         errorEmpty:         'has-error-empty',
         errorRule:          'has-error-rule',
+        modified:           'is-modified',
         pending:            'is-pending',
+        touched:            'is-touched',
         valid:              'is-valid'
     },
     focusOnRelated:         true,
@@ -656,6 +664,12 @@
                                         <span class="text-green">ajaxSuccess</span>: ( string ) CSS class(es) to be applied when the ajax call for form submission has finished with success ( useful for ajax forms )
                                     </li>
                                     <li>
+                                        <span class="text-green">error</span>: ( string ) CSS class(es) to be applied when the form is not valid
+                                    </li>
+                                    <li>
+                                        <span class="text-green">pending</span>: ( string ) CSS class(es) to be applied when the form validation starts and removed when it finishes
+                                    </li>
+                                    <li>
                                         <span class="text-green">submit</span>: ( string ) CSS class(es) to be applied when the form submission starts and removed when it finishes ( useful for ajax forms )
                                     </li>
                                     <li>
@@ -805,6 +819,8 @@
         ajaxError:      'ajax-error',
         ajaxPending:    'ajax-pending',
         ajaxSuccess:    'ajax-success',
+        error:          'form-error',
+        pending:        'form-pending',
         submit:         'is-submitting',
         valid:          'is-valid'
     },
@@ -967,7 +983,7 @@
                                         Emit event <code>fjs.field:validation</code> ( which runs basic feedback on UI - with CSS classes )
                                     </li>
                                     <li>
-                                        If field is valid and <code>onValidationCheckAll</code> is set to <code>true</code>, it will not emit <code>fjs.field:validation</code> for each field ( see <a href="#field-options">Field Options section</a> ) but event <code>fjs.form:validation</code> or <code>fjs.form:validation</code> based on option <code>groups</code>
+                                        If field is valid and <code>onValidationCheckAll</code> is set to <code>true</code>, it will not emit <code>fjs.field:validation</code> for each field ( see <a href="#field-options">Field Options section</a> ) but event <code>fjs.form:validation</code> or <code>fjs.group:validation</code> based on option <code>groups</code>
                                     </li>
                                 </ul>
                                 <hr />
