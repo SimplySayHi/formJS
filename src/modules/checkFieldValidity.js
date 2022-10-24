@@ -3,7 +3,6 @@ import {    getJSONobjectFromFieldAttribute,
             isDOMNode,
             mergeObjects,
             mergeValidateFieldDefault,
-            removeClass,
             runFunctionsSequence
         }           from './helpers';
 import { isValid }  from './isValid';
@@ -59,14 +58,6 @@ export function checkFieldValidity( $field, fieldOptions, validationRules, valid
                 }
                 resolve( needsValidation ? isValid($field, fieldOptions, validationRules, validationErrors) : dataObj );
             });
-        })
-        .then(data => {
-            const $container = fieldOptions.questionContainer && data.$field.closest( fieldOptions.questionContainer );
-            if( $container ){
-                removeClass( $container, fieldOptions.cssClasses.pending );
-            }
-            return data;
-        })
-        ;
+        });
 
 }

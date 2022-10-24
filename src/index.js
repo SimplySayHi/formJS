@@ -1,7 +1,9 @@
 
 import { version }              from '../package.json';
 import { 
+    addClass,
     checkFormEl, 
+    checkTouchedField, 
     customEvents, 
     dispatchCustomEvent, 
     excludeSelector, 
@@ -11,8 +13,10 @@ import {
     finalizeFormPromise, 
     getFilledFields, 
     getInitialValues,
+    getUniqueFields,
     isNodeList,
     mergeObjects, 
+    mergeValidateFormDefault, 
     removeClass }               from './modules/helpers';
 import { options }              from './modules/options';
 import { validationRules }      from './modules/validationRules';
@@ -114,6 +118,7 @@ class Form {
                     }
                 } else {
                     removeClass( $form, self.options.formOptions.cssClasses.valid );
+                    addClass( $form, self.options.formOptions.cssClasses.error );
                 }
                 return obj;
             })
@@ -122,8 +127,15 @@ class Form {
 
     validateFieldsGroup( group = this.currentGroup, fieldOptions ){
         const self = this;
+
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+        
         const $fields = self.$form.querySelectorAll(group);
+        const skipUIfeedback = fieldOptions.skipUIfeedback;
+
+        if( !skipUIfeedback ){
+            addClass( self.$form, self.options.formOptions.cssClasses.pending );
+        }
 
         return checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors)
             .then(data => {
@@ -148,15 +160,41 @@ class Form {
 
     validateFilledFields( fieldOptions ){
         const self = this;
-        const $filledFields = getFilledFields( self.$form );
+        const $form = self.$form;
+        const $filledFields = getFilledFields( $form );
+        const requiredFieldsLength = getUniqueFields( $form.querySelectorAll(fieldsStringSelector) ).filter($field => $field.required).length;
+        const formClasses = self.options.formOptions.cssClasses;
+
+        if( $filledFields.length === 0 ){
+            const obj = mergeValidateFormDefault({result: true, fields: []})
+            return Promise.resolve(obj);
+        }
 
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+
+        const skipUIfeedback = fieldOptions.skipUIfeedback;
+
+        if( !skipUIfeedback ){
+            addClass( $form, formClasses.pending );
+        }
 
         return checkFieldsValidity($filledFields, fieldOptions, self.validationRules, self.validationErrors)
             .then(data => {
                 data.fields.forEach(obj => {
+                    checkTouchedField( obj.$field, fieldOptions );
                     dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } );
                 });
+            
+                if( !skipUIfeedback ){
+                    removeClass( $form, (`${formClasses.pending} ${formClasses.valid} ${formClasses.error}`) );
+                    
+                    if( data.result && $filledFields.length === requiredFieldsLength ) {
+                        addClass( $form, formClasses.valid );
+                    } else if( !data.result ) {
+                        addClass( $form, formClasses.error );
+                    }
+                }
+                
                 return data;
             })
             .then(finalizeFormPromise);
@@ -173,6 +211,10 @@ class Form {
 
         const $form = self.$form;
         const $fields = $form.querySelectorAll(fieldsStringSelector);
+
+        if( !fieldOptions.skipUIfeedback ){
+            addClass( $form, self.options.formOptions.cssClasses.pending );
+        }
 
         return checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors)
             .then(data => {

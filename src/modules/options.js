@@ -48,6 +48,8 @@ export const options = {
             ajaxError:          'ajax-error',
             ajaxPending:        'ajax-pending',
             ajaxSuccess:        'ajax-success',
+            error:              'form-error',
+            pending:            'form-pending',
             submit:             'is-submitting',
             valid:              'is-valid'
         },

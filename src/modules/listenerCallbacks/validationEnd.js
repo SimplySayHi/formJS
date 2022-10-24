@@ -3,41 +3,46 @@ import { addClass, getJSONobjectFromFieldAttribute, removeClass, mergeObjects } 
 
 export const validationEnd = function( event ){
 
-    const eventDetail = event.detail,
-          $field = eventDetail.$field,
+    const { $field, result, errors } = event.detail,
           dataFieldOptions = getJSONobjectFromFieldAttribute( $field, 'data-field-options' ),
-          fieldOptions = mergeObjects({}, $field.closest('form').formjs.options.fieldOptions, dataFieldOptions),
-          $container = $field.closest( fieldOptions.questionContainer ),
+          { cssClasses, questionContainer, skipUIfeedback } = mergeObjects({}, $field.form.formjs.options.fieldOptions, dataFieldOptions),
+          $container = $field.closest( questionContainer ),
           isReqFrom = $field.matches('[data-required-from]'),
           $reqMore = document.querySelector( $field.getAttribute('data-required-from') );
 
-    if( $container && !fieldOptions.skipUIfeedback ){
+    if( $container && !skipUIfeedback ){
+        const formClasses = Object.values($field.form.formjs.options.formOptions.cssClasses)
+                                .reduce((accString, cssClass) => {
+                                    return `${accString} ${cssClass}`
+                                }, '').trim();
+        removeClass( $field.form, formClasses );
+        removeClass( $container, cssClasses.pending );
 
-        if( eventDetail.result ){
+        if( result ){
 
             if( !isReqFrom || (isReqFrom && $reqMore.checked) ){
                 // IF FIELD IS VALID
-                const errorClasses = fieldOptions.cssClasses.error + ' ' + fieldOptions.cssClasses.errorEmpty + ' ' + fieldOptions.cssClasses.errorRule;
+                const errorClasses = cssClasses.error + ' ' + cssClasses.errorEmpty + ' ' + cssClasses.errorRule;
                 removeClass( $container, errorClasses );
-                addClass( $container, fieldOptions.cssClasses.valid );
+                addClass( $container, cssClasses.valid );
             }
 
         } else {
 
             // IF FIELD IS NOT VALID
-            let extraErrorClass = fieldOptions.cssClasses.errorRule;
+            let extraErrorClass = cssClasses.errorRule;
 
             // HANDLE CASE OF FIELD data-checks
             const isChecks = $field.matches('[data-checks]'),
                   checkedElLength = (isChecks ? $container.querySelectorAll('[name="' + $field.name + '"]:checked').length : 0);
 
-            if( (!isChecks && (eventDetail.errors && eventDetail.errors.empty)) || (isChecks && checkedElLength === 0) ){
-                extraErrorClass = fieldOptions.cssClasses.errorEmpty;
+            if( (!isChecks && (errors && errors.empty)) || (isChecks && checkedElLength === 0) ){
+                extraErrorClass = cssClasses.errorEmpty;
             }
 
-            let errorClasses = fieldOptions.cssClasses.error + ' ' + extraErrorClass,
-                errorClassToRemove = fieldOptions.cssClasses.errorEmpty + ' ' + fieldOptions.cssClasses.errorRule;
-            removeClass( $container, fieldOptions.cssClasses.valid + ' ' + errorClassToRemove );
+            let errorClasses = cssClasses.error + ' ' + extraErrorClass,
+                errorClassToRemove = cssClasses.errorEmpty + ' ' + cssClasses.errorRule;
+            removeClass( $container, cssClasses.valid + ' ' + errorClassToRemove );
             addClass( $container, errorClasses );
 
         }

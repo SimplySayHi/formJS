@@ -1,10 +1,10 @@
 
-import { checkTouchedField } from '../helpers';
+import { checkTouchedField, removeClass } from '../helpers';
 
 export const groupValidationEnd = function( event ){
 
     const detail = event.detail;
-    const { fieldOptions } = event.target.formjs.options;
+    const { fieldOptions, formOptions } = event.target.formjs.options;
 
     if( detail.result ){
         event.target.formjs.currentGroup = detail.group.next;
@@ -14,6 +14,10 @@ export const groupValidationEnd = function( event ){
         detail.fields.forEach(({ $field }) => {
             checkTouchedField( $field, fieldOptions );
         });
+    }
+
+    if( !fieldOptions.skipUIfeedback ){
+        removeClass( $form, formOptions.cssClasses.pending );
     }
     
 }

@@ -1,18 +1,22 @@
 
-import { checkTouchedField } from '../helpers';
+import { addClass, checkTouchedField, removeClass } from '../helpers';
 
 export const formValidationEnd = function( event ){
-    const $form = event.target;
-    const options = $form.formjs.options;
-    
-    if( !options.fieldOptions.skipUIfeedback ){
-        const clMethodName = event.detail.result ? 'add' : 'remove';
-        $form.classList[clMethodName]( options.formOptions.cssClasses.valid );
-    }
 
-    if( event.detail.fields[0].isCheckingForm ){
-        event.detail.fields.forEach(({ $field }) => {
-            checkTouchedField( $field, options.fieldOptions );
+    const { result, fields } = event.detail;
+    const $form = event.target;
+    const { fieldOptions, formOptions: { cssClasses } } = $form.formjs.options;
+
+    if( fields[0].isCheckingForm ){
+        fields.forEach(({ $field }) => {
+            checkTouchedField( $field, fieldOptions );
         });
     }
+
+    if( !fieldOptions.skipUIfeedback ){
+        const feedbackClassesKey = result ? 'valid' : 'error';
+        removeClass( $form, (`${cssClasses.pending} ${cssClasses.valid} ${cssClasses.error}`) );
+        addClass( $form, cssClasses[feedbackClassesKey] );
+    }
+    
 }
