@@ -508,11 +508,15 @@
         }));
     }
     var groupValidationEnd = function(event) {
-        var detail = event.detail, _event$target$formjs$ = event.target.formjs.options, fieldOptions = _event$target$formjs$.fieldOptions, formOptions = _event$target$formjs$.formOptions;
-        detail.result && (event.target.formjs.currentGroup = detail.group.next), detail.fields[0].isCheckingGroup && detail.fields.forEach((function(_ref) {
+        var $form = event.target, detail = event.detail, _$form$formjs$options = $form.formjs.options, fieldOptions = _$form$formjs$options.fieldOptions, formOptions = _$form$formjs$options.formOptions;
+        if (detail.result && ($form.formjs.currentGroup = detail.group.next), detail.fields[0].isCheckingGroup && detail.fields.forEach((function(_ref) {
             var $field = _ref.$field;
             checkTouchedField($field, fieldOptions);
-        })), fieldOptions.skipUIfeedback || removeClass($form, formOptions.cssClasses.pending);
+        })), !fieldOptions.skipUIfeedback) {
+            removeClass($form, "".concat(formOptions.cssClasses.pending, " ").concat(formOptions.cssClasses.valid, " ").concat(formOptions.cssClasses.error));
+            var feedbackClassesKey = detail.result ? detail.group.next ? "" : "valid" : "error";
+            feedbackClassesKey && addClass($form, formOptions.cssClasses[feedbackClassesKey]);
+        }
     }, validation = function(event) {
         var isChangeEvent = "change" === event.type, $field = event.target, self = $field.closest("form").formjs;
         if ($field.matches(fieldsStringSelector)) {
