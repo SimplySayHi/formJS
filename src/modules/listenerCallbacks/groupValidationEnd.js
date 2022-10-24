@@ -1,13 +1,14 @@
 
-import { checkTouchedField, removeClass } from '../helpers';
+import { addClass, checkTouchedField, removeClass } from '../helpers';
 
 export const groupValidationEnd = function( event ){
 
+    const $form = event.target;
     const detail = event.detail;
-    const { fieldOptions, formOptions } = event.target.formjs.options;
+    const { fieldOptions, formOptions } = $form.formjs.options;
 
     if( detail.result ){
-        event.target.formjs.currentGroup = detail.group.next;
+        $form.formjs.currentGroup = detail.group.next;
     }
 
     if( detail.fields[0].isCheckingGroup ){
@@ -17,7 +18,12 @@ export const groupValidationEnd = function( event ){
     }
 
     if( !fieldOptions.skipUIfeedback ){
-        removeClass( $form, formOptions.cssClasses.pending );
+        removeClass( $form, (`${formOptions.cssClasses.pending} ${formOptions.cssClasses.valid} ${formOptions.cssClasses.error}`) );
+
+        const feedbackClassesKey = !detail.result ? 'error' : (!detail.group.next ? 'valid' : '');
+        if( feedbackClassesKey ){
+            addClass( $form, formOptions.cssClasses[feedbackClassesKey] );
+        }
     }
     
 }
