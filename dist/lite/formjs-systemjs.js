@@ -272,11 +272,6 @@ System.register([], (function(exports) {
                             }));
                         }($field, fieldOptions, validationRules, validationErrors) : dataObj);
                     }));
-                })).then((function(data) {
-                    var element, $container = fieldOptions.questionContainer && data.$field.closest(fieldOptions.questionContainer);
-                    return $container && (element = $container, fieldOptions.cssClasses.pending.split(" ").forEach((function(className) {
-                        element.classList.remove(className);
-                    }))), data;
                 }));
             }
             var Form = exports("default", function() {

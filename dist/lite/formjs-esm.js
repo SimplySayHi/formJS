@@ -202,12 +202,6 @@ function checkFieldValidity($field, fieldOptions, validationRules, validationErr
                 }, data.errors)), data));
             }($field, fieldOptions, validationRules, validationErrors) : dataObj);
         });
-    }).then(data => {
-        const $container = fieldOptions.questionContainer && data.$field.closest(fieldOptions.questionContainer);
-        var element;
-        return $container && (element = $container, fieldOptions.cssClasses.pending.split(" ").forEach(className => {
-            element.classList.remove(className);
-        })), data;
     });
 }
 
