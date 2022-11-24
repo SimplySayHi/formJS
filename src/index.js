@@ -71,7 +71,7 @@ class Form {
 
         const initOptions = {};
         if( self.options.formOptions.onInitCheckFilled ){
-            initOptions.detail = self.validateFilledFields().catch(fields => {});
+            initOptions.detail = self.validateFilledFields().catch(() => {});
         }
         dispatchCustomEvent( self.$form, customEvents.form.init, initOptions );
     }

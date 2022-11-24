@@ -27,10 +27,10 @@ export const validation = function( event ){
                         !(type === 'checkbox' || type === 'radio') && 
                         $relatedEqualTo && $relatedEqualTo.value.trim() !== ''
                     ){
-                        self.validateField( $relatedEqualTo ).catch(errors => {});
+                        self.validateField( $relatedEqualTo ).catch(() => {});
                     }
                 })
-                .catch(errors => {});
+                .catch(() => {});
 
         }
     }

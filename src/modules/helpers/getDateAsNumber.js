@@ -17,7 +17,7 @@ export const getDateAsNumber = ( dateString, dateFormat ) => {
     dateFormat = dateFormat || 'YYYY-MM-DD';
     const splitChar = getSplitChar(dateString);
 
-    if( dateFormat.indexOf(splitChar) < 0 ){
+    if( !dateFormat.includes(splitChar) ){
         return;
     }
 
