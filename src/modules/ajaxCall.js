@@ -1,14 +1,14 @@
 
-import { addClass, mergeObjects, removeClass, serializeObject } from './helpers';
+import { addClass, isPlainObject, mergeObjects, objectToFormData, removeClass, serializeObject } from './helpers';
 
 const getFetchMethod = (response, options) => {
     const accept = options.headers.get('Accept'),
           contentType = response.headers.get('Content-Type'),
           headerOpt = accept || contentType || '';
 
-    if( headerOpt.indexOf('application/json') > -1 || headerOpt === '' ){
+    if( headerOpt.includes('application/json') || headerOpt === '' ){
         return 'json';
-    } else if( headerOpt.indexOf('text/') > -1 ){
+    } else if( headerOpt.includes('text/') ){
         return 'text';
     } else {
         return 'blob';
@@ -18,27 +18,30 @@ const getFetchMethod = (response, options) => {
 export function ajaxCall( $form, formDataObj, options ){
 
     let timeoutTimer;
-    const ajaxOptions = mergeObjects( {}, options.formOptions.ajaxOptions ),
-          isMultipart = ajaxOptions.headers['Content-Type'] === 'multipart/form-data';
-
+    const ajaxOptions = mergeObjects( {}, options.formOptions.ajaxOptions );
+    
     ajaxOptions.body = formDataObj;
     
+    const enctypeAttr = $form.getAttribute('enctype');
+    const isMultipartForm = enctypeAttr && enctypeAttr.includes('multipart/form-data');
+    const isMultipartHeader = ajaxOptions.headers['Content-Type'].includes('multipart/form-data');
+    let bodyIsPlainObj = isPlainObject(ajaxOptions.body);
+    
     // POST A FormData OBJECT ( multipart )
-    if( isMultipart && options.formOptions.handleFileUpload ){
-        let formDataMultipart = new FormData();
+    if( (isMultipartForm || isMultipartHeader) && bodyIsPlainObj ){
+        let formDataMultipart = objectToFormData(ajaxOptions.body, options.formOptions.nestedMultipartDataToJSON);
         
-        for(let key in ajaxOptions.body){
-            formDataMultipart.append( key, ajaxOptions.body[key] );
+        if( options.formOptions.handleFileUpload ){
+            Array.from( $form.querySelectorAll('[type="file"]') ).forEach($field => {
+                Array.from($field.files).forEach((file, idx) => {
+                    const name = $field.name+'['+ idx +']';
+                    formDataMultipart.append( name, file, file.name );
+                });
+            });
         }
         
-        Array.from( $form.querySelectorAll('[type="file"]') ).forEach($field => {
-            Array.from($field.files).forEach((file, idx) => {
-                const name = $field.name+'['+ idx +']';
-                formDataMultipart.append( name, file, file.name );
-            });
-        });
-        
         ajaxOptions.body = formDataMultipart;
+        bodyIsPlainObj = false;
     }
 
     if( ajaxOptions.method === 'GET' ){
@@ -49,14 +52,21 @@ export function ajaxCall( $form, formDataObj, options ){
 
     } else {
 
-        if( ajaxOptions.headers['Content-Type'].indexOf('application/x-www-form-urlencoded') > -1 ){
+        if( ajaxOptions.headers['Content-Type'].includes('application/x-www-form-urlencoded') ){
             // POST A NORMAL FORM
             ajaxOptions.body = serializeObject( ajaxOptions.body );
-        } else if( !isMultipart ){
+        } else if( bodyIsPlainObj ){
             // POST A JSON STRING
             ajaxOptions.body = JSON.stringify(ajaxOptions.body);
         }
 
+    }
+
+    const bodyIsString = typeof ajaxOptions.body === 'string';
+    const isMultipartWithAutoContentType = !bodyIsString && (isMultipartForm && !isMultipartHeader)
+
+    if( isMultipartWithAutoContentType ){
+        delete ajaxOptions.headers['Content-Type']
     }
 
     ajaxOptions.headers = new Headers( ajaxOptions.headers );

@@ -24,6 +24,7 @@ export { isFieldForChangeEvent }    from './helpers/isFieldForChangeEvent';
 export { isNodeList }               from './helpers/isNodeList';
 export { isPlainObject }            from './helpers/isPlainObject';
 export { mergeObjects }             from './helpers/mergeObjects';
+export { objectToFormData }         from './helpers/objectToFormData';
 export { removeClass }              from './helpers/removeClass';
 export { runFunctionsSequence }     from './helpers/runFunctionsSequence';
 export { serializeObject }          from './helpers/serializeObject';

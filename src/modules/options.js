@@ -57,6 +57,7 @@ export const options = {
         groups:                 [],
         handleFileUpload:       true,
         handleSubmit:           true,
+        nestedMultipartDataToJSON: true,
         onInitCheckFilled:      true
     }
     

@@ -57,16 +57,19 @@ export function formStartup( $form, options ){
         $form.addEventListener('submit', submit);
 
         if( formOptions.ajaxSubmit ){
-            if( $form.getAttribute('enctype') ){
-                formOptions.ajaxOptions.headers['Content-Type'] = $form.getAttribute('enctype');
+            const enctype = $form.getAttribute('enctype')
+            if( enctype && !enctype.includes('multipart/form-data') ){
+                formOptions.ajaxOptions.headers['Content-Type'] = enctype;
             }
 
-            if( $form.getAttribute('method') ){
-                formOptions.ajaxOptions.method = $form.getAttribute('method').toUpperCase();
+            const method = $form.getAttribute('method');
+            if( method ){
+                formOptions.ajaxOptions.method = method.toUpperCase();
             }
 
-            if( $form.getAttribute('action') ){
-                formOptions.ajaxOptions.url = $form.getAttribute('action');
+            const action = $form.getAttribute('action')
+            if( action ){
+                formOptions.ajaxOptions.url = action;
             }
         }
     }

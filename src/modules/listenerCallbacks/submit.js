@@ -66,7 +66,7 @@ export function submit( event ){
             }
 
         })
-        .catch(fields => {
+        .catch(() => {
             eventPreventDefault();
             removeClass( $form, formCssClasses.submit );
         });
