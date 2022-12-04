@@ -137,7 +137,7 @@
     }, getDateAsNumber = function(dateString, dateFormat) {
         dateFormat = dateFormat || "YYYY-MM-DD";
         var separator, splitChar = (separator = dateString.match(/\D/)) && separator.length > 0 ? separator[0] : null;
-        if (!(dateFormat.indexOf(splitChar) < 0)) return dateFormat = dateFormat.replace(/[^YMD]/g, "-"), 
+        if (dateFormat.includes(splitChar)) return dateFormat = dateFormat.replace(/[^YMD]/g, "-"), 
         dateString = dateString.split(splitChar), dateString = formatMap[dateFormat](dateString).join("");
     }, getInitialValues = function($form) {
         return _toConsumableArray($form.querySelectorAll("input, select, textarea")).filter((function($el) {
@@ -303,12 +303,13 @@
             groups: [],
             handleFileUpload: !0,
             handleSubmit: !0,
+            nestedMultipartDataToJSON: !0,
             onInitCheckFilled: !0
         }
     }, validationRules = {
         date: function(string) {
             return {
-                result: /^((((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29))$/g.test(string)
+                result: /^((((19|[2-9]\d)\d{2})[ /\-.](0[13578]|1[02])[ /\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ /\-.](0[13456789]|1[012])[ /\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ /\-.]02[ /\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ /\-.]02[ /\-.]29))$/g.test(string)
             };
         },
         email: function(string) {
@@ -406,17 +407,20 @@
         var $field = event.target;
         if ($field.matches('[data-type="number"]')) {
             var fieldValue = $field.value;
-            if (/[^\d.,+\-]/.test(fieldValue)) {
+            if (/[^\d.,+-]/.test(fieldValue)) {
                 event.stopImmediatePropagation();
-                var valueReplaced = fieldValue.replace(/[^\d.,+\-]/g, "");
+                var valueReplaced = fieldValue.replace(/[^\d.,+-]/g, "");
                 $field.value = valueReplaced;
             }
         }
     }, formValidationEnd = function(event) {
         var _event$detail = event.detail, result = _event$detail.result, fields = _event$detail.fields, $form = event.target, _$form$formjs$options = $form.formjs.options, fieldOptions = _$form$formjs$options.fieldOptions, cssClasses = _$form$formjs$options.formOptions.cssClasses;
-        if (fields[0].isCheckingForm && fields.forEach((function(_ref) {
+        if (fields[0].isCheckingForm ? fields.forEach((function(_ref) {
             var $field = _ref.$field;
             checkTouchedField($field, fieldOptions);
+        })) : fields.forEach((function(_ref2) {
+            var $field = _ref2.$field;
+            removeClass($field.closest(fieldOptions.questionContainer), fieldOptions.cssClasses.pending);
         })), !fieldOptions.skipUIfeedback) {
             var feedbackClassesKey = result ? "valid" : "error";
             removeClass($form, "".concat(cssClasses.pending, " ").concat(cssClasses.valid, " ").concat(cssClasses.error)), 
@@ -433,19 +437,31 @@
         $field.matches(fieldOptions.preventPasteFields) && event.preventDefault();
     };
     function ajaxCall($form, formDataObj, options) {
-        var timeoutTimer, ajaxOptions = mergeObjects({}, options.formOptions.ajaxOptions), isMultipart = "multipart/form-data" === ajaxOptions.headers["Content-Type"];
-        if (ajaxOptions.body = formDataObj, isMultipart && options.formOptions.handleFileUpload) {
-            var formDataMultipart = new FormData;
-            for (var key in ajaxOptions.body) formDataMultipart.append(key, ajaxOptions.body[key]);
-            Array.from($form.querySelectorAll('[type="file"]')).forEach((function($field) {
+        var timeoutTimer, ajaxOptions = mergeObjects({}, options.formOptions.ajaxOptions);
+        ajaxOptions.body = formDataObj;
+        var enctypeAttr = $form.getAttribute("enctype"), isMultipartForm = enctypeAttr && enctypeAttr.includes("multipart/form-data"), isMultipartHeader = ajaxOptions.headers["Content-Type"].includes("multipart/form-data"), bodyIsPlainObj = isPlainObject(ajaxOptions.body);
+        if ((isMultipartForm || isMultipartHeader) && bodyIsPlainObj) {
+            var formDataMultipart = function(dataObj) {
+                var nestedToJSON = !(arguments.length > 1 && void 0 !== arguments[1]) || arguments[1], formData = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : new FormData;
+                function createFormData(obj) {
+                    var subKeyStr = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "";
+                    for (var i in obj) {
+                        var value = obj[i], i_isNumber = !Object.is(1 * i, Number.NaN), subKeyStrTrans = subKeyStr ? subKeyStr + (i_isNumber ? "[" + i + "]" : "." + i) : i;
+                        "object" === _typeof(value) && null != value ? nestedToJSON || Array.isArray(value) && 0 === value.length ? formData.append(subKeyStrTrans, JSON.stringify(value)) : createFormData(value, subKeyStrTrans) : formData.append(subKeyStrTrans, value);
+                    }
+                }
+                return createFormData(dataObj), formData;
+            }(ajaxOptions.body, options.formOptions.nestedMultipartDataToJSON);
+            options.formOptions.handleFileUpload && Array.from($form.querySelectorAll('[type="file"]')).forEach((function($field) {
                 Array.from($field.files).forEach((function(file, idx) {
                     var name = $field.name + "[" + idx + "]";
                     formDataMultipart.append(name, file, file.name);
                 }));
-            })), ajaxOptions.body = formDataMultipart;
+            })), ajaxOptions.body = formDataMultipart, bodyIsPlainObj = !1;
         }
         if ("GET" === ajaxOptions.method ? (ajaxOptions.url += (/\?/.test(ajaxOptions.url) ? "&" : "?") + serializeObject(ajaxOptions.body), 
-        delete ajaxOptions.body) : ajaxOptions.headers["Content-Type"].indexOf("application/x-www-form-urlencoded") > -1 ? ajaxOptions.body = serializeObject(ajaxOptions.body) : isMultipart || (ajaxOptions.body = JSON.stringify(ajaxOptions.body)), 
+        delete ajaxOptions.body) : ajaxOptions.headers["Content-Type"].includes("application/x-www-form-urlencoded") ? ajaxOptions.body = serializeObject(ajaxOptions.body) : bodyIsPlainObj && (ajaxOptions.body = JSON.stringify(ajaxOptions.body)), 
+        !("string" == typeof ajaxOptions.body) && isMultipartForm && !isMultipartHeader && delete ajaxOptions.headers["Content-Type"], 
         ajaxOptions.headers = new Headers(ajaxOptions.headers), ajaxOptions.timeout > 0) {
             var controller = new AbortController, signal = controller.signal;
             ajaxOptions.signal = signal, timeoutTimer = window.setTimeout((function() {
@@ -456,7 +472,7 @@
             if (!response.ok) throw new Error(response.statusText);
             var fetchMethod = function(response, options) {
                 var accept = options.headers.get("Accept"), contentType = response.headers.get("Content-Type"), headerOpt = accept || contentType || "";
-                return headerOpt.indexOf("application/json") > -1 || "" === headerOpt ? "json" : headerOpt.indexOf("text/") > -1 ? "text" : "blob";
+                return headerOpt.includes("application/json") || "" === headerOpt ? "json" : headerOpt.includes("text/") ? "text" : "blob";
             }(response, ajaxOptions);
             return response[fetchMethod]();
         })).then((function(data) {
@@ -503,18 +519,21 @@
                     detail: ajaxCall($form, formData, options)
                 });
             }
-        })).catch((function(fields) {
+        })).catch((function() {
             eventPreventDefault(), removeClass($form, formCssClasses.submit);
         }));
     }
     var groupValidationEnd = function(event) {
-        var $form = event.target, detail = event.detail, _$form$formjs$options = $form.formjs.options, fieldOptions = _$form$formjs$options.fieldOptions, formOptions = _$form$formjs$options.formOptions;
-        if (detail.result && ($form.formjs.currentGroup = detail.group.next), detail.fields[0].isCheckingGroup && detail.fields.forEach((function(_ref) {
+        var $form = event.target, _event$detail = event.detail, result = _event$detail.result, group = _event$detail.group, fields = _event$detail.fields, _$form$formjs$options = $form.formjs.options, fieldOptions = _$form$formjs$options.fieldOptions, formOptions = _$form$formjs$options.formOptions;
+        if (result && ($form.formjs.currentGroup = group.next), fields[0].isCheckingGroup ? fields.forEach((function(_ref) {
             var $field = _ref.$field;
             checkTouchedField($field, fieldOptions);
+        })) : fields.forEach((function(_ref2) {
+            var $field = _ref2.$field;
+            removeClass($field.closest(fieldOptions.questionContainer), fieldOptions.cssClasses.pending);
         })), !fieldOptions.skipUIfeedback) {
             removeClass($form, "".concat(formOptions.cssClasses.pending, " ").concat(formOptions.cssClasses.valid, " ").concat(formOptions.cssClasses.error));
-            var feedbackClassesKey = detail.result ? detail.group.next ? "" : "valid" : "error";
+            var feedbackClassesKey = result ? group.next ? "" : "valid" : "error";
             feedbackClassesKey && addClass($form, formOptions.cssClasses[feedbackClassesKey]);
         }
     }, validation = function(event) {
@@ -523,8 +542,8 @@
             var isFieldForChangeEventBoolean = isFieldForChangeEvent($field), hasOnlyChangeEvent = "change" === self.options.fieldOptions.validateOnEvents;
             (isFieldForChangeEventBoolean && isChangeEvent || !isFieldForChangeEventBoolean && (!isChangeEvent || hasOnlyChangeEvent)) && self.validateField($field).then((function() {
                 var type = $field.type, $relatedEqualTo = $field.closest("form").querySelector('[data-equal-to="' + $field.name + '"]');
-                ($field.required || $field.matches("[data-validate-if-filled]")) && "checkbox" !== type && "radio" !== type && $relatedEqualTo && "" !== $relatedEqualTo.value.trim() && self.validateField($relatedEqualTo).catch((function(errors) {}));
-            })).catch((function(errors) {}));
+                ($field.required || $field.matches("[data-validate-if-filled]")) && "checkbox" !== type && "radio" !== type && $relatedEqualTo && "" !== $relatedEqualTo.value.trim() && self.validateField($relatedEqualTo).catch((function() {}));
+            })).catch((function() {}));
         }
     }, validationEnd = function(event) {
         var _event$detail = event.detail, $field = _event$detail.$field, result = _event$detail.result, errors = _event$detail.errors, dataFieldOptions = getJSONobjectFromFieldAttribute($field, "data-field-options"), _mergeObjects = mergeObjects({}, $field.form.formjs.options.fieldOptions, dataFieldOptions), cssClasses = _mergeObjects.cssClasses, questionContainer = _mergeObjects.questionContainer, skipUIfeedback = _mergeObjects.skipUIfeedback, $container = $field.closest(questionContainer), isReqFrom = $field.matches("[data-required-from]"), $reqMore = document.querySelector($field.getAttribute("data-required-from"));
@@ -549,16 +568,21 @@
     function formStartup($form, options) {
         $form.noValidate = !0;
         var fieldOptions = options.fieldOptions, formOptions = options.formOptions;
-        fieldOptions.strictHtmlValidation && ($form.addEventListener("keypress", keypressMaxlength, !1), 
+        if (fieldOptions.strictHtmlValidation && ($form.addEventListener("keypress", keypressMaxlength, !1), 
         $form.addEventListener("input", dataTypeNumber, !1)), fieldOptions.preventPasteFields && $form.querySelectorAll(fieldOptions.preventPasteFields).length && $form.addEventListener("paste", pastePrevent, !1), 
         $form.addEventListener("blur", blurHandler, !0), fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
             var useCapture = /^(blur|focus)$/.test(eventName);
             $form.addEventListener(eventName, validation, useCapture);
         })), $form.addEventListener(customEvents_field.validation, validationEnd, !1), formOptions.groups.length > 0 && $form.addEventListener(customEvents_group.validation, groupValidationEnd, !1), 
         $form.addEventListener(customEvents_form.validation, formValidationEnd, !1), formOptions.handleSubmit && ($form.addEventListener("submit", submit), 
-        formOptions.ajaxSubmit && ($form.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = $form.getAttribute("enctype")), 
-        $form.getAttribute("method") && (formOptions.ajaxOptions.method = $form.getAttribute("method").toUpperCase()), 
-        $form.getAttribute("action") && (formOptions.ajaxOptions.url = $form.getAttribute("action"))));
+        formOptions.ajaxSubmit)) {
+            var enctype = $form.getAttribute("enctype");
+            enctype && !enctype.includes("multipart/form-data") && (formOptions.ajaxOptions.headers["Content-Type"] = enctype);
+            var method = $form.getAttribute("method");
+            method && (formOptions.ajaxOptions.method = method.toUpperCase());
+            var action = $form.getAttribute("action");
+            action && (formOptions.ajaxOptions.url = action);
+        }
     }
     function checkFieldValidity($field, fieldOptions, validationRules, validationErrors) {
         if (!isDOMNode($field)) {
@@ -671,7 +695,7 @@
                 initialValues: getInitialValues(self.$form)
             }, formStartup(self.$form, self.options);
             var initOptions = {};
-            self.options.formOptions.onInitCheckFilled && (initOptions.detail = self.validateFilledFields().catch((function(fields) {}))), 
+            self.options.formOptions.onInitCheckFilled && (initOptions.detail = self.validateFilledFields().catch((function() {}))), 
             dispatchCustomEvent(self.$form, customEvents_form.init, initOptions);
         }
         var Constructor, protoProps, staticProps;

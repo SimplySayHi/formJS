@@ -54,7 +54,7 @@ const addClass = (element, cssClasses) => {
         const separator = string.match(/\D/);
         return separator && separator.length > 0 ? separator[0] : null;
     })(dateString);
-    if (!(dateFormat.indexOf(splitChar) < 0)) return dateFormat = dateFormat.replace(/[^YMD]/g, "-"), 
+    if (dateFormat.includes(splitChar)) return dateFormat = dateFormat.replace(/[^YMD]/g, "-"), 
     dateString = dateString.split(splitChar), dateString = formatMap[dateFormat](dateString).join("");
 }, getJSONobjectFromFieldAttribute = (fieldEl, attrName) => {
     const customAttrEl = fieldEl.closest("[" + attrName + "]");
@@ -192,12 +192,13 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
         groups: [],
         handleFileUpload: !0,
         handleSubmit: !0,
+        nestedMultipartDataToJSON: !0,
         onInitCheckFilled: !0
     }
 }, validationRules = {
     date: function(string) {
         return {
-            result: /^((((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29))$/g.test(string)
+            result: /^((((19|[2-9]\d)\d{2})[ /\-.](0[13578]|1[02])[ /\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ /\-.](0[13456789]|1[012])[ /\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ /\-.]02[ /\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ /\-.]02[ /\-.]29))$/g.test(string)
         };
     },
     email: function(string) {
@@ -297,16 +298,18 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
     const $field = event.target;
     if ($field.matches('[data-type="number"]')) {
         let fieldValue = $field.value;
-        if (/[^\d.,+\-]/.test(fieldValue)) {
+        if (/[^\d.,+-]/.test(fieldValue)) {
             event.stopImmediatePropagation();
-            let valueReplaced = fieldValue.replace(/[^\d.,+\-]/g, "");
+            let valueReplaced = fieldValue.replace(/[^\d.,+-]/g, "");
             $field.value = valueReplaced;
         }
     }
 }, formValidationEnd = function(event) {
     const {result: result, fields: fields} = event.detail, $form = event.target, {fieldOptions: fieldOptions, formOptions: {cssClasses: cssClasses}} = $form.formjs.options;
-    if (fields[0].isCheckingForm && fields.forEach(({$field: $field}) => {
+    if (fields[0].isCheckingForm ? fields.forEach(({$field: $field}) => {
         checkTouchedField($field, fieldOptions);
+    }) : fields.forEach(({$field: $field}) => {
+        removeClass($field.closest(fieldOptions.questionContainer), fieldOptions.cssClasses.pending);
     }), !fieldOptions.skipUIfeedback) {
         const feedbackClassesKey = result ? "valid" : "error";
         removeClass($form, `${cssClasses.pending} ${cssClasses.valid} ${cssClasses.error}`), 
@@ -325,19 +328,27 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
 
 function ajaxCall($form, formDataObj, options) {
     let timeoutTimer;
-    const ajaxOptions = mergeObjects({}, options.formOptions.ajaxOptions), isMultipart = "multipart/form-data" === ajaxOptions.headers["Content-Type"];
-    if (ajaxOptions.body = formDataObj, isMultipart && options.formOptions.handleFileUpload) {
-        let formDataMultipart = new FormData;
-        for (let key in ajaxOptions.body) formDataMultipart.append(key, ajaxOptions.body[key]);
-        Array.from($form.querySelectorAll('[type="file"]')).forEach($field => {
+    const ajaxOptions = mergeObjects({}, options.formOptions.ajaxOptions);
+    ajaxOptions.body = formDataObj;
+    const enctypeAttr = $form.getAttribute("enctype"), isMultipartForm = enctypeAttr && enctypeAttr.includes("multipart/form-data"), isMultipartHeader = ajaxOptions.headers["Content-Type"].includes("multipart/form-data");
+    let bodyIsPlainObj = isPlainObject(ajaxOptions.body);
+    if ((isMultipartForm || isMultipartHeader) && bodyIsPlainObj) {
+        let formDataMultipart = ((dataObj, nestedToJSON = !0, formData = new FormData) => (function createFormData(obj, subKeyStr = "") {
+            for (let i in obj) {
+                const value = obj[i], subSubKeyString = Object.is(1 * i, Number.NaN) ? "." + i : "[" + i + "]", subKeyStrTrans = subKeyStr ? subKeyStr + subSubKeyString : i;
+                "object" == typeof value && null != value ? nestedToJSON || Array.isArray(value) && 0 === value.length ? formData.append(subKeyStrTrans, JSON.stringify(value)) : createFormData(value, subKeyStrTrans) : formData.append(subKeyStrTrans, value);
+            }
+        }(dataObj), formData))(ajaxOptions.body, options.formOptions.nestedMultipartDataToJSON);
+        options.formOptions.handleFileUpload && Array.from($form.querySelectorAll('[type="file"]')).forEach($field => {
             Array.from($field.files).forEach((file, idx) => {
                 const name = $field.name + "[" + idx + "]";
                 formDataMultipart.append(name, file, file.name);
             });
-        }), ajaxOptions.body = formDataMultipart;
+        }), ajaxOptions.body = formDataMultipart, bodyIsPlainObj = !1;
     }
-    if ("GET" === ajaxOptions.method ? (ajaxOptions.url += (/\?/.test(ajaxOptions.url) ? "&" : "?") + serializeObject(ajaxOptions.body), 
-    delete ajaxOptions.body) : ajaxOptions.headers["Content-Type"].indexOf("application/x-www-form-urlencoded") > -1 ? ajaxOptions.body = serializeObject(ajaxOptions.body) : isMultipart || (ajaxOptions.body = JSON.stringify(ajaxOptions.body)), 
+    "GET" === ajaxOptions.method ? (ajaxOptions.url += (/\?/.test(ajaxOptions.url) ? "&" : "?") + serializeObject(ajaxOptions.body), 
+    delete ajaxOptions.body) : ajaxOptions.headers["Content-Type"].includes("application/x-www-form-urlencoded") ? ajaxOptions.body = serializeObject(ajaxOptions.body) : bodyIsPlainObj && (ajaxOptions.body = JSON.stringify(ajaxOptions.body));
+    if (!("string" == typeof ajaxOptions.body) && isMultipartForm && !isMultipartHeader && delete ajaxOptions.headers["Content-Type"], 
     ajaxOptions.headers = new Headers(ajaxOptions.headers), ajaxOptions.timeout > 0) {
         const controller = new AbortController, signal = controller.signal;
         ajaxOptions.signal = signal, timeoutTimer = window.setTimeout(() => {
@@ -348,7 +359,7 @@ function ajaxCall($form, formDataObj, options) {
         if (!response.ok) throw new Error(response.statusText);
         const fetchMethod = ((response, options) => {
             const accept = options.headers.get("Accept"), contentType = response.headers.get("Content-Type"), headerOpt = accept || contentType || "";
-            return headerOpt.indexOf("application/json") > -1 || "" === headerOpt ? "json" : headerOpt.indexOf("text/") > -1 ? "text" : "blob";
+            return headerOpt.includes("application/json") || "" === headerOpt ? "json" : headerOpt.includes("text/") ? "text" : "blob";
         })(response, ajaxOptions);
         return response[fetchMethod]();
     }).then(data => (addClass($form, options.formOptions.cssClasses.ajaxSuccess), data)).catch(error => {
@@ -392,18 +403,20 @@ function submit(event) {
                 detail: ajaxCall($form, formData, options)
             });
         }
-    }).catch(fields => {
+    }).catch(() => {
         eventPreventDefault(), removeClass($form, formCssClasses.submit);
     });
 }
 
 const groupValidationEnd = function(event) {
-    const $form = event.target, detail = event.detail, {fieldOptions: fieldOptions, formOptions: formOptions} = $form.formjs.options;
-    if (detail.result && ($form.formjs.currentGroup = detail.group.next), detail.fields[0].isCheckingGroup && detail.fields.forEach(({$field: $field}) => {
+    const $form = event.target, {result: result, group: group, fields: fields} = event.detail, {fieldOptions: fieldOptions, formOptions: formOptions} = $form.formjs.options;
+    if (result && ($form.formjs.currentGroup = group.next), fields[0].isCheckingGroup ? fields.forEach(({$field: $field}) => {
         checkTouchedField($field, fieldOptions);
+    }) : fields.forEach(({$field: $field}) => {
+        removeClass($field.closest(fieldOptions.questionContainer), fieldOptions.cssClasses.pending);
     }), !fieldOptions.skipUIfeedback) {
         removeClass($form, `${formOptions.cssClasses.pending} ${formOptions.cssClasses.valid} ${formOptions.cssClasses.error}`);
-        const feedbackClassesKey = detail.result ? detail.group.next ? "" : "valid" : "error";
+        const feedbackClassesKey = result ? group.next ? "" : "valid" : "error";
         feedbackClassesKey && addClass($form, formOptions.cssClasses[feedbackClassesKey]);
     }
 }, validation = function(event) {
@@ -412,8 +425,8 @@ const groupValidationEnd = function(event) {
         const isFieldForChangeEventBoolean = isFieldForChangeEvent($field), hasOnlyChangeEvent = "change" === self.options.fieldOptions.validateOnEvents;
         (isFieldForChangeEventBoolean && isChangeEvent || !isFieldForChangeEventBoolean && (!isChangeEvent || hasOnlyChangeEvent)) && self.validateField($field).then(() => {
             const type = $field.type, $relatedEqualTo = $field.closest("form").querySelector('[data-equal-to="' + $field.name + '"]');
-            ($field.required || $field.matches("[data-validate-if-filled]")) && "checkbox" !== type && "radio" !== type && $relatedEqualTo && "" !== $relatedEqualTo.value.trim() && self.validateField($relatedEqualTo).catch(errors => {});
-        }).catch(errors => {});
+            ($field.required || $field.matches("[data-validate-if-filled]")) && "checkbox" !== type && "radio" !== type && $relatedEqualTo && "" !== $relatedEqualTo.value.trim() && self.validateField($relatedEqualTo).catch(() => {});
+        }).catch(() => {});
     }
 }, validationEnd = function(event) {
     const {$field: $field, result: result, errors: errors} = event.detail, dataFieldOptions = getJSONobjectFromFieldAttribute($field, "data-field-options"), {cssClasses: cssClasses, questionContainer: questionContainer, skipUIfeedback: skipUIfeedback} = mergeObjects({}, $field.form.formjs.options.fieldOptions, dataFieldOptions), $container = $field.closest(questionContainer), isReqFrom = $field.matches("[data-required-from]"), $reqMore = document.querySelector($field.getAttribute("data-required-from"));
@@ -554,19 +567,24 @@ class Form {
         }, function($form, options) {
             $form.noValidate = !0;
             const fieldOptions = options.fieldOptions, formOptions = options.formOptions;
-            fieldOptions.strictHtmlValidation && ($form.addEventListener("keypress", keypressMaxlength, !1), 
+            if (fieldOptions.strictHtmlValidation && ($form.addEventListener("keypress", keypressMaxlength, !1), 
             $form.addEventListener("input", dataTypeNumber, !1)), fieldOptions.preventPasteFields && $form.querySelectorAll(fieldOptions.preventPasteFields).length && $form.addEventListener("paste", pastePrevent, !1), 
             $form.addEventListener("blur", blurHandler, !0), fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
                 const useCapture = /^(blur|focus)$/.test(eventName);
                 $form.addEventListener(eventName, validation, useCapture);
             }), $form.addEventListener(customEvents_field.validation, validationEnd, !1), formOptions.groups.length > 0 && $form.addEventListener(customEvents_group.validation, groupValidationEnd, !1), 
             $form.addEventListener(customEvents_form.validation, formValidationEnd, !1), formOptions.handleSubmit && ($form.addEventListener("submit", submit), 
-            formOptions.ajaxSubmit && ($form.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = $form.getAttribute("enctype")), 
-            $form.getAttribute("method") && (formOptions.ajaxOptions.method = $form.getAttribute("method").toUpperCase()), 
-            $form.getAttribute("action") && (formOptions.ajaxOptions.url = $form.getAttribute("action"))));
+            formOptions.ajaxSubmit)) {
+                const enctype = $form.getAttribute("enctype");
+                enctype && !enctype.includes("multipart/form-data") && (formOptions.ajaxOptions.headers["Content-Type"] = enctype);
+                const method = $form.getAttribute("method");
+                method && (formOptions.ajaxOptions.method = method.toUpperCase());
+                const action = $form.getAttribute("action");
+                action && (formOptions.ajaxOptions.url = action);
+            }
         }(self.$form, self.options);
         const initOptions = {};
-        self.options.formOptions.onInitCheckFilled && (initOptions.detail = self.validateFilledFields().catch(fields => {})), 
+        self.options.formOptions.onInitCheckFilled && (initOptions.detail = self.validateFilledFields().catch(() => {})), 
         dispatchCustomEvent(self.$form, customEvents_form.init, initOptions);
     }
     destroy() {
