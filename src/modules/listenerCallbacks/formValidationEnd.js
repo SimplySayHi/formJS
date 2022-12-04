@@ -11,6 +11,10 @@ export const formValidationEnd = function( event ){
         fields.forEach(({ $field }) => {
             checkTouchedField( $field, fieldOptions );
         });
+    } else {
+        fields.forEach(({ $field }) => {
+            removeClass( $field.closest(fieldOptions.questionContainer), fieldOptions.cssClasses.pending );
+        });
     }
 
     if( !fieldOptions.skipUIfeedback ){
