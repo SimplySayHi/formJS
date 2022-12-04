@@ -227,6 +227,26 @@ console.log( formInstance.getFormData() );
     }
 }
 */
+
+// WITH A FORM ENCTYPE OF "multipart/form-data" WITH OPTION nestedMultipartDataToJSON = true, A FormData OBJECT LIKE:
+/*
+{
+    "user": "{ \"name\": \"Valerio\", \"email\": \"a@a.aa\", \"preference\": [ { \"contactCheck\": [\"email\", \"app-notiifcation\"] }, { \"privacyCheck\": \"accepted\" } ] }",
+    "registration": "{ \"code\": \"123asdASD\" }"
+}
+*/
+
+// WITH A FORM ENCTYPE OF "multipart/form-data" WITH OPTION nestedMultipartDataToJSON = false, A FormData OBJECT LIKE:
+/*
+{
+    "user.name": "Valerio"
+    "user.email": "a@a.aa"
+    "user.preference[0].contactCheck[0]": "email"
+    "user.preference[0].contactCheck[1]": "app-notiifcation"
+    "user.preference[1].privacyCheck": "accepted"
+    "registration.code": "123asdASD"
+}
+*/
 </code></pre>
                             </div>
                         </div>

@@ -572,6 +572,13 @@
                                         <span class="text-green">url</span>: ( string )
                                     </li>
                                 </ul>
+                                <p>
+                                    <b class="text-green">NOTE</b>: Attribute <code>enctype="multipart/form-data"</code> on form tag will not set header <code>Content-Type</code> since it's better to let the browser set it automatically.
+                                    <br />
+                                    Manually set header <code>Content-Type</code> only for specific, manual-management cases.
+                                    <br />
+                                    Setting form attribute <code>enctype</code> or header <code>Content-Type</code> will allow data transformation to <code>FormData</code>.
+                                </p>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -774,6 +781,25 @@
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3">
+                                <pre class="text-green">nestedMultipartDataToJSON</pre>
+                                <p>( boolean )</p>
+                            </div>
+                            <div class="w-100 d-xl-none"></div>
+                            <div class="col-lg-6 col-xl-5">
+
+                            </div>
+                            <div class="col-lg-6 col-xl-4">
+                                <p class="d-lg-none m-0">
+                                    Description:
+                                </p>
+                                <p>
+                                    Whether or not to allow, for FormData objects ( for mulitpart forms ), transformation of nested objects into JSON string.<br />
+                                    See comment in JS section of demo <a href="./demos/demo-get-form-data-complex.html">Get Form Data ( Complex Structure )</a> for details. Same rules apply to basic structure creation.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                            <div class="col-lg-auto col-xl-3">
                                 <pre class="text-green">onInitCheckFilled</pre>
                                 <p>( boolean )</p>
                             </div>
@@ -828,6 +854,7 @@
     groups:             [],
     handleFileUpload:   true,
     handleSubmit:       true,
+    nestedMultipartDataToJSON: true,
     onInitCheckFilled:  true
 }
 
