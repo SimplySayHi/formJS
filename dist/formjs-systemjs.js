@@ -62,7 +62,9 @@ System.register([], (function(exports) {
             }, checkModifiedField = function($field, initialValues, fieldOptions) {
                 var $container = $field.closest(fieldOptions.questionContainer) || $field;
                 (function(_ref, initValues) {
-                    var form = _ref.form, tagName = _ref.tagName, type = _ref.type, name = _ref.name, value = _ref.value, multiple = _ref.multiple, options = _ref.options, isRadio = "radio" === type, isCheckbox = "checkbox" === type, isSelect = "SELECT" === tagName;
+                    var form = _ref.form, tagName = _ref.tagName, type = _ref.type, name = _ref.name, value = _ref.value, multiple = _ref.multiple, options = _ref.options;
+                    if (!(name in initValues)) return !0;
+                    var isRadio = "radio" === type, isCheckbox = "checkbox" === type, isSelect = "SELECT" === tagName;
                     if (isCheckbox && form.querySelectorAll('[name="'.concat(name, '"]')).length > 1 || isSelect && multiple) {
                         var multiValues = isCheckbox ? _toConsumableArray(form.querySelectorAll('[name="'.concat(name, '"]:checked'))).map((function($el) {
                             return $el.value;
@@ -692,11 +694,18 @@ System.register([], (function(exports) {
                             return cbFn.bind(self);
                         })) : cbOpt.bind(self));
                     })), self._ = {
-                        initialValues: getInitialValues(self.$form)
+                        initialValues: getInitialValues(self.$form),
+                        asyncInitEnd: function() {
+                            var onInitCheckFilled = self.options.formOptions.onInitCheckFilled;
+                            return this.initialValues = getInitialValues(self.$form), onInitCheckFilled ? self.validateFilledFields().catch((function(fields) {
+                                return fields;
+                            })) : Promise.resolve([]);
+                        }
                     }, formStartup(self.$form, self.options);
                     var initOptions = {};
-                    self.options.formOptions.onInitCheckFilled && (initOptions.detail = self.validateFilledFields().catch((function() {}))), 
-                    dispatchCustomEvent(self.$form, customEvents_form.init, initOptions);
+                    self.options.formOptions.onInitCheckFilled && (initOptions.detail = self.validateFilledFields().catch((function(fields) {
+                        return fields;
+                    }))), dispatchCustomEvent(self.$form, customEvents_form.init, initOptions);
                 }
                 var Constructor, protoProps, staticProps;
                 return Constructor = Form, staticProps = [ {

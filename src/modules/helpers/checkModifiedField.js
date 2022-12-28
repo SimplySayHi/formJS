@@ -3,6 +3,9 @@ import { addClass } from './addClass';
 import { removeClass } from './removeClass';
 
 const isValueModified = ( { form, tagName, type, name, value, multiple, options }, initValues ) => {
+    // WORKAROUND FOR SURVEYJS: initValues IS {} AFTER SURVEY INIT
+    if( !(name in initValues) ){ return true }
+
     const isRadio = type === 'radio';
     const isCheckbox = type === 'checkbox';
     const isSelect = tagName === 'SELECT';

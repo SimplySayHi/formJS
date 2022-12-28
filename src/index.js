@@ -65,13 +65,21 @@ class Form {
             }
         });
 
-        self._ = { initialValues: getInitialValues(self.$form) }
+        self._ = {
+            initialValues: getInitialValues(self.$form),
+            // WORKAROUND FOR SURVEYJS: initialValues IS {} AFTER SURVEY INIT
+            asyncInitEnd: function () {
+                const onInitCheckFilled = self.options.formOptions.onInitCheckFilled;
+                this.initialValues = getInitialValues(self.$form);
+                return onInitCheckFilled ? self.validateFilledFields().catch(fields => fields) : Promise.resolve([]);
+            }
+        }
 
         formStartup( self.$form, self.options );
 
         const initOptions = {};
         if( self.options.formOptions.onInitCheckFilled ){
-            initOptions.detail = self.validateFilledFields().catch(() => {});
+            initOptions.detail = self.validateFilledFields().catch(fields => fields);
         }
         dispatchCustomEvent( self.$form, customEvents.form.init, initOptions );
     }

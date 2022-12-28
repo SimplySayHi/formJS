@@ -158,6 +158,31 @@ System.register([], (function () {
           }(dateString);
           if (dateFormat.includes(splitChar)) return dateFormat = dateFormat.replace(/[^YMD]/g, "-"), dateString = dateString.split(splitChar), dateString = formatMap[dateFormat](dateString).join("");
         },
+        getInitialValues = function getInitialValues($form) {
+          return _toConsumableArray($form.querySelectorAll("input, select, textarea")).filter(function ($el) {
+            return $el.matches(excludeSelector);
+          }).reduce(function (accData, _ref4) {
+            var tagName = _ref4.tagName,
+              type = _ref4.type,
+              name = _ref4.name,
+              value = _ref4.value,
+              checked = _ref4.checked,
+              multiple = _ref4.multiple,
+              options = _ref4.options;
+            var isCheckboxOrRadio = ["checkbox", "radio"].includes(type),
+              isMultiCheckbox = "checkbox" === type && $form.querySelectorAll("[name=\"".concat(name, "\"]")).length > 1;
+            if (void 0 !== accData[name] && isCheckboxOrRadio && !checked) return accData;
+            if (void 0 === accData[name]) {
+              if (isCheckboxOrRadio && !checked) return accData[name] = isMultiCheckbox ? [] : null, accData;
+              var isMultiSelect = "SELECT" === tagName && multiple,
+                multiSelectValues = options && _toConsumableArray(options).filter(function (opt) {
+                  return opt.selected;
+                });
+              accData[name] = isMultiSelect ? multiSelectValues : isMultiCheckbox ? [value] : value;
+            } else isMultiCheckbox ? accData[name].push(value) : accData[name] = value;
+            return accData;
+          }, {});
+        },
         getJSONobjectFromFieldAttribute = function getJSONobjectFromFieldAttribute(fieldEl, attrName) {
           var customAttrEl = fieldEl.closest("[" + attrName + "]");
           return customAttrEl && JSON.parse(customAttrEl.getAttribute(attrName)) || {};
@@ -187,15 +212,15 @@ System.register([], (function () {
           return $field.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
         },
         runFunctionsSequence = function runFunctionsSequence() {
-          var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            _ref4$functionsList = _ref4.functionsList,
-            functionsList = _ref4$functionsList === void 0 ? [] : _ref4$functionsList,
-            _ref4$data = _ref4.data,
-            data = _ref4$data === void 0 ? {} : _ref4$data,
-            _ref4$stopConditionFn = _ref4.stopConditionFn,
-            stopConditionFn = _ref4$stopConditionFn === void 0 ? function () {
+          var _ref5 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            _ref5$functionsList = _ref5.functionsList,
+            functionsList = _ref5$functionsList === void 0 ? [] : _ref5$functionsList,
+            _ref5$data = _ref5.data,
+            data = _ref5$data === void 0 ? {} : _ref5$data,
+            _ref5$stopConditionFn = _ref5.stopConditionFn,
+            stopConditionFn = _ref5$stopConditionFn === void 0 ? function () {
               return !1;
-            } : _ref4$stopConditionFn;
+            } : _ref5$stopConditionFn;
           return functionsList.reduce(function (acc, promiseFn) {
             return acc.then(function (res) {
               var dataNew = mergeObjects({}, res[res.length - 1]);
@@ -222,9 +247,9 @@ System.register([], (function () {
         },
         options = {
           fieldOptions: {
-            beforeValidation: [function (_ref5) {
-              var $field = _ref5.$field,
-                fieldOptions = _ref5.fieldOptions;
+            beforeValidation: [function (_ref6) {
+              var $field = _ref6.$field,
+                fieldOptions = _ref6.fieldOptions;
               var initialValues = $field.form.formjs._.initialValues;
               fieldOptions.trimValue && !isFieldForChangeEvent($field) && ($field.value = $field.value.trim()), function ($fields, fieldOptions) {
                 ($fields = isNodeList($fields) ? Array.from($fields) : [$fields]).forEach(function ($field) {
@@ -235,14 +260,15 @@ System.register([], (function () {
                 });
               }($field, fieldOptions), function ($field, initialValues, fieldOptions) {
                 var $container = $field.closest(fieldOptions.questionContainer) || $field;
-                (function (_ref6, initValues) {
-                  var form = _ref6.form,
-                    tagName = _ref6.tagName,
-                    type = _ref6.type,
-                    name = _ref6.name,
-                    value = _ref6.value,
-                    multiple = _ref6.multiple,
-                    options = _ref6.options;
+                (function (_ref7, initValues) {
+                  var form = _ref7.form,
+                    tagName = _ref7.tagName,
+                    type = _ref7.type,
+                    name = _ref7.name,
+                    value = _ref7.value,
+                    multiple = _ref7.multiple,
+                    options = _ref7.options;
+                  if (!(name in initValues)) return !0;
                   var isRadio = "radio" === type,
                     isCheckbox = "checkbox" === type,
                     isSelect = "SELECT" === tagName;
@@ -493,11 +519,11 @@ System.register([], (function () {
             _$form$formjs$options = $form.formjs.options,
             fieldOptions = _$form$formjs$options.fieldOptions,
             cssClasses = _$form$formjs$options.formOptions.cssClasses;
-          if (fields[0].isCheckingForm ? fields.forEach(function (_ref7) {
-            var $field = _ref7.$field;
-            checkTouchedField($field, fieldOptions);
-          }) : fields.forEach(function (_ref8) {
+          if (fields[0].isCheckingForm ? fields.forEach(function (_ref8) {
             var $field = _ref8.$field;
+            checkTouchedField($field, fieldOptions);
+          }) : fields.forEach(function (_ref9) {
+            var $field = _ref9.$field;
             removeClass($field.closest(fieldOptions.questionContainer), fieldOptions.cssClasses.pending);
           }), !fieldOptions.skipUIfeedback) {
             var feedbackClassesKey = result ? "valid" : "error";
@@ -604,8 +630,8 @@ System.register([], (function () {
             };
           return runFunctionsSequence(rfsObject);
         }).then(function (dataList) {
-          if (dataList.some(function (_ref9) {
-            var stopExecution = _ref9.stopExecution;
+          if (dataList.some(function (_ref10) {
+            var stopExecution = _ref10.stopExecution;
             return stopExecution;
           })) return eventPreventDefault(), !1;
           if (addClass($form, formCssClasses.submit), isAjaxForm) {
@@ -627,11 +653,11 @@ System.register([], (function () {
             _$form$formjs$options2 = $form.formjs.options,
             fieldOptions = _$form$formjs$options2.fieldOptions,
             formOptions = _$form$formjs$options2.formOptions;
-          if (result && ($form.formjs.currentGroup = group.next), fields[0].isCheckingGroup ? fields.forEach(function (_ref10) {
-            var $field = _ref10.$field;
-            checkTouchedField($field, fieldOptions);
-          }) : fields.forEach(function (_ref11) {
+          if (result && ($form.formjs.currentGroup = group.next), fields[0].isCheckingGroup ? fields.forEach(function (_ref11) {
             var $field = _ref11.$field;
+            checkTouchedField($field, fieldOptions);
+          }) : fields.forEach(function (_ref12) {
+            var $field = _ref12.$field;
             removeClass($field.closest(fieldOptions.questionContainer), fieldOptions.cssClasses.pending);
           }), !fieldOptions.skipUIfeedback) {
             removeClass($form, "".concat(formOptions.cssClasses.pending, " ").concat(formOptions.cssClasses.valid, " ").concat(formOptions.cssClasses.error));
@@ -775,8 +801,8 @@ System.register([], (function () {
           }
           return checkFieldValidity($field, fieldOptions, validationRules, validationErrors);
         })).then(function (fields) {
-          var areAllFieldsValid = fields.every(function (_ref12) {
-            var result = _ref12.result;
+          var areAllFieldsValid = fields.every(function (_ref13) {
+            var result = _ref13.result;
             return result;
           });
           return mergeValidateFormDefault({
@@ -802,7 +828,6 @@ System.register([], (function () {
           if (!checkFormElem.result) throw new Error('First argument "form" is not a DOM node nor a form CSS selector!');
           var self = this;
           self.$form = checkFormElem.$el, self.$form.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj), self.currentGroup = self.options.formOptions.groups[0];
-          var $form;
           ["beforeValidation", "beforeSend", "getFormData"].forEach(function (cbName) {
             var optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions";
             var cbOpt = self.options[optionType][cbName];
@@ -810,29 +835,13 @@ System.register([], (function () {
               return cbFn.bind(self);
             }) : cbOpt.bind(self));
           }), self._ = {
-            initialValues: ($form = self.$form, _toConsumableArray($form.querySelectorAll("input, select, textarea")).filter(function ($el) {
-              return $el.matches(excludeSelector);
-            }).reduce(function (accData, _ref13) {
-              var tagName = _ref13.tagName,
-                type = _ref13.type,
-                name = _ref13.name,
-                value = _ref13.value,
-                checked = _ref13.checked,
-                multiple = _ref13.multiple,
-                options = _ref13.options;
-              var isCheckboxOrRadio = ["checkbox", "radio"].includes(type),
-                isMultiCheckbox = "checkbox" === type && $form.querySelectorAll("[name=\"".concat(name, "\"]")).length > 1;
-              if (void 0 !== accData[name] && isCheckboxOrRadio && !checked) return accData;
-              if (void 0 === accData[name]) {
-                if (isCheckboxOrRadio && !checked) return accData[name] = isMultiCheckbox ? [] : null, accData;
-                var isMultiSelect = "SELECT" === tagName && multiple,
-                  multiSelectValues = options && _toConsumableArray(options).filter(function (opt) {
-                    return opt.selected;
-                  });
-                accData[name] = isMultiSelect ? multiSelectValues : isMultiCheckbox ? [value] : value;
-              } else isMultiCheckbox ? accData[name].push(value) : accData[name] = value;
-              return accData;
-            }, {}))
+            initialValues: getInitialValues(self.$form),
+            asyncInitEnd: function asyncInitEnd() {
+              var onInitCheckFilled = self.options.formOptions.onInitCheckFilled;
+              return this.initialValues = getInitialValues(self.$form), onInitCheckFilled ? self.validateFilledFields()["catch"](function (fields) {
+                return fields;
+              }) : Promise.resolve([]);
+            }
           }, function ($form, options) {
             $form.noValidate = !0;
             var fieldOptions = options.fieldOptions,
@@ -850,7 +859,9 @@ System.register([], (function () {
             }
           }(self.$form, self.options);
           var initOptions = {};
-          self.options.formOptions.onInitCheckFilled && (initOptions.detail = self.validateFilledFields()["catch"](function () {})), dispatchCustomEvent(self.$form, customEvents_form.init, initOptions);
+          self.options.formOptions.onInitCheckFilled && (initOptions.detail = self.validateFilledFields()["catch"](function (fields) {
+            return fields;
+          })), dispatchCustomEvent(self.$form, customEvents_form.init, initOptions);
         }
         _createClass(Form, [{
           key: "destroy",

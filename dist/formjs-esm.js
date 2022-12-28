@@ -56,7 +56,17 @@ const addClass = (element, cssClasses) => {
     })(dateString);
     if (dateFormat.includes(splitChar)) return dateFormat = dateFormat.replace(/[^YMD]/g, "-"), 
     dateString = dateString.split(splitChar), dateString = formatMap[dateFormat](dateString).join("");
-}, getJSONobjectFromFieldAttribute = (fieldEl, attrName) => {
+}, getInitialValues = $form => [ ...$form.querySelectorAll("input, select, textarea") ].filter($el => $el.matches(excludeSelector)).reduce((accData, {tagName: tagName, type: type, name: name, value: value, checked: checked, multiple: multiple, options: options}) => {
+    const isCheckboxOrRadio = [ "checkbox", "radio" ].includes(type), isMultiCheckbox = "checkbox" === type && $form.querySelectorAll(`[name="${name}"]`).length > 1;
+    if (void 0 !== accData[name] && isCheckboxOrRadio && !checked) return accData;
+    if (void 0 === accData[name]) {
+        if (isCheckboxOrRadio && !checked) return accData[name] = isMultiCheckbox ? [] : null, 
+        accData;
+        const isMultiSelect = "SELECT" === tagName && multiple, multiSelectValues = options && [ ...options ].filter(opt => opt.selected);
+        accData[name] = isMultiSelect ? multiSelectValues : isMultiCheckbox ? [ value ] : value;
+    } else isMultiCheckbox ? accData[name].push(value) : accData[name] = value;
+    return accData;
+}, {}), getJSONobjectFromFieldAttribute = (fieldEl, attrName) => {
     const customAttrEl = fieldEl.closest("[" + attrName + "]");
     return customAttrEl && JSON.parse(customAttrEl.getAttribute(attrName)) || {};
 }, getUniqueFields = $nodeList => {
@@ -93,6 +103,7 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
             })($field, fieldOptions), (($field, initialValues, fieldOptions) => {
                 const $container = $field.closest(fieldOptions.questionContainer) || $field;
                 (({form: form, tagName: tagName, type: type, name: name, value: value, multiple: multiple, options: options}, initValues) => {
+                    if (!(name in initValues)) return !0;
                     const isRadio = "radio" === type, isCheckbox = "checkbox" === type, isSelect = "SELECT" === tagName;
                     if (isCheckbox && form.querySelectorAll(`[name="${name}"]`).length > 1 || isSelect && multiple) {
                         const multiValues = isCheckbox ? [ ...form.querySelectorAll(`[name="${name}"]:checked`) ].map($el => $el.value) : [ ...options ].filter(opt => opt.selected);
@@ -547,23 +558,16 @@ class Form {
         const self = this;
         self.$form = checkFormElem.$el, self.$form.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj), 
         self.currentGroup = self.options.formOptions.groups[0];
-        var $form;
         [ "beforeValidation", "beforeSend", "getFormData" ].forEach(cbName => {
             const optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions";
             let cbOpt = self.options[optionType][cbName];
             cbOpt && (self.options[optionType][cbName] = Array.isArray(cbOpt) ? cbOpt.map(cbFn => cbFn.bind(self)) : cbOpt.bind(self));
         }), self._ = {
-            initialValues: ($form = self.$form, [ ...$form.querySelectorAll("input, select, textarea") ].filter($el => $el.matches(excludeSelector)).reduce((accData, {tagName: tagName, type: type, name: name, value: value, checked: checked, multiple: multiple, options: options}) => {
-                const isCheckboxOrRadio = [ "checkbox", "radio" ].includes(type), isMultiCheckbox = "checkbox" === type && $form.querySelectorAll(`[name="${name}"]`).length > 1;
-                if (void 0 !== accData[name] && isCheckboxOrRadio && !checked) return accData;
-                if (void 0 === accData[name]) {
-                    if (isCheckboxOrRadio && !checked) return accData[name] = isMultiCheckbox ? [] : null, 
-                    accData;
-                    const isMultiSelect = "SELECT" === tagName && multiple, multiSelectValues = options && [ ...options ].filter(opt => opt.selected);
-                    accData[name] = isMultiSelect ? multiSelectValues : isMultiCheckbox ? [ value ] : value;
-                } else isMultiCheckbox ? accData[name].push(value) : accData[name] = value;
-                return accData;
-            }, {}))
+            initialValues: getInitialValues(self.$form),
+            asyncInitEnd: function() {
+                const onInitCheckFilled = self.options.formOptions.onInitCheckFilled;
+                return this.initialValues = getInitialValues(self.$form), onInitCheckFilled ? self.validateFilledFields().catch(fields => fields) : Promise.resolve([]);
+            }
         }, function($form, options) {
             $form.noValidate = !0;
             const fieldOptions = options.fieldOptions, formOptions = options.formOptions;
@@ -584,7 +588,7 @@ class Form {
             }
         }(self.$form, self.options);
         const initOptions = {};
-        self.options.formOptions.onInitCheckFilled && (initOptions.detail = self.validateFilledFields().catch(() => {})), 
+        self.options.formOptions.onInitCheckFilled && (initOptions.detail = self.validateFilledFields().catch(fields => fields)), 
         dispatchCustomEvent(self.$form, customEvents_form.init, initOptions);
     }
     destroy() {
