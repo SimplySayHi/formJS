@@ -319,7 +319,7 @@
                 controller.abort();
             }, ajaxOptions.timeout);
         }
-        return fetch(ajaxOptions.url, ajaxOptions).then(response => {
+        return await fetch(ajaxOptions.url, ajaxOptions).then(response => {
             if (!response.ok) throw new Error(response.statusText);
             const fetchMethod = ((response, options) => {
                 const accept = options.headers.get("Accept"), contentType = response.headers.get("Content-Type"), headerOpt = accept || contentType || "";
@@ -484,10 +484,10 @@
     class Form {
         constructor(form, optionsObj) {
             const argsL = arguments.length, checkFormElem = (form => {
-                const typeofForm = typeof form, isFormSelector = "string" === typeofForm && isDOMNode(document.querySelector(form)) && "form" === document.querySelector(form).tagName.toLowerCase();
+                const formIsString = "string" == typeof form, isFormSelector = formIsString && isDOMNode(document.querySelector(form)) && "form" === document.querySelector(form).tagName.toLowerCase();
                 return {
                     result: isDOMNode(form) || isFormSelector,
-                    $el: "string" === typeofForm ? document.querySelector(form) : form
+                    $el: formIsString ? document.querySelector(form) : form
                 };
             })(form);
             if (0 === argsL || argsL > 0 && !form) throw new Error('First argument "form" is missing or falsy!');
@@ -593,11 +593,13 @@
             })(groupValidity);
         }
         async validateFilledFields(fieldOptions) {
-            var $form;
-            const filledFieldsValidity = checkFieldsValidity(($form = this.$form, getUniqueFields($form.querySelectorAll(fieldsStringSelector)).map($field => {
+            const $filledFields = ($form = this.$form, getUniqueFields($form.querySelectorAll(fieldsStringSelector)).map($field => {
                 const name = $field.name, type = $field.type, isCheckboxOrRadio = [ "checkbox", "radio" ].includes(type), fieldChecked = $form.querySelector(`[name="${name}"]:checked`), isReqFrom = $field.matches("[data-required-from]"), $reqMore = isReqFrom ? $form.querySelector($field.dataset.requiredFrom) : null;
                 return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && $reqMore.checked || !isReqFrom && $field.value ? $field : null;
-            }).filter($field => null !== $field)), fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), this.validationRules, this.validationErrors);
+            }).filter($field => null !== $field));
+            var $form;
+            fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
+            const filledFieldsValidity = await checkFieldsValidity($filledFields, fieldOptions, this.validationRules, this.validationErrors);
             return filledFieldsValidity.fields.forEach(obj => {
                 dispatchCustomEvent(obj.$field, customEvents_field.validation, {
                     detail: obj

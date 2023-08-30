@@ -71,7 +71,7 @@ export async function ajaxCall( $form, formDataObj, options ){
         }, ajaxOptions.timeout)
     }
 
-    return fetch(ajaxOptions.url, ajaxOptions)
+    return await fetch(ajaxOptions.url, ajaxOptions)
         .then(response => {
             if( !response.ok ){
                 throw new Error(response.statusText)

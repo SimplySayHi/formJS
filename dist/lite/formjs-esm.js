@@ -237,10 +237,10 @@ async function checkFieldsValidity($fields, fieldOptions, validationRules, valid
 class Form {
     constructor(form, optionsObj) {
         const argsL = arguments.length, checkFormElem = (form => {
-            const typeofForm = typeof form, isFormSelector = "string" === typeofForm && isDOMNode(document.querySelector(form)) && "form" === document.querySelector(form).tagName.toLowerCase();
+            const formIsString = "string" == typeof form, isFormSelector = formIsString && isDOMNode(document.querySelector(form)) && "form" === document.querySelector(form).tagName.toLowerCase();
             return {
                 result: isDOMNode(form) || isFormSelector,
-                $el: "string" === typeofForm ? document.querySelector(form) : form
+                $el: formIsString ? document.querySelector(form) : form
             };
         })(form);
         if (0 === argsL || argsL > 0 && !form) throw new Error('First argument "form" is missing or falsy!');

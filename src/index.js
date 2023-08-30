@@ -150,7 +150,7 @@ class Form {
 
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions)
 
-        const filledFieldsValidity = checkFieldsValidity($filledFields, fieldOptions, self.validationRules, self.validationErrors)
+        const filledFieldsValidity = await checkFieldsValidity($filledFields, fieldOptions, self.validationRules, self.validationErrors)
 
         filledFieldsValidity.fields.forEach(obj => {
             dispatchCustomEvent( obj.$field, customEvents.field.validation, { detail: obj } )
