@@ -51,45 +51,6 @@ optionsESM = {
     plugins: [ json() ]
 },
 
-optionsSYS = {
-    input: 'src/index.js',
-    output: [
-
-        // SYSTEMJS TRANSPILED SCRIPT
-        {
-            file: `dist/${libraryFileName}-systemjs.js`,
-            format: 'system',
-            sourcemap: false,
-            plugins: [
-                terser({
-                    mangle: false,
-                    output: {
-                        beautify: true,
-                        preamble: initialComment
-                    }
-                })
-            ]
-        },
-
-        // SYSTEMJS TRANSPILED SCRIPT MINIFIED
-        {
-            file: `dist/${libraryFileName}-systemjs.min.js`,
-            format: 'system',
-            sourcemap: true,
-            plugins: [
-                terser({
-                    output: {
-                        beautify: false,
-                        preamble: initialComment
-                    }
-                })
-            ]
-        }
-
-    ],
-    plugins: [ json(), resolve(), babel({babelHelpers: 'bundled'}) ]
-},
-
 optionsUMD = {
     input: 'src/index.js',
     output: [
@@ -133,4 +94,4 @@ optionsUMD = {
 
 ;
 
-export default [ optionsESM, optionsSYS, optionsUMD ]
+export default [ optionsESM, optionsUMD ]
