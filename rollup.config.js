@@ -1,14 +1,14 @@
 
-import json from '@rollup/plugin-json';
-import resolve from '@rollup/plugin-node-resolve';
-import babel from '@rollup/plugin-babel';
-import { terser } from 'rollup-plugin-terser';
-import myPackage from './package.json';
+import json from '@rollup/plugin-json'
+import resolve from '@rollup/plugin-node-resolve'
+import babel from '@rollup/plugin-babel'
+import terser from '@rollup/plugin-terser'
+import myPackage from './package.json' assert { type: 'json' }
 
-const initialComment = `/* ${myPackage.title} v${myPackage.version} | ${myPackage.author.name} (@${myPackage.customData.repository.accountName}) | ${myPackage.homepage} | ${myPackage.customData.repository.homepage} | ${myPackage.license} license */`;
+const initialComment = `/* ${myPackage.title} v${myPackage.version} | ${myPackage.author.name} (@${myPackage.customData.repository.accountName}) | ${myPackage.homepage} | ${myPackage.customData.repository.homepage} | ${myPackage.license} license */`
 
-const libraryFileName = myPackage.customData.libraryFileName;
-const libraryNamespace = myPackage.customData.libraryNamespace;
+const libraryFileName = myPackage.customData.libraryFileName
+const libraryNamespace = myPackage.customData.libraryNamespace
 
 const
 
@@ -91,7 +91,5 @@ optionsUMD = {
     ],
     plugins: [ json(), resolve(), babel({babelHelpers: 'bundled'}) ]
 }
-
-;
 
 export default [ optionsESM, optionsUMD ]
