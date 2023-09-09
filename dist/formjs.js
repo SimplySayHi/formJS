@@ -3,10 +3,12 @@
     "object" == typeof exports && "undefined" != typeof module ? module.exports = factory() : "function" == typeof define && define.amd ? define(factory) : (global = "undefined" != typeof globalThis ? globalThis : global || self).Form = factory();
 }(this, (function() {
     "use strict";
-    const addClass = (element, cssClasses) => {
-        element.classList.add(...cssClasses.split(" "));
-    }, isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), removeClass = (element, cssClasses) => {
-        element.classList.remove(...cssClasses.split(" "));
+    const addClass = function(element) {
+        let cssClasses = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "";
+        element && element.classList.add(...cssClasses.split(" "));
+    }, isNodeList = nodeList => NodeList.prototype.isPrototypeOf(nodeList), removeClass = function(element) {
+        let cssClasses = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "";
+        element && element.classList.remove(...cssClasses.split(" "));
     }, isDOMNode = node => Element.prototype.isPrototypeOf(node), customEvents = {
         field: {
             validation: "fjs.field:validation"
@@ -390,14 +392,14 @@
         }
     }, validationEnd = function(event) {
         const eventDetail = event.detail, $field = eventDetail.$field, dataFieldOptions = getJSONobjectFromFieldAttribute($field, "data-field-options"), fieldOptions = mergeObjects({}, $field.form.formjs.options.fieldOptions, dataFieldOptions), $container = $field.closest(fieldOptions.questionContainer), isReqFrom = $field.matches("[data-required-from]"), $reqMore = document.querySelector($field.dataset.requiredFrom);
-        if ($container && !fieldOptions.skipUIfeedback) if (eventDetail.result) {
+        if (!fieldOptions.skipUIfeedback) if (eventDetail.result) {
             if (!isReqFrom || isReqFrom && $reqMore.checked) {
                 const errorClasses = `${fieldOptions.cssClasses.error} ${fieldOptions.cssClasses.errorEmpty} ${fieldOptions.cssClasses.errorRule}`;
                 removeClass($container, errorClasses), addClass($container, fieldOptions.cssClasses.valid);
             }
         } else {
             let extraErrorClass = fieldOptions.cssClasses.errorRule;
-            const isChecks = $field.matches("[data-checks]"), checkedElLength = isChecks ? $container.querySelectorAll(`[name="${$field.name}"]:checked`).length : 0;
+            const isChecks = $field.matches("[data-checks]"), checkedElLength = isChecks ? $field.form.querySelectorAll(`[name="${$field.name}"]:checked`).length : 0;
             (!isChecks && eventDetail.errors && eventDetail.errors.empty || isChecks && 0 === checkedElLength) && (extraErrorClass = fieldOptions.cssClasses.errorEmpty);
             let errorClasses = `${fieldOptions.cssClasses.error} ${extraErrorClass}`, errorClassToRemove = `${fieldOptions.cssClasses.errorEmpty} ${fieldOptions.cssClasses.errorRule}`;
             removeClass($container, `${fieldOptions.cssClasses.valid} ${errorClassToRemove}`), 
@@ -459,7 +461,7 @@
                 return mergeObjects(accObj, errors);
             }), validity.errors)), validity;
         }($field, fieldOptions, validationRules, validationErrors) : dataBeforeValidation, $container = fieldOptions.questionContainer && validationResult.$field.closest(fieldOptions.questionContainer);
-        return $container && removeClass($container, fieldOptions.cssClasses.pending), validationResult;
+        return removeClass($container, fieldOptions.cssClasses.pending), validationResult;
     }
     async function checkFieldsValidity($fields, fieldOptions, validationRules, validationErrors) {
         let fieldToSkip = arguments.length > 4 && void 0 !== arguments[4] ? arguments[4] : null;

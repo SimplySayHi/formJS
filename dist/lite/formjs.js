@@ -3,8 +3,9 @@
     "object" == typeof exports && "undefined" != typeof module ? module.exports = factory() : "function" == typeof define && define.amd ? define(factory) : (global = "undefined" != typeof globalThis ? globalThis : global || self).Form = factory();
 }(this, (function() {
     "use strict";
-    const removeClass = (element, cssClasses) => {
-        element.classList.remove(...cssClasses.split(" "));
+    const removeClass = function(element) {
+        let cssClasses = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "";
+        element && element.classList.remove(...cssClasses.split(" "));
     }, isDOMNode = node => Element.prototype.isPrototypeOf(node), mergeObjects = function() {
         let out = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
         return Array.from(arguments).slice(1).filter((arg => !!arg)).forEach((arg => {
@@ -213,7 +214,7 @@
                 return mergeObjects(accObj, errors);
             }), validity.errors)), validity;
         }($field, fieldOptions, validationRules, validationErrors) : dataBeforeValidation, $container = fieldOptions.questionContainer && validationResult.$field.closest(fieldOptions.questionContainer);
-        return $container && removeClass($container, fieldOptions.cssClasses.pending), validationResult;
+        return removeClass($container, fieldOptions.cssClasses.pending), validationResult;
     }
     async function checkFieldsValidity($fields, fieldOptions, validationRules, validationErrors) {
         let fieldToSkip = arguments.length > 4 && void 0 !== arguments[4] ? arguments[4] : null;

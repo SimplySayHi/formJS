@@ -1,6 +1,6 @@
 /* formJS Lite v6.0.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
-const removeClass = (element, cssClasses) => {
-    element.classList.remove(...cssClasses.split(" "));
+const removeClass = (element, cssClasses = "") => {
+    element && element.classList.remove(...cssClasses.split(" "));
 }, isDOMNode = node => Element.prototype.isPrototypeOf(node), mergeObjects = function(out = {}) {
     return Array.from(arguments).slice(1).filter((arg => !!arg)).forEach((arg => {
         Object.keys(arg).forEach((key => {
@@ -203,7 +203,7 @@ async function checkFieldValidity($field, fieldOptions, validationRules, validat
             return mergeObjects(accObj, errors);
         }), validity.errors)), validity;
     }($field, fieldOptions, validationRules, validationErrors) : dataBeforeValidation, $container = fieldOptions.questionContainer && validationResult.$field.closest(fieldOptions.questionContainer);
-    return $container && removeClass($container, fieldOptions.cssClasses.pending), validationResult;
+    return removeClass($container, fieldOptions.cssClasses.pending), validationResult;
 }
 
 async function checkFieldsValidity($fields, fieldOptions, validationRules, validationErrors, fieldToSkip = null) {
