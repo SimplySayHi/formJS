@@ -175,14 +175,14 @@
             const $reqMore = $form.querySelector($field.dataset.requiredFrom);
             $reqMore.checked = !0, $field.required = $reqMore.required;
         }
-        const dataObj = (await runFunctionsSequence({
+        const dataBeforeValidation = (await runFunctionsSequence({
             functionsList: fieldOptions.beforeValidation,
             data: {
                 $field: $field,
                 fieldOptions: fieldOptions
             }
         })).pop(), needsValidation = $field.required || $field.matches("[data-validate-if-filled]") && isValidValue;
-        needsValidation || (dataObj.result = !0);
+        needsValidation || (delete dataBeforeValidation.fieldOptions, dataBeforeValidation.result = !0);
         const validationResult = needsValidation ? await async function($field, fieldOptions, validationRules, validationErrors) {
             const fieldValue = $field.value, obj = mergeValidateFieldDefault({
                 result: fieldValue.trim().length > 0,
@@ -212,7 +212,7 @@
                 const errors = validationErrors[methodName] && validationErrors[methodName](fieldValue, $field) || {};
                 return mergeObjects(accObj, errors);
             }), validity.errors)), validity;
-        }($field, fieldOptions, validationRules, validationErrors) : dataObj, $container = fieldOptions.questionContainer && validationResult.$field.closest(fieldOptions.questionContainer);
+        }($field, fieldOptions, validationRules, validationErrors) : dataBeforeValidation, $container = fieldOptions.questionContainer && validationResult.$field.closest(fieldOptions.questionContainer);
         return $container && removeClass($container, fieldOptions.cssClasses.pending), validationResult;
     }
     async function checkFieldsValidity($fields, fieldOptions, validationRules, validationErrors) {
