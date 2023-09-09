@@ -11,8 +11,6 @@ describe( 'checkFieldsValidity', () => {
         return document.querySelector(`form [name="field-${strNum}"]`);
     };
 
-    options.fieldOptions.beforeValidation = [];
-
     beforeEach(() => {
         document.body.innerHTML = `
         <form name="my-form">
@@ -309,7 +307,8 @@ describe( 'checkFieldsValidity', () => {
         </form>`;
     } );
 
-    test( 'checkFieldsValidity -> form fields not valid', () => {
+    test( 'checkFieldsValidity -> form fields not valid', async () => {
+        expect.assertions(1);
         const returnObj1 = {
             fields: [
                 // FIELD TO SKIP
@@ -434,17 +433,17 @@ describe( 'checkFieldsValidity', () => {
                 { $field: $('72-more'), result: true },
 
                 { $field: $('73'), result: true },
-                { $field: $('73-more'), result: false, errors:{email:true} }
+                { $field: $('73-more'), result: false, errors:{email:true, missingAtChar:true} }
 
             ],
             result: false
         };
-        return checkFieldsValidity( document.querySelector('form').querySelectorAll(fieldsStringSelector), options.fieldOptions, validationRules, validationErrors ).then(obj1 => {
-            expect( obj1 ).toMatchSnapshot( returnObj1 );
-        });
+        const promiseRun = await checkFieldsValidity( document.querySelector('form').querySelectorAll(fieldsStringSelector), options.fieldOptions, validationRules, validationErrors )
+        return expect( promiseRun ).toEqual( returnObj1 );
     } );
 
-    test( 'checkFieldsValidity -> form fields not valid with skip field', () => {
+    test( 'checkFieldsValidity -> form fields not valid with skip field', async () => {
+        expect.assertions(1);
         const returnObj2 = {
             fields: [
                 { $field: $('00'), result: true },
@@ -568,14 +567,13 @@ describe( 'checkFieldsValidity', () => {
                 { $field: $('72-more'), result: true },
 
                 { $field: $('73'), result: true },
-                { $field: $('73-more'), result: false, errors:{email:true} }
+                { $field: $('73-more'), result: false, errors:{email:true, missingAtChar:true} }
 
             ],
             result: false
         };
-        return checkFieldsValidity( document.querySelector('form').querySelectorAll(fieldsStringSelector), options.fieldOptions, validationRules, validationErrors, $('00') ).then(obj2 => {
-            expect( obj2 ).toMatchSnapshot( returnObj2 );
-        });
+        const promiseRun = await checkFieldsValidity( document.querySelector('form').querySelectorAll(fieldsStringSelector), options.fieldOptions, validationRules, validationErrors, $('00') )
+        return expect( promiseRun ).toEqual( returnObj2 );
     } );
 
 });
