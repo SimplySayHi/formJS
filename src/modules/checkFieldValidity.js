@@ -46,19 +46,19 @@ export async function checkFieldValidity( $field, fieldOptions, validationRules,
         $field.required = $reqMore.required
     }
 
-    const dataBeforeValidation = await runFunctionsSequence({
+    const dataBeforeValidation = (await runFunctionsSequence({
         functionsList: fieldOptions.beforeValidation,
         data: { $field, fieldOptions }
-    })
+    })).pop()
 
-    const dataObj = dataBeforeValidation.pop()
     const needsValidation = $field.required || ($field.matches('[data-validate-if-filled]') && isValidValue)
 
     if( !needsValidation ){
-        dataObj.result = true
+        delete dataBeforeValidation.fieldOptions
+        dataBeforeValidation.result = true
     }
     
-    const validationResult = needsValidation ? await isValid($field, fieldOptions, validationRules, validationErrors) : dataObj
+    const validationResult = needsValidation ? await isValid($field, fieldOptions, validationRules, validationErrors) : dataBeforeValidation
 
     const $container = fieldOptions.questionContainer && validationResult.$field.closest( fieldOptions.questionContainer )
     if( $container ){
