@@ -11,7 +11,7 @@ export const validationEnd = function( event ){
     const isReqFrom = $field.matches('[data-required-from]')
     const $reqMore = document.querySelector( $field.dataset.requiredFrom )
 
-    if( $container && !fieldOptions.skipUIfeedback ){
+    if( !fieldOptions.skipUIfeedback ){
 
         if( eventDetail.result ){
 
@@ -29,7 +29,7 @@ export const validationEnd = function( event ){
 
             // HANDLE CASE OF FIELD data-checks
             const isChecks = $field.matches('[data-checks]')
-            const checkedElLength = (isChecks ? $container.querySelectorAll(`[name="${$field.name}"]:checked`).length : 0)
+            const checkedElLength = (isChecks ? $field.form.querySelectorAll(`[name="${$field.name}"]:checked`).length : 0)
 
             if( (!isChecks && (eventDetail.errors && eventDetail.errors.empty)) || (isChecks && checkedElLength === 0) ){
                 extraErrorClass = fieldOptions.cssClasses.errorEmpty

@@ -61,9 +61,7 @@ export async function checkFieldValidity( $field, fieldOptions, validationRules,
     const validationResult = needsValidation ? await isValid($field, fieldOptions, validationRules, validationErrors) : dataBeforeValidation
 
     const $container = fieldOptions.questionContainer && validationResult.$field.closest( fieldOptions.questionContainer )
-    if( $container ){
-        removeClass( $container, fieldOptions.cssClasses.pending )
-    }
+    removeClass( $container, fieldOptions.cssClasses.pending )
     
     return validationResult
 
