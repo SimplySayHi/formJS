@@ -1,15 +1,15 @@
 
-import { checkFieldsValidity } from '../src/modules/checkFieldsValidity';
-import { options } from '../src/modules/options';
-import { validationRules } from '../src/modules/validationRules';
-import { validationErrors } from '../js/test-modules/validationErrors';
-import { fieldsStringSelector } from '../src/modules/helpers';
+import { checkFieldsValidity } from '../src/modules/checkFieldsValidity'
+import { options } from '../src/modules/options'
+import { validationRules } from '../src/modules/validationRules'
+import { validationErrors } from '../js/test-modules/validationErrors'
+import { getFormFields } from '../src/modules/helpers'
 
 describe( 'checkFieldsValidity', () => {
 
     const $ = (strNum) => {
-        return document.querySelector(`form [name="field-${strNum}"]`);
-    };
+        return document.querySelector(`form [name="field-${strNum}"]`)
+    }
 
     beforeEach(() => {
         document.body.innerHTML = `
@@ -80,22 +80,22 @@ describe( 'checkFieldsValidity', () => {
             <div data-formjs-question>
                 <input name="field-17" type="checkbox" value="sms" data-checks="[1,2]" />
                 <input name="field-17" type="checkbox" value="email" />
-                <input name="field-17" type="checkbox" value="app-notiifcation" />
+                <input name="field-17" type="checkbox" value="app-notification" />
             </div>
             <div data-formjs-question>
                 <input name="field-18" type="checkbox" value="sms" data-checks="[1,2]" required />
                 <input name="field-18" type="checkbox" value="email" required />
-                <input name="field-18" type="checkbox" value="app-notiifcation" required />
+                <input name="field-18" type="checkbox" value="app-notification" required />
             </div>
             <div data-formjs-question>
                 <input name="field-19" type="checkbox" value="sms" data-checks="[1,2]" required checked />
                 <input name="field-19" type="checkbox" value="email" required />
-                <input name="field-19" type="checkbox" value="app-notiifcation" required />
+                <input name="field-19" type="checkbox" value="app-notification" required />
             </div>
             <div data-formjs-question>
                 <input name="field-20" type="checkbox" value="sms" data-checks="[1,2]" required checked />
                 <input name="field-20" type="checkbox" value="email" required checked />
-                <input name="field-20" type="checkbox" value="app-notiifcation" required checked />
+                <input name="field-20" type="checkbox" value="app-notification" required checked />
             </div>
 
             /* DATE */
@@ -304,11 +304,13 @@ describe( 'checkFieldsValidity', () => {
                 <input name="field-73-more" type="email" data-required-from="#req-more-5" value="a" required />
             </div>
             
-        </form>`;
-    } );
+        </form>`
+    } )
 
     test( 'checkFieldsValidity -> form fields not valid', async () => {
-        expect.assertions(1);
+        expect.assertions(1)
+        const $form = document.querySelector('form')
+        const $fields = getFormFields($form, { hidden: false })
         const returnObj1 = {
             fields: [
                 // FIELD TO SKIP
@@ -437,13 +439,15 @@ describe( 'checkFieldsValidity', () => {
 
             ],
             result: false
-        };
-        const promiseRun = await checkFieldsValidity( document.querySelector('form').querySelectorAll(fieldsStringSelector), options.fieldOptions, validationRules, validationErrors )
-        return expect( promiseRun ).toEqual( returnObj1 );
-    } );
+        }
+        const promiseRun = await checkFieldsValidity( $fields, options.fieldOptions, validationRules, validationErrors )
+        return expect( promiseRun ).toEqual( returnObj1 )
+    } )
 
     test( 'checkFieldsValidity -> form fields not valid with skip field', async () => {
-        expect.assertions(1);
+        expect.assertions(1)
+        const $form = document.querySelector('form')
+        const $fields = getFormFields($form, { hidden: false })
         const returnObj2 = {
             fields: [
                 { $field: $('00'), result: true },
@@ -571,9 +575,9 @@ describe( 'checkFieldsValidity', () => {
 
             ],
             result: false
-        };
-        const promiseRun = await checkFieldsValidity( document.querySelector('form').querySelectorAll(fieldsStringSelector), options.fieldOptions, validationRules, validationErrors, $('00') )
-        return expect( promiseRun ).toEqual( returnObj2 );
-    } );
+        }
+        const promiseRun = await checkFieldsValidity( $fields, options.fieldOptions, validationRules, validationErrors, $('00') )
+        return expect( promiseRun ).toEqual( returnObj2 )
+    } )
 
-});
+})

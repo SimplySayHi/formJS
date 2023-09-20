@@ -1,8 +1,10 @@
 
-import { excludeSelector } from '../src/modules/helpers';
-import { getFormData } from '../src/modules/optionsUtils/getFormData';
+import { getFormFields } from '../src/modules/helpers'
+import { getFormData } from '../src/modules/optionsUtils/getFormData'
 
-describe( 'checkFieldValidity', () => {
+// TODO: ADD TESTS FOR FIELDS OUTSIDE form ELEMENT
+
+describe( 'getFormData', () => {
 
     beforeEach(() => {
         document.body.innerHTML = `
@@ -32,7 +34,7 @@ describe( 'checkFieldValidity', () => {
             <div data-formjs-question>
                 <input name="field-03" type="checkbox" value="sms" data-checks="[1,2]" />
                 <input name="field-03" type="checkbox" value="email" checked />
-                <input name="field-03" type="checkbox" value="app-notiifcation" checked />
+                <input name="field-03" type="checkbox" value="app-notification" checked />
             </div>
             <div data-formjs-question>
                 <input name="list[].1___title" type="text" value="New Title" />
@@ -71,15 +73,14 @@ describe( 'checkFieldValidity', () => {
                     <option value="3">option 3</option>
                 </select>
             </div>
-        </form>`;
-    } );
+        </form>`
+    } )
 
     test( 'getFormData Test - No trim values', () => {
-        const $form = document.querySelector('form');
-        const $formFields = $form.querySelectorAll('input, select, textarea');
-        const $filteredFields = Array.from( $formFields ).filter( elem => elem.matches(excludeSelector) );
+        const $form = document.querySelector('form')
+        const $filteredFields = getFormFields($form, { file: false, excludeData: false })
 
-        const expectTest = getFormData.bind({$form})( $filteredFields );
+        const expectTest = getFormData.bind({$form})( $filteredFields )
         const extectedResult = {
             'field-01': 'hello world ',
             'field-02': '1',
@@ -94,7 +95,7 @@ describe( 'checkFieldValidity', () => {
                     }
                 }
             },
-            'field-03': ['email', 'app-notiifcation'],
+            'field-03': ['email', 'app-notification'],
             list: [
                 {
                     title: 'New Title',
@@ -112,16 +113,15 @@ describe( 'checkFieldValidity', () => {
             ],
             'field-04': '2',
             'field-05': ['1', '2']
-        };
-        return expect( expectTest ).toEqual( extectedResult );
-    } );
+        }
+        return expect( expectTest ).toEqual( extectedResult )
+    } )
 
     test( 'getFormData Test - Trim values', () => {
-        const $form = document.querySelector('form');
-        const $formFields = $form.querySelectorAll('input, select, textarea');
-        const $filteredFields = Array.from( $formFields ).filter( elem => elem.matches(excludeSelector) );
+        const $form = document.querySelector('form')
+        const $filteredFields = getFormFields($form, { file: false, excludeData: false })
 
-        const expectTest = getFormData.bind({$form})( $filteredFields, true );
+        const expectTest = getFormData.bind({$form})( $filteredFields, true )
         const extectedResult = {
             'field-01': 'hello world',
             'field-02': '1',
@@ -151,11 +151,11 @@ describe( 'checkFieldValidity', () => {
                     }
                 }
             ],
-            'field-03': ['email', 'app-notiifcation'],
+            'field-03': ['email', 'app-notification'],
             'field-04': '2',
             'field-05': ['1', '2']
-        };
-        return expect( expectTest ).toEqual( extectedResult );
-    } );
+        }
+        return expect( expectTest ).toEqual( extectedResult )
+    } )
 
-} );
+} )
