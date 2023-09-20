@@ -48,9 +48,6 @@ const addClass = (element, cssClasses = "") => {
     })(dateString);
     if (!(dateFormat.indexOf(splitChar) < 0)) return dateFormat = dateFormat.replace(/[^YMD]/g, "-"), 
     dateString = dateString.split(splitChar), dateString = formatMap[dateFormat](dateString).join("");
-}, getJSONobjectFromFieldAttribute = ($field, attrName) => {
-    const $customAttr = $field.closest(`[${attrName}]`);
-    return $customAttr && JSON.parse($customAttr.getAttribute(attrName)) || {};
 }, getUniqueFields = $nodeList => {
     let currentFieldName = "", currentFieldType = "";
     return Array.from($nodeList).filter(($field => {
@@ -58,6 +55,12 @@ const addClass = (element, cssClasses = "") => {
         return (name !== currentFieldName || type !== currentFieldType) && ($field.matches("[data-required-from]") || (currentFieldName = name, 
         currentFieldType = type), !0);
     }));
+}, getFormFields = ($form, {unique: unique = !1, hidden: hidden = !0, file: file = !0, excludeData: excludeData = !0} = {}) => {
+    const FIELDS_SELECTOR = `select, textarea, input:not([type="reset"]):not([type="submit"]):not([type="button"])${hidden ? "" : ':not([type="hidden"])'}${file ? "" : ':not([type="file"])'}${excludeData ? "" : ":not([data-exclude-data])"}`;
+    return (unique ? getUniqueFields($form.elements) : Array.from($form.elements)).filter(($el => $el.matches(FIELDS_SELECTOR)));
+}, getJSONobjectFromFieldAttribute = ($field, attrName) => {
+    const $customAttr = $field.closest(`[${attrName}]`);
+    return $customAttr && JSON.parse($customAttr.getAttribute(attrName)) || {};
 }, mergeValidateFieldDefault = obj => mergeObjects({}, {
     result: !1,
     $field: null
@@ -123,22 +126,22 @@ a)), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (
             valid: "is-valid"
         },
         getFormData: function($filteredFields, trimValues) {
-            const formData = {}, $form = this.$form;
+            const formData = {}, $form = this.$form, $formFields = getFormFields($form);
             let prevObj = formData;
             return $filteredFields.forEach(($field => {
                 const isCheckbox = "checkbox" === $field.type, isRadio = "radio" === $field.type, isSelect = $field.matches("select"), name = $field.name;
                 let value = trimValues ? $field.value.trim() : $field.value;
                 if (isCheckbox) {
                     value = $field.checked;
-                    let $checkboxes = Array.from($form.querySelectorAll(`[name="${name}"]`));
+                    let $checkboxes = $formFields.filter(($el => $el.name === name));
                     if ($checkboxes.length > 1) {
                         value = [], $checkboxes.filter((field => field.checked)).forEach(($field => {
                             value.push($field.value);
                         }));
                     }
                 } else if (isRadio) {
-                    const $checkedRadio = $form.querySelector(`[name="${name}"]:checked`);
-                    value = null === $checkedRadio ? null : $checkedRadio.value;
+                    const $checkedRadio = $formFields.find(($el => $el.matches(`[name="${name}"]:checked`)));
+                    value = $checkedRadio ? $checkedRadio.value : null;
                 } else if (isSelect) {
                     const $selectedOpts = Array.from($field.options).filter((option => option.selected));
                     $selectedOpts.length > 1 && (value = [], $selectedOpts.forEach(($field => {
@@ -181,9 +184,9 @@ a)), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (
         };
     },
     checkbox: function(value, $field) {
-        const $dataChecks = $field.form.querySelector(`[name="${$field.name}"][data-checks]`);
+        const $dataChecks = getFormFields($field.form).find(($el => $el.matches(`[name="${$field.name}"][data-checks]`)));
         return $dataChecks ? function($field) {
-            const attrValue = JSON.parse($field.dataset.checks), checkedLength = $field.form.querySelectorAll(`[name="${$field.name}"]:checked`).length, isMinOk = checkedLength >= attrValue[0], isMaxOk = checkedLength <= attrValue[1], obj = {
+            const attrValue = JSON.parse($field.dataset.checks), checkedLength = getFormFields($field.form).filter(($el => $el.matches(`[name="${$field.name}"]:checked`))).length, isMinOk = checkedLength >= attrValue[0], isMaxOk = checkedLength <= attrValue[1], obj = {
                 result: isMinOk && isMaxOk
             };
             return obj.result || (obj.errors = {
@@ -196,7 +199,7 @@ a)), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (
     },
     equalTo: function(value, $field) {
         return {
-            result: value === $field.form.querySelector(`[name="${$field.dataset.equalTo}"]`).value
+            result: value === getFormFields($field.form).find(($el => $el.matches(`[name="${$field.dataset.equalTo}"]`))).value
         };
     },
     exactLength: function(value, $field) {
@@ -255,7 +258,7 @@ a)), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (
         };
     },
     radio: function(value, $field) {
-        const $fieldChecked = $field.form.querySelector(`[name="${$field.name}"]:checked`);
+        const $fieldChecked = getFormFields($field.form).find(($el => $el.matches(`[name="${$field.name}"]:checked`)));
         return {
             result: null !== $fieldChecked && $fieldChecked.value.trim().length > 0
         };
@@ -296,7 +299,7 @@ async function ajaxCall($form, formDataObj, options) {
     if (ajaxOptions.body = formDataObj, isMultipart && options.formOptions.handleFileUpload) {
         let formDataMultipart = new FormData;
         for (let key in ajaxOptions.body) formDataMultipart.append(key, ajaxOptions.body[key]);
-        Array.from($form.querySelectorAll('[type="file"]')).forEach(($field => {
+        getFormFields($form).filter(($el => "file" === $el.type)).forEach(($field => {
             Array.from($field.files).forEach(((file, idx) => {
                 const name = `${$field.name}[${idx}]`;
                 formDataMultipart.append(name, file, file.name);
@@ -319,12 +322,12 @@ async function ajaxCall($form, formDataObj, options) {
         throw addClass($form, options.formOptions.cssClasses.ajaxError), new Error(error.message);
     })).finally((() => {
         timeoutTimer && window.clearTimeout(timeoutTimer), removeClass($form, `${options.formOptions.cssClasses.submit} ${options.formOptions.cssClasses.ajaxPending}`), 
-        addClass($form, options.formOptions.cssClasses.ajaxComplete), $form.querySelector('[type="submit"]').disabled = !1;
+        addClass($form, options.formOptions.cssClasses.ajaxComplete), Array.from($form.elements).find(($el => "submit" === $el.type)).disabled = !1;
     }));
 }
 
 function submit(event) {
-    const $form = event.target, instance = $form.formjs, options = instance.options, formCssClasses = options.formOptions.cssClasses, isAjaxForm = options.formOptions.ajaxSubmit, $btn = $form.querySelector('[type="submit"]'), eventPreventDefault = (enableBtn = !0) => {
+    const $form = event.target, instance = $form.formjs, options = instance.options, formCssClasses = options.formOptions.cssClasses, isAjaxForm = options.formOptions.ajaxSubmit, $btn = Array.from($form.elements).find(($el => $el.matches('[type="submit"]'))), eventPreventDefault = (enableBtn = !0) => {
         $btn && enableBtn && ($btn.disabled = !1), event && event.preventDefault();
     };
     if (isAjaxForm && eventPreventDefault(!1), $btn) {
@@ -369,12 +372,12 @@ const groupValidationEnd = function(event) {
     if ($field.matches(fieldsStringSelector)) {
         const isFieldForChangeEventBoolean = isFieldForChangeEvent($field), hasOnlyChangeEvent = "change" === self.options.fieldOptions.validateOnEvents;
         (isFieldForChangeEventBoolean && isChangeEvent || !isFieldForChangeEventBoolean && (!isChangeEvent || hasOnlyChangeEvent)) && self.validateField($field).then((() => {
-            const type = $field.type, $relatedEqualTo = $field.form.querySelector(`[data-equal-to="${$field.name}"]`);
+            const type = $field.type, $relatedEqualTo = getFormFields($field.form).find(($el => $el.matches(`[data-equal-to="${$field.name}"]`)));
             ($field.required || $field.matches("[data-validate-if-filled]")) && "checkbox" !== type && "radio" !== type && $relatedEqualTo && "" !== $relatedEqualTo.value.trim() && self.validateField($relatedEqualTo).catch((errors => {}));
         })).catch((errors => {}));
     }
 }, validationEnd = function(event) {
-    const eventDetail = event.detail, $field = eventDetail.$field, dataFieldOptions = getJSONobjectFromFieldAttribute($field, "data-field-options"), fieldOptions = mergeObjects({}, $field.form.formjs.options.fieldOptions, dataFieldOptions), $container = $field.closest(fieldOptions.questionContainer), isReqFrom = $field.matches("[data-required-from]"), $reqMore = document.querySelector($field.dataset.requiredFrom);
+    const eventDetail = event.detail, $field = eventDetail.$field, dataFieldOptions = getJSONobjectFromFieldAttribute($field, "data-field-options"), fieldOptions = mergeObjects({}, $field.form.formjs.options.fieldOptions, dataFieldOptions), $container = $field.closest(fieldOptions.questionContainer), isReqFrom = $field.matches("[data-required-from]"), $reqMore = getFormFields($field.form).find(($el => $el.matches($field.dataset.requiredFrom)));
     if (!fieldOptions.skipUIfeedback) if (eventDetail.result) {
         if (!isReqFrom || isReqFrom && $reqMore.checked) {
             const errorClasses = `${fieldOptions.cssClasses.error} ${fieldOptions.cssClasses.errorEmpty} ${fieldOptions.cssClasses.errorRule}`;
@@ -382,7 +385,7 @@ const groupValidationEnd = function(event) {
         }
     } else {
         let extraErrorClass = fieldOptions.cssClasses.errorRule;
-        const isChecks = $field.matches("[data-checks]"), checkedElLength = isChecks ? $field.form.querySelectorAll(`[name="${$field.name}"]:checked`).length : 0;
+        const isChecks = $field.matches("[data-checks]"), checkedElLength = isChecks ? getFormFields($field.form).filter(($el => $el.matches(`[name="${$field.name}"]:checked`))).length : 0;
         (!isChecks && eventDetail.errors && eventDetail.errors.empty || isChecks && 0 === checkedElLength) && (extraErrorClass = fieldOptions.cssClasses.errorEmpty);
         let errorClasses = `${fieldOptions.cssClasses.error} ${extraErrorClass}`, errorClassToRemove = `${fieldOptions.cssClasses.errorEmpty} ${fieldOptions.cssClasses.errorRule}`;
         removeClass($container, `${fieldOptions.cssClasses.valid} ${errorClassToRemove}`), 
@@ -397,14 +400,14 @@ async function checkFieldValidity($field, fieldOptions, validationRules, validat
         });
         return Promise.resolve(obj);
     }
-    const $form = $field.form, isValidValue = $field.value.trim().length > 0, dataFieldOptions = getJSONobjectFromFieldAttribute($field, "data-field-options");
+    const $form = $field.form, $formFields = getFormFields($form), isValidValue = $field.value.trim().length > 0, dataFieldOptions = getJSONobjectFromFieldAttribute($field, "data-field-options");
     if (fieldOptions = mergeObjects(fieldOptions, dataFieldOptions), "radio" === $field.type) {
-        const $checked = $field.checked ? $field : $form.querySelector(`[name="${$field.name}"]:checked`), reqMoreIsChecked = $checked && $checked.matches("[data-require-more]"), $findReqMore = reqMoreIsChecked ? $checked : $form.querySelector(`[data-require-more][name="${$field.name}"]`), $findReqFrom = $findReqMore ? $form.querySelector(`[data-required-from="#${$findReqMore.id}"]`) : null;
+        const $checked = $field.checked ? $field : $formFields.find(($el => $el.matches(`[name="${$field.name}"]:checked`))), reqMoreIsChecked = $checked && $checked.matches("[data-require-more]"), $findReqMore = reqMoreIsChecked ? $checked : $formFields.find(($el => $el.matches(`[data-require-more][name="${$field.name}"]`))), $findReqFrom = $findReqMore ? $formFields.find(($el => $el.matches(`[data-required-from="#${$findReqMore.id}"]`))) : null;
         $checked && $findReqFrom && ($findReqFrom.required = $findReqMore.required && $findReqMore.checked, 
         reqMoreIsChecked ? fieldOptions.focusOnRelated && $findReqFrom.focus() : $findReqFrom.value = "");
     }
     if ($field.matches("[data-required-from]") && isValidValue) {
-        const $reqMore = $form.querySelector($field.dataset.requiredFrom);
+        const $reqMore = $formFields.find(($el => $el.matches($field.dataset.requiredFrom)));
         $reqMore.checked = !0, $field.required = $reqMore.required;
     }
     const dataBeforeValidation = (await runFunctionsSequence({
@@ -419,7 +422,7 @@ async function checkFieldValidity($field, fieldOptions, validationRules, validat
         const fieldValue = $field.value, obj = mergeValidateFieldDefault({
             result: fieldValue.trim().length > 0,
             $field: $field
-        }), isCheckboxOrRadio = [ "checkbox", "radio" ].includes($field.type), hasSelectedInput = $field.form.querySelectorAll(`[name="${$field.name}"]:checked`).length > 0;
+        }), isCheckboxOrRadio = [ "checkbox", "radio" ].includes($field.type), hasSelectedInput = getFormFields($field.form).filter(($el => $el.matches(`[name="${$field.name}"]:checked`))).length > 0;
         if (!isCheckboxOrRadio && !obj.result || isCheckboxOrRadio && !hasSelectedInput) return obj.result = !1, 
         obj.errors = {
             empty: !0
@@ -494,7 +497,7 @@ class Form {
             $form.noValidate = !0;
             const fieldOptions = options.fieldOptions, formOptions = options.formOptions;
             fieldOptions.strictHtmlValidation && ($form.addEventListener("keypress", keypressMaxlength, !1), 
-            $form.addEventListener("input", dataTypeNumber, !1)), fieldOptions.preventPasteFields && $form.querySelectorAll(fieldOptions.preventPasteFields).length && $form.addEventListener("paste", pastePrevent, !1), 
+            $form.addEventListener("input", dataTypeNumber, !1)), fieldOptions.preventPasteFields && getFormFields($form).filter(($el => $el.matches(fieldOptions.preventPasteFields))).length && $form.addEventListener("paste", pastePrevent, !1), 
             fieldOptions.validateOnEvents.split(" ").forEach((eventName => {
                 const useCapture = [ "blur", "focus" ].includes(eventName);
                 $form.addEventListener(eventName, validation, useCapture);
@@ -523,11 +526,16 @@ class Form {
         }(this.$form, this.options), dispatchCustomEvent(this.$form, customEvents.form.destroy);
     }
     getFormData(trimValues = this.options.fieldOptions.trimValue) {
-        const $formFields = this.$form.querySelectorAll("input, select, textarea"), $filteredFields = Array.from($formFields).filter((elem => elem.matches(':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])')));
-        return this.options.formOptions.getFormData($filteredFields, trimValues);
+        const $fields = this.$dataFields;
+        return this.options.formOptions.getFormData($fields, trimValues);
     }
     async validateField(field, fieldOptions) {
-        const self = this, $form = self.$form, $field = "string" == typeof field ? $form.querySelector(field) : field;
+        const self = this, $form = self.$form;
+        let $field = field;
+        if ("string" == typeof field) {
+            const element = $form.elements.namedItem(field);
+            $field = isDOMNode(element) ? element : element[0];
+        }
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
         const fieldValidity = await checkFieldValidity($field, fieldOptions, self.validationRules, self.validationErrors);
         if (dispatchCustomEvent(fieldValidity.$field, customEvents.field.validation, {
@@ -535,7 +543,7 @@ class Form {
         }), fieldValidity.result) {
             if (fieldOptions.onValidationCheckAll) {
                 const selector = self.currentGroup || fieldsStringSelector;
-                checkFieldsValidity($form.querySelectorAll(selector), fieldOptions, self.validationRules, self.validationErrors, fieldValidity.$field).then((dataForm => {
+                checkFieldsValidity(self.$fields.filter(($el => $el.matches(selector))), fieldOptions, self.validationRules, self.validationErrors, fieldValidity.$field).then((dataForm => {
                     const groups = self.options.formOptions.groups, validationEventName = self.currentGroup ? customEvents.group.validation : customEvents.form.validation;
                     groups.length > 0 && (dataForm.group = {
                         prev: groups[groups.indexOf(selector) - 1],
@@ -551,7 +559,7 @@ class Form {
     }
     async validateFieldsGroup(group = this.currentGroup, fieldOptions) {
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-        const $fields = this.$form.querySelectorAll(group), groupValidity = await checkFieldsValidity($fields, fieldOptions, this.validationRules, this.validationErrors);
+        const $fields = this.$fields.filter(($el => $el.matches(group))), groupValidity = await checkFieldsValidity($fields, fieldOptions, this.validationRules, this.validationErrors);
         groupValidity.fields.forEach((obj => {
             obj.isCheckingGroup = !0, dispatchCustomEvent(obj.$field, customEvents.field.validation, {
                 detail: obj
@@ -575,11 +583,16 @@ class Form {
         }))(groupValidity);
     }
     async validateFilledFields(fieldOptions) {
-        const $filledFields = ($form = this.$form, getUniqueFields($form.querySelectorAll(fieldsStringSelector)).map(($field => {
-            const name = $field.name, type = $field.type, isCheckboxOrRadio = [ "checkbox", "radio" ].includes(type), fieldChecked = $form.querySelector(`[name="${name}"]:checked`), isReqFrom = $field.matches("[data-required-from]"), $reqMore = isReqFrom ? $form.querySelector($field.dataset.requiredFrom) : null;
-            return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && $reqMore.checked || !isReqFrom && $field.value ? $field : null;
-        })).filter(($field => null !== $field)));
-        var $form;
+        const $filledFields = ($form => {
+            const $formFields = getFormFields($form, {
+                unique: !0,
+                hidden: !1
+            });
+            return $formFields.map(($field => {
+                const name = $field.name, type = $field.type, isCheckboxOrRadio = [ "checkbox", "radio" ].includes(type), fieldChecked = $formFields.find(($el => $el.matches(`[name="${name}"]:checked`))), isReqFrom = $field.matches("[data-required-from]"), $reqMore = isReqFrom ? $formFields.find(($el => $el.matches($field.dataset.requiredFrom))) : null;
+                return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && $reqMore.checked || !isReqFrom && $field.value ? $field : null;
+            })).filter(($field => null !== $field));
+        })(this.$form);
         fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
         const filledFieldsValidity = await checkFieldsValidity($filledFields, fieldOptions, this.validationRules, this.validationErrors);
         return filledFieldsValidity.fields.forEach((obj => {
@@ -591,7 +604,7 @@ class Form {
     async validateForm(fieldOptions) {
         const self = this;
         if (fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions), self.currentGroup) return self.validateFieldsGroup(self.currentGroup, fieldOptions);
-        const $form = self.$form, $fields = $form.querySelectorAll(fieldsStringSelector), formVaidity = await checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors);
+        const $form = self.$form, $fields = this.$visibleFields, formVaidity = await checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors);
         return formVaidity.fields.forEach((obj => {
             obj.isCheckingForm = !0, dispatchCustomEvent(obj.$field, customEvents.field.validation, {
                 detail: obj
@@ -599,6 +612,25 @@ class Form {
         })), dispatchCustomEvent($form, customEvents.form.validation, {
             detail: formVaidity
         }), finalizeFormPromise(formVaidity);
+    }
+    get $fields() {
+        return getFormFields(this.$form);
+    }
+    get $dataFields() {
+        return getFormFields(this.$form, {
+            file: !1,
+            excludeData: !1
+        });
+    }
+    get $uniqueFields() {
+        return getFormFields(this.$form, {
+            unique: !0
+        });
+    }
+    get $visibleFields() {
+        return getFormFields(this.$form, {
+            hidden: !1
+        });
     }
     static addValidationErrors(errorsObj) {
         Form.prototype.validationErrors = mergeObjects({}, Form.prototype.validationErrors, errorsObj);
