@@ -1,5 +1,5 @@
 
-import { customEvents } from './helpers'
+import { customEvents, getFormFields } from './helpers'
 import { 
     dataTypeNumber,
     formValidationEnd,
@@ -31,7 +31,7 @@ export function formStartup( $form, options ){
         
     }
     
-    if( fieldOptions.preventPasteFields && $form.querySelectorAll( fieldOptions.preventPasteFields ).length ){
+    if( fieldOptions.preventPasteFields && getFormFields($form).filter($el => $el.matches(fieldOptions.preventPasteFields) ).length ){
         // INIT EVENT LISTENER FOR "PASTE" EVENT TO PREVENT IT ON SPECIFIED FIELDS
         $form.addEventListener('paste', pastePrevent, false)
     }

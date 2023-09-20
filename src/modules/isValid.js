@@ -1,12 +1,12 @@
 
-import { mergeValidateFieldDefault, mergeObjects, toCamelCase } from './helpers'
+import { getFormFields, mergeObjects, mergeValidateFieldDefault, toCamelCase } from './helpers'
 
 export async function isValid( $field, fieldOptions, validationRules, validationErrors ){
 
     const fieldValue = $field.value
     const obj = mergeValidateFieldDefault({result: fieldValue.trim().length > 0, $field})
     const isCheckboxOrRadio = ['checkbox', 'radio'].includes($field.type)
-    const hasSelectedInput = $field.form.querySelectorAll(`[name="${$field.name}"]:checked`).length > 0
+    const hasSelectedInput = getFormFields($field.form).filter($el => $el.matches(`[name="${$field.name}"]:checked`)).length > 0
 
     if( (!isCheckboxOrRadio && !obj.result) || (isCheckboxOrRadio && !hasSelectedInput) ){
         obj.result = false

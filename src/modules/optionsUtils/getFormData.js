@@ -1,8 +1,11 @@
 
+import { getFormFields } from '../helpers'
+
 export const getFormData = function getFormDataDefault( $filteredFields, trimValues ){
 
     const formData = {}
     const $form = this.$form
+    const $formFields = getFormFields($form)
     let prevObj = formData
   
     $filteredFields.forEach($field => {
@@ -15,7 +18,7 @@ export const getFormData = function getFormDataDefault( $filteredFields, trimVal
         if( isCheckbox ){
 
             value = $field.checked
-            let $checkboxes = Array.from( $form.querySelectorAll(`[name="${name}"]`) )
+            let $checkboxes = $formFields.filter($el => $el.name === name)
             if( $checkboxes.length > 1 ){
                 value = []
                 let $checked = $checkboxes.filter((field) => field.checked)
@@ -26,8 +29,8 @@ export const getFormData = function getFormDataDefault( $filteredFields, trimVal
 
         } else if( isRadio ){
 
-            const $checkedRadio = $form.querySelector(`[name="${name}"]:checked`)
-            value = $checkedRadio === null ? null : $checkedRadio.value
+            const $checkedRadio = $formFields.find($el => $el.matches(`[name="${name}"]:checked`))
+            value = $checkedRadio ? $checkedRadio.value : null
 
         } else if( isSelect ){
 

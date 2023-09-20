@@ -1,5 +1,5 @@
 
-import { fieldsStringSelector, isFieldForChangeEvent } from '../helpers'
+import { fieldsStringSelector, getFormFields, isFieldForChangeEvent } from '../helpers'
 
 export const validation = function( event ){
 
@@ -19,7 +19,7 @@ export const validation = function( event ){
             self.validateField( $field )
                 .then(() => {
                     const type = $field.type
-                    const $relatedEqualTo = $field.form.querySelector(`[data-equal-to="${$field.name}"]`)
+                    const $relatedEqualTo = getFormFields($field.form).find($el => $el.matches(`[data-equal-to="${$field.name}"]`))
 
                     if(
                         // FIELD IS ( required OR data-validate-if-filled ) AND RELATED FIELD data-equal-to HAS A VALUE

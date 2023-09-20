@@ -1,5 +1,6 @@
 
 import {    
+    getFormFields,
     getJSONobjectFromFieldAttribute,
     isDOMNode,
     mergeObjects,
@@ -17,6 +18,7 @@ export async function checkFieldValidity( $field, fieldOptions, validationRules,
     }
 
     const $form = $field.form
+    const $formFields = getFormFields($form)
     const isValidValue = $field.value.trim().length > 0
     const dataFieldOptions = getJSONobjectFromFieldAttribute( $field, 'data-field-options' )
 
@@ -24,10 +26,10 @@ export async function checkFieldValidity( $field, fieldOptions, validationRules,
 
     // HANDLE FIELD data-required-from WHEN CHANGING ITS RELATED RADIO
     if( $field.type === 'radio' ){
-        const $checked = $field.checked ? $field : $form.querySelector(`[name="${$field.name}"]:checked`)
+        const $checked = $field.checked ? $field : $formFields.find($el => $el.matches(`[name="${$field.name}"]:checked`))
         const reqMoreIsChecked = $checked && $checked.matches('[data-require-more]')
-        const $findReqMore = reqMoreIsChecked ? $checked : $form.querySelector(`[data-require-more][name="${$field.name}"]`)
-        const $findReqFrom = $findReqMore ? $form.querySelector(`[data-required-from="#${$findReqMore.id}"]`) : null
+        const $findReqMore = reqMoreIsChecked ? $checked : $formFields.find($el => $el.matches(`[data-require-more][name="${$field.name}"]`))
+        const $findReqFrom = $findReqMore ? $formFields.find($el => $el.matches(`[data-required-from="#${$findReqMore.id}"]`)) : null
         
         if( $checked && $findReqFrom ){
             $findReqFrom.required = $findReqMore.required && $findReqMore.checked
@@ -41,7 +43,7 @@ export async function checkFieldValidity( $field, fieldOptions, validationRules,
 
     // HANDLE FIELD data-require-more & data-required-from WHEN *-from IT'S FILLED
     if( $field.matches('[data-required-from]') && isValidValue ){
-        const $reqMore = $form.querySelector( $field.dataset.requiredFrom )
+        const $reqMore = $formFields.find( $el => $el.matches($field.dataset.requiredFrom) )
         $reqMore.checked = true
         $field.required = $reqMore.required
     }

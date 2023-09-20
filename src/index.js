@@ -4,12 +4,13 @@ import {
     checkFormEl, 
     customEvents, 
     dispatchCustomEvent, 
-    excludeSelector, 
     fieldsStringSelector, 
     finalizeFieldPromise, 
     finalizeFieldsGroupPromise, 
     finalizeFormPromise, 
     getFilledFields, 
+    getFormFields, 
+    isDOMNode, 
     isNodeList,
     mergeObjects, 
     removeClass }               from './modules/helpers'
@@ -75,15 +76,24 @@ class Form {
     }
     
     getFormData( trimValues = this.options.fieldOptions.trimValue ){
-        const $formFields = this.$form.querySelectorAll('input, select, textarea')
-        const $filteredFields = Array.from( $formFields ).filter( elem => elem.matches(excludeSelector) )
-        return this.options.formOptions.getFormData( $filteredFields, trimValues )
+        const $fields = this.$dataFields
+        return this.options.formOptions.getFormData( $fields, trimValues )
     }
 
+    // TODO: UPDATE DOC => field MUST BE A DOM-NODE OR THE FIELD name/id
     async validateField( field, fieldOptions ){
         const self = this
         const $form = self.$form
-        const $field = typeof field === 'string' ? $form.querySelector(field) : field
+        let $field = field
+
+        if( typeof field === 'string' ){
+            const element = $form.elements.namedItem(field)
+            if( isDOMNode(element) ){
+                $field = element
+            } else {
+                $field = element[0]
+            }
+        }
 
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions)
 
@@ -94,7 +104,8 @@ class Form {
         if( fieldValidity.result ){
             if( fieldOptions.onValidationCheckAll ){
                 const selector = self.currentGroup || fieldsStringSelector
-                const $fields = $form.querySelectorAll(selector)
+                const $fields = self.$fields.filter($el => $el.matches(selector))
+
                 checkFieldsValidity( $fields, fieldOptions, self.validationRules, self.validationErrors, fieldValidity.$field )
                     .then(dataForm => {
                         const groups = self.options.formOptions.groups
@@ -119,9 +130,10 @@ class Form {
 
     async validateFieldsGroup( group = this.currentGroup, fieldOptions ){
         const self = this
+        
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions)
-        const $fields = self.$form.querySelectorAll(group)
-
+        
+        const $fields = self.$fields.filter($el => $el.matches(group))
         const groupValidity = await checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors)
 
         groupValidity.fields.forEach(obj => {
@@ -169,7 +181,7 @@ class Form {
         }
 
         const $form = self.$form
-        const $fields = $form.querySelectorAll(fieldsStringSelector)
+        const $fields = this.$visibleFields
 
         const formVaidity = await checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors)
 
@@ -181,6 +193,22 @@ class Form {
         dispatchCustomEvent( $form, customEvents.form.validation, { detail: formVaidity } )
 
         return finalizeFormPromise(formVaidity)
+    }
+
+    get $fields () {
+        return getFormFields( this.$form )
+    }
+
+    get $dataFields () {
+        return getFormFields( this.$form, { file: false, excludeData: false } )
+    }
+
+    get $uniqueFields () {
+        return getFormFields( this.$form, { unique: true } )
+    }
+
+    get $visibleFields () {
+        return getFormFields( this.$form, { hidden: false } )
     }
     
     static addValidationErrors( errorsObj ){

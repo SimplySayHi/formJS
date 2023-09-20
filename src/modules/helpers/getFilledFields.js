@@ -1,17 +1,16 @@
 
-import { fieldsStringSelector } from './fieldsStringSelector'
-import { getUniqueFields } from './getUniqueFields'
+import { getFormFields } from './getFormFields'
 
 export const getFilledFields = $form => {
-    return getUniqueFields( $form.querySelectorAll(fieldsStringSelector) )
-    .map($field => {
+    const $formFields = getFormFields($form, { unique: true, hidden: false })
+    return $formFields.map($field => {
 
         const name = $field.name
         const type = $field.type
         const isCheckboxOrRadio = ['checkbox', 'radio'].includes(type)
-        const fieldChecked = $form.querySelector(`[name="${name}"]:checked`)
+        const fieldChecked = $formFields.find($el => $el.matches(`[name="${name}"]:checked`))
         const isReqFrom = $field.matches('[data-required-from]')
-        const $reqMore = (isReqFrom ? $form.querySelector($field.dataset.requiredFrom) : null)
+        const $reqMore = (isReqFrom ? $formFields.find($el => $el.matches($field.dataset.requiredFrom)) : null)
 
         return (
             isCheckboxOrRadio ? (fieldChecked || null) :

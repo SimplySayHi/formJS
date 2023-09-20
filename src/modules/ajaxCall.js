@@ -1,5 +1,5 @@
 
-import { addClass, mergeObjects, removeClass, serializeObject } from './helpers'
+import { addClass, getFormFields, mergeObjects, removeClass, serializeObject } from './helpers'
 
 const getFetchMethod = (response, options) => {
     const accept = options.headers.get('Accept')
@@ -31,7 +31,7 @@ export async function ajaxCall( $form, formDataObj, options ){
             formDataMultipart.append( key, ajaxOptions.body[key] )
         }
         
-        Array.from( $form.querySelectorAll('[type="file"]') ).forEach($field => {
+        getFormFields($form).filter($el => $el.type === 'file').forEach($field => {
             Array.from($field.files).forEach((file, idx) => {
                 const name = `${$field.name}[${idx}]`
                 formDataMultipart.append( name, file, file.name )
@@ -93,7 +93,7 @@ export async function ajaxCall( $form, formDataObj, options ){
             }
             removeClass( $form, `${options.formOptions.cssClasses.submit} ${options.formOptions.cssClasses.ajaxPending}` )
             addClass( $form, options.formOptions.cssClasses.ajaxComplete )
-            $form.querySelector('[type="submit"]').disabled = false
+            Array.from($form.elements).find($el => $el.type === 'submit').disabled = false
         })
 
 }

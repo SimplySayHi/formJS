@@ -3,9 +3,9 @@ import { version }              from '../package.json'
 import { 
     checkFormEl,
     dispatchCustomEvent,
-    fieldsStringSelector,
     finalizeFieldPromise,
     finalizeFormPromise,
+    getFormFields,
     isNodeList,
     mergeObjects }              from './modules/helpers'
 import { customEvents }         from './modules-lite/helpers/customEvents'
@@ -51,7 +51,16 @@ class Form {
 
     async validateField( field, fieldOptions ){
         const self = this
-        const $field = typeof field === 'string' ? self.$form.querySelector(field) : field
+        let $field = field
+
+        if( typeof field === 'string' ){
+            const element = self.$form.elements.namedItem(field)
+            if( isDOMNode(element) ){
+                $field = element
+            } else {
+                $field = element[0]
+            }
+        }
         
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions)
         
@@ -65,7 +74,7 @@ class Form {
     async validateForm( fieldOptions ){
         const self = this
         const $form = self.$form
-        const $fields = $form.querySelectorAll(fieldsStringSelector)
+        const $fields = getFormFields( $form, { hidden: false } )
 
         fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions)
 

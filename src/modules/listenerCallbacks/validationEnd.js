@@ -1,5 +1,5 @@
 
-import { addClass, getJSONobjectFromFieldAttribute, removeClass, mergeObjects } from '../helpers'
+import { addClass, getFormFields, getJSONobjectFromFieldAttribute, removeClass, mergeObjects } from '../helpers'
 
 export const validationEnd = function( event ){
 
@@ -9,7 +9,7 @@ export const validationEnd = function( event ){
     const fieldOptions = mergeObjects({}, $field.form.formjs.options.fieldOptions, dataFieldOptions)
     const $container = $field.closest( fieldOptions.questionContainer )
     const isReqFrom = $field.matches('[data-required-from]')
-    const $reqMore = document.querySelector( $field.dataset.requiredFrom )
+    const $reqMore = getFormFields($field.form).find($el => $el.matches($field.dataset.requiredFrom))
 
     if( !fieldOptions.skipUIfeedback ){
 
@@ -29,7 +29,7 @@ export const validationEnd = function( event ){
 
             // HANDLE CASE OF FIELD data-checks
             const isChecks = $field.matches('[data-checks]')
-            const checkedElLength = (isChecks ? $field.form.querySelectorAll(`[name="${$field.name}"]:checked`).length : 0)
+            const checkedElLength = (isChecks ? getFormFields($field.form).filter($el => $el.matches(`[name="${$field.name}"]:checked`)).length : 0)
 
             if( (!isChecks && (eventDetail.errors && eventDetail.errors.empty)) || (isChecks && checkedElLength === 0) ){
                 extraErrorClass = fieldOptions.cssClasses.errorEmpty

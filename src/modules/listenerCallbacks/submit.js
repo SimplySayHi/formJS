@@ -9,7 +9,7 @@ export function submit( event ){
     const options = instance.options
     const formCssClasses = options.formOptions.cssClasses
     const isAjaxForm = options.formOptions.ajaxSubmit
-    const $btn = $form.querySelector('[type="submit"]')
+    const $btn = Array.from($form.elements).find($el => $el.matches('[type="submit"]'))
 
     const eventPreventDefault = ( enableBtn = true ) => {
         if( $btn && enableBtn ){ $btn.disabled = false }
