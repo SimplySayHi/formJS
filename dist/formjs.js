@@ -239,7 +239,7 @@
             obj;
         },
         file: function(value, $field, fieldOptions) {
-            const maxFileSize = 1 * ($field.getAttribute("data-max-file-size") || fieldOptions.maxFileSize), MIMEtype = $field.accept ? new RegExp($field.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from($field.files), obj = {
+            const maxFileSize = 1 * fieldOptions.maxFileSize, MIMEtype = $field.accept ? new RegExp($field.accept.replace("*", "[^\\/,]+")) : null, filesList = Array.from($field.files), obj = {
                 result: !0
             };
             return filesList.forEach((file => {
