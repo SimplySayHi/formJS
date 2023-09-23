@@ -34,7 +34,6 @@ module.exports = {
     "<rootDir>/src/modules/validationRulesAttributes.js",
     "<rootDir>/src/modules/validationRules/checks.js",
     "<rootDir>/src/modules/validationErrors.js",
-    "<rootDir>/src/modules-lite/options.js",
   ],
 
   // A list of reporter names that Jest uses when writing coverage reports

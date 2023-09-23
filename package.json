@@ -11,7 +11,6 @@
     "jsnext:main": "dist/formjs-esm.js",
     "exports": {
         ".": "./dist/formjs-esm.js",
-        "./lite": "./dist/lite/formjs-esm.js",
         "./additional-rules": "./dist/additionals/validationRules.esm.js",
         "./additional-errors": "./dist/additionals/validationErrors.esm.js",
         "./utils": "./dist/additionals/utils.esm.js"
@@ -38,7 +37,6 @@
     "license": "MIT",
     "scripts": {
         "build": "BABEL_ENV=build rollup --config",
-        "build-lite": "BABEL_ENV=build rollup --config rollup.config.lite.js",
         "test": "BABEL_ENV=test jest"
     },
     "devDependencies": {

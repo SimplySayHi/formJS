@@ -68,88 +68,6 @@
                 <a href="#utils">Utils</a>
             </div>
 
-        <!-- Lite Version Options -->
-        <div class="mt-5">
-            <hr />
-            <p class="m-0">
-                Features included in Lite version have this badge: <span class="badge badge-pill badge-yellow">Lite</span>
-            </p>
-            <div class="toggable-content-outer">
-                Get a quick peek of features included in Lite version:
-                <input type="checkbox" class="fake-checkbox btn-toggable-content" id="lite-show-more" />
-                <label class="toggable-label text-red" for="lite-show-more">
-                    <span>show more</span>
-                    <span>close</span>
-                </label>
-                <div class="toggable-content">
-                    <div class="d-flex flex-wrap">
-                        <div class="col-sm-6 col-md-3">
-                            <h3 class="small-title mt-3">Field Options</h3>
-                            <ul>
-                                <li>
-                                    beforeValidation
-                                </li>
-                                <li>
-                                    focusOnRelated
-                                </li>
-                                <li>
-                                    maxFileSize
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-md-3">
-                            <h3 class="small-title mt-3">Methods</h3>
-                            <ul>
-                                <li>
-                                    destroy
-                                </li>
-                                <li>
-                                    validateField
-                                </li>
-                                <li>
-                                    validateForm
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-md-3">
-                            <h3 class="small-title mt-3">Static</h3>
-                            <ul>
-                                <li>
-                                    as full version
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-md-3">
-                            <h3 class="small-title mt-3">Events</h3>
-                            <ul>
-                                <li>
-                                    fjs.field:validation
-                                </li>
-                                <li>
-                                    fjs.form:destroy
-                                </li>
-                                <li>
-                                    fjs.form:init
-                                </li>
-                                <li>
-                                    fjs.form:validation
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-md-3">
-                            <h3 class="small-title mt-3">Validations</h3>
-                            <ul>
-                                <li>
-                                    as full version
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <hr />
-        </div>
-
         <!-- Instance -->
         <div id="instance">
             <h3 class="sticky-title">Instance<span class="small">:</span></h3>
@@ -229,7 +147,6 @@
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">beforeValidation</pre>
-                                <span class="badge badge-pill badge-yellow">Lite</span>
                                 <div class="mt-1">
                                     <a href="./demos/demo-callback-before-validation.html">see demo</a>
                                 </div>
@@ -314,7 +231,6 @@
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">focusOnRelated</pre>
-                                <span class="badge badge-pill badge-yellow">Lite</span>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-4 col-xl-3">
@@ -330,7 +246,6 @@
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">maxFileSize</pre>
-                                <span class="badge badge-pill badge-yellow">Lite</span>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-4 col-xl-3">
@@ -845,7 +760,6 @@
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">destroy()</pre>
-                                <span class="badge badge-pill badge-yellow">Lite</span>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-7 col-xl-5">
@@ -860,7 +774,6 @@
                                         Remove all events listeners from the form instance
                                     </li>
                                     <li>
-                                        <span class="badge badge-pill badge-yellow">Lite</span>
                                         Remove the form instance attached to the form element
                                     </li>
                                 </ul>
@@ -950,7 +863,6 @@
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">validateField( field[, fieldOptions] )</pre>
-                                <span class="badge badge-pill badge-yellow">Lite</span>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-7 col-xl-5">
@@ -958,7 +870,7 @@
                                     Description:
                                 </p>
                                 <p>
-                                    <span class="badge badge-pill badge-yellow">Lite</span> Fires validation for the specified field.
+                                    Fires validation for the specified field.
                                     <br /><br />
                                     Then:
                                 </p>
@@ -1146,7 +1058,6 @@
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">validateForm( [fieldOptions] )</pre>
-                                <span class="badge badge-pill badge-yellow">Lite</span>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-7 col-xl-5">
@@ -1154,7 +1065,7 @@
                                     Description:
                                 </p>
                                 <p>
-                                    <span class="badge badge-pill badge-yellow">Lite</span> Fires validation for the form.
+                                    Fires validation for the form.
                                     <br /><br />
                                     If option <code>groups</code> is set, the validation will act like "steps" by firing method <code>validateFieldsGroup</code> ( validating <code>this.currentGroup</code> ) each time <code>validateForm</code> is called until last step, where, if fields are valid, the for is submitted as usual.
                                     <br /><br />
@@ -1242,7 +1153,6 @@
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">addValidationErrors( newErrors )</pre>
-                                <span class="badge badge-pill badge-yellow">Lite</span>
                                 <div class="mt-1">
                                     <a href="./demos/demo-add-custom-validation-errors.html">see demo</a>
                                 </div>
@@ -1290,7 +1200,6 @@
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">addValidationRules( newRules )</pre>
-                                <span class="badge badge-pill badge-yellow">Lite</span>
                                 <div class="mt-1">
                                     <a href="./demos/demo-add-custom-validation-rules.html">see demo</a>
                                 </div>
@@ -1346,7 +1255,6 @@
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">setOptions( options )</pre>
-                                <span class="badge badge-pill badge-yellow">Lite</span>
                                 <div class="mt-1">
                                     <a href="./demos/demo-change-global-options.html">see demo</a>
                                 </div>
@@ -1453,7 +1361,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-6">
                             <pre class="text-green">fjs.field:validation</pre>
-                            <span class="badge badge-pill badge-yellow">Lite</span>
                             <p>
                                 Emitted just after a field has been validated.
                             </p>
@@ -1493,7 +1400,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-6">
                             <pre class="text-green">fjs.form:destroy</pre>
-                            <span class="badge badge-pill badge-yellow">Lite</span>
                             <p>
                                 Emitted after method <code>destroy</code> has been called.
                             </p>
@@ -1504,7 +1410,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-6">
                             <pre class="text-green">fjs.form:init</pre>
-                            <span class="badge badge-pill badge-yellow">Lite</span>
                             <p>
                                 Emitted when the form is initialized ( on constructor call ).
                             </p>
@@ -1514,7 +1419,7 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                                 additional parameter data
                             </p>
                             <p>
-                                In this case, ( if <code>onInitCheckFilled</code> is set to <code>true</code> in formOptions ) a Promise is returned in <code>event.detail</code> and it will always go through Promise method <code>.then</code> passing the array <code>fields</code> to the function ( same array as returned in event <code>fjs.form:validation</code> but will ONLY contain validated fields ). NOT for <span class="badge badge-pill badge-yellow">Lite</span> version.
+                                In this case, ( if <code>onInitCheckFilled</code> is set to <code>true</code> in formOptions ) a Promise is returned in <code>event.detail</code> and it will always go through Promise method <code>.then</code> passing the array <code>fields</code> to the function ( same array as returned in event <code>fjs.form:validation</code> but will ONLY contain validated fields ).
                             </p>
                         </div>
                     </div>
@@ -1537,7 +1442,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-6">
                             <pre class="text-green">fjs.form:validation</pre>
-                            <span class="badge badge-pill badge-yellow">Lite</span>
                             <p>
                                 Emitted just after the form has been validated.
                             </p>
@@ -1769,7 +1673,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Checkbox
                                 <div>( checkbox )</div>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -1784,7 +1687,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                         <div id="validation-checks" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Checks
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                                 <p class="small">
                                     NOTE: this validation is packed together with "checkbox" validation
                                 </p>
@@ -1844,7 +1746,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Date
                                 <div>( date )</div>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -1908,7 +1809,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Email
                                 <div>( email )</div>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                                 <div class="text-red">[ err ]</div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
@@ -1941,7 +1841,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Equal To
                                 <div>( equalTo )</div>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -1960,7 +1859,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Exact Length
                                 <div>( exactLength )</div>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -1989,7 +1887,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 File
                                 <div>( file )</div>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2063,7 +1960,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Length
                                 <div>( length )</div>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2079,7 +1975,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Max
                                 <div>( max )</div>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2117,7 +2012,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Maxlength
                                 <div>( maxlength )</div>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2134,7 +2028,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Min
                                 <div>( min )</div>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2172,7 +2065,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Minlength
                                 <div>( minlength )</div>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2207,7 +2099,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Number <span class="text-yellow">*</span>
                                 <div>( number )</div>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2311,7 +2202,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Pattern
                                 <div>( pattern )</div>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2328,7 +2218,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Radio
                                 <div>( radio )</div>
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2343,7 +2232,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                         <div id="validation-required-more-from" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Require More &amp; Required From
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
@@ -2456,7 +2344,6 @@ formInstance.options.fieldOptions.onValidationCheckAll = true;
                         <div id="validation-validate-if-filled" class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-3 text-green">
                                 Validate if Filled
-                                <div><span class="badge badge-pill badge-yellow">Lite</span></div>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-md-6 col-lg-5 col-xl-3 my-3 my-xl-0 text-green">
