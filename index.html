@@ -217,10 +217,13 @@
                                 <span class="text-red">BREAKING CHANGES</span>
                                 <ul>
                                     <li>
-                                        First argument of method "validateField" must be a field name or id ( no longer a CSS seelctor )
+                                        First argument of method "validateField" must be a field name/id ( no longer a CSS selector ) or DOM node
                                     </li>
                                     <li>
-                                        "onValidationCheckAll" in fieldOptions now will always run silent field validation ( no longer only if the field is valid )
+                                        "onValidationCheckAll" in "fieldOptions" now will always run a silent form/group validation ( no longer only if the field is valid )
+                                    </li>
+                                    <li>
+                                        Remove HTML attribute "data-max-file-size". Use "maxFileSize" in "fieldOptions" and/or set it in HTML attribute "data-field-options"
                                     </li>
                                 </ul>
                             </li>
