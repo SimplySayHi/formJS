@@ -448,6 +448,10 @@ describe( 'checkFieldsValidity', () => {
         expect.assertions(1)
         const $form = document.querySelector('form')
         const $fields = getFormFields($form, { hidden: false })
+        const $fieldToSkip = {
+            $field: $('00'),
+            result: true,
+        }
         const returnObj2 = {
             fields: [
                 { $field: $('00'), result: true },
@@ -576,7 +580,7 @@ describe( 'checkFieldsValidity', () => {
             ],
             result: false
         }
-        const promiseRun = await checkFieldsValidity( $fields, options.fieldOptions, validationRules, validationErrors, $('00') )
+        const promiseRun = await checkFieldsValidity( $fields, options.fieldOptions, validationRules, validationErrors, $fieldToSkip )
         return expect( promiseRun ).toEqual( returnObj2 )
     } )
 
