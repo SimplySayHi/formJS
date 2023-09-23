@@ -40,16 +40,16 @@
         "test": "BABEL_ENV=test jest"
     },
     "devDependencies": {
-        "@babel/core": "^7.22.15",
-        "@babel/preset-env": "^7.22.15",
+        "@babel/core": "^7.22.20",
+        "@babel/preset-env": "^7.22.20",
         "@rollup/plugin-babel": "^6.0.3",
         "@rollup/plugin-json": "^6.0.0",
         "@rollup/plugin-node-resolve": "^15.2.1",
         "@rollup/plugin-terser": "^0.4.3",
-        "babel-jest": "^29.6.4",
-        "jest": "^29.6.4",
-        "jest-environment-jsdom": "^29.6.4",
-        "rollup": "^3.29.0"
+        "babel-jest": "^29.7.0",
+        "jest": "^29.7.0",
+        "jest-environment-jsdom": "^29.7.0",
+        "rollup": "^3.29.2"
     },
     "customData": {
         "libraryNamespace": "Form",
