@@ -1,11 +1,11 @@
 
-import { beforeValidation } from './optionsUtils/beforeValidation'
+import { beforeValidationExtraLogic, beforeValidationUI } from './optionsUtils/beforeValidation'
 import { getFormData } from './optionsUtils/getFormData'
 
 export const options = {
 
     fieldOptions: {
-        beforeValidation:       [beforeValidation],
+        beforeValidation:       [beforeValidationExtraLogic, beforeValidationUI],
         cssClasses: {
             dirty:              'is-dirty',
             error:              'has-error',

@@ -5,13 +5,15 @@ export const validationEnd = function( event ){
 
     const eventDetail = event.detail
     const $field = eventDetail.$field
+    const $form = $field.form
     const dataFieldOptions = getJSONobjectFromFieldAttribute( $field, 'data-field-options' )
-    const fieldOptions = mergeObjects({}, $field.form.formjs.options.fieldOptions, dataFieldOptions)
+    const fieldOptions = mergeObjects({}, $form.formjs.options.fieldOptions, dataFieldOptions)
     const $container = $field.closest( fieldOptions.questionContainer )
     const isReqFrom = $field.matches('[data-required-from]')
-    const $reqMore = getFormFields($field.form).find($el => $el.matches($field.dataset.requiredFrom))
+    const $reqMore = getFormFields($form).find($el => $el.matches($field.dataset.requiredFrom))
 
     if( !fieldOptions.skipUIfeedback ){
+        removeClass( $container, fieldOptions.cssClasses.pending )
 
         if( eventDetail.result ){
 
@@ -29,7 +31,7 @@ export const validationEnd = function( event ){
 
             // HANDLE CASE OF FIELD data-checks
             const isChecks = $field.matches('[data-checks]')
-            const checkedElLength = (isChecks ? getFormFields($field.form).filter($el => $el.matches(`[name="${$field.name}"]:checked`)).length : 0)
+            const checkedElLength = (isChecks ? getFormFields($form).filter($el => $el.matches(`[name="${$field.name}"]:checked`)).length : 0)
 
             if( (!isChecks && (eventDetail.errors && eventDetail.errors.empty)) || (isChecks && checkedElLength === 0) ){
                 extraErrorClass = fieldOptions.cssClasses.errorEmpty
@@ -39,6 +41,8 @@ export const validationEnd = function( event ){
             let errorClassToRemove = `${fieldOptions.cssClasses.errorEmpty} ${fieldOptions.cssClasses.errorRule}`
             removeClass( $container, `${fieldOptions.cssClasses.valid} ${errorClassToRemove}` )
             addClass( $container, errorClasses )
+
+            removeClass( $form, $form.formjs.options.formOptions.cssClasses.valid )
 
         }
     }

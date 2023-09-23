@@ -1,20 +1,19 @@
 
-import { getUniqueFields, mergeValidateFieldDefault, mergeValidateFormDefault, mergeObjects } from './helpers'
+import { getUniqueFields, mergeValidateFormDefault, mergeObjects } from './helpers'
 import { checkFieldValidity } from './checkFieldValidity'
 
-export async function checkFieldsValidity( $fields, fieldOptions, validationRules, validationErrors, fieldToSkip = null ){
+export async function checkFieldsValidity( $fields, fieldOptions, validationRules, validationErrors, fieldToSkip = {} ){
 
     fieldOptions = mergeObjects( {}, fieldOptions, {focusOnRelated: false} )
     const $fieldsList = getUniqueFields( $fields )
 
-    const fieldsValidity = await Promise.all( $fieldsList.map($field => {
+    const fieldsValidity = await Promise.all( $fieldsList.map(async $field => {
 
-        if( fieldToSkip && $field === fieldToSkip ){
-            const obj = mergeValidateFieldDefault({$field, result: true})
-            return Promise.resolve(obj)
+        if( fieldToSkip.$field && $field === fieldToSkip.$field ){
+            return Promise.resolve(fieldToSkip)
         }
         
-        return checkFieldValidity( $field, fieldOptions, validationRules, validationErrors )
+        return await checkFieldValidity( $field, fieldOptions, validationRules, validationErrors )
 
     }) )
 

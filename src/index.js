@@ -12,8 +12,8 @@ import {
     getFormFields, 
     isDOMNode, 
     isNodeList,
-    mergeObjects, 
-    removeClass }               from './modules/helpers'
+    mergeObjects
+}                               from './modules/helpers'
 import { options }              from './modules/options'
 import { validationRules }      from './modules/validationRules'
 import { formStartup }          from './modules/formStartup'
@@ -80,7 +80,9 @@ class Form {
         return this.options.formOptions.getFormData( $fields, trimValues )
     }
 
-    // TODO: UPDATE DOC => field MUST BE A DOM-NODE OR THE FIELD name/id
+    // TODO:
+    // UPDATE DOC => field MUST BE A DOM-NODE OR THE FIELD name/id
+    // UPDATE DOC => onValidationCheckAll ALWAYS RUNS FORM/GROUP VALIDATION, NOT ONLY WHEN FIELD IS VALID
     async validateField( field, fieldOptions ){
         const self = this
         const $form = self.$form
@@ -100,29 +102,26 @@ class Form {
         const fieldValidity = await checkFieldValidity($field, fieldOptions, self.validationRules, self.validationErrors)
 
         dispatchCustomEvent( fieldValidity.$field, customEvents.field.validation, { detail: fieldValidity } )
-        
-        if( fieldValidity.result ){
-            if( fieldOptions.onValidationCheckAll ){
-                const selector = self.currentGroup || fieldsStringSelector
-                const $fields = self.$fields.filter($el => $el.matches(selector))
 
-                checkFieldsValidity( $fields, fieldOptions, self.validationRules, self.validationErrors, fieldValidity.$field )
-                    .then(dataForm => {
-                        const groups = self.options.formOptions.groups
-                        const validationEventName = self.currentGroup ? customEvents.group.validation : customEvents.form.validation
-                        if( groups.length > 0 ){
-                            dataForm.group = {
-                                prev: groups[groups.indexOf(selector) - 1],
-                                current: selector,
-                                next: groups[groups.indexOf(selector) + 1]
-                            }
-                            dataForm.canSubmit = dataForm.result && !dataForm.group.next
+        if( fieldOptions.onValidationCheckAll ){
+            const selector = self.currentGroup || fieldsStringSelector
+            const $fields = self.$fields.filter($el => $el.matches(selector))
+            const tempFieldOptions = mergeObjects({}, fieldOptions, { skipUIfeedback: true })
+
+            checkFieldsValidity( $fields, tempFieldOptions, self.validationRules, self.validationErrors, fieldValidity )
+                .then(dataForm => {
+                    const groups = self.options.formOptions.groups
+                    const validationEventName = self.currentGroup ? customEvents.group.validation : customEvents.form.validation
+                    if( groups.length > 0 ){
+                        dataForm.group = {
+                            prev: groups[groups.indexOf(selector) - 1],
+                            current: selector,
+                            next: groups[groups.indexOf(selector) + 1]
                         }
-                        dispatchCustomEvent( $form, validationEventName, { detail: dataForm } )
-                    })
-            }
-        } else {
-            removeClass( $form, self.options.formOptions.cssClasses.valid )
+                        dataForm.canSubmit = dataForm.result && !dataForm.group.next
+                    }
+                    dispatchCustomEvent( $form, validationEventName, { detail: dataForm } )
+                })
         }
 
         return finalizeFieldPromise(fieldValidity)
@@ -201,6 +200,10 @@ class Form {
 
     get $dataFields () {
         return getFormFields( this.$form, { file: false, excludeData: false } )
+    }
+
+    get $groupFields () {
+        return this.$fields.filter($el => $el.matches(this.currentGroup))
     }
 
     get $uniqueFields () {
