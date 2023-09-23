@@ -18,13 +18,14 @@ const getFetchMethod = (response, options) => {
 export async function ajaxCall( $form, formDataObj, options ){
 
     let timeoutTimer
-    const ajaxOptions = mergeObjects( {}, options.formOptions.ajaxOptions )
+    const { formOptions } = options
+    const ajaxOptions = mergeObjects( {}, formOptions.ajaxOptions )
     const isMultipart = ajaxOptions.headers['Content-Type'] === 'multipart/form-data'
 
     ajaxOptions.body = formDataObj
     
     // POST A FormData OBJECT ( multipart )
-    if( isMultipart && options.formOptions.handleFileUpload ){
+    if( isMultipart && formOptions.handleFileUpload ){
         let formDataMultipart = new FormData()
         
         for(let key in ajaxOptions.body){
@@ -80,19 +81,19 @@ export async function ajaxCall( $form, formDataObj, options ){
             return response[fetchMethod]()
         })
         .then(data => {
-            addClass( $form, options.formOptions.cssClasses.ajaxSuccess )
+            addClass( $form, formOptions.cssClasses.ajaxSuccess )
             return data
         })
         .catch(error => {
-            addClass( $form, options.formOptions.cssClasses.ajaxError )
+            addClass( $form, formOptions.cssClasses.ajaxError )
             throw new Error(error.message)
         })
         .finally(() => {
             if( timeoutTimer ){
                 window.clearTimeout( timeoutTimer )
             }
-            removeClass( $form, `${options.formOptions.cssClasses.submit} ${options.formOptions.cssClasses.ajaxPending}` )
-            addClass( $form, options.formOptions.cssClasses.ajaxComplete )
+            removeClass( $form, `${formOptions.cssClasses.submit} ${formOptions.cssClasses.ajaxPending}` )
+            addClass( $form, formOptions.cssClasses.ajaxComplete )
             Array.from($form.elements).find($el => $el.type === 'submit').disabled = false
         })
 

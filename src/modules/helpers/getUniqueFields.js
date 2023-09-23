@@ -5,8 +5,7 @@ export const getUniqueFields = $nodeList => {
     let currentFieldType = ''
 
     return Array.from( $nodeList ).filter($field => {
-        const name = $field.name
-        const type = $field.type
+        const { name, type } = $field
 
         if( name === currentFieldName && type === currentFieldType ){
             return false

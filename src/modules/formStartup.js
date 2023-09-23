@@ -13,10 +13,9 @@ import {
 
 export function formStartup( $form, options ){
 
+    const { fieldOptions, formOptions } = options
+    
     $form.noValidate = true
-
-    const fieldOptions = options.fieldOptions
-    const formOptions = options.formOptions
         
     // VALIDATION WITH ATTRIBUTES LIKE HTML ONES ( ALSO FOR BUG FIXING, EG: maxlength IN ANDROID )
     if( fieldOptions.strictHtmlValidation ){

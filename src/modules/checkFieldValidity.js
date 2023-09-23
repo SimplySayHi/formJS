@@ -10,11 +10,11 @@ export async function checkFieldValidity( $field, fieldOptions, validationRules,
     }
 
     const dataFieldOptions = getJSONobjectFromFieldAttribute( $field, 'data-field-options' )
-    fieldOptions = mergeObjects( fieldOptions, dataFieldOptions )
+    const fieldOptionsTemp = mergeObjects( {}, fieldOptions, dataFieldOptions )
     
     const dataBeforeValidation = (await runFunctionsSequence({
-        functionsList: fieldOptions.beforeValidation,
-        data: { $field, fieldOptions }
+        functionsList: fieldOptionsTemp.beforeValidation,
+        data: { $field, fieldOptions: fieldOptionsTemp }
     })).pop()
     
     const isValidValue = $field.value.trim().length > 0
@@ -25,6 +25,6 @@ export async function checkFieldValidity( $field, fieldOptions, validationRules,
         dataBeforeValidation.result = true
     }
     
-    return needsValidation ? await isValid($field, fieldOptions, validationRules, validationErrors) : dataBeforeValidation
+    return needsValidation ? await isValid($field, fieldOptionsTemp, validationRules, validationErrors) : dataBeforeValidation
 
 }

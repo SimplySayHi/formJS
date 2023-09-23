@@ -32,7 +32,7 @@ export function submit( event ){
     addClass( $form, formCssClasses.submit )
 
     instance.validateForm()
-        .then(data => {
+        .then(async data => {
             
             const hasGroup = typeof data.group !== 'undefined'
 
@@ -46,11 +46,12 @@ export function submit( event ){
             }
 
             const rfsObject = {
-                  functionsList: options.formOptions.beforeSend,
-                  data: beforeSendData,
-                  stopConditionFn: function(data){ return data.stopExecution }
+                functionsList: options.formOptions.beforeSend,
+                data: beforeSendData,
+                stopConditionFn: function(data){ return data.stopExecution }
             }
-            return runFunctionsSequence(rfsObject)
+
+            return await runFunctionsSequence(rfsObject)
 
         }).then(dataList => {
 
@@ -60,13 +61,13 @@ export function submit( event ){
             }
             
             if( isAjaxForm ){
-                const formData = dataList.pop().formData
+                const { formData } = dataList.pop()
                 addClass( $form, formCssClasses.ajaxPending )
                 dispatchCustomEvent( $form, customEvents.form.submit, { detail: ajaxCall( $form, formData, options ) } )
             }
 
         })
-        .catch(fields => {
+        .catch(() => {
             eventPreventDefault()
             removeClass( $form, formCssClasses.submit )
         })

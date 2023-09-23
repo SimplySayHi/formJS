@@ -5,26 +5,28 @@ import { dataTypeNumber, formValidationEnd, groupValidationEnd, keypressMaxlengt
 
 export function destroy( $form, options ){
 
-    if( options.fieldOptions.strictHtmlValidation ){
+    const { fieldOptions, formOptions } = options
+
+    if( fieldOptions.strictHtmlValidation ){
         $form.removeEventListener('keypress', keypressMaxlength, false)
         $form.removeEventListener('input', dataTypeNumber, false)
     }
 
-    if( options.fieldOptions.preventPasteFields ){
+    if( fieldOptions.preventPasteFields ){
         $form.removeEventListener('paste', pastePrevent, false)
     }
 
-    if( options.formOptions.handleSubmit ){
+    if( formOptions.handleSubmit ){
         $form.removeEventListener('submit', submit)
     }
 
-    options.fieldOptions.validateOnEvents.split(' ').forEach(eventName => {
+    fieldOptions.validateOnEvents.split(' ').forEach(eventName => {
         const useCapturing = eventName === 'blur' ? true : false
         $form.removeEventListener(eventName, validation, useCapturing)
     })
 
     $form.removeEventListener(customEvents.field.validation, validationEnd, false)
-    if( options.formOptions.groups.length > 0 ){
+    if( formOptions.groups.length > 0 ){
         $form.removeEventListener(customEvents.group.validation, groupValidationEnd, false)
     }
     $form.removeEventListener(customEvents.form.validation, formValidationEnd, false)

@@ -1,4 +1,4 @@
 
-export const removeClass = ( element, cssClasses = '' ) => {
-    element && element.classList.remove( ...cssClasses.split(' ') )
+export const removeClass = ( $el, cssClasses = '' ) => {
+    $el && $el.classList.remove( ...cssClasses.split(' ') )
 }

@@ -1,4 +1,4 @@
 
-export const addClass = ( element, cssClasses = '' ) => {
-    element && element.classList.add( ...cssClasses.split(' ') )
+export const addClass = ( $el, cssClasses = '' ) => {
+    $el && $el.classList.add( ...cssClasses.split(' ') )
 }

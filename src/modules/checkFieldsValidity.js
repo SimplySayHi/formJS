@@ -4,7 +4,7 @@ import { checkFieldValidity } from './checkFieldValidity'
 
 export async function checkFieldsValidity( $fields, fieldOptions, validationRules, validationErrors, fieldToSkip = {} ){
 
-    fieldOptions = mergeObjects( {}, fieldOptions, {focusOnRelated: false} )
+    const fieldOptionsTemp = mergeObjects( {}, fieldOptions, {focusOnRelated: false} )
     const $fieldsList = getUniqueFields( $fields )
 
     const fieldsValidity = await Promise.all( $fieldsList.map(async $field => {
@@ -12,8 +12,7 @@ export async function checkFieldsValidity( $fields, fieldOptions, validationRule
         if( fieldToSkip.$field && $field === fieldToSkip.$field ){
             return Promise.resolve(fieldToSkip)
         }
-        
-        return await checkFieldValidity( $field, fieldOptions, validationRules, validationErrors )
+        return await checkFieldValidity( $field, fieldOptionsTemp, validationRules, validationErrors )
 
     }) )
 

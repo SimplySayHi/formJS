@@ -1,8 +1,8 @@
 
 import { mergeObjects } from './mergeObjects'
 
-export const runFunctionsSequence = ( { functionsList = [], data = {}, stopConditionFn = () => false } = {} ) => {
-    return functionsList.reduce((acc, promiseFn) => {
+export const runFunctionsSequence = async ( { functionsList = [], data = {}, stopConditionFn = () => false } = {} ) => {
+    return await functionsList.reduce((acc, promiseFn) => {
         return acc.then(res => {
             let dataNew = mergeObjects({}, res[res.length - 1])
             if( stopConditionFn(dataNew) ){

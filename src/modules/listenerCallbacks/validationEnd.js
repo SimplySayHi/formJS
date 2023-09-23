@@ -37,8 +37,8 @@ export const validationEnd = function( event ){
                 extraErrorClass = fieldOptions.cssClasses.errorEmpty
             }
 
-            let errorClasses = `${fieldOptions.cssClasses.error} ${extraErrorClass}`
-            let errorClassToRemove = `${fieldOptions.cssClasses.errorEmpty} ${fieldOptions.cssClasses.errorRule}`
+            const errorClasses = `${fieldOptions.cssClasses.error} ${extraErrorClass}`
+            const errorClassToRemove = `${fieldOptions.cssClasses.errorEmpty} ${fieldOptions.cssClasses.errorRule}`
             removeClass( $container, `${fieldOptions.cssClasses.valid} ${errorClassToRemove}` )
             addClass( $container, errorClasses )
 
