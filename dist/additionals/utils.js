@@ -54,7 +54,7 @@ var initMaxFileSizeFields = function ( $form ) {
         var $printMaxFileSize = $field.closest(questionContainer).querySelector('[data-print-max-file-size]');
 
         if( $printMaxFileSize ){
-            var maxFileSize = $field.getAttribute('data-max-file-size') || fieldOptions.maxFileSize;
+            var maxFileSize = (dataFieldOptions && dataFieldOptions.maxFileSize) || fieldOptions.maxFileSize;
             $printMaxFileSize.textContent = maxFileSize;
         }
     })

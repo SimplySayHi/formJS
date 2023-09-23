@@ -80,9 +80,6 @@ class Form {
         return this.options.formOptions.getFormData( this.$dataFields, trimValues )
     }
 
-    // TODO:
-    // UPDATE DOC => field MUST BE A DOM-NODE OR THE FIELD name/id
-    // UPDATE DOC => onValidationCheckAll ALWAYS RUNS FORM/GROUP VALIDATION, NOT ONLY WHEN FIELD IS VALID
     async validateField( field, fieldOptions ){
         const { $fields, $form, currentGroup, options, validationErrors, validationRules } = this
         let $field = field
